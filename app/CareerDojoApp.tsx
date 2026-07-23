@@ -258,6 +258,8 @@ export function CareerDojoApp({
   const [attemptScore, setAttemptScore] = useState(50);
   const [attemptConfidence, setAttemptConfidence] = useState(50);
   const [attemptNotes, setAttemptNotes] = useState("");
+  const [privateProfileDraft, setPrivateProfileDraft] = useState("");
+  const [privateProfileMessage, setPrivateProfileMessage] = useState("");
   const [applicationBuilderVisible, setApplicationBuilderVisible] =
     useState(false);
   const [applicationDraft, setApplicationDraft] = useState<ApplicationDraft>(
@@ -762,6 +764,52 @@ export function CareerDojoApp({
       .slice(0, 10)}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function importPrivateProfile() {
+    setPrivateProfileMessage("");
+    try {
+      const parsed = JSON.parse(privateProfileDraft) as Profile;
+      if (
+        !parsed?.education?.program ||
+        !Array.isArray(parsed.priorityRoleFamilies) ||
+        !Array.isArray(parsed.criticalGaps)
+      ) {
+        throw new Error("missing required profile fields");
+      }
+      const serialized = JSON.stringify(parsed);
+      if (serialized.length > 8000) {
+        setPrivateProfileMessage("画像超过 8,000 字符，请精简后重试。");
+        return;
+      }
+      const saved = await mutate({
+        action: "setPreference",
+        key: "candidateProfile",
+        value: serialized,
+      });
+      if (saved) {
+        setPrivateProfileDraft("");
+        setPrivateProfileMessage("私有画像已保存并应用。");
+      } else {
+        setPrivateProfileMessage("暂时无法保存，请稍后重试。");
+      }
+    } catch {
+      setPrivateProfileMessage(
+        "画像格式无效：请使用完整 JSON，并保留教育、目标岗位和关键缺口字段。",
+      );
+    }
+  }
+
+  async function clearPrivateProfile() {
+    const saved = await mutate({
+      action: "setPreference",
+      key: "candidateProfile",
+      value: "",
+    });
+    setPrivateProfileDraft("");
+    setPrivateProfileMessage(
+      saved ? "已恢复公开安全的匿名模板。" : "暂时无法清除，请稍后重试。",
+    );
   }
 
   async function saveAttempt() {
@@ -1830,6 +1878,63 @@ export function CareerDojoApp({
             </div>
 
             <div className="evidence-grid">
+              <article className="panel private-profile-panel">
+                <div className="private-profile-heading">
+                  <div>
+                    <span className="section-kicker">PRIVATE PROFILE SYNC</span>
+                    <h3>私有画像同步</h3>
+                  </div>
+                  <span
+                    className={
+                      persisted.preferences.candidateProfile
+                        ? "profile-state active"
+                        : "profile-state"
+                    }
+                  >
+                    {persisted.preferences.candidateProfile
+                      ? "私有画像已启用"
+                      : "当前为匿名模板"}
+                  </span>
+                </div>
+                <p>
+                  在这里粘贴本机私有画像 JSON。通过格式校验后，它只写入当前登录用户的
+                  D1 空间，不会进入公开仓库，也不会与其他账号共享。
+                </p>
+                <label>
+                  <span>候选人画像 JSON</span>
+                  <textarea
+                    data-testid="private-profile-import"
+                    aria-label="候选人画像 JSON"
+                    value={privateProfileDraft}
+                    onChange={(event) =>
+                      setPrivateProfileDraft(event.target.value)
+                    }
+                    placeholder='{"education": {...}, "priorityRoleFamilies": [...]}'
+                    spellCheck={false}
+                  />
+                </label>
+                <div className="private-profile-actions">
+                  <button
+                    className="primary-button"
+                    data-testid="private-profile-save"
+                    onClick={importPrivateProfile}
+                    disabled={!privateProfileDraft.trim()}
+                  >
+                    校验并保存
+                  </button>
+                  {persisted.preferences.candidateProfile ? (
+                    <button
+                      className="secondary-button"
+                      onClick={clearPrivateProfile}
+                    >
+                      恢复匿名模板
+                    </button>
+                  ) : null}
+                  <span role="status" aria-live="polite">
+                    {privateProfileMessage}
+                  </span>
+                </div>
+              </article>
               <article className="panel">
                 <span className="section-kicker">COVERAGE CONTRACT</span>
                 <h3>公司宇宙覆盖原则</h3>
