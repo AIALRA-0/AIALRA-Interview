@@ -1,98 +1,107 @@
-# vinext-starter
+# AIALRA Career Dojo
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+A private, evidence-driven career intelligence and interview training system
+for semiconductor, EDA, verification, RTL/FPGA, architecture, physical design,
+AI hardware, research, and adjacent engineering careers.
 
-## Prerequisites
+Target operating model:
 
-- Node.js `>=22.13.0`
+`company evidence → role fit → skill gaps → training → applications → outcomes`
 
-## Quick Start
+The current foundation stores the evidence, training attempts, application
+state, and outcome observations needed for that loop. It deliberately does not
+infer rejection causes or automatically reweight skills from sparse outcomes.
+
+## Current snapshot
+
+Evidence date: **2026-07-23**
+
+- **390** company, institute, university-lab, foundry, equipment, IP, startup,
+  and open-source ecosystem nodes: 200 US/global-first and 190 China-first
+- **15** normalized role families and **1,168** company-to-role edges
+- **130** atomic skills with prerequisite relationships
+- **210** original training tasks, including 45 short foundation drills and
+  role-specific multi-stage Boss Fights
+- Persistent applications, bookmarks, skill progress, attempts, aggregate
+  mastery statistics, and private candidate preferences
+
+The company layer is an organization universe, not a claim that every
+organization has an open requisition today. Time-sensitive job, eligibility,
+visa, export-control, and deadline decisions must be re-verified against the
+specific official job posting before applying.
+
+## Product surfaces
+
+- Mission control with an adaptive next-action queue
+- Searchable US/China company and research-institute atlas
+- Canonical company → role → skill → prerequisite graph
+- Foundation-to-advanced Interview Dojo with provenance and review status
+- Rubrics, failure patterns, reference outlines, and observable completion
+  oracles
+- Role-specific readiness estimates based on evidence, not fabricated
+  acceptance probabilities
+- Editable requisition tracker for JD URL, deadline, eligibility signals,
+  contacts, resume version, keywords, notes, and funnel stage
+- Per-user Cloudflare D1 persistence with authenticated-user isolation
+
+## Research
+
+- [Coverage contract](research/coverage-contract.md)
+- [US company universe](research/us-company-universe.md)
+- [China company universe](research/china-company-universe.md)
+- [Strategy framework](research/strategy-framework.md)
+- [Competitive landscape](research/competitive-landscape.md)
+- [Interview content contract](research/interview-content-contract.md)
+
+## Evidence and content policy
+
+Every time-sensitive claim should carry a source, observation date, and
+confidence. Paid question banks, leaked OA material, NDA content, close
+paraphrases of competitor questions, and stealth live-interview assistance are
+excluded. Training content uses original engineering scenarios, public
+concepts, official documentation, and license-reviewed open material.
+
+Question status is visible in the interface. `review-ready` means the task has
+passed structural and source checks but still needs domain-expert and learner
+pilot calibration; it must not be treated as an industry-certified score, and
+its self-score does not change role readiness.
+
+## Privacy
+
+This repository is public. The checked-in profile is an anonymized template.
+Real candidate facts live under the ignored `private/` directory and can be
+written into the authenticated site's private D1 preference store after
+deployment. Do not commit personal education, immigration, timeline, contact,
+or application data.
+
+## Local development
+
+Requires Node.js 22.15 or newer.
 
 ```bash
 npm install
 npm run dev
-npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+The local app runs at `http://localhost:3000`.
 
-## Included Shape
+## Quality gates
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```bash
+npm run validate
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+The gate audits cross-file IDs, graph cycles, role mapping, evidence fields,
+question quality and coverage, privacy boundaries, TypeScript, lint, production
+build output, server rendering, API authentication, user isolation, request
+validation, cache privacy, and the generated D1 migration.
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+Run the separate network audit when refreshing the evidence snapshot:
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+```bash
+npm run audit:links
+```
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+It distinguishes confirmed missing pages from access-controlled, rate-limited,
+timed-out, and other links that need human browser review; it is intentionally
+not part of the deterministic offline validation gate.

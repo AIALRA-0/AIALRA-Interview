@@ -1,0 +1,38 @@
+{
+  "id": "public-template",
+  "evidenceDate": "2026-07-23",
+  "targetWindow": "下一实习周期",
+  "education": {
+    "program": "工程硕士",
+    "start": "即将入学",
+    "status": "incoming",
+    "workAuthorization": "身份条件待配置"
+  },
+  "positioning": "EDA/CAD 与验证基础设施工程师；具备 RTL/FPGA 实现经验；构建可复现、可诊断的芯片工程流程。",
+  "strengths": [
+    "晶体管级设计与定制电路基础",
+    "RTL 与 FPGA 从模型到硬件验证",
+    "SystemVerilog、时序分析与调试",
+    "体系结构、内存与可靠性分析",
+    "C++、Python、Tcl 与 CAD 自动化",
+    "可复现的工程文档与实验流程"
+  ],
+  "priorityRoleFamilies": [
+    "rf-eda-rd",
+    "rf-ai-eda",
+    "rf-cad-flow",
+    "rf-dv",
+    "rf-rtl",
+    "rf-fpga",
+    "rf-architecture",
+    "rf-physical-design"
+  ],
+  "criticalGaps": [
+    "实验室、实习或开源上游证据",
+    "UVM、SVA、formal、coverage、CDC/RDC 生产证据",
+    "物理设计流程与 PPA closure",
+    "C++ EDA 算法 benchmark",
+    "面试与技术英语基线",
+    "聚焦且可复现的公开项目叙事"
+  ]
+}

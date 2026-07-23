@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-23",
+  "roleFamilies": [
+    {
+      "id": "rf-eda-rd",
+      "name": "EDA Research & Development",
+      "nameZh": "EDA 研发与算法",
+      "description": "Develop algorithms, data models, and production software for synthesis, simulation, timing, placement, routing, and verification tools.",
+      "typicalTitles": ["EDA R&D Engineer", "Software Engineer, EDA", "CAD Algorithm Engineer", "Member of Technical Staff, EDA"],
+      "interviewStages": ["coding", "algorithms", "EDA fundamentals", "domain design", "project deep dive"],
+      "primarySkillDomains": ["software-engineering", "eda-algorithms", "optimization", "graph-algorithms"],
+      "adjacentRoleFamilies": ["rf-ai-eda", "rf-cad-flow", "rf-physical-design"]
+    },
+    {
+      "id": "rf-ai-eda",
+      "name": "AI for EDA",
+      "nameZh": "AI for EDA",
+      "description": "Apply machine learning, graph learning, optimization, and uncertainty-aware modeling to chip design and EDA workloads.",
+      "typicalTitles": ["Machine Learning Engineer, EDA", "AI Research Engineer, EDA", "ML Scientist, Chip Design", "Applied Scientist, EDA"],
+      "interviewStages": ["coding", "machine learning", "EDA domain", "experiment design", "ML system design", "research deep dive"],
+      "primarySkillDomains": ["machine-learning", "ai-for-eda", "statistics", "ml-systems"],
+      "adjacentRoleFamilies": ["rf-eda-rd", "rf-physical-design", "rf-architecture"]
+    },
+    {
+      "id": "rf-cad-flow",
+      "name": "CAD and Design Flow Engineering",
+      "nameZh": "CAD 与设计流程",
+      "description": "Build reliable, reproducible, observable chip-design flows that integrate EDA tools, compute farms, licenses, and design data.",
+      "typicalTitles": ["CAD Engineer", "Design Methodology Engineer", "EDA Flow Engineer", "Infrastructure Engineer, Silicon"],
+      "interviewStages": ["scripting", "Linux and systems", "flow debugging", "automation design", "project deep dive"],
+      "primarySkillDomains": ["cad-flow", "automation", "distributed-compute", "observability"],
+      "adjacentRoleFamilies": ["rf-eda-rd", "rf-rtl", "rf-physical-design", "rf-dv"]
+    },
+    {
+      "id": "rf-rtl",
+      "name": "RTL Design",
+      "nameZh": "RTL 设计",
+      "description": "Design synthesizable, timing-aware, reset-safe, power-conscious digital hardware using Verilog and SystemVerilog.",
+      "typicalTitles": ["RTL Design Engineer", "Digital Design Engineer", "SoC Design Engineer", "Logic Design Engineer"],
+      "interviewStages": ["digital fundamentals", "RTL coding", "waveform debug", "microarchitecture design", "project deep dive"],
+      "primarySkillDomains": ["rtl", "digital-design", "microarchitecture", "clock-reset"],
+      "adjacentRoleFamilies": ["rf-dv", "rf-fpga", "rf-architecture", "rf-dft"]
+    },
+    {
+      "id": "rf-dv",
+      "name": "Design Verification, UVM, and Formal",
+      "nameZh": "数字验证、UVM 与形式验证",
+      "description": "Verify RTL and SoC behavior through simulation, constrained random testing, coverage, assertions, formal proofs, and debug.",
+      "typicalTitles": ["Design Verification Engineer", "UVM Verification Engineer", "Formal Verification Engineer", "SoC Verification Engineer"],
+      "interviewStages": ["SystemVerilog", "UVM", "assertions and formal", "debug", "testbench design", "project deep dive"],
+      "primarySkillDomains": ["verification", "uvm", "formal", "coverage"],
+      "adjacentRoleFamilies": ["rf-rtl", "rf-fpga", "rf-dft", "rf-architecture"]
+    },
+    {
+      "id": "rf-fpga",
+      "name": "FPGA Engineering",
+      "nameZh": "FPGA 工程",
+      "description": "Implement, constrain, close timing on, and debug digital systems on FPGA fabrics and boards.",
+      "typicalTitles": ["FPGA Engineer", "FPGA Design Engineer", "Prototyping Engineer", "Hardware Acceleration Engineer"],
+      "interviewStages": ["RTL coding", "FPGA architecture", "timing closure", "interfaces", "board and lab debug"],
+      "primarySkillDomains": ["fpga", "rtl", "timing", "interfaces"],
+      "adjacentRoleFamilies": ["rf-rtl", "rf-dv", "rf-embedded", "rf-architecture"]
+    },
+    {
+      "id": "rf-architecture",
+      "name": "Computer Architecture, Performance, and Memory",
+      "nameZh": "计算机体系结构、性能与存储",
+      "description": "Reason about processor and accelerator microarchitecture, memory hierarchies, interconnects, workloads, and performance trade-offs.",
+      "typicalTitles": ["CPU Architect", "GPU Architect", "Performance Engineer", "Memory Systems Engineer", "Architecture Modeling Engineer"],
+      "interviewStages": ["architecture fundamentals", "performance analysis", "modeling and coding", "design trade-offs", "project deep dive"],
+      "primarySkillDomains": ["computer-architecture", "performance", "memory-systems", "modeling"],
+      "adjacentRoleFamilies": ["rf-rtl", "rf-ai-eda", "rf-fpga", "rf-embedded"]
+    },
+    {
+      "id": "rf-physical-design",
+      "name": "Physical Design and Static Timing Analysis",
+      "nameZh": "物理设计与 STA",
+      "description": "Take designs from netlist to signoff through floorplanning, placement, CTS, routing, extraction, timing, power, and ECO closure.",
+      "typicalTitles": ["Physical Design Engineer", "STA Engineer", "Place and Route Engineer", "Physical Implementation Engineer"],
+      "interviewStages": ["implementation flow", "timing analysis", "constraint debug", "physical closure", "project deep dive"],
+      "primarySkillDomains": ["physical-design", "sta", "signoff", "power-integrity"],
+      "adjacentRoleFamilies": ["rf-eda-rd", "rf-cad-flow", "rf-dft", "rf-analog-custom"]
+    },
+    {
+      "id": "rf-dft",
+      "name": "Design for Test",
+      "nameZh": "DFT 与量产测试",
+      "description": "Architect and verify scan, ATPG, compression, memory test, boundary scan, and silicon diagnosis solutions.",
+      "typicalTitles": ["DFT Engineer", "ATPG Engineer", "Silicon Test Engineer", "DFT Methodology Engineer"],
+      "interviewStages": ["fault models", "scan and ATPG", "MBIST and JTAG", "coverage diagnosis", "flow design"],
+      "primarySkillDomains": ["dft", "atpg", "silicon-test", "diagnosis"],
+      "adjacentRoleFamilies": ["rf-rtl", "rf-dv", "rf-physical-design", "rf-manufacturing-automation"]
+    },
+    {
+      "id": "rf-analog-custom",
+      "name": "Analog and Custom IC Design",
+      "nameZh": "模拟与定制 IC",
+      "description": "Design, simulate, lay out, and verify analog, mixed-signal, and custom transistor-level circuits.",
+      "typicalTitles": ["Analog Design Engineer", "Custom Circuit Designer", "Analog Layout Engineer", "Mixed-Signal Verification Engineer"],
+      "interviewStages": ["device fundamentals", "circuit analysis", "stability and noise", "layout", "simulation and debug"],
+      "primarySkillDomains": ["analog-design", "custom-layout", "mixed-signal", "circuit-simulation"],
+      "adjacentRoleFamilies": ["rf-physical-design", "rf-dv", "rf-manufacturing-automation"]
+    },
+    {
+      "id": "rf-embedded",
+      "name": "Embedded Systems and Firmware",
+      "nameZh": "嵌入式系统与固件",
+      "description": "Develop reliable low-level software for SoCs, microcontrollers, boards, peripherals, boot, RTOS, and secure field updates.",
+      "typicalTitles": ["Embedded Software Engineer", "Firmware Engineer", "BSP Engineer", "Device Driver Engineer"],
+      "interviewStages": ["C and systems", "firmware coding", "concurrency", "hardware interfaces", "debug and system design"],
+      "primarySkillDomains": ["embedded", "firmware", "rtos", "device-drivers"],
+      "adjacentRoleFamilies": ["rf-fpga", "rf-rtl", "rf-architecture", "rf-manufacturing-automation"]
+    },
+    {
+      "id": "rf-manufacturing-automation",
+      "name": "Semiconductor Manufacturing and Equipment Automation",
+      "nameZh": "半导体制造与设备自动化",
+      "description": "Integrate equipment, factory systems, controls, telemetry, recipes, and analytics for safe and repeatable semiconductor manufacturing.",
+      "typicalTitles": ["Equipment Automation Engineer", "Factory Automation Engineer", "Manufacturing Systems Engineer", "Controls Engineer, Semiconductor"],
+      "interviewStages": ["industrial protocols", "controls and safety", "data and SPC", "automation design", "incident deep dive"],
+      "primarySkillDomains": ["manufacturing-automation", "industrial-controls", "factory-data", "equipment-integration"],
+      "adjacentRoleFamilies": ["rf-embedded", "rf-dft", "rf-cad-flow", "rf-analog-custom"]
+    },
+    {
+      "id": "rf-behavioral",
+      "name": "Behavioral Interview",
+      "nameZh": "行为面试",
+      "description": "Demonstrate ownership, collaboration, judgment, learning, conflict resolution, and measurable impact with truthful evidence.",
+      "typicalTitles": ["All technical roles"],
+      "interviewStages": ["recruiter screen", "behavioral", "leadership principles", "hiring manager", "team match"],
+      "primarySkillDomains": ["behavioral", "leadership", "collaboration", "judgment"],
+      "adjacentRoleFamilies": ["rf-project-deep-dive", "rf-english-communication"]
+    },
+    {
+      "id": "rf-project-deep-dive",
+      "name": "Technical Project Deep Dive",
+      "nameZh": "技术项目深挖",
+      "description": "Explain a real project with architectural clarity, individual ownership, evidence, trade-offs, debugging depth, and lessons learned.",
+      "typicalTitles": ["All technical roles"],
+      "interviewStages": ["resume screen", "project deep dive", "technical leadership", "hiring manager"],
+      "primarySkillDomains": ["project-story", "architecture-communication", "technical-evidence", "retrospective"],
+      "adjacentRoleFamilies": ["rf-behavioral", "rf-english-communication"]
+    },
+    {
+      "id": "rf-english-communication",
+      "name": "Technical English Communication",
+      "nameZh": "技术英文表达",
+      "description": "Communicate requirements, reasoning, trade-offs, uncertainty, and results clearly in English technical interviews.",
+      "typicalTitles": ["All roles interviewing in English"],
+      "interviewStages": ["recruiter screen", "technical interview", "behavioral", "presentation", "team match"],
+      "primarySkillDomains": ["technical-english", "interview-communication", "clarification", "presentation"],
+      "adjacentRoleFamilies": ["rf-behavioral", "rf-project-deep-dive"]
+    }
+  ]
+}

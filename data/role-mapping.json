@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-23",
+  "rules": [
+    {
+      "roleFamilyId": "rf-eda-rd",
+      "keywords": [
+        "eda",
+        "electronic design automation",
+        "design automation",
+        "synthesis",
+        "place-and-route",
+        "place and route",
+        "仿真工具",
+        "设计自动化"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-ai-eda",
+      "keywords": [
+        "ai-for-eda",
+        "ai for eda",
+        "agentic engineering",
+        "machine learning for chip",
+        "智能eda"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-cad-flow",
+      "keywords": [
+        "cad",
+        "design flow",
+        "flow automation",
+        "developer tools",
+        "software infrastructure",
+        "workflow",
+        "open-source engineering",
+        "开源工程",
+        "applications engineering",
+        "应用工程",
+        "工具链"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-rtl",
+      "keywords": [
+        "rtl",
+        "asic",
+        "soc",
+        "digital design",
+        "logic design",
+        "chip design",
+        "semiconductor-ip",
+        "design services",
+        "数字ic",
+        "数字/模拟ic",
+        "芯片设计",
+        "ip研发"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-dv",
+      "keywords": [
+        "verification",
+        "formal",
+        "emulation",
+        "silicon validation",
+        "design validation",
+        "验证",
+        "仿真",
+        "debug"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-fpga",
+      "keywords": [
+        "fpga",
+        "adaptive compute",
+        "prototyping",
+        "hardware prototype",
+        "可编程逻辑",
+        "原型验证"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-architecture",
+      "keywords": [
+        "cpu",
+        "gpu",
+        "npu",
+        "dpu",
+        "processor",
+        "accelerator",
+        "risc-v",
+        "architecture",
+        "memory",
+        "storage",
+        "ai-hardware",
+        "systems-hardware",
+        "chiplet",
+        "server",
+        "ai infra",
+        "compiler",
+        "distributed systems",
+        "algorithm research",
+        "大模型",
+        "算法研究",
+        "计算机视觉",
+        "语音",
+        "计算架构",
+        "处理器",
+        "存储",
+        "算力",
+        "ai芯片",
+        "服务器"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-physical-design",
+      "keywords": [
+        "physical design",
+        "physical-design",
+        "static timing",
+        "sta",
+        "signoff",
+        "layout",
+        "ppa",
+        "gds",
+        "后端设计",
+        "物理设计",
+        "版图",
+        "时序"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-dft",
+      "keywords": [
+        "dft",
+        "ate",
+        "semiconductor-test",
+        "test and measurement",
+        "metrology",
+        "inspection",
+        "测试",
+        "封装测试",
+        "封测",
+        "量产测试",
+        "测试设备",
+        "检测"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-analog-custom",
+      "keywords": [
+        "analog",
+        "mixed-signal",
+        "rf",
+        "power semiconductor",
+        "power-management",
+        "sensor",
+        "photonics",
+        "optical",
+        "wireless",
+        "circuit design",
+        "power",
+        "integrated circuit",
+        "microelectronics",
+        "集成电路",
+        "微电子",
+        "模拟",
+        "射频",
+        "功率",
+        "传感",
+        "光电",
+        "通信芯片"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-embedded",
+      "keywords": [
+        "embedded",
+        "firmware",
+        "mcu",
+        "iot",
+        "automotive",
+        "robotics",
+        "autonomous",
+        "vehicle",
+        "edge ai",
+        "control systems",
+        "mobile systems",
+        "system software",
+        "影像",
+        "系统软件",
+        "通信",
+        "嵌入式",
+        "固件",
+        "汽车",
+        "机器人",
+        "控制",
+        "无人机"
+      ]
+    },
+    {
+      "roleFamilyId": "rf-manufacturing-automation",
+      "keywords": [
+        "manufacturing",
+        "semiconductor-equipment",
+        "equipment",
+        "materials",
+        "foundry",
+        "fab",
+        "advanced-packaging",
+        "packaging",
+        "process technology",
+        "industrial automation",
+        "晶圆制造",
+        "晶圆代工",
+        "设备",
+        "材料",
+        "工艺",
+        "封装",
+        "制造",
+        "产线",
+        "半导体生态",
+        "semiconductor research"
+      ]
+    }
+  ],
+  "universalInterviewRoleFamilies": [
+    "rf-behavioral",
+    "rf-project-deep-dive",
+    "rf-english-communication"
+  ]
+}
