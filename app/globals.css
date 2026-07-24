@@ -848,7 +848,44 @@ main {
   letter-spacing: -0.045em;
 }
 
-.company-tree-heading span {
+.bilingual-node-label {
+  display: inline-flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.18;
+}
+
+.bilingual-node-label > span:last-child {
+  color: var(--ink-soft);
+  font-size: 0.68em;
+  font-weight: 570;
+  letter-spacing: 0;
+}
+
+.bilingual-organization-name {
+  display: inline-flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.15;
+}
+
+.organization-name-primary,
+.organization-name-secondary {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.organization-name-secondary {
+  color: var(--ink-soft);
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 0.78em;
+  font-weight: 560;
+  letter-spacing: 0;
+}
+
+.company-tree-heading > span {
   color: var(--ink-soft);
   font-family: var(--font-geist-mono), monospace;
   font-size: 10px;
@@ -870,6 +907,11 @@ main {
   cursor: pointer;
   font-size: 10px;
   font-weight: 730;
+}
+
+.company-tree summary > span {
+  padding-right: 12px;
+  line-height: 1.35;
 }
 
 .company-tree summary b {
@@ -906,6 +948,14 @@ main {
 .tree-company-list span {
   font-size: 10px;
   font-weight: 680;
+}
+
+.tree-company-list .organization-name-secondary {
+  font-size: 9px;
+}
+
+.tree-company-list .bilingual-organization-name {
+  flex: 1 1 auto;
 }
 
 .tree-company-list small {

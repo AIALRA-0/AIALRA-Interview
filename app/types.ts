@@ -8,9 +8,12 @@ export type Evidence = {
 export type Company = {
   id: string;
   name: string;
+  nameEn: string;
+  nameZh?: string;
   aliases: string[];
   country: string;
   region: string;
+  opportunityMarket: "US" | "CN" | "Global";
   companyType: string;
   categories: string[];
   locations: string[];

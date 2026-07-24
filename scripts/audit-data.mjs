@@ -274,8 +274,18 @@ function jaccard(left, right) {
   return intersection / (left.size + right.size - intersection);
 }
 
-const [profile, usRaw, cnRaw, rolesRaw, roleMapping, skillsRaw, questionsRaw] =
-  await Promise.all([
+const [
+  profile,
+  usRaw,
+  cnRaw,
+  rolesRaw,
+  roleMapping,
+  skillsRaw,
+  questionsRaw,
+  organizationLabels,
+  categoryLabelsEn,
+  categoryLabelsZh,
+] = await Promise.all([
     readJson("data/profile.json"),
     readJson("data/companies.us.json"),
     readJson("data/companies.cn.json"),
@@ -283,6 +293,9 @@ const [profile, usRaw, cnRaw, rolesRaw, roleMapping, skillsRaw, questionsRaw] =
     readJson("data/role-mapping.json"),
     readJson("data/skill-graph.json"),
     readJson("data/questions.seed.json"),
+    readJson("data/organization-labels.json"),
+    readJson("data/organization-category-labels.en.json"),
+    readJson("data/organization-category-labels.zh.json"),
   ]);
 
 assert.ok(profile.id);
@@ -360,6 +373,205 @@ assert.equal(
   new Set(companies.map((company) => company.id)).size,
   companies.length,
   "company ids must also be unique across regions",
+);
+
+assert.equal(
+  organizationLabels.schemaVersion,
+  "1.0.0",
+  "organization label schemaVersion changed without an audit update",
+);
+assert.ok(
+  organizationLabels.policy?.zh && organizationLabels.policy?.en,
+  "organization label policy must be bilingual",
+);
+assert.deepEqual(
+  Object.keys(organizationLabels.regionGroups).sort(),
+  ["CN", "Global", "US"],
+  "opportunity-market roots need exact bilingual labels",
+);
+for (const [market, label] of Object.entries(
+  organizationLabels.regionGroups,
+)) {
+  assert.ok(
+    hasChinese(label.zh) && /[A-Za-z]/.test(label.en),
+    `opportunity-market label ${market} is not bilingual`,
+  );
+}
+
+const companyTypeIds = [
+  ...new Set(companies.map((company) => company.companyType)),
+].sort();
+const hanPattern = /[\u3400-\u9fff]/;
+const latinPattern = /[A-Za-z]/;
+assert.deepEqual(
+  Object.keys(organizationLabels.companyTypes).sort(),
+  companyTypeIds,
+  "organization-type labels must cover the exact live taxonomy",
+);
+for (const [companyType, label] of Object.entries(
+  organizationLabels.companyTypes,
+)) {
+  assert.ok(
+    hasChinese(label.zh) && /[A-Za-z]/.test(label.en),
+    `organization-type label ${companyType} is not bilingual`,
+  );
+}
+
+assert.equal(
+  categoryLabelsEn.schemaVersion,
+  "1.0.0",
+  "English-origin organization-category label schemaVersion changed",
+);
+assert.equal(
+  categoryLabelsZh.schemaVersion,
+  "1.0.0",
+  "Chinese-origin organization-category label schemaVersion changed",
+);
+const categoryLabelKeysEn = Object.keys(categoryLabelsEn.labels);
+const categoryLabelKeysZh = Object.keys(categoryLabelsZh.labels);
+assert.equal(
+  new Set([...categoryLabelKeysEn, ...categoryLabelKeysZh]).size,
+  categoryLabelKeysEn.length + categoryLabelKeysZh.length,
+  "organization-category label catalogs overlap",
+);
+const liveCategoryIds = [
+  ...new Set(companies.flatMap((company) => company.categories)),
+].sort();
+assert.deepEqual(
+  [...categoryLabelKeysEn, ...categoryLabelKeysZh].sort(),
+  liveCategoryIds,
+  "bilingual organization-category labels must cover the exact live taxonomy",
+);
+assert.equal(
+  categoryLabelKeysEn.length,
+  184,
+  "reviewed English-origin category-label coverage changed",
+);
+assert.equal(
+  categoryLabelKeysZh.length,
+  149,
+  "reviewed Chinese-origin category-label coverage changed",
+);
+for (const [category, label] of Object.entries({
+  ...categoryLabelsEn.labels,
+  ...categoryLabelsZh.labels,
+})) {
+  assert.ok(
+    typeof label.en === "string" &&
+      latinPattern.test(label.en) &&
+      !hanPattern.test(label.en),
+    `organization-category ${category} needs a clean English label`,
+  );
+  assert.ok(
+    typeof label.zh === "string" && hasChinese(label.zh),
+    `organization-category ${category} needs a Chinese label`,
+  );
+}
+const combinedCategoryLabels = {
+  ...categoryLabelsEn.labels,
+  ...categoryLabelsZh.labels,
+};
+const canonicalCategoryGroups = new Map();
+for (const category of liveCategoryIds) {
+  const canonicalId = combinedCategoryLabels[category].en
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\s\-–—_/（）()，,：:·.]/g, "");
+  const group = canonicalCategoryGroups.get(canonicalId) || [];
+  group.push(category);
+  canonicalCategoryGroups.set(canonicalId, group);
+}
+const mergedCategoryAliasGroups = [...canonicalCategoryGroups.values()].filter(
+  (group) => group.length > 1,
+);
+assert.equal(
+  canonicalCategoryGroups.size,
+  303,
+  "reviewed canonical industry-category count changed",
+);
+assert.equal(
+  mergedCategoryAliasGroups.length,
+  30,
+  "reviewed cross-market category-alias groups changed",
+);
+assert.deepEqual(
+  canonicalCategoryGroups.get("advancedpackaging")?.sort(),
+  ["advanced-packaging", "先进封装"].sort(),
+  "advanced packaging aliases must share one filter option",
+);
+
+const usCompanyIds = usCompanies.map((company) => company.id).sort();
+assert.deepEqual(
+  Object.keys(organizationLabels.companyNameZh).sort(),
+  usCompanyIds,
+  "every US-first organization must explicitly choose a Chinese name or English-only status",
+);
+const companyIds = new Set(companies.map((company) => company.id));
+for (const id of Object.keys(organizationLabels.companyNameEn)) {
+  assert.ok(companyIds.has(id), `unknown English organization-name override ${id}`);
+}
+
+let bilingualOrganizationCount = 0;
+let englishOnlyOrganizationCount = 0;
+const resolvedOrganizationNamesEn = [];
+const resolvedOrganizationNamesZh = [];
+for (const company of companies) {
+  const sourceNameIsChinese = hanPattern.test(company.name);
+  const aliasEn = company.aliases.find((alias) => latinPattern.test(alias));
+  const aliasZh = company.aliases.find((alias) => hanPattern.test(alias));
+  const nameEn = sourceNameIsChinese
+    ? organizationLabels.companyNameEn[company.id] || aliasEn
+    : organizationLabels.companyNameEn[company.id] || company.name;
+  const nameZh = sourceNameIsChinese
+    ? company.name
+    : organizationLabels.companyNameZh[company.id] || aliasZh;
+  assert.ok(
+    typeof nameEn === "string" &&
+      nameEn.trim() &&
+      latinPattern.test(nameEn) &&
+      !hanPattern.test(nameEn),
+    `company ${company.id} needs an explicit English organization name`,
+  );
+  resolvedOrganizationNamesEn.push(nameEn.trim().toLowerCase());
+  if (nameZh) {
+    assert.ok(
+      hanPattern.test(nameZh),
+      `company ${company.id} has an unusable Chinese organization name`,
+    );
+    assert.notEqual(
+      nameZh.trim().toLowerCase(),
+      nameEn.trim().toLowerCase(),
+      `company ${company.id} repeats the same organization name twice`,
+    );
+    resolvedOrganizationNamesZh.push(nameZh.trim().toLowerCase());
+    bilingualOrganizationCount += 1;
+  } else {
+    assert.ok(
+      !sourceNameIsChinese,
+      `company ${company.id} silently degraded to a Chinese-only label`,
+    );
+    englishOnlyOrganizationCount += 1;
+  }
+}
+assert.equal(
+  bilingualOrganizationCount,
+  429,
+  "reviewed bilingual organization-name coverage changed",
+);
+assert.equal(
+  englishOnlyOrganizationCount,
+  100,
+  "reviewed English-only organization-name decisions changed",
+);
+assert.equal(
+  new Set(resolvedOrganizationNamesEn).size,
+  resolvedOrganizationNamesEn.length,
+  "canonical English organization names must be unique",
+);
+assert.equal(
+  new Set(resolvedOrganizationNamesZh).size,
+  resolvedOrganizationNamesZh.length,
+  "canonical Chinese organization names must be unique",
 );
 
 for (const company of companies) {
@@ -2245,7 +2457,13 @@ console.log(
         usCompanies: usCompanies.length,
         chinaCompanies: cnCompanies.length,
         organizationTypes: companyTypes.size,
+        bilingualOrganizationTypeLabels: companyTypeIds.length,
         industryCategories: categories.size,
+        bilingualIndustryCategoryLabels: liveCategoryIds.length,
+        canonicalIndustryCategoryFilters: canonicalCategoryGroups.size,
+        mergedIndustryCategoryAliasGroups: mergedCategoryAliasGroups.length,
+        bilingualOrganizationNames: bilingualOrganizationCount,
+        reviewedEnglishOnlyOrganizationNames: englishOnlyOrganizationCount,
         canonicalRoleEdges: companies.reduce(
           (total, company) => total + mappedRoleIds(company).length,
           0,

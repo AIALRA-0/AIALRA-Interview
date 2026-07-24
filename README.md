@@ -19,6 +19,11 @@ Evidence date: **2026-07-23**
 - **529** company, institute, university-lab, national-lab, foundry, equipment,
   IP, startup, and open-source ecosystem nodes: 256 US/global-first and 273
   China-first
+- Audited bilingual organization taxonomy: 3 opportunity-market roots, 20
+  organization types, and all 333 source industry-category labels, merged into
+  303 unambiguous filter concepts across the two markets. Of the 529
+  organization names, 429 have reviewed Chinese/English display pairs and 100
+  are explicitly English-only rather than machine-translated
 - **15** normalized role families with auditable company-to-role edges
 - **130** atomic skills with prerequisite relationships
 - **2,100** fully bilingual training tasks: 210 independently authored,
@@ -38,7 +43,7 @@ specific official job posting before applying.
 ## Product surfaces
 
 - Mission control with an adaptive next-action queue
-- Searchable US/China company and research-institute atlas
+- Searchable bilingual US/China company and research-institute atlas
 - Canonical company → role → skill → prerequisite graph
 - Foundation-to-advanced Interview Dojo with provenance and review status
 - Complete side-by-side Chinese/English prompts, rubrics, failure patterns,
@@ -63,6 +68,7 @@ specific official job posting before applying.
 - [Pre-fix independent quality audit](research/question-bank-quality-audit-v2.md)
 - [Post-fix independent quality audit](research/question-bank-quality-audit-v3.md)
 - [v3 release verification](research/release-verification-v3.md)
+- [Organization-tree bilingual audit](research/organization-tree-bilingual-audit.md)
 
 ## Evidence and content policy
 
@@ -103,11 +109,13 @@ npm run validate
 ```
 
 The gate audits cross-file IDs, graph cycles, role mapping, evidence fields,
-question quality and coverage, all 1,512 technical source-scenario payloads,
-all 168 minimal-invalid-fixture exercises, all 168 contract-only exercises,
-the complete TAP fixture lineage, privacy boundaries, TypeScript, lint,
-production build output, server rendering, API authentication, user isolation,
-request validation, cache privacy, and the generated D1 migration.
+all 529 organization-name decisions, the complete 20-type and 333-category
+bilingual taxonomy, question quality and coverage, all 1,512 technical
+source-scenario payloads, all 168 minimal-invalid-fixture exercises, all 168
+contract-only exercises, the complete TAP fixture lineage, privacy boundaries,
+TypeScript, lint, production build output, server rendering, API
+authentication, user isolation, request validation, cache privacy, and the
+generated D1 migration.
 
 Run the separate network audit when refreshing the evidence snapshot:
 

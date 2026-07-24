@@ -1,0 +1,601 @@
+{
+  "schemaVersion": "1.0.0",
+  "labels": {
+    "3D传感器": {
+      "en": "3D Sensors",
+      "zh": "3D 传感器"
+    },
+    "AI加速器": {
+      "en": "AI Accelerators",
+      "zh": "AI 加速器"
+    },
+    "AI基础设施": {
+      "en": "AI Infrastructure",
+      "zh": "AI 基础设施"
+    },
+    "AI平台": {
+      "en": "AI Platforms",
+      "zh": "AI 平台"
+    },
+    "AI系统": {
+      "en": "AI Systems",
+      "zh": "AI 系统"
+    },
+    "AI芯片": {
+      "en": "AI Chips",
+      "zh": "AI 芯片"
+    },
+    "AI计算": {
+      "en": "AI Computing",
+      "zh": "AI 计算"
+    },
+    "IoT芯片": {
+      "en": "IoT Chips",
+      "zh": "IoT 芯片"
+    },
+    "XR硬件": {
+      "en": "XR Hardware",
+      "zh": "XR 硬件"
+    },
+    "中科院研究所": {
+      "en": "Chinese Academy of Sciences Research Institutes",
+      "zh": "中科院研究所"
+    },
+    "云计算": {
+      "en": "Cloud Computing",
+      "zh": "云计算"
+    },
+    "互联网平台": {
+      "en": "Internet Platforms",
+      "zh": "互联网平台"
+    },
+    "产业服务": {
+      "en": "Industry Services",
+      "zh": "产业服务"
+    },
+    "产业组织": {
+      "en": "Industry Associations",
+      "zh": "产业组织"
+    },
+    "产教融合平台": {
+      "en": "Industry–Education Integration Platforms",
+      "zh": "产教融合平台"
+    },
+    "人工智能": {
+      "en": "Artificial Intelligence",
+      "zh": "人工智能"
+    },
+    "以太网": {
+      "en": "Ethernet",
+      "zh": "以太网"
+    },
+    "传感器": {
+      "en": "Sensors",
+      "zh": "传感器"
+    },
+    "先进制造": {
+      "en": "Advanced Manufacturing",
+      "zh": "先进制造"
+    },
+    "先进封装": {
+      "en": "Advanced Packaging",
+      "zh": "先进封装"
+    },
+    "光刻材料": {
+      "en": "Lithography Materials",
+      "zh": "光刻材料"
+    },
+    "光电": {
+      "en": "Optoelectronics",
+      "zh": "光电"
+    },
+    "公共研发": {
+      "en": "Public R&D",
+      "zh": "公共研发"
+    },
+    "具身智能": {
+      "en": "Embodied AI",
+      "zh": "具身智能"
+    },
+    "分布式系统": {
+      "en": "Distributed Systems",
+      "zh": "分布式系统"
+    },
+    "制造": {
+      "en": "Manufacturing",
+      "zh": "制造"
+    },
+    "制造自动化": {
+      "en": "Manufacturing Automation",
+      "zh": "制造自动化"
+    },
+    "功率半导体": {
+      "en": "Power Semiconductors",
+      "zh": "功率半导体"
+    },
+    "医疗机器人": {
+      "en": "Medical Robotics",
+      "zh": "医疗机器人"
+    },
+    "半导体IP": {
+      "en": "Semiconductor IP",
+      "zh": "半导体 IP"
+    },
+    "半导体器件": {
+      "en": "Semiconductor Devices",
+      "zh": "半导体器件"
+    },
+    "半导体工程": {
+      "en": "Semiconductor Engineering",
+      "zh": "半导体工程"
+    },
+    "半导体显示": {
+      "en": "Semiconductor Displays",
+      "zh": "半导体显示"
+    },
+    "半导体材料": {
+      "en": "Semiconductor Materials",
+      "zh": "半导体材料"
+    },
+    "半导体测试": {
+      "en": "Semiconductor Testing",
+      "zh": "半导体测试"
+    },
+    "半导体生态": {
+      "en": "Semiconductor Ecosystem",
+      "zh": "半导体生态"
+    },
+    "半导体设备": {
+      "en": "Semiconductor Equipment",
+      "zh": "半导体设备"
+    },
+    "半导体设备零部件": {
+      "en": "Semiconductor Equipment Components",
+      "zh": "半导体设备零部件"
+    },
+    "半导体软件": {
+      "en": "Semiconductor Software",
+      "zh": "半导体软件"
+    },
+    "厂务": {
+      "en": "Fab Facilities Engineering",
+      "zh": "晶圆厂厂务"
+    },
+    "可重构计算": {
+      "en": "Reconfigurable Computing",
+      "zh": "可重构计算"
+    },
+    "器件": {
+      "en": "Devices",
+      "zh": "器件"
+    },
+    "国家创新平台": {
+      "en": "National Innovation Platforms",
+      "zh": "国家创新平台"
+    },
+    "图像传感器": {
+      "en": "Image Sensors",
+      "zh": "图像传感器"
+    },
+    "地方创新平台": {
+      "en": "Regional Innovation Platforms",
+      "zh": "地方创新平台"
+    },
+    "基础软件": {
+      "en": "Foundational Software",
+      "zh": "基础软件"
+    },
+    "声学": {
+      "en": "Acoustics",
+      "zh": "声学"
+    },
+    "多媒体芯片": {
+      "en": "Multimedia Chips",
+      "zh": "多媒体芯片"
+    },
+    "大湾区": {
+      "en": "Greater Bay Area",
+      "zh": "大湾区"
+    },
+    "央国企研究院": {
+      "en": "State-Owned Enterprise Research Institutes",
+      "zh": "央国企研究院"
+    },
+    "存储": {
+      "en": "Memory",
+      "zh": "存储"
+    },
+    "存储系统": {
+      "en": "Storage Systems",
+      "zh": "存储系统"
+    },
+    "安全芯片": {
+      "en": "Security Chips",
+      "zh": "安全芯片"
+    },
+    "封装测试": {
+      "en": "Semiconductor Packaging and Testing",
+      "zh": "封装测试"
+    },
+    "射频芯片": {
+      "en": "RF Chips",
+      "zh": "射频芯片"
+    },
+    "嵌入式": {
+      "en": "Embedded Technology",
+      "zh": "嵌入式"
+    },
+    "嵌入式CPU": {
+      "en": "Embedded CPUs",
+      "zh": "嵌入式 CPU"
+    },
+    "嵌入式系统": {
+      "en": "Embedded Systems",
+      "zh": "嵌入式系统"
+    },
+    "嵌入式计算": {
+      "en": "Embedded Computing",
+      "zh": "嵌入式计算"
+    },
+    "工业互联网": {
+      "en": "Industrial Internet",
+      "zh": "工业互联网"
+    },
+    "工业自动化": {
+      "en": "Industrial Automation",
+      "zh": "工业自动化"
+    },
+    "工业芯片": {
+      "en": "Industrial Chips",
+      "zh": "工业芯片"
+    },
+    "应用处理器": {
+      "en": "Application Processors",
+      "zh": "应用处理器"
+    },
+    "开源生态": {
+      "en": "Open-Source Ecosystem",
+      "zh": "开源生态"
+    },
+    "开源芯片": {
+      "en": "Open-Source Chips",
+      "zh": "开源芯片"
+    },
+    "影像与AI": {
+      "en": "Imaging and AI",
+      "zh": "影像与 AI"
+    },
+    "微电子": {
+      "en": "Microelectronics",
+      "zh": "微电子"
+    },
+    "微系统": {
+      "en": "Microsystems",
+      "zh": "微系统"
+    },
+    "微纳器件": {
+      "en": "Micro- and Nano-Devices",
+      "zh": "微纳器件"
+    },
+    "探针台": {
+      "en": "Probe Stations",
+      "zh": "探针台"
+    },
+    "接口芯片": {
+      "en": "Interface Chips",
+      "zh": "接口芯片"
+    },
+    "控制": {
+      "en": "Control Systems",
+      "zh": "控制系统"
+    },
+    "操作系统": {
+      "en": "Operating Systems",
+      "zh": "操作系统"
+    },
+    "数据中心": {
+      "en": "Data Centers",
+      "zh": "数据中心"
+    },
+    "数据中心互连": {
+      "en": "Data Center Interconnects",
+      "zh": "数据中心互连"
+    },
+    "新能源汽车": {
+      "en": "New Energy Vehicles",
+      "zh": "新能源汽车"
+    },
+    "无线连接": {
+      "en": "Wireless Connectivity",
+      "zh": "无线连接"
+    },
+    "显示材料": {
+      "en": "Display Materials",
+      "zh": "显示材料"
+    },
+    "显示芯片": {
+      "en": "Display Chips",
+      "zh": "显示芯片"
+    },
+    "显示驱动": {
+      "en": "Display Drivers",
+      "zh": "显示驱动"
+    },
+    "晶圆代工": {
+      "en": "Semiconductor Foundry",
+      "zh": "晶圆代工"
+    },
+    "晶圆制造": {
+      "en": "Wafer Fabrication",
+      "zh": "晶圆制造"
+    },
+    "智能EDA": {
+      "en": "Intelligent EDA",
+      "zh": "智能 EDA"
+    },
+    "智能制造": {
+      "en": "Smart Manufacturing",
+      "zh": "智能制造"
+    },
+    "智能家居": {
+      "en": "Smart Home",
+      "zh": "智能家居"
+    },
+    "智能终端": {
+      "en": "Smart Devices",
+      "zh": "智能终端"
+    },
+    "智能音频": {
+      "en": "Smart Audio",
+      "zh": "智能音频"
+    },
+    "智能驾驶": {
+      "en": "Intelligent Driving",
+      "zh": "智能驾驶"
+    },
+    "服务器": {
+      "en": "Servers",
+      "zh": "服务器"
+    },
+    "机器人": {
+      "en": "Robotics",
+      "zh": "机器人"
+    },
+    "机器人与制造": {
+      "en": "Robotics and Manufacturing",
+      "zh": "机器人与制造"
+    },
+    "材料": {
+      "en": "Materials",
+      "zh": "材料"
+    },
+    "标准与产业研究": {
+      "en": "Standards and Industry Research",
+      "zh": "标准与产业研究"
+    },
+    "标准与测试": {
+      "en": "Standards and Testing",
+      "zh": "标准与测试"
+    },
+    "模块": {
+      "en": "Modules",
+      "zh": "模块"
+    },
+    "模拟芯片": {
+      "en": "Analog Chips",
+      "zh": "模拟芯片"
+    },
+    "毫米波雷达": {
+      "en": "Millimeter-Wave Radar",
+      "zh": "毫米波雷达"
+    },
+    "汽车": {
+      "en": "Automotive",
+      "zh": "汽车"
+    },
+    "汽车电子": {
+      "en": "Automotive Electronics",
+      "zh": "汽车电子"
+    },
+    "汽车芯片": {
+      "en": "Automotive Chips",
+      "zh": "汽车芯片"
+    },
+    "测试设备": {
+      "en": "Test Equipment",
+      "zh": "测试设备"
+    },
+    "消费电子": {
+      "en": "Consumer Electronics",
+      "zh": "消费电子"
+    },
+    "混合信号": {
+      "en": "Mixed-Signal",
+      "zh": "混合信号"
+    },
+    "温控设备": {
+      "en": "Thermal Management Equipment",
+      "zh": "温控设备"
+    },
+    "激光雷达": {
+      "en": "LiDAR",
+      "zh": "激光雷达"
+    },
+    "物联网": {
+      "en": "Internet of Things",
+      "zh": "物联网"
+    },
+    "电力电子": {
+      "en": "Power Electronics",
+      "zh": "电力电子"
+    },
+    "电子特气": {
+      "en": "Electronic Specialty Gases",
+      "zh": "电子特气"
+    },
+    "电子系统": {
+      "en": "Electronic Systems",
+      "zh": "电子系统"
+    },
+    "电机控制芯片": {
+      "en": "Motor Control Chips",
+      "zh": "电机控制芯片"
+    },
+    "电源管理芯片": {
+      "en": "Power Management ICs",
+      "zh": "电源管理芯片"
+    },
+    "电镀材料": {
+      "en": "Electroplating Materials",
+      "zh": "电镀材料"
+    },
+    "研究院": {
+      "en": "Research Institutes",
+      "zh": "研究院"
+    },
+    "离子注入": {
+      "en": "Ion Implantation",
+      "zh": "离子注入"
+    },
+    "移动SoC": {
+      "en": "Mobile SoCs",
+      "zh": "移动 SoC"
+    },
+    "移动系统": {
+      "en": "Mobile Systems",
+      "zh": "移动系统"
+    },
+    "端侧AI": {
+      "en": "On-Device AI",
+      "zh": "端侧 AI"
+    },
+    "第三代半导体": {
+      "en": "Third-Generation (Wide-Bandgap) Semiconductors",
+      "zh": "第三代半导体"
+    },
+    "精密制造": {
+      "en": "Precision Manufacturing",
+      "zh": "精密制造"
+    },
+    "精密控制": {
+      "en": "Precision Control",
+      "zh": "精密控制"
+    },
+    "系统厂自研芯片": {
+      "en": "In-House Chips by System Vendors",
+      "zh": "系统厂自研芯片"
+    },
+    "系统软件": {
+      "en": "Systems Software",
+      "zh": "系统软件"
+    },
+    "红外传感器": {
+      "en": "Infrared Sensors",
+      "zh": "红外传感器"
+    },
+    "红外器件": {
+      "en": "Infrared Devices",
+      "zh": "红外器件"
+    },
+    "纳米材料": {
+      "en": "Nanomaterials",
+      "zh": "纳米材料"
+    },
+    "终端系统": {
+      "en": "End-Device Systems",
+      "zh": "终端系统"
+    },
+    "网络芯片": {
+      "en": "Networking Chips",
+      "zh": "网络芯片"
+    },
+    "自动化": {
+      "en": "Automation",
+      "zh": "自动化"
+    },
+    "自动驾驶": {
+      "en": "Autonomous Driving",
+      "zh": "自动驾驶"
+    },
+    "芯片测试": {
+      "en": "Chip Testing",
+      "zh": "芯片测试"
+    },
+    "视觉系统": {
+      "en": "Vision Systems",
+      "zh": "视觉系统"
+    },
+    "视频芯片": {
+      "en": "Video Chips",
+      "zh": "视频芯片"
+    },
+    "计算体系结构": {
+      "en": "Computer Architecture",
+      "zh": "计算体系结构"
+    },
+    "计算机视觉": {
+      "en": "Computer Vision",
+      "zh": "计算机视觉"
+    },
+    "计算系统": {
+      "en": "Computing Systems",
+      "zh": "计算系统"
+    },
+    "计算芯片": {
+      "en": "Compute Chips",
+      "zh": "计算芯片"
+    },
+    "设计服务": {
+      "en": "Design Services",
+      "zh": "设计服务"
+    },
+    "语音与大模型": {
+      "en": "Speech and Large Models",
+      "zh": "语音与大模型"
+    },
+    "超快光学": {
+      "en": "Ultrafast Optics",
+      "zh": "超快光学"
+    },
+    "边缘AI": {
+      "en": "Edge AI",
+      "zh": "边缘 AI"
+    },
+    "边缘计算": {
+      "en": "Edge Computing",
+      "zh": "边缘计算"
+    },
+    "通信": {
+      "en": "Communications",
+      "zh": "通信"
+    },
+    "通信系统": {
+      "en": "Communications Systems",
+      "zh": "通信系统"
+    },
+    "通信芯片": {
+      "en": "Communications Chips",
+      "zh": "通信芯片"
+    },
+    "量检测": {
+      "en": "Metrology and Inspection",
+      "zh": "量测与检测"
+    },
+    "集成电路": {
+      "en": "Integrated Circuits",
+      "zh": "集成电路"
+    },
+    "雷达与电子系统": {
+      "en": "Radar and Electronic Systems",
+      "zh": "雷达与电子系统"
+    },
+    "音频芯片": {
+      "en": "Audio Chips",
+      "zh": "音频芯片"
+    },
+    "高校实验室": {
+      "en": "University Laboratories",
+      "zh": "高校实验室"
+    }
+  }
+}

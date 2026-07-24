@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import categoryLabelsEnRaw from "../data/organization-category-labels.en.json";
+import categoryLabelsZhRaw from "../data/organization-category-labels.zh.json";
+import organizationLabelsRaw from "../data/organization-labels.json";
 import type {
   ApplicationRecord,
   Company,
@@ -121,25 +124,77 @@ const applicationStages = [
   ["closed", "关闭"],
 ] as const;
 
+const regionLabels = organizationLabelsRaw.regionGroups;
+const companyTypeLabels = organizationLabelsRaw.companyTypes as Record<
+  string,
+  { zh: string; en: string }
+>;
+const categoryLabels = {
+  ...categoryLabelsEnRaw.labels,
+  ...categoryLabelsZhRaw.labels,
+} as Record<string, { zh: string; en: string }>;
+
 function regionOf(company: Company): "US" | "CN" | "Global" {
-  const value = `${company.country} ${company.region}`.toLowerCase();
-  if (
-    value.includes("china") ||
-    value.includes("中国") ||
-    value.includes("hong kong") ||
-    value.includes("cn")
-  ) {
-    return "CN";
-  }
-  if (
-    value.includes("united states") ||
-    value.includes("美国") ||
-    value.includes("usa") ||
-    value.includes("us")
-  ) {
-    return "US";
-  }
-  return "Global";
+  return company.opportunityMarket;
+}
+
+function regionLabel(region: "US" | "CN" | "Global") {
+  const label = regionLabels[region];
+  return `${label.zh} / ${label.en}`;
+}
+
+function companyTypeLabel(companyType: string) {
+  const label = companyTypeLabels[companyType];
+  if (!label) return "未分类 / Unclassified";
+  return `${label.zh} / ${label.en}`;
+}
+
+function categoryLabel(category: string) {
+  const label = categoryLabels[category];
+  if (!label) return "未分类 / Unclassified";
+  return `${label.zh} / ${label.en}`;
+}
+
+function canonicalCategoryId(category: string) {
+  const label = categoryLabels[category];
+  return (label?.en || category)
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\s\-–—_/（）()，,：:·.]/g, "");
+}
+
+function BilingualNodeLabel({
+  label,
+}: {
+  label: { zh: string; en: string };
+}) {
+  return (
+    <span className="bilingual-node-label">
+      <span lang="zh-CN">{label.zh}</span>
+      <span lang="en">{label.en}</span>
+    </span>
+  );
+}
+
+function companyName(company: Company) {
+  return company.nameZh
+    ? `${company.nameZh} / ${company.nameEn}`
+    : company.nameEn;
+}
+
+function CompanyName({ company }: { company: Company }) {
+  return (
+    <span className="bilingual-organization-name">
+      <span lang={company.nameZh ? "zh-CN" : "en"} className="organization-name-primary">
+        {company.nameZh || company.nameEn}
+      </span>
+      {company.nameZh ? (
+        <span lang="en" className="organization-name-secondary">
+          {company.nameEn}
+        </span>
+      ) : null}
+    </span>
+  );
 }
 
 function signalKey(signal: string): "green" | "yellow" | "orange" | "red" | "unknown" {
@@ -162,14 +217,14 @@ function confidenceLabel(value: string) {
 function signalLabel(signal: string) {
   const key = signalKey(signal);
   return key === "green"
-    ? "可投初筛"
+    ? "可投初筛 / Initial fit"
     : key === "yellow"
-      ? "需核赞助"
+      ? "赞助待核 / Sponsorship check"
       : key === "orange"
-        ? "出口复核"
+        ? "出口复核 / Export review"
         : key === "red"
-          ? "硬门槛"
-          : "待核验";
+          ? "硬门槛 / Restricted"
+          : "待核验 / Unverified";
 }
 
 function fitRank(value: string) {
@@ -1050,11 +1105,44 @@ export function CareerDojoApp({
     return operation;
   }
 
-  const categories = useMemo(
+  const categoryOptions = useMemo(() => {
+    const groups = new Map<
+      string,
+      { id: string; values: string[]; zh: string; en: string }
+    >();
+    for (const rawCategory of new Set(
+      companies.flatMap((company) => company.categories),
+    )) {
+      if (!rawCategory) continue;
+      const id = canonicalCategoryId(rawCategory);
+      const label = categoryLabels[rawCategory];
+      const current = groups.get(id);
+      if (!current) {
+        groups.set(id, {
+          id,
+          values: [rawCategory],
+          zh: label.zh,
+          en: label.en,
+        });
+        continue;
+      }
+      current.values.push(rawCategory);
+      if (label.zh.length < current.zh.length) current.zh = label.zh;
+      if (label.en.length < current.en.length) current.en = label.en;
+    }
+    return [...groups.values()].sort((a, b) =>
+      `${a.zh} / ${a.en}`.localeCompare(`${b.zh} / ${b.en}`),
+    );
+  }, [companies]);
+  const categoryValuesById = useMemo(
     () =>
-      Array.from(new Set(companies.flatMap((company) => company.categories)))
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b)),
+      new Map(
+        categoryOptions.map((option) => [option.id, new Set(option.values)]),
+      ),
+    [categoryOptions],
+  );
+  const companyById = useMemo(
+    () => new Map(companies.map((company) => [company.id, company])),
     [companies],
   );
 
@@ -1068,11 +1156,13 @@ export function CareerDojoApp({
 
   const filteredCompanies = useMemo(() => {
     const term = search.trim().toLowerCase();
+    const selectedCategoryValues = categoryValuesById.get(category);
     return companies
       .filter((company) => region === "ALL" || regionOf(company) === region)
       .filter(
         (company) =>
-          category === "ALL" || company.categories.includes(category),
+          category === "ALL" ||
+          company.categories.some((item) => selectedCategoryValues?.has(item)),
       )
       .filter(
         (company) =>
@@ -1082,10 +1172,21 @@ export function CareerDojoApp({
         if (!term) return true;
         return [
           company.name,
+          company.nameEn,
+          company.nameZh || "",
           ...company.aliases,
           ...company.categories,
+          ...company.categories.map(categoryLabel),
+          companyTypeLabel(company.companyType),
+          regionLabel(regionOf(company)),
+          company.country,
+          company.region,
+          ...company.locations,
           ...company.focusAreas,
           ...company.roleFamilies,
+          ...company.opportunityTypes,
+          ...company.requirements,
+          ...company.gaps,
           company.whyRelevant,
         ]
           .join(" ")
@@ -1095,9 +1196,16 @@ export function CareerDojoApp({
       .sort(
         (a, b) =>
           fitRank(a.fitTier) - fitRank(b.fitTier) ||
-          a.name.localeCompare(b.name),
+          a.nameEn.localeCompare(b.nameEn),
       );
-  }, [category, companies, region, search, visa]);
+  }, [
+    category,
+    categoryValuesById,
+    companies,
+    region,
+    search,
+    visa,
+  ]);
 
   const filteredQuestions = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -1389,7 +1497,7 @@ export function CareerDojoApp({
       action: "saveApplication",
       application: {
         companyId: company.id,
-        companyName: company.name,
+        companyName: companyName(company),
         region: regionOf(company),
         status: "researching",
         priority: fitRank(company.fitTier) <= 1 ? "high" : "medium",
@@ -1431,9 +1539,13 @@ export function CareerDojoApp({
   }
 
   async function deleteApplication(application: ApplicationRecord) {
+    const currentCompany = companyById.get(application.company_id);
+    const currentCompanyName = currentCompany
+      ? companyName(currentCompany)
+      : application.company_name;
     if (
       !window.confirm(
-        `确认从投递作战室删除 ${application.company_name} — ${application.role_title}？`,
+        `确认从投递作战室删除 ${currentCompanyName} — ${application.role_title}？`,
       )
     ) {
       return;
@@ -1831,10 +1943,13 @@ export function CareerDojoApp({
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="target-name">
-                        <strong>{company.name}</strong>
+                        <strong><CompanyName company={company} /></strong>
                         <small>
-                          {company.categories.slice(0, 2).join(" · ") ||
-                            company.companyType}
+                          {company.categories
+                            .slice(0, 2)
+                            .map(categoryLabel)
+                            .join(" · ") ||
+                            companyTypeLabel(company.companyType)}
                         </small>
                       </span>
                       <span className="tier-badge">{company.fitTier || "TBD"}</span>
@@ -1924,10 +2039,10 @@ export function CareerDojoApp({
               </label>
               <div className="segmented" aria-label="地区筛选">
                 {[
-                  ["ALL", "全部"],
-                  ["US", "美国"],
-                  ["CN", "中国"],
-                  ["Global", "全球"],
+                  ["ALL", "全部 / All"],
+                  ["US", "美国 / U.S."],
+                  ["CN", "中国 / China"],
+                  ["Global", "全球 / Global"],
                 ].map(([value, label]) => (
                   <button
                     key={value}
@@ -1943,7 +2058,7 @@ export function CareerDojoApp({
                 ))}
               </div>
               <label>
-                <span>产业节点</span>
+                <span>产业节点 / Industry node</span>
                 <select
                   value={category}
                   onChange={(event) => {
@@ -1951,10 +2066,10 @@ export function CareerDojoApp({
                     setCompanyLimit(60);
                   }}
                 >
-                  <option value="ALL">全部产业节点</option>
-                  {categories.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
+                  <option value="ALL">全部产业节点 / All industry nodes</option>
+                  {categoryOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.zh} / {option.en}
                     </option>
                   ))}
                 </select>
@@ -1991,7 +2106,7 @@ export function CareerDojoApp({
                     aria-pressed={atlasLayout === "tree"}
                     onClick={() => setAtlasLayout("tree")}
                   >
-                    组织树
+                    组织树 / Tree
                   </button>
                   <button
                     className={atlasLayout === "cards" ? "active" : ""}
@@ -2009,8 +2124,12 @@ export function CareerDojoApp({
                 {companyTree.map((regionGroup) => (
                   <section key={regionGroup.region}>
                     <div className="company-tree-heading">
-                      <h3>{regionGroup.region}</h3>
-                      <span>{regionGroup.nodes.length} 个节点</span>
+                      <h3>
+                        <BilingualNodeLabel
+                          label={regionLabels[regionGroup.region]}
+                        />
+                      </h3>
+                      <span>{regionGroup.nodes.length} 个节点 / nodes</span>
                     </div>
                     {regionGroup.groups.map((typeGroup) => {
                       const groupId = `${regionGroup.region}:${typeGroup.companyType}`;
@@ -2031,7 +2150,14 @@ export function CareerDojoApp({
                           }}
                         >
                           <summary>
-                            <span>{typeGroup.companyType}</span>
+                            <BilingualNodeLabel
+                              label={
+                                companyTypeLabels[typeGroup.companyType] || {
+                                  zh: "未分类",
+                                  en: "Unclassified",
+                                }
+                              }
+                            />
                             <b>{typeGroup.companies.length}</b>
                           </summary>
                           {expanded ? (
@@ -2041,7 +2167,7 @@ export function CareerDojoApp({
                                   key={company.id}
                                   onClick={() => setSelectedCompany(company)}
                                 >
-                                  <span>{company.name}</span>
+                                  <CompanyName company={company} />
                                   <small>
                                     {company.fitTier || "TBD"} ·{" "}
                                     {signalLabel(company.visaSignal)}
@@ -2063,7 +2189,7 @@ export function CareerDojoApp({
                     <article className="company-card" key={company.id}>
                       <div className="company-card-top">
                         <span className="company-avatar">
-                          {company.name.slice(0, 2).toUpperCase()}
+                          {company.nameEn.slice(0, 2).toUpperCase()}
                         </span>
                         <button
                           className={`bookmark-button ${
@@ -2079,7 +2205,7 @@ export function CareerDojoApp({
                       </div>
                       <div>
                         <div className="company-title-row">
-                          <h3>{company.name}</h3>
+                          <h3><CompanyName company={company} /></h3>
                           <span className="tier-badge">
                             {company.fitTier || "TBD"}
                           </span>
@@ -2090,11 +2216,11 @@ export function CareerDojoApp({
                       </div>
                       <div className="tag-row">
                         {company.categories.slice(0, 3).map((item) => (
-                          <span key={item}>{item}</span>
+                          <span key={item}>{categoryLabel(item)}</span>
                         ))}
                       </div>
                       <div className="company-meta">
-                        <span>{regionOf(company)}</span>
+                        <span>{regionLabel(regionOf(company))}</span>
                         <span>{company.difficulty || "难度待核"}</span>
                         <span>{confidenceLabel(company.confidence)}</span>
                       </div>
@@ -2686,7 +2812,15 @@ export function CareerDojoApp({
                             </span>
                             <small>{application.region}</small>
                           </div>
-                          <h3>{application.company_name}</h3>
+                          <h3>
+                            {companyById.has(application.company_id) ? (
+                              <CompanyName
+                                company={companyById.get(application.company_id)!}
+                              />
+                            ) : (
+                              application.company_name
+                            )}
+                          </h3>
                           <p>{application.role_title}</p>
                           <div className="application-signals">
                             <span>{application.employment_type}</span>
@@ -2895,7 +3029,7 @@ export function CareerDojoApp({
                         key={company.id}
                         onClick={() => setSelectedCompany(company)}
                       >
-                        <strong>{company.name}</strong>
+                        <strong><CompanyName company={company} /></strong>
                         <small>{company.fitTier}</small>
                       </button>
                     ))}
@@ -3048,7 +3182,7 @@ export function CareerDojoApp({
                     .flatMap((company) =>
                       company.evidence.map((evidence) => ({
                         ...evidence,
-                        company: company.name,
+                        company: companyName(company),
                       })),
                     )
                     .filter((evidence) => evidence.url)
@@ -3112,13 +3246,16 @@ export function CareerDojoApp({
             </button>
             <div className="modal-header">
               <span className="company-avatar large">
-                {selectedCompany.name.slice(0, 2).toUpperCase()}
+                {selectedCompany.nameEn.slice(0, 2).toUpperCase()}
               </span>
               <div>
                 <span className="section-kicker">
-                  {regionOf(selectedCompany)} · {selectedCompany.companyType}
+                  {regionLabel(regionOf(selectedCompany))} ·{" "}
+                  {companyTypeLabel(selectedCompany.companyType)}
                 </span>
-                <h2 id="company-dialog-title">{selectedCompany.name}</h2>
+                <h2 id="company-dialog-title">
+                  <CompanyName company={selectedCompany} />
+                </h2>
                 <div className="modal-status-row">
                   <span className="tier-badge">
                     FIT {selectedCompany.fitTier || "TBD"}
@@ -3140,7 +3277,10 @@ export function CareerDojoApp({
             <div className="tag-row canonical-role-row">
               {selectedCompany.roleFamilyIds.map((roleId) => (
                 <span key={roleId}>
-                  {roles.find((role) => role.id === roleId)?.nameZh || roleId}
+                  {(() => {
+                    const role = roles.find((item) => item.id === roleId);
+                    return role ? `${role.nameZh} / ${role.name}` : roleId;
+                  })()}
                 </span>
               ))}
             </div>
