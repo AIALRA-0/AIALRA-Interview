@@ -1,0 +1,170 @@
+{
+  "q-dft-fault-detectability": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Enumerate every primary-input vector for the supplied combinational cone twice, once fault-free and once with the internal node forced to 0; record activation at the fault site and propagation to each observable output.",
+      "acceptance": "The proposed vector makes the fault-free internal node 1 and produces at least one output different from the stuck-at-0 circuit. If exhaustive enumeration finds no such vector, the redundancy claim includes the Boolean condition that blocks activation or propagation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "对给定组合逻辑锥的所有主输入向量进行两次穷举：一次使用无故障电路，一次把内部节点强制为 0；记录故障点的激活情况以及故障向每个可观察输出的传播情况。",
+      "acceptance": "所给向量必须使无故障内部节点为 1，并让至少一个输出与 stuck-at-0 电路不同。若穷举后不存在此类向量，冗余结论必须给出阻止故障激活或传播的布尔条件。"
+    }
+  },
+  "q-dft-scan-stitch": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Apply the proposed partitioning to a fixture listing every scan flop's clock, active edge, physical partition, and shift path; compute each chain length and shift time, then run scan-rule, cross-domain min-delay, and chain-connectivity checks.",
+      "acceptance": "Every eligible flop appears in exactly one connected chain, chain lengths satisfy the declared maximum shift time, mixed-edge or skewed clock crossings have a justified lockup strategy, test controls have safe functional values, and all scan clocks and exceptions are explicitly constrained."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把方案应用到一个列出每个扫描触发器时钟、有效边沿、物理分区和移位路径的样例；计算各链长度与 shift time，再执行扫描规则、跨域最小延迟和链连通性检查。",
+      "acceptance": "每个符合条件的触发器恰好出现在一条连通扫描链中，链长满足声明的最大 shift time；混合边沿或大偏斜时钟跨越具有合理的 lockup 策略；测试控制在功能模式下取安全值，且所有扫描时钟与例外均被明确约束。"
+    }
+  },
+  "q-dft-lockup-failure": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Reproduce one failing boundary with annotated launch and capture edges, clock arrival times, combinational min delay, and hold requirement; compare the computed margin before and after each proposed lockup, ordering, or constraint repair in gate-level scan simulation.",
+      "acceptance": "The diagnosis identifies a negative scan-shift hold margin at the failing partition crossing, the chosen lockup polarity and placement make the margin non-negative for all checked corners without changing scan order, and the repair removes the failure without masking an unconstrained path."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "用带标注的发射/捕获边沿、时钟到达时间、组合最小延迟和保持要求复现一个失败边界；在门级扫描仿真中，比较采用每种 lockup、排序或约束修复前后的计算裕量。",
+      "acceptance": "诊断必须指出失败分区跨越处的 scan-shift 保持裕量为负；所选 lockup 极性与位置应使所有已检查角落的裕量非负且不改变扫描顺序；修复后故障消失，同时不能用未约束路径掩盖问题。"
+    }
+  },
+  "q-dft-untestable-faults": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Diff pre-change and post-change ATPG reports by fault class, cone, power domain, and abort reason; for representative blocked, tied, redundant, and aborted faults, relax exactly one constraint or model boundary at a time and rerun targeted ATPG or formal justification.",
+      "acceptance": "Each sampled fault is assigned a reproducible cause rather than a generic untestable label: blocked and tied faults trace to a controlling constraint, redundant faults have a proof or exhaustive small-cone check, aborted faults expose a compute limit, and remediation improves the intended class without illegally powering or observing the design."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "按故障类别、逻辑锥、电源域和中止原因对比修改前后的 ATPG 报告；从 blocked、tied、redundant 和 aborted 中各取代表性故障，每次只放宽一个约束或模型边界，并重新运行定向 ATPG 或形式证明。",
+      "acceptance": "每个抽样故障都必须归因到可复现原因，而不是笼统标为不可测：blocked 与 tied 可追溯到控制性约束，redundant 具有证明或小逻辑锥穷举结果，aborted 明确暴露计算上限；补救措施应改善目标类别，且不能非法上电或观察设计。"
+    }
+  },
+  "q-dft-compression-x": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Inject an X independently at each listed memory or analog-wrapper source, propagate it through the proposed masking or bounding network into the compactor, and compare fault coverage and aliasing on clean, X-contaminated, and real stuck-at-fault fixtures.",
+      "acceptance": "Every declared X source is either initialized, bounded, or masked at a documented cycle and channel; uncontaminated response bits remain observable, injected real faults outside the masked support are still detected, and any coverage loss or compactor aliasing is quantified rather than hidden."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "分别在每个已列出的存储器或模拟 wrapper 源注入 X，使其经过拟定的 masking 或 X-bounding 网络传播到 compactor，并在干净、X 污染和真实 stuck-at 故障样例上比较覆盖率与混叠。",
+      "acceptance": "每个声明的 X 源都必须在有记录的周期和通道被初始化、截断或屏蔽；未受污染的响应位仍然可观察，屏蔽支持集之外注入的真实故障仍可检测，并且任何覆盖率损失或 compactor 混叠都被量化而非隐藏。"
+    }
+  },
+  "q-dft-march-memory": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Execute the ordered March elements on a small reference SRAM model, then repeat with one injected stuck-at-0, stuck-at-1, up-transition, down-transition, and representative inter-cell coupling fault at every legal address relation.",
+      "acceptance": "The fault-free model produces every expected read, each claimed fault class causes at least one predicted mismatch before a masking write, address directions and operation order are unambiguous, and the reported cycle count equals the number of operations per address times the memory depth plus declared overhead."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个小型参考 SRAM 模型上执行有序 March element；随后对每种合法地址关系，分别注入 stuck-at-0、stuck-at-1、上跳变、下跳变和代表性单元间耦合故障并重复执行。",
+      "acceptance": "无故障模型的每次读取都得到期望值；每个声称覆盖的故障类别都在被后续写入掩盖前产生至少一次可预测失配；地址方向和操作顺序无歧义；报告的周期数等于每地址操作数乘存储深度，再加已声明开销。"
+    }
+  },
+  "q-dft-tap-trace": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Feed the exact TMS sequence into an independent IEEE 1149.1 TAP state-table model from every possible initial state, annotate the state entered on each TCK rising edge, and separately model TDI sampling, IR/DR capture-shift-update actions, and TDO change timing.",
+      "acceptance": "Five consecutive TMS=1 samples converge every initial state to Test-Logic-Reset when that reset sequence is used; every subsequent state and IR/DR action matches the independent table, TDI is associated with the declared sampling edge, and TDO timing is not incorrectly treated as a state transition."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "从每一种可能初始状态出发，把给定 TMS 序列送入独立的 IEEE 1149.1 TAP 状态表模型；标注每个 TCK 上升沿进入的状态，并分别建模 TDI 采样、IR/DR capture-shift-update 操作和 TDO 变化时序。",
+      "acceptance": "若使用五个连续 TMS=1 的复位序列，所有初始状态都应收敛到 Test-Logic-Reset；其后每个状态与 IR/DR 操作均与独立状态表一致；TDI 对应已声明的采样边沿，且不能把 TDO 时序错误地当成状态转移。"
+    }
+  },
+  "q-dft-at-speed-clock": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Trace shift-to-capture-to-shift control on a multi-clock fixture, simulate the on-chip clock controller with PLL locked, unlocked, and disabled cases, and check generated-clock, clock-group, pulse-count, minimum-pulse-width, and test-enable assertions.",
+      "acceptance": "Slow scan shifting cannot leak an unintended at-speed pulse, the declared launch-on-capture sequence emits exactly the required legal pulses in each participating domain, unsafe PLL or enable states are blocked, crossings are constrained according to the test relationship, and return to shift mode is glitch-free."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在一个多时钟样例上追踪 shift→capture→shift 控制；分别在 PLL 已锁定、未锁定和禁用情况下仿真片上时钟控制器，并检查 generated clock、clock group、脉冲数、最小脉宽和测试使能断言。",
+      "acceptance": "低速扫描移位不能泄漏非预期高速脉冲；声明的 launch-on-capture 序列在每个参与时钟域恰好产生所需合法脉冲；不安全的 PLL 或使能状态被阻止；跨域关系按测试模式正确约束，且返回 shift 模式时无毛刺。"
+    }
+  },
+  "q-dft-fail-log-diagnosis": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Ingest a labeled synthetic fail-log set containing a repeated bridge signature, a scan-cell defect, random noise, duplicate records, and wafer-edge clustering; compare suspect rankings with the planted causes and validate the top hypotheses against held-out physical-analysis labels.",
+      "acceptance": "Parsing preserves device, pattern, cycle, channel, scan-cell, and wafer coordinates without double counting; each suspect includes calibrated support and uncertainty, the planted causes rank above distractors on held-out devices, spatial clustering is distinguished from signature overlap, and the report names a discriminating physical check."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "读取一组带标签的合成 fail log，其中包含重复桥接签名、扫描单元缺陷、随机噪声、重复记录和晶圆边缘聚类；把可疑点排序与植入根因比较，并使用留出的物理失效分析标签验证首要假设。",
+      "acceptance": "解析过程应保留器件、pattern、周期、通道、scan cell 和晶圆坐标且不重复计数；每个可疑点都给出经校准的支持度与不确定性；在留出器件上，植入根因排在干扰项之前；空间聚类与签名重叠被区分，并指出一项具有区分力的物理检查。"
+    }
+  },
+  "q-dft-low-power-test": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay representative shift and capture patterns with per-domain toggle and current estimates, compare them with package and power-grid limits, then evaluate the proposed chain grouping, fill scheduling, clock throttling, and power-control sequence against the same fault set.",
+      "acceptance": "Peak and average shift/capture activity stay below explicitly stated limits in every legal power state, isolation and retention controls remain test-safe, coverage loss is within the declared budget and traced to specific constraints, and monitor or abort behavior catches an injected over-current case."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "使用各电源域的翻转率和电流估算重放代表性 shift 与 capture pattern，并与封装和电源网格上限比较；随后在同一故障集上评估扫描链分组、填充值调度、时钟降速和电源控制序列。",
+      "acceptance": "在每个合法电源状态下，shift/capture 的峰值与平均活动都低于明确声明的限制；隔离和保持控制在测试模式下安全；覆盖率损失处于声明预算内且可追溯到具体约束；监测或中止机制能够捕获一个注入的过流案例。"
+    }
+  },
+  "q-dft-soc-dft-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Apply the architecture to an inventory of cores, memories, third-party IP, power/clock domains, tester channels, quality targets, and physical budgets; trace one scan pattern, one memory-repair transaction, and one diagnosis case end to end, then reconcile independent coverage, test-time, peak-power, pin, area, and timing estimates.",
+      "acceptance": "Every testable block has a defined access, clock, power, wrapper, pattern-validation, and diagnosis path; channel and test-time arithmetic closes within the tester budget, memory test and repair are auditable, coverage exclusions are justified, peak power and physical impact meet stated limits, and all residual automotive-quality risks have an owner and signoff evidence."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把架构应用到一份包含处理器核、存储器、第三方 IP、电源/时钟域、测试机通道、质量目标和物理预算的清单；端到端追踪一个扫描 pattern、一次存储器修复事务和一个诊断案例，再核对独立计算的覆盖率、测试时间、峰值功耗、引脚、面积和时序估算。",
+      "acceptance": "每个可测模块都具有明确的访问、时钟、电源、wrapper、pattern 验证和诊断路径；通道与测试时间计算在测试机预算内闭合；存储器测试与修复可审计；覆盖率排除有依据；峰值功耗与物理影响满足声明限制；所有残余汽车级质量风险都有责任人和签核证据。"
+    }
+  },
+  "q-dft-foundation-stuck-at": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the AND truth table and substitute each forced output fault.",
+      "acceptance": "Vector 11 distinguishes good 1 from stuck-at-0 value 0, and a selected zero-producing vector distinguishes good 0 from stuck-at-1 value 1."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "计算与门真值表，并分别代入两种输出固定故障。",
+      "acceptance": "向量 11 能区分正常值 1 与 stuck-at-0 故障值 0；任选一个能产生 0 的向量，能区分正常值 0 与 stuck-at-1 故障值 1。"
+    }
+  },
+  "q-dft-foundation-scan-cycles": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate an eight-bit shift register with eight load shifts, one capture replacement, and eight unload shifts.",
+      "acceptance": "The intended pattern is fully resident after 8 shifts and all captured bits emerge after a further 8 shifts, separated by 1 capture clock."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "仿真一个 8 位移位寄存器：执行 8 次装载移位、1 次捕获替换和 8 次卸载移位。",
+      "acceptance": "预期图样在 8 次移位后完全装入；两者之间间隔 1 个捕获时钟，再经过 8 次移位后，所有捕获位均被移出。"
+    }
+  },
+  "q-dft-foundation-mbist-walk": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the operation list on a four-element bit array and again with address 2 forced to one.",
+      "acceptance": "All normal reads return zero; the forced run reports exactly the read at address 2 as failing before the write-one operation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个含四个元素的位数组上运行该操作序列，然后将地址 2 强制为 1 后再次运行。",
+      "acceptance": "正常运行中的所有读取均返回 0；强制故障运行在写 1 操作之前，恰好将地址 2 的那次读取报告为失败。"
+    }
+  }
+}

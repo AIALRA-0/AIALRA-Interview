@@ -1,0 +1,170 @@
+{
+  "q-eda-hier-netlist-ir": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Instantiate a two-level parameterized RTL fixture, exercise hierarchy-preserving queries, clone one instance, flatten another, and compare connectivity, ownership, identity, and source maps with an independently enumerated golden model before and after one legal update.",
+      "acceptance": "Every connection has one declared owner and legal endpoint, surviving objects retain stable identity, cloned or flattened objects retain an unambiguous origin map, the update leaves no stale adjacency, and malformed references are rejected without mutating the valid IR."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "构造一个两级参数化 RTL 样例，执行保留层次结构的查询，克隆一个实例并展平另一个实例；在一次合法更新前后，将连通性、所有权、对象标识和源码映射与独立枚举的黄金模型比较。",
+      "acceptance": "每条连接都有唯一且明确的所有者和合法端点，保留对象的标识稳定，克隆或展平对象具有无歧义的来源映射，更新后不存在陈旧邻接关系，且畸形引用会在不修改有效 IR 的前提下被拒绝。"
+    }
+  },
+  "q-eda-timing-propagation": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the implementation on a hand-computed weighted DAG with multiple sources and a tied predecessor, compare every arrival and reconstructed path with an independent topological dynamic program, then add a back edge to form a cycle.",
+      "acceptance": "All arrival times equal the independent results, predecessor tie handling follows the declared deterministic rule, the reported endpoint path sums to the worst arrival, complexity is O(V+E), and the cyclic fixture is rejected rather than partially propagated."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个经过手工计算、含多个源点和前驱并列情况的带权 DAG 上运行实现，将每个到达时间和重建路径与独立的拓扑动态规划结果比较，然后加入一条回边形成环。",
+      "acceptance": "所有到达时间均与独立结果一致，前驱并列按照已声明的确定性规则处理，所报告端点路径的权重和等于最差到达时间，复杂度为 O(V+E)，且含环样例被拒绝而不是被部分传播。"
+    }
+  },
+  "q-eda-elaboration-width-bug": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compile a minimal module with WIDTH=17 using both a literal override and BASE+1, record parsed AST, constant-folded value, elaborated type, and diagnostic phase, and compare both runs with a pre-rewrite reference build.",
+      "acceptance": "Both legal overrides elaborate the adder to 17 bits, the first divergent phase is identified from evidence, constant folding and width ownership are assigned to one explicit phase, and an invalid or unresolved expression produces the declared diagnostic without silently using 16."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "编译一个最小模块，分别以字面量和 BASE+1 覆盖 WIDTH=17；记录解析后的 AST、常量折叠值、展开后的类型及诊断阶段，并与重写前的参考版本比较。",
+      "acceptance": "两种合法覆盖都将加法器展开为 17 位，能够依据证据定位第一个出现差异的阶段，常量折叠和位宽求值由一个明确阶段负责，且无效或无法求值的表达式产生已声明的诊断，而不是静默采用 16 位。"
+    }
+  },
+  "q-eda-delta-cycle-trace": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Instrument enqueue, dequeue, value-change, and driver events with stable IDs on one fixture that settles after two delta cycles and one true combinational loop; compare the trace with a reference simulator and with duplicate-schedule suppression enabled.",
+      "acceptance": "The settling fixture reaches the same final values in two delta cycles, duplicate scheduling is distinguishable from a value-changing event, a real zero-time loop is reported with its repeating dependency cycle, and instrumentation does not change event order."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在一个两次 delta 周期后稳定的样例和一个真实组合环样例上，为入队、出队、值变化和驱动事件加入稳定 ID；将轨迹与参考仿真器以及启用重复调度抑制后的结果比较。",
+      "acceptance": "稳定样例在两次 delta 周期后得到相同终值，重复调度能够与真实值变化事件区分，真实零时间环会连同重复依赖环被报告，且插桩不会改变事件顺序。"
+    }
+  },
+  "q-eda-onehot-sat": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Generate both encodings for N=1, N=2, and N=5, enumerate primary assignments with a SAT solver, project away auxiliary variables, and independently count clauses and auxiliary variables.",
+      "acceptance": "For each N, exactly the N assignments with one true mode bit are satisfiable after projection, zero-hot and multi-hot assignments are unsatisfiable, pairwise growth matches the declared quadratic count, and the compact encoding's linear-size claim matches the emitted CNF."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "针对 N=1、N=2 和 N=5 生成两种编码，使用 SAT 求解器枚举主变量赋值并投影掉辅助变量，同时独立统计子句数和辅助变量数。",
+      "acceptance": "对每个 N，投影后恰好只有 N 个“仅一个模式位为真”的赋值可满足，零热和多热赋值均不可满足；成对编码的增长符合所声明的二次数量，紧凑编码的线性规模主张与实际生成的 CNF 一致。"
+    }
+  },
+  "q-eda-incremental-timing": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Apply sparse arc-delay increases and decreases to reduced and randomized DAGs, including edits that enter and leave the critical cone, and after every edit compare incremental arrivals, predecessors, and worst endpoints with a clean full recomputation.",
+      "acceptance": "Incremental and full results are identical for every edited graph, invalidation reaches every and only dependency-reachable candidate allowed by the declared algorithm, convergence terminates without stale values, and measured work scales with the affected region rather than the entire graph."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在缩小版和随机 DAG 上稀疏增加或减少弧延迟，其中包含进入和离开关键锥的修改；每次修改后，将增量计算的到达时间、前驱和最差端点与一次干净的全量重算比较。",
+      "acceptance": "每个修改图上的增量结果都与全量结果完全一致；失效传播覆盖声明算法允许的所有且仅有依赖可达候选；收敛后没有陈旧值；实测工作量随受影响区域而不是整个图增长。"
+    }
+  },
+  "q-eda-hpwl-delta": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay deterministic and randomized cell moves, including removal of a unique minimum or maximum and ties at each extreme, and compare every incremental per-net and total HPWL delta with a full pin rescan.",
+      "acceptance": "Every incremental delta exactly equals the full-rescan delta, tied extrema and unique-extremum invalidation follow the declared update path, unaffected nets are untouched, and the stated amortized complexity matches measured operations."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "回放确定性和随机单元移动，其中包括移除唯一最小值或最大值，以及各极值处存在并列的情况；把每条网络和总 HPWL 的增量变化与完整引脚重扫结果逐次比较。",
+      "acceptance": "每次增量变化都与完整重扫结果精确一致，并列极值和唯一极值失效按照已声明的更新路径处理，未受影响的网络不被访问，且所述摊销复杂度与实测操作数一致。"
+    }
+  },
+  "q-eda-routing-congestion-log": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Diff the old and new technology-derived capacity tables after normalizing layer names, directions, pitches, obstructions, via rules, and units; change one suspected field at a time and rerun the affected region.",
+      "acceptance": "The ranked list starts with hypotheses consistent with unchanged placement, netlist, and floorplan hashes, the first five checks each predict a distinct observation, and at least one controlled reversal reproduces or removes the 140% overflow without changing unrelated inputs."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "统一层名、方向、间距、障碍物、过孔规则和单位后，比较新旧技术文件导出的容量表；每次只改变一个怀疑字段并重跑受影响区域。",
+      "acceptance": "排序最前的假设必须与布局、网表和 floorplan 哈希未变化这一事实一致；前五项检查分别预测可区分的观测；至少一次受控回退能够在不改变无关输入的情况下复现或消除 140% 溢出。"
+    }
+  },
+  "q-eda-differential-transform": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run hand-built and randomized Boolean cones through every pass boundary, compare simulation plus an independently encoded SAT-equivalence check, then inject one wrong rewrite and minimize the failing design and pass sequence.",
+      "acceptance": "Equivalent transforms pass both independent checks, the injected defect is localized to the first bad pass, minimization preserves the mismatch and deterministic replay, and no result is accepted solely because the transformed netlist agrees with its own evaluator."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让手工构造和随机布尔逻辑锥经过每个 pass 边界，使用仿真和独立编码的 SAT 等价性检查进行比较；随后注入一次错误重写，并最小化失败设计与 pass 序列。",
+      "acceptance": "等价变换同时通过两种独立检查，注入缺陷被定位到第一个错误 pass，最小化后仍保留失配且可确定性重放，任何结果都不会仅因变换后网表与其自身求值器一致而被接受。"
+    }
+  },
+  "q-eda-billion-pin-memory": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Build a byte-level budget for one billion pins including allocator, index, adjacency, and incremental-attribute overhead, validate representative structures with a scaled prototype, and sweep pointer width, fanout, and attribute sparsity.",
+      "acceptance": "The projected peak, including declared safety margin and non-pin structures, fits within 256 GB or is explicitly rejected; adjacency traversal and updates remain supported; every byte-per-pin assumption is traceable; and sensitivity analysis identifies the first condition that breaks the budget."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "为十亿个引脚建立逐字节预算，包含分配器、索引、邻接关系和增量属性开销；使用缩比原型验证代表性结构，并扫描指针宽度、扇出和属性稀疏度。",
+      "acceptance": "计入已声明安全余量和非引脚结构后的预计峰值必须低于 256 GB，否则明确判定不可行；方案仍支持邻接遍历和更新；每项每引脚字节假设均可追溯；敏感性分析能够指出首个使预算失效的条件。"
+    }
+  },
+  "q-eda-mini-sta-boss": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the analyzer on a hand-computed netlist containing reconvergent paths, one setup-critical endpoint, input/output delays, and a malformed or cyclic case; compare parsed objects, graph edges, arrivals, required times, slack, and reported paths with an independent script.",
+      "acceptance": "All legal-case timing values and worst-path ordering match the independent calculation under the declared convention, every report path reconstructs through valid arcs, malformed or cyclic input fails with a specific diagnostic, and repeated runs are deterministic."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个手工算定的网表上运行分析器；样例包含重汇聚路径、一个建立时间关键端点、输入/输出延迟，以及一个畸形或含环案例。将解析对象、图边、到达时间、要求时间、裕量和报告路径与独立脚本比较。",
+      "acceptance": "在已声明约定下，合法案例的全部时序值和最差路径排序均与独立计算一致；每条报告路径都能沿合法弧重建；畸形或含环输入以明确诊断失败；重复运行结果确定一致。"
+    }
+  },
+  "q-eda-foundation-fanout-count": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the pseudocode implementation on a fixed fixture containing four edges, one duplicate, and one unknown endpoint.",
+      "acceptance": "The output matches the independently enumerated unique-sink sets and the malformed record follows the declared policy."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个固定测试样例上运行该伪代码实现；样例包含四条边、一条重复边和一个未知端点。",
+      "acceptance": "输出与独立枚举得到的唯一接收端集合一致，且格式错误的记录按照已声明的策略处理。"
+    }
+  },
+  "q-eda-foundation-path-delay": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the supplied arithmetic with a calculator or a five-line script.",
+      "acceptance": "Arrival is 300 ps and slack is +50 ps under required-minus-arrival convention."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器或不超过五行的脚本计算题目给出的算式。",
+      "acceptance": "到达时间为 300 ps；按“要求时间减到达时间”的约定，裕量为 +50 ps。"
+    }
+  },
+  "q-eda-foundation-transform-invariant": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Run the transform on the three fixtures, enumerate all Boolean inputs, and compare outputs plus connectivity and source-location records.",
+      "acceptance": "All outputs match, every intended sink remains reachable, and every retained logical object has traceable metadata."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在三个测试样例上运行该变换，枚举所有布尔输入，并比较输出、连通性和源码位置记录。",
+      "acceptance": "所有输出均一致，每个预期接收端仍然可达，且每个被保留的逻辑对象都有可追溯的元数据。"
+    }
+  }
+}

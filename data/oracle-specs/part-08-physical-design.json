@@ -1,0 +1,170 @@
+{
+  "q-pd-macro-floorplan": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Apply the floorplan to a coarse-placement, pin-access, early global-route, and power-grid feasibility model; trace the high-bandwidth interface through all six SRAM macros and sweep channel, halo, and orientation alternatives.",
+      "acceptance": "Macros and pins follow declared data flow, no required routing or power-grid channel is geometrically blocked, halos and placement regions retain quantified optimization whitespace, pin-access and congestion remain below stated early limits, feedthroughs are explicit, and the selected alternative improves measured feasibility rather than appearance."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把 floorplan 应用于粗布局、引脚可达性、早期全局布线和电源网格可行性模型；跟踪高带宽接口与全部六个 SRAM 宏的数据流，并扫描通道、halo 和朝向方案。",
+      "acceptance": "宏单元和引脚符合声明数据流；必需布线或电源网格通道不会被几何阻断；halo 与布局区域保留量化优化空白；引脚可达性和拥塞低于声明早期上限；feedthrough 明确；所选方案改善实测可行性而非仅改善外观。"
+    }
+  },
+  "q-pd-congestion-heatmap": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Normalize local routing demand and capacity, then perturb pin placement, blockages, macro channels, layer capacity, cell density, and selected net topology one at a time; compare predicted and measured directional overflow around macro corners.",
+      "acceptance": "The diagnosis uses local rather than 58% average utilization, each ranked cause predicts a distinct heatmap or pin-access change, at least one controlled perturbation reproduces or relieves horizontal overflow, and the chosen fix reports timing, power, and displaced-congestion side effects."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "统一局部布线需求与容量口径，然后每次只改变引脚布局、blockage、宏通道、布线层容量、单元密度或选定网络拓扑之一；比较宏角落附近方向性溢出的预测与实测变化。",
+      "acceptance": "诊断依据局部指标而不是 58% 平均利用率；每个排序原因都预测不同热图或引脚可达性变化；至少一次受控扰动能够复现或缓解水平溢出；所选修复报告对时序、功耗和拥塞转移的副作用。"
+    }
+  },
+  "q-pd-setup-hold-math": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Substitute the declared launch and capture latencies, clock period, min and max data delays, setup, hold, and uncertainty into independently written setup and hold equations; verify both with a one-path STA fixture and reverse the skew sign as a boundary check.",
+      "acceptance": "Units and sign convention are explicit, setup uses the max path and hold uses the min path, uncertainty is applied once in the correct direction, arithmetic matches the independent STA fixture, and reversing capture-minus-launch skew has the correctly opposite effect on setup and hold."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "把声明的发射/捕获时钟延迟、周期、最小/最大数据延迟、setup、hold 和不确定度代入独立编写的建立与保持公式；用单路径 STA 样例验证，并反转 skew 符号作为边界检查。",
+      "acceptance": "单位与符号约定明确；setup 使用最大路径，hold 使用最小路径；不确定度只在正确方向计入一次；算术与独立 STA 样例一致；反转 capture-minus-launch skew 后，对 setup 和 hold 产生正确的相反影响。"
+    }
+  },
+  "q-pd-generated-clock-sdc": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Enumerate source and divide-by-three output edges over multiple parent cycles, encode the non-50% generated waveform on the true generated-clock pin, and compare clock, endpoint, unconstrained-path, and timing reports with the enumerated edge map.",
+      "acceptance": "Generated edges and period exactly match the physical divide-by-three behavior, the clock is attached to the true source and target pins with parent relationship preserved, all intended endpoints are timed against correct edges, and unconstrained paths disappear without false asynchronous or false-path exceptions."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "枚举多个父时钟周期中的源边沿和三分频输出边沿，在真实 generated-clock 引脚上编码非 50% 波形，并将时钟、端点、未约束路径和时序报告与枚举边沿映射比较。",
+      "acceptance": "生成边沿和周期与真实三分频行为精确一致；时钟附着在正确源/目标引脚且保留父时钟关系；所有预期端点按正确边沿分析；未约束路径消失且未使用虚假异步或 false path 例外。"
+    }
+  },
+  "q-pd-false-path-abuse": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Expand the broad exception into exact startpoint and endpoint pairs, identify the synchronized multi-bit control bus, run structural CDC and coherency checks, replace the exception with the proposed targeted constraints, and compare timed-path coverage before and after.",
+      "acceptance": "Every excluded path has a reviewed protocol justification, the real control bus is no longer hidden and its coherency mechanism is verified, unrelated asynchronous paths remain appropriately constrained, synchronous setup and hold analysis is restored where required, and no endpoint becomes silently unconstrained."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把宽泛例外展开为精确 startpoint/endpoint 对，识别同步多比特控制总线，运行结构 CDC 与一致性检查，使用拟定的定向约束替换例外，并比较前后的已分析路径覆盖。",
+      "acceptance": "每条被排除路径都有经评审的协议依据；真实控制总线不再被隐藏且其一致性机制得到验证；无关异步路径仍被适当约束；需要的同步 setup/hold 分析恢复；没有端点静默变为未约束。"
+    }
+  },
+  "q-pd-cts-skew": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Evaluate the skew change and buffering, sizing, and logic alternatives across the complete MMMC and test-mode matrix, comparing setup, hold, OCV sensitivity, clock power, and electrical checks before and after each isolated experiment.",
+      "acceptance": "The chosen fix closes the target setup path while preserving nonnegative required hold margins in every declared corner and test mode, does not rely on one optimistic skew estimate, introduces no electrical or clock-power violation, and is more robust across scenarios than the rejected alternatives."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在完整 MMMC 和测试模式矩阵上评估 skew 修改以及缓冲、尺寸和逻辑替代方案，逐项比较隔离实验前后的 setup、hold、OCV 敏感性、时钟功耗和电气检查。",
+      "acceptance": "所选修复收敛目标 setup 路径，同时在全部声明工艺角与测试模式中保留所需非负 hold 余量；不依赖单一乐观 skew 估计；不引入电气或时钟功耗违例；跨场景鲁棒性高于被否决方案。"
+    }
+  },
+  "q-pd-coupling-delay": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Align victim and aggressor switching windows, replay same-direction, opposite-direction, quiet-aggressor, and functionally impossible patterns in SI timing, and measure the critical path after isolated spacing, shielding, layer, and driver experiments.",
+      "acceptance": "The opposite-switching legal case reproduces the added delay near 180 ps while controls separate coupling from base RC, impossible correlation is excluded with functional evidence, the selected fix reduces measured SI delay to the declared margin, and congestion, power, and new-victim effects are reported."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "对齐 victim 与 aggressor 切换窗口，在 SI 时序中回放同向、反向、aggressor 静止和功能上不可能的模式，并在分别改变间距、屏蔽、布线层和驱动后测量关键路径。",
+      "acceptance": "合法反向切换案例复现约 180 ps 额外延迟，对照能够区分耦合与基础 RC；功能不可能的相关性由证据排除；所选修复把实测 SI 延迟降到声明余量内；同时报告拥塞、功耗和新 victim 副作用。"
+    }
+  },
+  "q-pd-mmmc-conflict": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Score a fixed sequence of candidate resize, Vt, buffer, and route changes against all slow, fast, standby, setup, hold, and leakage scenarios before commit; replay batched commits and rollbacks while tracking path groups and guard bands.",
+      "acceptance": "No committed change violates protected hold or leakage limits, every objective and guard band is evaluated on the same candidate snapshot, repeated optimization does not alternate between inverse fixes, regressions are attributable to a batch, and convergence reflects all declared scenarios rather than one active corner."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在提交前，把固定的尺寸、Vt、缓冲和布线候选变更序列放到全部慢角、快角、待机、setup、hold 和漏电场景中评分；重放批量提交与回滚，并跟踪路径组和 guard band。",
+      "acceptance": "任何已提交变更都不破坏受保护 hold 或漏电上限；所有目标和 guard band 在同一候选快照上评估；重复优化不会在相反修复之间振荡；回归可归因到具体批次；收敛反映全部声明场景而非单一活动工艺角。"
+    }
+  },
+  "q-pd-eco-choice": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Use the actual path composition and whitespace to run reversible what-if experiments for resize, buffering, Vt, route, logic, and skew; evaluate setup, hold, IR, DRC, power, and schedule risk in the signoff scenario matrix after each candidate.",
+      "acceptance": "The first experiment is physically feasible and reversible, the selected ECO removes the -120 ps setup deficit with declared margin, preserves the existing 80 ps hold budget or an approved minimum, creates no new IR, DRC, power, or MMMC violation, and has a rollback and verification plan compatible with ten days."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "依据真实路径组成和空白，对尺寸调整、插缓冲、Vt、布线、逻辑和 skew 运行可逆 what-if 实验；逐候选在 signoff 场景矩阵中评估 setup、hold、IR、DRC、功耗和进度风险。",
+      "acceptance": "第一项实验物理可行且可逆；所选 ECO 以声明余量消除 -120 ps setup 缺口；保留现有 80 ps hold 预算或获批最低值；不产生新的 IR、DRC、功耗或 MMMC 违例；并具有适合十天窗口的回滚与验证计划。"
+    }
+  },
+  "q-pd-ir-timing": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Align vector or vectorless activity windows with dynamic IR analysis, map voltage waveforms to critical clock and data cells, compare nominal and voltage-aware timing without double derating, and evaluate localized grid, placement, activity, and timing fixes.",
+      "acceptance": "The same time window and workload drive IR and timing evidence, voltage-aware delay changes correlate with affected cells and path sensitivity, pessimism is applied once, at least one independent waveform or library check supports the degradation, and the chosen joint fix improves both droop and signoff timing without moving the hotspot unreported."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "对齐有向量或无向量活动窗口与动态 IR 分析，把电压波形映射到关键时钟和数据单元，在不重复 derate 的情况下比较标称与电压感知时序，并评估局部电网、布局、活动和时序修复。",
+      "acceptance": "IR 与时序证据使用同一时间窗口和负载；电压感知延迟变化与受影响单元及路径敏感性相关；悲观量只施加一次；至少一个独立波形或库检查支持性能下降；所选联合修复同时改善压降和 signoff 时序，且不隐瞒热点转移。"
+    }
+  },
+  "q-pd-closure-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Audit a stage-gate package for the two-million-instance block from netlist and SDC lint through floorplan, PG, placement, CTS, route, extraction, STA, SI/IR, ECO, and final regression; sample artifacts across MMMC and replay one late ECO through governance.",
+      "acceptance": "Every gate has quantitative entry and exit evidence, all clocks and endpoints are constrained, floorplan and PG feasibility precede detailed optimization, MMMC coverage remains complete, final extraction and signoff artifacts share exact provenance, the sampled ECO passes controlled regression or rolls back, and unresolved tapeout risks have owners and escalation thresholds."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "审计该两百万实例模块从网表与 SDC lint，到 floorplan、PG、布局、CTS、布线、提取、STA、SI/IR、ECO 和最终回归的阶段关卡包；跨 MMMC 抽查工件，并让一个晚期 ECO 经过治理流程。",
+      "acceptance": "每个关卡都有量化入口与出口证据；所有时钟和端点均受约束；floorplan 与 PG 可行性早于详细优化；MMMC 覆盖保持完整；最终提取和 signoff 工件共享精确来源；抽查 ECO 通过受控回归或完成回滚；未解决 tapeout 风险具有负责人和升级阈值。"
+    }
+  },
+  "q-pd-foundation-setup-slack": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the three equations with a calculator using nanoseconds.",
+      "acceptance": "Arrival is 0.76 ns, required is 0.88 ns, slack is +0.12 ns, and the path is classified as meeting setup."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "以纳秒为单位，使用计算器计算题目给出的三个等式。",
+      "acceptance": "到达时间为 0.76 ns，要求时间为 0.88 ns，裕量为 +0.12 ns，且该路径被判定为满足建立时间要求。"
+    }
+  },
+  "q-pd-foundation-hold-fix": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Apply a modeled 60 ps data delay to the endpoint and rerun setup/hold reports in the same corner set.",
+      "acceptance": "Hold slack becomes nonnegative, setup remains nonnegative, and no new electrical violation appears at the changed path."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在端点处加入模型化的 60 ps 数据延迟，并在同一组工艺角下重新运行建立/保持时序报告。",
+      "acceptance": "保持时间裕量变为非负，建立时间裕量仍为非负，且修改后的路径没有出现新的电气违例。"
+    }
+  },
+  "q-pd-foundation-missing-clock": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Run clock and unconstrained-path reports before and after adding the intended create_clock constraint.",
+      "acceptance": "The expected clock appears, the synchronous endpoint count becomes constrained, and real setup/hold paths are analyzed rather than waived."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在添加预期的 create_clock 约束前后，分别运行时钟报告和未约束路径报告。",
+      "acceptance": "预期时钟出现在报告中，同步端点数量变为已约束，并且真实的建立/保持路径得到分析而不是被豁免。"
+    }
+  }
+}

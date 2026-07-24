@@ -1,0 +1,170 @@
+{
+  "q-fpga-resource-mapping": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Synthesize minimal multiplier and memory variants using the proposed templates, attributes, widths, pipeline stages, ports, and read modes; compare functional simulation, latency, utilization, and primitive-inference reports with LUT-only controls.",
+      "acceptance": "Legal inputs produce identical declared-cycle results, intended multipliers map to DSPs and memories to BRAMs in the report, unsupported shapes are explicitly identified, latency and collision behavior match the interface contract, and area improvement is measured rather than assumed."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用拟定模板、属性、位宽、流水级、端口和读取模式综合最小乘法器与存储器变体；将功能仿真、延迟、利用率和原语推断报告与纯 LUT 对照比较。",
+      "acceptance": "合法输入在声明周期得到相同结果；报告中预期乘法器映射到 DSP、存储器映射到 BRAM；不支持的结构被明确指出；延迟和冲突行为符合接口契约；面积改善来自测量而非假设。"
+    }
+  },
+  "q-fpga-missing-generated-clock": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Derive the divided waveform from source edges, apply the proposed generated-clock constraint to the actual divider pin, and compare clock, unconstrained-path, setup, and hold reports before and after while checking synchronous relationships.",
+      "acceptance": "The reported generated-clock period, phase, and edges equal the divider behavior, all intended synchronous endpoints become timed, unconstrained paths disappear for that reason rather than through false-path waivers, and no fabricated asynchronous domain suppresses real setup or hold checks."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "从源时钟边沿推导分频波形，把拟定 generated clock 约束施加到真实分频器引脚，并比较约束前后的时钟、未约束路径、setup 和 hold 报告，同时检查同步关系。",
+      "acceptance": "报告中的 generated clock 周期、相位和边沿与分频器行为一致；所有预期同步端点都得到时序分析；未约束路径因正确约束而消失而非被 false path 豁免；不会虚构异步域来压制真实 setup 或 hold 检查。"
+    }
+  },
+  "q-fpga-critical-path-report": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record baseline logic and route components for the -1.8 ns path, apply one controlled experiment each for pipelining, control replication, placement, and constraint review, and compare predicted versus measured path composition across seeds.",
+      "acceptance": "The ranking starts from the measured 65% routing contribution, each proposed intervention predicts a specific logic or routing change, experiments isolate one cause at a time, timing gains persist across declared seeds or placements, and no unjustified exception merely hides the path."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "记录 -1.8 ns 路径的基线逻辑与布线组成，分别对流水化、控制复制、布局和约束审查执行一次受控实验，并跨随机种子比较预测与实测的路径组成。",
+      "acceptance": "优先级从实测 65% 布线占比出发；每项干预都预测明确的逻辑或布线变化；实验每次隔离一个原因；时序收益在声明的多个种子或布局中保持；不存在仅靠无依据例外隐藏路径的做法。"
+    }
+  },
+  "q-fpga-fifo-pointer-wave": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate independent clocks through pointer wrap with varied phase and reset release, compare FIFO occupancy and empty/full flags with a reference queue, and assert binary-increment-before-Gray conversion, one-bit Gray transitions, synchronizer use, and wrap-bit comparisons.",
+      "acceptance": "Accepted writes and reads match the reference queue with no loss or duplication; each source-domain Gray update changes one bit; a destination sample may skip legal intermediate codes but, under the declared bus-skew and CDC constraints, never captures a mixed code not produced by the source; empty and full assert at the correct destination edges across wrap; and per-domain reset release creates no false flag."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用独立时钟、不同相位和复位释放方式仿真指针回绕，将 FIFO 占用及 empty/full 标志与参考队列比较，并断言先二进制递增再转 Gray、Gray 单比特变化、同步器使用和回绕位比较。",
+      "acceptance": "已接收读写与参考队列一致且无丢失或重复；源时钟域中的每次 Gray 更新只变化一位；目的域采样可以跳过合法中间码，但在声明的总线偏斜与 CDC 约束下，绝不能捕获源端从未产生的混合码；empty 和 full 在回绕前后均于正确目的时钟边沿置位；各域复位释放不产生虚假标志。"
+    }
+  },
+  "q-fpga-axi-backpressure": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Drive packets with randomized tready stalls, especially on tlast, and compare accepted data plus all sidebands with a packet-aware scoreboard while asserting stability whenever tvalid&&!tready and consumption only on tvalid&&tready.",
+      "acceptance": "The last beat and tlast remain stable through the stated stall, every packet byte and sideband is emitted exactly once and in order, no transfer occurs without a handshake, packet boundaries match the scoreboard, and all randomized-stall assertions pass."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "驱动带随机 tready 停顿的数据包，重点覆盖 tlast 周期；使用感知数据包的 scoreboard 比较已接收数据及全部 sideband，并断言 tvalid&&!tready 时稳定且只在 tvalid&&tready 时消费。",
+      "acceptance": "最后一拍及 tlast 在题目所述停顿期间保持稳定；每个数据包字节和 sideband 都按序恰好发出一次；非握手周期不发生传输；包边界与 scoreboard 一致；所有随机停顿断言通过。"
+    }
+  },
+  "q-fpga-transceiver-bringup": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Execute a staged matrix for reference-clock presence, reset timing, PLL lock, internal and external loopback, polarity, encoding, comma or block alignment, equalization, and channel measurements on both cold and warm boot; record counters at each boundary.",
+      "acceptance": "Each stage has a pass condition and a failure signature that narrows the next check, warm and cold reset order is recorded and made consistent, a stable aligned link sustains the declared error-rate window, and periodic bursts are localized to clock/reset, digital protocol, or channel evidence rather than guessed."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在冷启动和热启动下，分阶段检查参考时钟、复位时序、PLL 锁定、内部/外部 loopback、极性、编码、comma 或 block 对齐、均衡及信道测量，并在每个边界记录计数器。",
+      "acceptance": "每个阶段都有通过条件和能够缩小下一步检查范围的失败特征；冷/热启动复位顺序被记录并统一；稳定对齐链路在声明窗口内满足错误率；周期性突发依据证据被定位到时钟/复位、数字协议或信道之一，而不是猜测。"
+    }
+  },
+  "q-fpga-bram-latency": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Synthesize and simulate randomized addresses, bubbles, back-to-back requests, and every declared read-during-write collision; compare delayed data, metadata, and valid with a one-cycle reference pipeline and inspect BRAM inference and throughput reports.",
+      "acceptance": "Each accepted request produces its matching data and metadata exactly one declared latency later, bubbles and stalls do not misalign valid, collisions follow the selected contract, one result per cycle is sustained after fill, and synthesis infers the intended BRAM rather than distributed LUT memory."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "综合并仿真随机地址、气泡、连续请求和所有声明的读写冲突；将延迟后的数据、元数据和 valid 与单周期参考流水线比较，并检查 BRAM 推断和吞吐报告。",
+      "acceptance": "每个已接收请求都在声明延迟后产生匹配的数据与元数据；气泡和停顿不会错位 valid；冲突遵循所选契约；流水填满后维持每周期一个结果；综合推断预期 BRAM 而非分布式 LUT 存储器。"
+    }
+  },
+  "q-fpga-pblock-congestion": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Run the unconstrained baseline and a systematic sequence of relaxed and alternative pblocks across multiple placement seeds, recording regional utilization, pin demand, congestion, detours, critical timing, and interface locality globally and locally.",
+      "acceptance": "Each pblock is evaluated as a measured hypothesis with explicit headroom, the chosen boundary improves its target interface without an unacceptable global timing or congestion regression, the conclusion persists across declared seeds, and unnecessary constraints are removed rather than retained by intuition."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "跨多个布局随机种子运行无约束基线，以及一系列系统性放宽和替代 pblock；记录全局与局部的区域利用率、引脚需求、拥塞、绕行、关键时序和接口局部性。",
+      "acceptance": "每个 pblock 都作为具有明确余量的实测假设评估；所选边界改善目标接口且不引入不可接受的全局时序或拥塞回归；结论在声明种子间保持；不必要约束被移除而不是凭直觉保留。"
+    }
+  },
+  "q-fpga-ila-probe-plan": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay one source-stability defect and one internal-overflow defect lasting four cycles, apply the proposed three-signal trigger and capture policy, and compare pre/post-trigger evidence while checking clock-domain correctness, memory depth, and timing impact.",
+      "acceptance": "The selected signals distinguish the two root-cause classes and expose the first violated invariant before corruption, the four-cycle event fits the capture window under the stated rare-event trigger, probes are sampled in valid domains, memory fits the analyzer budget, and implementation timing remains within the declared non-intrusion limit."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "回放一个源端稳定性缺陷和一个持续四周期的内部溢出缺陷，应用拟定的三信号触发与采集策略，并比较触发前后证据，同时检查时钟域、存储深度和时序影响。",
+      "acceptance": "所选信号能够区分两类根因，并在数据损坏前暴露第一个失效不变量；在声明的稀有事件触发下，四周期事件落入采集窗口；探针在合法时钟域采样；存储量满足分析器预算；实现时序处于声明的非侵入限制内。"
+    }
+  },
+  "q-fpga-host-fpga-dma": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run a queueing and transaction model with variable descriptors, batches, translations, interrupts, backpressure, partial errors, timeout, and sustained load; compare descriptor ownership, byte movement, completion order, and measured throughput with independent PCIe, memory, and compute ceilings.",
+      "acceptance": "Every descriptor has one owner and exactly one terminal completion, accepted bytes are neither lost nor duplicated, backpressure and partial failure preserve recoverable state, invalid translations fail safely, interrupts and batching follow policy, and sustained throughput is consistent with the minimum declared bottleneck."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在队列与事务模型中运行可变 descriptor、批处理、地址转换、中断、背压、局部错误、超时和持续负载；将 descriptor 所有权、字节移动、完成顺序及实测吞吐与独立 PCIe、内存和计算上限比较。",
+      "acceptance": "每个 descriptor 始终只有一个所有者并恰好具有一个终态；已接收字节无丢失或重复；背压和局部失败保留可恢复状态；无效地址转换安全失败；中断与批处理遵循策略；持续吞吐与声明的最小瓶颈一致。"
+    }
+  },
+  "q-fpga-stream-accelerator-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Close an independent line-rate, latency, buffering, DSP, BRAM, and timing budget; simulate randomized packets and backpressure with live coefficient updates; synthesize and place the design; and reconcile on-chip counters with the testbench scoreboard during lab-style bring-up.",
+      "acceptance": "The 256-bit stream meets the declared line-rate equation without data or packet loss, resource and timing reports fit budget, coefficient changes are atomic at a stated boundary, counters equal independently observed traffic, simulation and on-chip evidence agree, and any floorplan assumption is verified rather than presumed."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "独立闭合线速、延迟、缓冲、DSP、BRAM 和时序预算；在 live 系数更新下仿真随机数据包与背压；综合并布局设计；在类似实验室 bring-up 中把片上计数器与测试平台 scoreboard 对账。",
+      "acceptance": "256 位流满足声明的线速方程且无数据或包丢失；资源和时序报告符合预算；系数在声明边界原子更新；计数器等于独立观测流量；仿真与片上证据一致；任何 floorplan 假设都经过验证而非默认成立。"
+    }
+  },
+  "q-fpga-foundation-period-slack": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate 1/(200e6) and subtract 5.30 ns using a calculator.",
+      "acceptance": "The period is 5.00 ns, slack is -0.30 ns, and the answer identifies a setup violation under the supplied assumptions."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器计算 1/(200e6)，再减去 5.30 ns。",
+      "acceptance": "时钟周期为 5.00 ns，裕量为 -0.30 ns；在题目给定的假设下，答案将其判定为建立时间违例。"
+    }
+  },
+  "q-fpga-foundation-sync-scope": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Randomize source transitions around destination edges and monitor whether received bus words belong to the set of complete transmitted words.",
+      "acceptance": "The selected coherent crossing never emits a mixed word; the single-bit output changes only after the synchronizer latency."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在目的时钟边沿附近随机改变源端信号，并监测接收到的总线字是否属于完整发送字的集合。",
+      "acceptance": "所选的相干跨域方案绝不输出混合字；单比特输出只在经历同步器延迟后发生变化。"
+    }
+  },
+  "q-fpga-foundation-probe-plan": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay two synthetic scenarios, one violating source stability and one filling the internal queue, and capture the three selected signals.",
+      "acceptance": "The capture rules classify the two scenarios differently and identify the first edge at which the relevant invariant fails."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "回放两个合成场景：一个违反源端稳定性，另一个填满内部队列；同时采集所选的三个信号。",
+      "acceptance": "采集规则能够将两个场景判为不同类别，并定位相关不变量首次失效的时钟边沿。"
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "q-cad-tcl-quoting": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Invoke the corrected command with an argv-capturing fake tool using ordinary paths, 'top revA.sdc', braces, semicolons, dollar signs, backslashes, an empty argument, and nested substitutions; compare the captured argument vector with the intended list.",
+      "acceptance": "Every input becomes exactly one intended argument with identical bytes, the empty argument is preserved, no metacharacter is executed or reparsed through eval, and malformed input produces an explicit error rather than an intermittently split command."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用能够捕获 argv 的模拟工具调用修正后命令，输入包括普通路径、'top revA.sdc'、花括号、分号、美元符号、反斜杠、空参数和嵌套替换；将捕获的参数向量与预期列表比较。",
+      "acceptance": "每项输入都以完全相同的字节成为唯一预期参数，空参数得到保留，没有元字符通过 eval 被执行或再次解析，且畸形输入产生明确错误而不是间歇性拆分命令。"
+    }
+  },
+  "q-cad-flow-dag": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Execute a miniature flow DAG twice, then independently mutate source, constraint, mode, tool version, and one optional-stage condition; record cache keys, scheduled stages, committed artifacts, and terminal states for success, skip, and failure.",
+      "acceptance": "An unchanged replay reuses every valid artifact, each mutation reruns exactly its semantic descendants, skipped output is distinguishable from failed or missing output, no failed artifact enters the cache, and repeated runs with the same keys are deterministic."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "执行一个微型流程 DAG 两次，随后分别修改源码、约束、模式、工具版本和一个可选阶段条件；记录成功、跳过和失败情况下的缓存键、调度阶段、已提交产物及终态。",
+      "acceptance": "未变化的重放复用所有有效产物；每项修改恰好重跑其语义后继；跳过输出能够与失败或缺失输出区分；失败产物不会进入缓存；相同键的重复运行结果确定一致。"
+    }
+  },
+  "q-cad-drifting-runs": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Create a controlled run matrix that varies host, seed, thread count, library, and hotfix one at a time, repeat the pinned baseline, and compare placement and timing with predeclared exact or statistical tolerances.",
+      "acceptance": "The pinned baseline is reproducible within its declared tolerance, every trial records a complete run identity, the first variable or interaction that explains drift is supported by repeated evidence, and stochastic variation is not mislabeled as corruption."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立受控运行矩阵，每次只改变主机、随机种子、线程数、库或热修复之一；重复固定基线，并按照预先声明的精确或统计容差比较布局和时序。",
+      "acceptance": "固定基线在声明容差内可复现；每次试验都记录完整运行身份；首个能够解释漂移的变量或交互由重复证据支持；随机波动不会被误判为数据损坏。"
+    }
+  },
+  "q-cad-license-starvation": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate a queue with scarce multi-type license tokens, short arrivals, one large tapeout job, worker loss, timeout, and cancellation; measure wait time, utilization, held resources, and token conservation under the proposed policy.",
+      "acceptance": "No job holds compute while indefinitely waiting for another required token, every admitted job either starts within a declared bound or receives an auditable terminal decision, crashed jobs release all tokens, short-job throughput remains measured, and the tapeout job cannot starve."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "模拟一个包含多类稀缺许可证、持续到达的短任务、一个大型 tapeout 任务、worker 丢失、超时和取消的队列；在拟定策略下测量等待时间、利用率、已占资源和 token 守恒。",
+      "acceptance": "任何任务都不会在持有计算资源时无限等待另一必需 token；每个已接纳任务要么在声明上限内启动，要么获得可审计终止决定；崩溃任务释放全部 token；短任务吞吐得到量化；大型任务不会饥饿。"
+    }
+  },
+  "q-cad-failure-clustering": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the parser on labeled multiline logs that vary timestamps, paths, seeds, IDs, addresses, warning order, and semantically meaningful numeric error codes; compare extracted fatal windows and exact signatures with a hand-labeled manifest.",
+      "acceptance": "Volatile-only variants join the same cluster, different fatal causes or semantic numbers remain separate, multiline context and tool/stage provenance are preserved, unknown formats enter an explicit fallback category, and rerunning produces identical signatures."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在已标注的多行日志上运行解析器；日志分别改变时间戳、路径、随机种子、ID、地址、warning 顺序和具有语义的数字错误码；将提取的致命窗口与精确签名同人工标注清单比较。",
+      "acceptance": "只含易变信息差异的日志归入同一组；不同致命原因或语义数字保持分离；多行上下文和工具/阶段来源得到保留；未知格式进入明确回退类别；重复运行生成相同签名。"
+    }
+  },
+  "q-cad-artifact-lineage": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Create a source-to-netlist-to-report lineage with two corners and owners, retrieve the exact ancestors of one report, attempt cross-project access, delete an unreferenced branch, and run retention and garbage collection.",
+      "acceptance": "The report resolves to exact content-addressed inputs, tool build, command, corner, and owner; cross-project access is denied and audited; referenced ancestors survive retention; only unreachable artifacts are collected; and immutable IDs never change after publication."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "创建一条从源码到网表再到报告的血缘，其中包含两个工艺角和负责人；查询一份报告的精确祖先，尝试跨项目访问，删除一条未引用分支，并执行保留与垃圾回收。",
+      "acceptance": "该报告能够解析到精确的内容寻址输入、工具构建、命令、工艺角和负责人；跨项目访问被拒绝并审计；被引用祖先在保留期内不被删除；只有不可达产物被回收；不可变 ID 发布后不发生变化。"
+    }
+  },
+  "q-cad-regression-bisect": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Use a synthetic provenance matrix with one single-axis regression and one non-monotonic two-axis interaction, schedule expensive combinations under the proposed strategy, and compare the inferred culprit set with the planted changes.",
+      "acceptance": "Every tested point has complete RTL, flow, library, tool, environment, and seed identity; the planted single cause and interaction are both discoverable; a non-monotonic result does not force an invalid binary-search conclusion; and the remaining uncertainty and run count are reported."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用一个合成来源矩阵，其中注入一个单轴回归和一个非单调双轴交互；按拟定策略调度昂贵组合，并将推断的责任变更集合与注入结果比较。",
+      "acceptance": "每个测试点都具有完整的 RTL、流程、库、工具、环境和随机种子身份；注入的单一原因与交互均可被发现；非单调结果不会被强行解释为普通二分结论；剩余不确定性和运行次数得到报告。"
+    }
+  },
+  "q-cad-flow-slos": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay a fixed month of run and queue events containing a partial outage, retry storm, PPA regression, and cost spike; independently calculate journey success, latency percentiles, retry-adjusted reliability, quality, cost, and error-budget burn by cohort.",
+      "acceptance": "Each SLI has a defined population, unit, window, and owner; the four planted incidents appear in the relevant metric without being hidden by averages; alert thresholds predict an actionable response; and success cannot be improved merely by retries, exclusions, or relabeling failures."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "回放一个固定月份的运行和队列事件，其中包含局部故障、重试风暴、PPA 回归和成本突增；按 cohort 独立计算用户旅程成功率、时延分位数、扣除重试后的可靠性、质量、成本及错误预算消耗。",
+      "acceptance": "每个 SLI 都有明确总体、单位、窗口和负责人；四个注入事件都在相关指标中显现且不被平均值掩盖；告警阈值对应可执行响应；不能仅通过重试、排除样本或重新标记失败来提高成功率。"
+    }
+  },
+  "q-cad-secret-boundaries": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run valid, expired, unauthorized, and rotated credentials through a fake vendor-tool flow; scan manifests, commands, logs, bundles, caches, and error paths for secret values while replaying by secret-version reference.",
+      "acceptance": "No secret value appears in immutable artifacts or shared output, authorized jobs receive only the least-privilege credential for their project and lifetime, rotation revokes the old value, denial and use are audited, and replay identifies a version without storing its value."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让有效、过期、未授权和已轮换凭据经过模拟供应商工具流程；扫描清单、命令、日志、运行包、缓存和错误路径中的密钥值，同时通过密钥版本引用执行重放。",
+      "acceptance": "不可变产物和共享输出中不出现任何密钥值；授权任务只获得适用于本项目和生命周期的最小权限凭据；轮换后旧值失效；拒绝与使用均被审计；重放只标识版本而不存储密钥值。"
+    }
+  },
+  "q-cad-checkpoint-recovery": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Inject preemption before, during, and after atomic checkpoint publication, then attempt resume with matching and mismatched tool, configuration, and input hashes; repeat a successful retry and run cleanup.",
+      "acceptance": "Only a completely committed compatible checkpoint is resumable, partial reports never become published outputs, mismatches fail before mutation with a specific reason, retry is idempotent, retry count is bounded, and cleanup removes only private abandoned state."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在原子发布检查点之前、期间和之后分别注入抢占，然后使用匹配及不匹配的工具、配置和输入哈希尝试恢复；重复一次成功重试并执行清理。",
+      "acceptance": "只有完整提交且兼容的检查点可以恢复；部分报告绝不会成为已发布输出；失配在修改状态前以明确原因失败；重试具有幂等性且次数有界；清理只删除私有的废弃状态。"
+    }
+  },
+  "q-cad-flow-platform-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Exercise a reduced platform model with two confidential projects, shared compute, multi-token jobs, cache hits, tool-version coexistence, a scheduler failure, a license outage, and a canary rollout; replay one run from provenance.",
+      "acceptance": "Projects cannot read each other's data or cache entries, resources remain deadlock-free with bounded priority behavior, committed artifacts survive partial outages, a pinned run replays deterministically, telemetry identifies the failed boundary, and canary rollback restores the prior version without corrupting in-flight work."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在缩小的平台模型上运行两个保密项目、共享计算、多 token 任务、缓存命中、多工具版本共存、调度器故障、许可证中断和 canary 上线，并依据来源信息重放一次运行。",
+      "acceptance": "项目之间不能读取对方数据或缓存；资源无死锁且优先级等待有界；已提交产物在局部故障中保留；固定版本运行可确定性重放；遥测能够定位失败边界；canary 回滚恢复上一版本且不破坏在途任务。"
+    }
+  },
+  "q-cad-foundation-stage-contract": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Execute a fake stage twice: once producing a valid artifact and once exiting zero without it.",
+      "acceptance": "The wrapper accepts only the first run and records a distinct missing-artifact failure for the second."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "将一个模拟流程阶段执行两次：第一次生成有效产物，第二次以退出码 0 结束但不生成产物。",
+      "acceptance": "包装器只接受第一次运行，并为第二次运行记录一种明确且独立的“缺失产物”失败。"
+    }
+  },
+  "q-cad-foundation-provenance": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Diff manifests from two controlled runs in which only the constraint file is changed.",
+      "acceptance": "The diff identifies the constraint content hash as changed while source, tool, and configuration identifiers remain equal."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "比较两次受控运行的清单；两次运行之间只有约束文件发生了变化。",
+      "acceptance": "差异结果识别出约束文件的内容哈希已变化，同时源码、工具和配置标识符均保持相同。"
+    }
+  },
+  "q-cad-foundation-retry": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Feed two synthetic logs with stable error codes into the classifier and simulate five scheduling decisions.",
+      "acceptance": "The timeout receives no more than the configured retries; the syntax error receives zero retries; both produce an auditable terminal reason."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "向分类器输入两份具有稳定错误码的合成日志，并模拟五次调度决策。",
+      "acceptance": "超时失败的重试次数不超过配置上限；语法错误的重试次数为 0；两者都产生可审计的终止原因。"
+    }
+  }
+}

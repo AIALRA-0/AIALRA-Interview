@@ -1,0 +1,170 @@
+{
+  "q-dv-simulation-race": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the original and repaired testbench on at least two simulators, with logging enabled and disabled and with small scheduling perturbations; record req drive and DUT sample regions and compare cycle-level results.",
+      "acceptance": "The original fixture demonstrates an ordering-dependent result, the repaired stimulus and sampling occupy explicitly deterministic regions or a clocking-block contract, and every repaired run produces the same req sampling and regression outcome regardless of logging."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在至少两个仿真器上运行原始和修复后的测试平台，分别开启与关闭日志并加入小型调度扰动；记录 req 驱动与 DUT 采样所在调度区，并比较逐周期结果。",
+      "acceptance": "原始样例能够展示依赖执行顺序的结果；修复后的激励与采样位于明确的确定性调度区或 clocking block 契约中；无论是否记录日志，所有修复后运行的 req 采样和回归结果都一致。"
+    }
+  },
+  "q-dv-uvm-env-plan": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Instantiate the proposed environment in block-active, block-passive, and SoC-reuse configurations; inject one normal packet, one register-driven change, one interrupt, and one corrupted response while tracing which component drives, observes, predicts, checks, and covers each event.",
+      "acceptance": "Agents change activity by configuration without structural forks, monitors are the sole observed-transaction source, the reference model and scoreboard detect the corruption independently of drivers, register and virtual-sequence responsibilities are explicit, and all three reuse modes produce attributable coverage and diagnostics."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "以模块级主动、模块级被动和 SoC 复用三种配置实例化拟定环境；注入一个正常数据包、一次寄存器驱动变化、一次中断和一个损坏响应，并追踪各事件由哪个组件驱动、观察、预测、检查和覆盖。",
+      "acceptance": "agent 活动性可通过配置改变而无需复制结构；monitor 是观测事务的唯一来源；参考模型与 scoreboard 不依赖 driver 地发现损坏；寄存器模型和虚拟 sequence 职责明确；三种复用模式都产生可归属的覆盖率和诊断。"
+    }
+  },
+  "q-dv-sequence-deadlock": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay reset before get_next_item, after item grant, while the driver waits, and after item completion; monitor sequencer ownership, item_done or cancellation, outstanding resources, virtual-sequence completion, and watchdog evidence.",
+      "acceptance": "Every granted item reaches exactly one declared completion, cancellation, or drain state, reset leaves no locked sequencer or orphaned item, the virtual sequence terminates within the watchdog bound, and normal non-reset traffic retains standard get_next_item/item_done semantics."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "分别在 get_next_item 前、item 授予后、driver 等待期间和 item 完成后回放复位；监测 sequencer 所有权、item_done 或取消、未完成资源、虚拟 sequence 结束情况和 watchdog 证据。",
+      "acceptance": "每个已授予 item 恰好进入一种声明的完成、取消或排空状态；复位后不存在被锁 sequencer 或孤儿 item；虚拟 sequence 在 watchdog 上限内结束；正常非复位流量仍遵循标准 get_next_item/item_done 语义。"
+    }
+  },
+  "q-dv-reorder-scoreboard": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Generate tagged requests with repeated addresses, out-of-order responses, retries, duplicate responses, timeouts, and reset at each in-flight position; compare scoreboard state and diagnostics with an independent transaction-state model.",
+      "acceptance": "Legal responses match by unique transaction identity rather than address, retries do not double-apply expected state, duplicates and unknown tags are reported, reset flushes exactly the declared transactions, timeouts retain actionable request context, and all internal entries are eventually retired."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "生成带 tag 的请求，覆盖重复地址、乱序响应、重试、重复响应、超时，以及在每个在途位置发生复位；将 scoreboard 状态和诊断与独立事务状态模型比较。",
+      "acceptance": "合法响应按唯一事务身份而不是地址匹配；重试不会重复应用预期状态；重复或未知 tag 会被报告；复位恰好清除声明范围内事务；超时保留可执行的请求上下文；所有内部条目最终都会退休。"
+    }
+  },
+  "q-dv-constraint-unsat": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Use staged constraint disabling or a solver unsat core to isolate the len=64 conflict, then randomize legal boundary lengths and addresses over many seeds and compare the repaired distribution and reserved-region exclusions with an independent legal-space enumerator.",
+      "acceptance": "A minimal conflicting set explains the len=64 failure, the repair preserves alignment, boundary, burst, and reserved-region intent, every generated transaction is legal, all intended boundary classes remain reachable, and solvability is demonstrated across seeds rather than one lucky example."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用分阶段禁用约束或求解器 unsat core 隔离 len=64 冲突，随后以多个随机种子生成合法边界长度和地址，并将修复后分布与保留区域排除同独立合法空间枚举器比较。",
+      "acceptance": "一个最小冲突集合能够解释 len=64 失败；修复保留对齐、边界、burst 和保留区域意图；每个生成事务都合法；所有预期边界类别仍可达；可满足性通过多个随机种子而不是单个幸运样例证明。"
+    }
+  },
+  "q-dv-coverage-hole": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Trace the cross bin to a requirement and legality table, use formal reachability or a reduced exhaustive model to test mode=low_power, burst=max, error=timeout, and attempt one directed stimulus while checking monitor observability.",
+      "acceptance": "The bin is classified separately for required, legal, reachable, observable, and useful, with evidence for each; a reachable required bin receives effective stimulus and is observed, while an impossible or irrelevant bin is waived only with reviewed requirement and reachability evidence rather than excluded to raise coverage."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把该交叉 bin 追溯到需求与合法性表，使用形式可达性或缩小后的穷举模型测试 mode=low_power、burst=max、error=timeout，并尝试一次定向激励且检查 monitor 可观察性。",
+      "acceptance": "分别依据证据判断该 bin 是否必需、合法、可达、可观察和有用；可达且必需的 bin 获得有效激励并被观察；不可能或无关的 bin 只有在需求和可达性证据经过评审后才可豁免，不能为提高覆盖率而直接排除。"
+    }
+  },
+  "q-dv-ready-valid-sva": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compile the properties and run traces for normal transfer, multi-cycle stall with stable data, data change under stall, valid without ready, reset entry and exit, and bounded-progress success and failure under explicit environment assumptions; inspect vacuity.",
+      "acceptance": "Legal traces pass, the first illegal edge is reported for unstable stalled data or spurious transfer, reset creates and cancels obligations exactly as declared, safety properties do not require fairness, liveness uses an explicit non-vacuous assumption, and antecedents are demonstrably reachable."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "编译这些属性，并运行正常传输、多周期停顿且数据稳定、停顿期间数据改变、valid 无 ready、复位进入与退出，以及在明确环境假设下的有界进展成功和失败轨迹；同时检查空洞性。",
+      "acceptance": "合法轨迹通过；停顿数据不稳定或虚假传输在第一个非法边沿被报告；复位按声明创建和取消义务；安全属性不依赖公平性；活性属性使用明确且非空洞的假设；属性前件可证明能够到达。"
+    }
+  },
+  "q-dv-formal-vacuity": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run antecedent-coverage and request cover properties, inspect and minimize the assumption core that forces reset, then repair the environment and rerun proofs plus covers with a reachable legal request trace.",
+      "acceptance": "The original proof is identified as vacuous because its antecedent is unreachable, the reset-forever assumption appears in a minimal explanatory core, the repaired model reaches a legal request, and the protocol assertion proves again without excluding required behavior."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "运行前件覆盖和请求 cover property，检查并最小化强制复位的假设核，然后修复环境，使用一条可达合法请求轨迹重新运行证明和 cover。",
+      "acceptance": "原始证明因前件不可达而被判定为空洞；永久复位假设出现在能够解释问题的最小核中；修复后模型可到达合法请求；协议断言再次证明且没有排除必需行为。"
+    }
+  },
+  "q-dv-x-propagation": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Trace four-state values backward from the committed transaction to the first X source, compare ordinary RTL, x-prop, and gate-level runs on the same reset fixture, then apply the proposed initialization or design fix and rerun all modes.",
+      "acceptance": "Evidence identifies the first unknown source before downstream masking, the original modes reproduce the optimism mismatch, the fix removes or explicitly blocks the unknown at its ownership boundary, all three simulations agree on transaction commitment, and no configuration merely hides a real uninitialized state."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "从已提交事务沿四态值反向追踪到第一个 X 来源，在同一复位样例上比较普通 RTL、x-prop 和门级运行；应用拟定的初始化或设计修复后重跑全部模式。",
+      "acceptance": "证据在下游掩盖前定位到首个未知来源；原始模式复现乐观语义失配；修复在所有权边界消除或明确阻断未知值；三种仿真对事务提交结论一致；任何配置都不会仅仅隐藏真实未初始化状态。"
+    }
+  },
+  "q-dv-equivalence-regression": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay the failing equivalence counterexample, partition functional, scan, and clock-gating modes with explicit legal constraints, inspect initial-state and state-point mapping, and reduce the failing cone while preserving the trace.",
+      "acceptance": "A valid mode and reset correspondence is stated without forcing test pins to convenient constants, the counterexample is either explained as a real mismatch or removed by a justified mapping, functional equivalence proves for reachable states, scan behavior is checked under its own contract, and the minimized trace remains reproducible."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "重放失败的等价性反例，以明确合法约束划分功能、扫描和时钟门控模式，检查初始状态与状态点映射，并在保留轨迹的前提下缩减失败逻辑锥。",
+      "acceptance": "给出有效模式和复位对应关系，且不为方便证明而把测试引脚强制为常量；反例要么被证明为真实失配，要么由有依据的映射消除；功能等价性对可达状态成立；扫描行为按自身契约检查；最小化轨迹仍可复现。"
+    }
+  },
+  "q-dv-dma-verification-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Execute a traceable signoff matrix spanning channels, descriptor chains, scatter-gather, reordered responses, interrupts, errors, resets at each ownership boundary, protection violations, and performance load; compare monitor traffic with an independent memory and descriptor model, assertions, and selected formal proofs.",
+      "acceptance": "Data, ordering, completion, interrupt, error, reset, and protection invariants pass independently; every requirement maps to a reachable test, assertion, cover, or justified exclusion; injected defects are detected with actionable context; performance meets declared workload thresholds; and residual coverage and model risks are explicit."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "执行可追溯 signoff 矩阵，覆盖多通道、descriptor 链、scatter-gather、乱序响应、中断、错误、各所有权边界复位、保护违例和性能负载；将 monitor 流量与独立内存/descriptor 模型、断言和选定形式证明比较。",
+      "acceptance": "数据、顺序、完成、中断、错误、复位和保护不变量均通过独立检查；每项需求映射到可达测试、断言、cover 或有依据的排除；注入缺陷以可执行上下文被发现；性能达到声明工作负载阈值；剩余覆盖和模型风险明确。"
+    }
+  },
+  "q-dv-foundation-handshake-property": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compile the property with three tiny traces: req then ack, req then no ack, and req during reset.",
+      "acceptance": "The first passes, the second fails at the expected edge, and the reset trace creates no obligation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用三条最小轨迹编译并运行该属性：req 后出现 ack、req 后未出现 ack，以及复位期间出现 req。",
+      "acceptance": "第一条轨迹通过，第二条轨迹在预期的时钟边沿失败，复位轨迹不产生任何后续义务。"
+    }
+  },
+  "q-dv-foundation-scoreboard": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate (250 + 10) & 0xff in an independent script and compare it with the observed byte.",
+      "acceptance": "The independent result is 4 and the transaction is recorded as a pass with complete context."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在独立脚本中计算 (250 + 10) & 0xff，并将结果与观测到的字节进行比较。",
+      "acceptance": "独立计算结果为 4，且该事务连同完整上下文被记录为通过。"
+    }
+  },
+  "q-dv-foundation-coverage-bins": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Sample the coverpoint with 00, 01, 10, and 11 in a simulator or a four-value reference counter.",
+      "acceptance": "Each legal bin has one hit and the illegal-bin mechanism reports the 11 sample."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在仿真器或四值参考计数器中，用 00、01、10 和 11 对该覆盖点进行采样。",
+      "acceptance": "每个合法覆盖箱各命中一次，非法覆盖箱机制报告 11 这一采样值。"
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "q-arch-cpi-stack": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the analysis on a fixed multi-run counter table containing mutually exclusive cycles, deliberately overlapping events, and one unattributed interval; independently recompute CPI, confidence intervals, and every reconciled bucket.",
+      "acceptance": "Retired instructions and total cycles reconcile to CPI, no overlapping event is counted twice, mutually exclusive cycle buckets plus an explicit unattributed bucket equal the declared total, uncertainty across runs is reported, and impossible or underspecified decompositions are labeled rather than forced."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个固定的多次运行计数表上执行分析；该表包含互斥周期、刻意重叠事件和一段未归因区间；独立复算 CPI、置信区间和每个对账 bucket。",
+      "acceptance": "退休指令数与总周期能够对账到 CPI；重叠事件不会重复计数；互斥周期 bucket 加明确未归因 bucket 等于声明总量；报告跨运行不确定性；不可能或信息不足的分解会被标记而不是强行给出。"
+    }
+  },
+  "q-arch-pipeline-trace": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compare the proposed cycle table with a five-stage reference simulator for the load, dependent add, taken branch, and younger store, then run variations with branch and load timing boundaries while checking stall, forwarding, kill, and side-effect assertions.",
+      "acceptance": "The dependent add does not consume the load before availability, the taken branch kills every younger instruction, the store never reaches an enabled memory side effect, forwarding, stall, and flush priority match the declared table, and all boundary traces retire the same architectural state as the reference."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "将拟定逐周期表与五级参考仿真器比较，执行 load、依赖 add、跳转成立分支和年轻 store，并改变分支与 load 时序边界，同时检查停顿、前递、kill 和副作用断言。",
+      "acceptance": "依赖 add 不会在 load 数据可用前消费；跳转成立会杀死所有年轻指令；store 不会产生使能的存储副作用；前递、停顿和 flush 优先级与声明表一致；所有边界轨迹退休后的架构状态与参考模型相同。"
+    }
+  },
+  "q-arch-cache-address": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Independently calculate the address partition, construct at least five addresses mapping to one set with distinct tags, and replay the proposed LRU sequence in a small cache model.",
+      "acceptance": "The cache has 256 sets, 6 offset bits, 8 index bits, and 34 tag bits; every traced address maps to the claimed set and tag; replacement affects only that set; and the evicted line matches true 4-way LRU under the stated access sequence."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "独立计算地址划分，构造至少五个映射到同一组但 tag 不同的地址，并在小型缓存模型中回放拟定 LRU 序列。",
+      "acceptance": "该缓存有 256 组、6 个 offset 位、8 个 index 位和 34 个 tag 位；每个跟踪地址都映射到声明的组和 tag；替换只影响该组；在给定访问序列下，被驱逐 cache line 符合真实 4 路 LRU。"
+    }
+  },
+  "q-arch-coherence-trace": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Model the two simultaneous write requests and delayed invalidation acknowledgement as an explicit state/message trace, check a single-writer or multiple-reader invariant at every step, and replay message reorderings around the proposed serialization and transient states.",
+      "acceptance": "At no reachable point do two caches hold writable permission, data cannot be consumed with permission still pending, one explicit serialization point orders the writers, delayed acknowledgements remain represented in transient state, and every message reordering reaches a legal stable state without losing the latest value."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "把两个同时写请求和延迟的 invalidation acknowledgement 建模为显式状态/消息轨迹，在每一步检查单写者或多读者不变量，并围绕拟定序列化点和瞬态状态回放消息重排。",
+      "acceptance": "任何可达状态都不会让两个缓存同时拥有可写权限；权限待定时数据不能被消费；一个明确序列化点为两个写者排序；延迟 acknowledgement 由瞬态状态保留；每种消息重排最终都到达合法稳定状态且不丢失最新值。"
+    }
+  },
+  "q-arch-page-walk": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Step a four-level page-walk reference model with selected page-table entries cached, permissions at multiple levels, and a nonresident terminal page; compare every memory reference, cache lookup, accessed or dirty update, and exception point.",
+      "acceptance": "The trace distinguishes TLB and page-walk-cache hits from data-cache access, checks permissions at each required level, performs only architecturally allowed accessed or dirty updates, raises the declared terminal fault, and issues no target-data access after that fault."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "逐步运行四级页表遍历参考模型，其中部分页表项已缓存、多级包含权限且最终页不驻留；比较每次内存访问、缓存查询、accessed 或 dirty 更新及异常点。",
+      "acceptance": "轨迹能够区分 TLB 与 page-walk cache 命中和数据缓存访问；在每个必需层级检查权限；只执行架构允许的 accessed 或 dirty 更新；在声明边界触发终止 fault；fault 后不再发出目标数据访问。"
+    }
+  },
+  "q-arch-dram-schedule": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate a continuous row-hit stream plus a latency-sensitive competing stream under the baseline and proposed scheduler, enforcing DRAM timing and finite queues; measure bandwidth, mean and tail latency, row-hit rate, and maximum wait across load levels.",
+      "acceptance": "All issued commands satisfy timing constraints, the latency-sensitive stream has a declared finite wait bound or service guarantee, tail latency and bandwidth are both reported, bank and row effects are separated, and any throughput loss versus row-hit-first is quantified rather than hidden."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在有限队列和 DRAM 时序约束下，用基线及拟定调度器模拟连续 row-hit 流与竞争的时延敏感流；跨负载测量带宽、平均与尾时延、row-hit 率和最大等待。",
+      "acceptance": "所有发出命令都满足时序约束；时延敏感流具有声明的有限等待上限或服务保证；同时报告尾时延和带宽；区分 bank 与 row 影响；相对 row-hit-first 的吞吐损失被量化而不是隐藏。"
+    }
+  },
+  "q-arch-noc-deadlock": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Construct the channel-dependency graph for all routing and virtual-channel transitions, use cycle detection on the original and repaired graphs, and model-check finite-buffer traffic including the four-router circular wait and escape-path contention.",
+      "acceptance": "The original dependency cycle is explicitly found, every legal repaired transition graph is acyclic or has a proven progressing escape class, packets never wait while holding an unmodeled channel, credits are conserved, and all injected packets eventually advance under the declared arbitration fairness."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "为全部路由和虚通道转换建立 channel-dependency graph，对原始及修复后图执行环检测，并在有限缓冲模型中检查四路由器循环等待和 escape path 竞争。",
+      "acceptance": "原始依赖环被明确发现；修复后每个合法转换图要么无环，要么具有被证明可进展的 escape class；数据包不会在持有未建模通道时等待；credit 守恒；在声明的仲裁公平性下，所有注入数据包最终前进。"
+    }
+  },
+  "q-arch-roofline": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Independently compute arithmetic intensity, compute-time bound, and memory-time bound with consistent decimal units, then place the kernel on a roofline using 20 TOPS and 1 TB/s and compare proposed measurements with hardware counters.",
+      "acceptance": "Arithmetic intensity is 5 operations/byte, compute time is 0.1 s, memory time is 0.4 s, and the lower bound is 0.4 s with memory bandwidth as the stated bottleneck; any optimization claim names which measured bytes or operations move the point and does not exceed sustainable ceilings."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用一致的十进制单位独立计算算术强度、计算时间下界和内存时间下界，再用 20 TOPS 与 1 TB/s 将内核放到 Roofline 图上，并将拟定测量与硬件计数器比较。",
+      "acceptance": "算术强度为 5 operations/byte，计算时间为 0.1 s，内存时间为 0.4 s，因此下界为 0.4 s 且瓶颈是内存带宽；任何优化主张都说明实测字节或运算数如何移动工作点，且不超过可持续上限。"
+    }
+  },
+  "q-arch-counter-anomaly": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Audit a fixed counter capture with known windows, groups, multiplex ratios, overflows, and privilege filters; independently recompute scaling and derived equations, then repeat with non-multiplexed invariant counters and matched timestamps.",
+      "acceptance": "Retired branches do not exceed retired instructions for a matched scope, derived time is nonnegative or rejected as invalid, overflow and multiplex uncertainty are explicit, user and kernel populations are aligned, and corrected measurements reproduce within declared run-to-run uncertainty."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "审计一份具有已知窗口、分组、复用比例、溢出和权限过滤的固定计数采集；独立复算缩放与派生公式，再使用非复用不变量计数器和匹配时间戳重复测量。",
+      "acceptance": "在匹配范围内，退休分支数不超过退休指令数；派生时间非负，否则判定数据无效；明确报告溢出和复用不确定性；用户态与内核态总体对齐；修正后的测量在声明的跨运行不确定性内复现。"
+    }
+  },
+  "q-arch-memory-subsystem": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay representative latency-sensitive CPU and bandwidth-heavy accelerator traces through an analytical or executable cache, queue, coherence, and DRAM model; sweep sharing, prefetching, partitioning, and QoS while measuring hit rates, bandwidth, mean and tail latency, and starvation.",
+      "acceptance": "Coherent shared data follows the declared consistency boundary, private or partitioned resources preserve ownership, accelerator load cannot violate the CPU service bound, sustained bandwidth stays within physical ceilings, prefetch traffic is accounted for, and the selected design meets explicit latency and bandwidth targets on both workloads."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "让具有代表性的时延敏感 CPU 和高带宽 accelerator 轨迹经过可分析或可执行的缓存、队列、一致性与 DRAM 模型；扫描共享、预取、分区和 QoS，并测量命中率、带宽、平均与尾时延及饥饿。",
+      "acceptance": "共享相干数据遵循声明的一致性边界；私有或分区资源保持所有权；accelerator 负载不能破坏 CPU 服务上限；持续带宽处于物理上限内；预取流量被计入；所选设计在两类负载上都满足明确时延与带宽目标。"
+    }
+  },
+  "q-arch-perf-investigation-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Reproduce the 28% gap with pinned binaries, inputs, frequency, thermal state, and statistics; validate counters, rank hypotheses across core, cache, NoC, and DRAM, and run discriminating microbenchmarks plus one reversal or independent model prediction for the leading cause.",
+      "acceptance": "The slowdown reproduces outside aggregate-noise uncertainty, measurement invariants hold, each leading hypothesis predicts a distinct observation, the selected cause explains a quantified portion of the 28% gap and survives an independent check, alternative causes and unattributed remainder remain explicit, and the conclusion states what evidence would reverse it."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "固定二进制、输入、频率、热状态和统计方法复现 28% 差距；校验计数器，按 core、cache、NoC 和 DRAM 对假设排序，并为首要原因运行区分性微基准及一次反向实验或独立模型预测。",
+      "acceptance": "性能下降在聚合噪声不确定性之外可复现；测量不变量成立；每个首要假设预测不同观测；所选原因解释 28% 差距中的量化部分且通过独立检查；替代原因和未归因部分保持明确；结论说明什么证据会使其反转。"
+    }
+  },
+  "q-arch-foundation-weighted-cpi": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the weighted sum with a calculator and compare it with the [1,3] bound.",
+      "acceptance": "Average CPI is 1.7 and the answer names at least one omitted microarchitectural effect."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器计算加权和，并将结果与 [1,3] 的范围进行比较。",
+      "acceptance": "平均 CPI 为 1.7，且答案指出至少一种题目未纳入的微架构影响因素。"
+    }
+  },
+  "q-arch-foundation-load-use": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Compare the proposed cycle table with a stage-by-stage availability table for the load value.",
+      "acceptance": "The add never enters EX before the load completes MEM, and exactly one bubble is present."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "将候选答案中的逐周期表，与加载数据在各流水级的可用性表逐级比较。",
+      "acceptance": "在 load 完成 MEM 阶段之前，add 绝不进入 EX 阶段，并且恰好出现一个气泡。"
+    }
+  },
+  "q-arch-foundation-row-buffer": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Step a three-state bank model through precharged, row-A-open, row-A-open, and row-B-open states.",
+      "acceptance": "The classifications are activate, hit, conflict, with the hit qualitatively fastest under ordinary timing assumptions."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "让一个三状态 bank 模型依次经历预充电、行 A 已打开、行 A 已打开和行 B 已打开四种状态。",
+      "acceptance": "三次访问依次分类为激活、命中、冲突；在通常的时序假设下，命中的访问定性上最快。"
+    }
+  }
+}

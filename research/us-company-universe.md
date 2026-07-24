@@ -1,6 +1,6 @@
 # 美国硬件与芯片求职公司宇宙：覆盖口径与审计
 
-> 版本：v1
+> 版本：v2（二次覆盖审计）
 >
 > 信息观察日：2026-07-23
 >
@@ -8,7 +8,7 @@
 
 ## 1. 这份清单是什么
 
-这是一份面向美国求职的“候选组织全集种子”，不是一张声称所有公司都正在招聘的岗位表。v1 共收录 **200 个唯一实体**，覆盖：
+这是一份面向美国求职的“候选组织全集种子”，不是一张声称所有公司都正在招聘的岗位表。v2 共收录 **256 个唯一实体**。二次审计新增 57 个有独立身份与官方一手入口的实体，同时把已完成收购、招聘入口已统一到 Qualcomm 的 Alphawave Semi 从独立节点合并为 Qualcomm 别名，因此净增 56 个。覆盖：
 
 - 半导体、EDA、IP、处理器、AI 加速器与存储；
 - 晶圆制造、设备、材料、测试、封装与电子制造服务；
@@ -109,7 +109,7 @@
 
 `whyRelevant`、`fitTier`、`difficulty`、`requirements` 和 `gaps` 是分析字段，不是公司原话。对岗位做最终判断时，必须以当时 requisition 的原文为准。
 
-## 4. v1 覆盖审计
+## 4. v2 覆盖审计
 
 ### 4.1 数量与完整性
 
@@ -117,8 +117,8 @@
 
 | 指标 | 结果 |
 |---|---:|
-| JSON 对象数 | 200 |
-| 唯一 `id` 数 | 200 |
+| JSON 对象数 | 256 |
+| 唯一 `id` 数 | 256 |
 | 重复 `id` | 0 |
 | 缺失必填字段 | 0 |
 | 缺失或空 `evidence` | 0 |
@@ -126,32 +126,35 @@
 
 ### 4.2 方向覆盖
 
-下表按非互斥 `categories` 标签计数，因此总和会超过 200：
+下表按非互斥 `categories` 标签计数，因此总和会超过 256：
 
 | 方向标签 | 实体数 |
 |---|---:|
-| semiconductor | 52 |
-| AI-hardware | 27 |
-| semiconductor-equipment | 21 |
-| automotive | 20 |
-| manufacturing | 18 |
-| systems-hardware | 18 |
+| semiconductor | 54 |
+| AI-hardware | 36 |
+| systems-hardware | 29 |
+| manufacturing | 28 |
+| semiconductor-equipment | 26 |
+| automotive | 23 |
+| robotics | 20 |
+| embedded | 19 |
+| semiconductor-research | 21 |
+| semiconductor-IP | 18 |
 | systems | 17 |
+| advanced-packaging | 17 |
+| AI | 16 |
 | EDA | 15 |
-| AI | 15 |
-| robotics | 15 |
-| analog | 13 |
-| semiconductor-IP | 12 |
-| connectivity | 12 |
-| embedded | 12 |
-| advanced-packaging | 11 |
-| CPU | 10 |
-| storage | 9 |
-| research | 9 |
-| RISC-V | 8 |
-| networking | 8 |
+| connectivity | 14 |
+| analog | 14 |
+| research | 13 |
+| semiconductor-materials | 11 |
+| networking | 11 |
+| RISC-V | 11 |
+| CPU | 11 |
+| power | 10 |
+| photonics | 10 |
 
-优先级分布为 `P0 35 / P1 71 / P2 71 / P3 23`；难度分布为 `S 47 / A 84 / B 69`。这保证公司树既不只剩“大厂愿望清单”，也没有用低相关组织虚增数量。
+优先级分布为 `P0 38 / P1 92 / P2 99 / P3 27`；难度分布为 `S 71 / A 101 / B 84`。新增节点集中在原覆盖薄弱的 FPGA、新型计算、chiplet/IP、中型设备材料企业、大学微电子中心和国家实验室；受限研究机构没有被伪装成普通可投岗位。
 
 ### 4.3 签证信号审计
 
@@ -159,10 +162,10 @@
 
 | 信号 | 数量 |
 |---|---:|
-| unverified | 176 |
-| mixed | 16 |
+| unverified | 221 |
+| mixed | 21 |
 | friendly | 3 |
-| restricted | 5 |
+| restricted | 11 |
 
 高比例 `unverified` 是有意的保守设计。公司是否办理 H-1B、某个团队是否能接收 F-1/CPT、某个项目是否涉及出口许可，通常无法从总公司招聘页可靠推断。
 
@@ -170,14 +173,14 @@
 
 [USC Viterbi Summer Internships 2025 官方统计](https://viterbigradadmission.usc.edu/summerintern2025/)显示，截至 2025-05-27，共有 **416 名硕士生和 144 名博士生，即 560 名国际研究生，在 100+ 家公司进行 CPT 实习**。该页发布于 2025-06-12，并于 2025-07-01 更新。它不是公司自报的“愿意赞助”口径，而是 USC 国际研究生已经取得 CPT 实习的历史结果，因此可用作公司宇宙的可达性校验集。
 
-该官方名单与 v1 的重点方向有大量交叉，包括 Cadence、Synopsys、Siemens Digital Industries Software、NVIDIA、Intel、Qualcomm、Arm、Applied Materials、KLA、Lightmatter、Tenstorrent、Texas Instruments、NXP、Renesas、Skyworks、Monolithic Power Systems、OmniVision、Micron、MathWorks、Arista、IBM、HPE、Rivian、Bosch、General Motors、Tesla、Toyota Research Institute、Waymo、Zoox、Boston Dynamics、Samsung Research America、Seagate 和 Lawrence Berkeley National Laboratory 等。这证明：
+该官方名单与 v2 的重点方向有大量交叉，包括 Cadence、Synopsys、Siemens Digital Industries Software、NVIDIA、Intel、Qualcomm、Arm、Applied Materials、KLA、Lightmatter、Tenstorrent、Texas Instruments、NXP、Renesas、Skyworks、Monolithic Power Systems、OmniVision、Micron、MathWorks、Arista、IBM、HPE、Rivian、Bosch、General Motors、Tesla、Toyota Research Institute、Waymo、Zoox、Boston Dynamics、Samsung Research America、Seagate 和 Lawrence Berkeley National Laboratory 等。这证明：
 
 - 国际学生在芯片、EDA、设备、系统硬件、汽车和机器人方向获得 CPT 并非理论可能；
 - “公司级历史可达”仍不等于 2027 年同一团队、同一岗位或同一国籍条件下可达；
 - 应优先把名单中与目标方向重合的公司升级为校友检索、内推和岗位提醒对象；
 - USC 全表是跨学科雇主集合，包含大量金融、医药、建筑、纯软件和小型咨询公司，不能不加筛选地全部并入硬件公司树。
 
-残余覆盖也因此可以被具体化：TetraMem、Futurewei、Calix、Dolby、HARMAN、Honda Research Institute USA、Mercedes-Benz Research and Development North America、Intrinsic、Intuitive Surgical、Nokia、TE Connectivity、Viasat、XMotors.ai 等与硬件相邻、且出现在 2025 USC CPT 结果中的组织，构成 v2 的优先核验队列。它们没有被假装成 v1 已完成覆盖，也不能仅凭历史结果标成 `friendly`；下一步需回到各自官方岗位页核实 2027 的职位、团队、地点和身份措辞。
+二次审计已经把 TetraMem、Futurewei、Calix、Dolby、HARMAN、Honda Research Institute USA、Mercedes-Benz Research & Development North America、Intrinsic、Intuitive Surgical、Nokia、TE Connectivity 与 Viasat 纳入正式节点，并回到各自官网或官方职业入口。`XMotors.ai` 只发现无当前空缺的官方 ATS，且与小鹏的主体归一化关系仍需进一步核验，因此保留在 residual queue，不为凑数建节点。历史 CPT 结果也没有被转换成 `friendly` 标签；任何 2027 申请仍须回到具体职位核验。
 
 ## 5. F-1、CPT、出口管制与安保许可筛选
 
@@ -232,7 +235,7 @@
 
 ## 7. 如何使用公司树
 
-建议把 200 个实体转成四层行动队列，而不是一次性海投：
+建议把 256 个实体转成四层行动队列，而不是一次性海投：
 
 1. **认知层**：按 `categories → focusAreas → roleFamilies` 建立产业链和岗位地图；
 2. **准备层**：对 P0/P1 的共同 `requirements` 做技能聚类，选择能同时服务多家公司的作品集项目；
@@ -251,7 +254,7 @@
 
 ## 8. 已知缺口与下一轮更新
 
-v1 的边界如下：
+v2 的边界如下：
 
 - 它覆盖组织，不覆盖每个组织的全部团队和 requisition；
 - 2027 岗位仍处在陆续出现阶段，绝大多数记录不能视为当前空缺；
@@ -270,4 +273,76 @@ v1 的边界如下：
 4. 每次真实申请/面试后更新技能缺口与难度；
 5. 当新增目录连续两轮带来的“新且相关实体”低于既有清单的 3%，视为组织层覆盖趋于饱和，转向岗位层深挖。
 
-这份 v1 的停止条件是：产业链主要节点均有代表性组织、公司类型不只集中在品牌大厂、汽车/机器人/科研等邻接领域已覆盖、资格受限组织被显式标记、且 200 条记录全部通过结构与唯一性校验。
+这份 v2 的停止条件是：产业链主要节点均有代表性组织、公司类型不只集中在品牌大厂、汽车/机器人/科研等邻接领域已覆盖、资格受限组织被显式标记、且 256 条记录全部通过结构、证据日期与唯一性校验。它仍不是“全世界所有法人”的静态穷举；新增组织必须跨过独立身份、目标岗位关联和一手证据三道门槛。
+
+## 9. v2 新增节点与一手入口
+
+下表逐项列出二次审计新增的 57 个节点。`official-company` 或研究中心主页只证明实体与技术方向存在，不证明当前有职位；只有 `official-careers` 能证明存在长期招聘入口，也仍不能替代当期 requisition。
+
+| ID | 实体 | 一手入口 | 证据类型 | 置信度 |
+|---|---|---|---|---|
+| `achronix` | Achronix Semiconductor | [official](https://www.achronix.com/company/careers) | official-careers | high |
+| `efinix` | Efinix | [official](https://www.efinixinc.com/) | official-company | medium |
+| `quicklogic` | QuickLogic | [official](https://www.quicklogic.com/company/careers/) | official-careers | high |
+| `ampere-computing` | Ampere Computing | [official](https://careers.amperecomputing.com/) | official-careers | high |
+| `tetramem` | TetraMem | [official](https://tetramem.com/job-openings/) | official-careers | high |
+| `matx` | MatX | [official](https://matx.com/jobs) | official-careers | high |
+| `extropic` | Extropic | [official](https://extropic.ai/about#careers) | official-careers | high |
+| `quadric` | Quadric | [official](https://quadric.ai/careers) | official-careers | high |
+| `axiado` | Axiado | [official](https://axiado.com/joinus/) | official-careers | high |
+| `baya-systems` | Baya Systems | [official](https://bayasystems.com/careers) | official-careers | high |
+| `blue-cheetah-analog-design` | Blue Cheetah Analog Design | [official](https://www.bcanalog.com/careers/) | official-careers | high |
+| `eliyan` | Eliyan | [official](https://eliyan.com/careers/) | official-careers | high |
+| `futurewei-technologies` | Futurewei Technologies | [official](https://www.futurewei.com/careers) | official-careers | high |
+| `calix` | Calix | [official](https://www.calix.com/careers.html) | official-careers | high |
+| `dolby-laboratories` | Dolby Laboratories | [official](https://careers.dolby.com/) | official-careers | high |
+| `harman` | HARMAN International | [official](https://jobs.harman.com/) | official-careers | high |
+| `honda-research-institute-usa` | Honda Research Institute USA | [official](https://usa.honda-ri.com/careers) | official-careers | medium |
+| `intrinsic` | Intrinsic | [official](https://www.intrinsic.ai/careers) | official-careers | high |
+| `intuitive-surgical` | Intuitive Surgical | [official](https://careers.intuitive.com/en/) | official-careers | high |
+| `nokia` | Nokia | [official](https://www.nokia.com/careers/) | official-careers | high |
+| `te-connectivity` | TE Connectivity | [official](https://careers.te.com/) | official-careers | high |
+| `viasat` | Viasat | [official](https://careers.viasat.com/) | official-careers | high |
+| `skydio` | Skydio | [official](https://www.skydio.com/careers) | official-careers | high |
+| `zipline` | Zipline | [official](https://www.zipline.com/careers) | official-careers | high |
+| `brewer-science` | Brewer Science | [official](https://www.brewerscience.com/careers/) | official-careers | medium |
+| `jsr-micro` | JSR Micro | [official](https://jsrmicroinc.careers.hibob.com/) | official-careers | high |
+| `shin-etsu-microsi` | Shin-Etsu MicroSi | [official](https://www.microsi.com/careers/) | official-careers | high |
+| `sumco-phoenix` | SUMCO Phoenix | [official](https://www.sumcousa.com/careers/) | official-careers | high |
+| `hemlock-semiconductor` | Hemlock Semiconductor | [official](https://careers.hscpoly.com/) | official-careers | high |
+| `ultra-clean-holdings` | Ultra Clean Holdings | [official](https://www.uct.com/careers/) | official-careers | high |
+| `suss-microtec-us` | SUSS MicroTec US | [official](https://www.suss.com/en/your-career) | official-careers | high |
+| `ebara-technologies` | Ebara Technologies | [official](https://www.ebaratech.com/careers/) | official-careers | high |
+| `yield-engineering-systems` | Yield Engineering Systems | [official](https://www.yes.tech/careers) | official-careers | high |
+| `plasma-therm` | Plasma-Therm | [official](https://www.plasmatherm.com/careers) | official-careers | high |
+| `samtec` | Samtec | [official](https://www.samtec.com/about/#careers) | official-careers | high |
+| `stanford-systemx-alliance` | Stanford SystemX Alliance | [official](https://systemx.stanford.edu/) | official-research-program | high |
+| `berkeley-bwrc` | Berkeley Wireless Research Center | [official](https://bwrc.berkeley.edu/) | official-research-program | high |
+| `mit-microsystems-technology-laboratories` | MIT Microsystems Technology Laboratories | [official](https://www.mtl.mit.edu/) | official-research-institute | high |
+| `ucla-chips` | UCLA CHIPS | [official](https://chips.ucla.edu/) | official-research-center | high |
+| `purdue-asip` | Purdue ASIP | [official](https://engineering.purdue.edu/ASIP) | official-research-institute | high |
+| `cornell-nanofabrication-facility` | Cornell NanoScale Science and Technology Facility | [official](https://www.cnf.cornell.edu/) | official-research-facility | high |
+| `ut-austin-microelectronics-research-center` | UT Austin Microelectronics Research Center | [official](https://www.research.utexas.edu/mrc) | official-research-center | high |
+| `asu-macrotechnology-works` | ASU MacroTechnology Works | [official](https://microelectronics.asu.edu/macrotechnology-works/) | official-research-facility | high |
+| `nc-state-freedm-systems-center` | NC State FREEDM Systems Center | [official](https://freedm.ncsu.edu/) | official-research-center | high |
+| `cornami` | Cornami | [official](https://cornami.com/) | official-company | high |
+| `edgeq` | EdgeQ | [official](https://www.edgeq.io/company/) | official-company | high |
+| `esperanto-technologies` | Esperanto Technologies | [official](https://www.esperanto.ai/careers/) | official-careers | high |
+| `lightelligence` | Lightelligence | [official](https://www.lightelligence.ai/) | official-company | medium |
+| `normal-computing` | Normal Computing | [official](https://normalcomputing.com/) | official-company | medium |
+| `mercedes-benz-rd-north-america` | Mercedes-Benz R&D North America | [official](https://mbrdna.com/) | official-us-rd-entity | high |
+| `sandia-national-laboratories` | Sandia National Laboratories | [official](https://www.sandia.gov/mesa/) | official-microelectronics-program | high |
+| `lawrence-livermore-national-laboratory` | Lawrence Livermore National Laboratory | [official](https://www.llnl.gov/sites/www/files/2025-05/semiconductor-micro-nano-tech-fact-sheet.pdf) | official-microelectronics-program | high |
+| `los-alamos-national-laboratory` | Los Alamos National Laboratory | [official](https://cint.lanl.gov/research/index.shtml) | official-microelectronics-program | high |
+| `oak-ridge-national-laboratory` | Oak Ridge National Laboratory | [official](https://www.ornl.gov/content/microelectronics-ornl) | official-microelectronics-program | high |
+| `pacific-northwest-national-laboratory` | Pacific Northwest National Laboratory | [official](https://www.pnnl.gov/news-media/microelectronics-science-research-centers-lead-charge-next-generation-designs-and) | official-microelectronics-program | high |
+| `national-renewable-energy-laboratory` | National Renewable Energy Laboratory | [official](https://www.nrel.gov/grid/news/features/2025/nrel-researchers-construct-worlds-fastest-low-cost-ultraefficient-silicon-carbide-power-module) | official-semiconductor-research | medium |
+| `nist-chips-rd` | National Institute of Standards and Technology — CHIPS R&D | [official](https://www.nist.gov/chips/research-development-programs) | official-microelectronics-program | high |
+
+### 9.1 合并、排除与残余队列
+
+- **合并 1 个旧节点**：Alphawave Semi 已于 2025-12 完成并入 Qualcomm；从独立节点删除，作为 Qualcomm 的 alias、业务方向和官方并购证据保留。
+- **合并而不新建**：Celestial AI 与 XConn 已于 2026-02 完成并入 Marvell；两者保留为 Marvell aliases，并在 Marvell 节点加入官方财报证据。
+- **明确排除**：Rapid Silicon 的原官网在观察日重定向到无关域名，无法满足当前一手证据门槛；不纳入。
+- **待归一化**：XMotors.ai 的官方 ATS 存在但无当前职位，且与小鹏美国研发主体的关系需进一步确认；暂不独立计数。
+- **机构层残余**：国家实验室和大学中心仍需扩展到具体开放课题、PI、学生资格与人事公告；“研究中心主页存在”绝不等于外部学生可加入。

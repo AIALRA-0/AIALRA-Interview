@@ -129,13 +129,21 @@ console.log(
       observedAt: new Date().toISOString(),
       totalUniqueUrls: results.length,
       summary,
-      actionRequired: results.filter((result) =>
-        ["missing", "server-error"].includes(result.category),
+      // Only a confirmed 404/410 proves that the stored URL is gone. A 5xx
+      // response describes the remote server (and is common for bot-sensitive
+      // career sites), so keep it in manual review instead of presenting it as
+      // a broken-link fact.
+      actionRequired: results.filter(
+        (result) => result.category === "missing",
       ),
       manualReview: results.filter((result) =>
-        ["access-controlled", "timeout", "network-error"].includes(
-          result.category,
-        ),
+        [
+          "access-controlled",
+          "server-error",
+          "other-http",
+          "timeout",
+          "network-error",
+        ].includes(result.category),
       ),
     },
     null,

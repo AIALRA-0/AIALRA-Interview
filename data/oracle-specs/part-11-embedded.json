@@ -1,0 +1,170 @@
+{
+  "q-emb-volatile-ring": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the implementation in a deterministic ISR/task interleaving harness that inserts producer and consumer steps at every shared-state boundary; exercise empty, one item, full, wraparound, overflow, and prolonged producer-overrun cases while comparing with a simple sequential queue model.",
+      "acceptance": "Produced bytes are observed exactly once and in order unless the declared overflow policy explicitly drops them, full and empty are never ambiguous, indices remain in range through wraparound, and every shared access has a justified atomic or critical-section and memory-order boundary rather than relying on volatile."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在确定性的 ISR/任务交错测试器中运行实现，在每个共享状态边界插入生产者与消费者步骤；覆盖空、单元素、满、回绕、溢出和生产者长期超速情况，并与简单顺序队列模型比较。",
+      "acceptance": "除非声明的溢出策略明确丢弃，否则产生的字节必须按序且恰好被观察一次；满与空不能歧义；索引在回绕时始终合法；每次共享访问都有合理的原子操作、临界区和内存顺序边界，而不是依赖 volatile。"
+    }
+  },
+  "q-emb-interrupt-race": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Use a scheduler harness to inject one or more ISR events immediately before, during, and after each foreground read, process, and clear operation; count generated, processed, queued, and deliberately coalesced events for the original and repaired signaling primitive.",
+      "acceptance": "The original flag implementation reproduces at least one lost-event interleaving, while the repair conserves generated events according to its declared queueing or coalescing contract for every tested interleaving and does not hold interrupts disabled across event processing."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用调度测试器，在前台每次读取、处理和清除操作之前、期间与之后注入一个或多个 ISR 事件；分别统计原实现和修复后信号原语中产生、处理、排队及按策略合并的事件。",
+      "acceptance": "原始 flag 实现至少复现一种丢事件交错；修复方案在所有测试交错中都按声明的排队或合并契约守恒事件，并且不会在实际处理事件期间持续关闭中断。"
+    }
+  },
+  "q-emb-priority-inversion": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate the supplied low-, medium-, and high-priority release times, mutex hold intervals, preemption rules, and deadline first without mitigation and then with priority inheritance, ceiling, or the proposed architectural removal; record the high-priority blocking interval.",
+      "acceptance": "The unmitigated trace shows the medium-priority task extending blocking beyond the low-priority critical section, the selected repair yields a defensible finite blocking bound, the high-priority task meets the stated deadline under the modeled worst case, and no lock-order cycle or unbounded critical section is introduced."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "依据给定低、中、高优先级任务的释放时间、mutex 持有区间、抢占规则和截止期进行调度仿真；先不使用缓解措施，再采用优先级继承、优先级上限或拟定的架构消除方案，并记录高优先级任务的阻塞区间。",
+      "acceptance": "未缓解轨迹必须显示中优先级任务把阻塞延长到低优先级临界区之外；所选修复产生有依据的有限阻塞上界；高优先级任务在建模的最坏情况下满足截止期，且不引入锁顺序环或无界临界区。"
+    }
+  },
+  "q-emb-mmio-driver": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the driver against a fake-register model that enforces write-one-to-clear, reserved-bit preservation, self-clearing commands, delayed posted writes, and a never-completing command; inspect every bus read and write for nominal, concurrent-status, timeout, and malformed-mask cases.",
+      "acceptance": "Writes never set reserved bits or accidentally clear unrelated write-one-to-clear status, command completion is observed only after the required barrier or readback, polling terminates at the declared timeout, register widths and volatile access are correct, and the fake model passes both expected-success and injected-failure tests."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让驱动运行在一个强制实现 write-one-to-clear、保留位不变、自清除命令、延迟 posted write 和永不完成命令的假寄存器模型上；检查正常、并发状态、超时和畸形掩码案例中的每次总线读写。",
+      "acceptance": "写操作不能置位保留位或意外清除无关的 write-one-to-clear 状态；只有经过所需 barrier 或 readback 后才能确认命令完成；轮询在声明的超时时间终止；寄存器位宽与 volatile 访问正确；假模型的预期成功和注入失败测试均通过。"
+    }
+  },
+  "q-emb-dma-cache": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Model CPU cache lines, main memory, DMA descriptors, and device ownership on a non-coherent platform; inject descriptor publication and receive completion at every ordering boundary, including unaligned and shared-cache-line buffers, and compare CPU-visible bytes with device-written memory.",
+      "acceptance": "The ownership timeline has one owner at each transition, transmit clean and receive invalidate operations use the correct direction and cache-line extent, barriers order buffer and descriptor visibility, the CPU never reads a completed stale buffer, and instrumentation does not itself supply the missing ordering."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在非一致性平台上建模 CPU cache line、主存、DMA descriptor 和设备所有权；在每个排序边界注入 descriptor 发布和接收完成，包括未对齐及共享 cache line 的缓冲区，并比较 CPU 可见字节与设备写入的内存。",
+      "acceptance": "所有权时间线在每次转换中只有一个所有者；发送 clean 与接收 invalidate 的方向和 cache line 范围正确；barrier 对缓冲区与 descriptor 可见性进行排序；CPU 不会读取已完成但陈旧的缓冲区；调试插桩本身不能成为缺失的顺序保证。"
+    }
+  },
+  "q-emb-boot-linker": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Parse the pre-change and post-change ELF/map files, verify vector and image-header addresses, every section's VMA/LMA and memory bounds, data-copy and BSS-zero ranges, stack placement, and reset entry; then boot a minimal image with checkpoints before copy, zero, constructors, and main.",
+      "acceptance": "The analysis identifies the first invalid or overlapping region caused by the added table, all load and run ranges fit their declared memories without corrupting stack or headers, reset reaches each checkpoint after the linker repair, and the fix is expressed as an enforceable linker assertion rather than a silent address adjustment."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "解析修改前后的 ELF 和 map 文件，核验中断向量与镜像头地址、每个 section 的 VMA/LMA 与内存边界、data copy 与 BSS zero 范围、stack 位置和 reset 入口；随后启动一个在复制、清零、构造函数和 main 前设有检查点的最小镜像。",
+      "acceptance": "分析必须定位由新增只读表引起的第一个非法或重叠区域；所有加载与运行范围都位于声明内存中且不破坏 stack 或镜像头；修复链接脚本后 reset 到达每个检查点；修复应写成可执行的 linker assertion，而不是静默移动地址。"
+    }
+  },
+  "q-emb-i2c-recovery": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "On a controllable bus model, reset the controller after each possible bit of a read, separately hold SDA low with a peripheral and with an electrical fault, then apply the proposed GPIO clock, STOP, peripheral-reset, and controller-reinitialization decision tree while capturing SCL and SDA.",
+      "acceptance": "Recovery only toggles SCL when electrically safe, releases a peripheral-held SDA within the declared maximum clock pulses and emits a valid STOP, distinguishes a persistent electrical short from protocol state, restores controller configuration, and bounds retries without corrupting another master's transaction."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在可控总线模型中，于一次读取的每个可能 bit 之后复位控制器；分别用外设和电气故障把 SDA 拉低，再按拟定决策树执行 GPIO 时钟、STOP、外设复位和控制器重初始化，同时采集 SCL 与 SDA。",
+      "acceptance": "恢复流程只在电气安全时翻转 SCL；在声明的最大时钟脉冲数内释放由外设拉低的 SDA 并产生合法 STOP；能够区分持续电气短路与协议状态；恢复控制器配置；重试次数有界，且不会破坏另一主设备的事务。"
+    }
+  },
+  "q-emb-can-log": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay the timestamped transmit and receive error counters, bit-error types, motor-switch events, and node state against the CAN error-state thresholds; correlate them with oscilloscope differential voltage, termination, bitrate and sample-point measurements, and a software retransmission-disabled run.",
+      "acceptance": "Every error-active, error-passive, and bus-off transition is consistent with the counter direction and threshold model, the leading physical or timing hypothesis predicts the repeated error type and motor correlation, and one proposed measurement distinguishes it from termination, bitrate, and software retry alternatives."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "按照 CAN 错误状态阈值，重放带时间戳的发送/接收错误计数器、bit error 类型、电机开关事件和节点状态；再与示波器差分电压、终端匹配、bitrate、sample point 测量及关闭软件重传后的运行结果关联。",
+      "acceptance": "每次 error-active、error-passive 与 bus-off 转换都应与计数器方向和阈值模型一致；首要物理或时序假设能够预测重复错误类型及其与电机的相关性；至少一项测量能把该假设与终端、bitrate 和软件重试等替代原因区分开。"
+    }
+  },
+  "q-emb-secure-update": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run signed valid, invalid-signature, truncated, corrupted, duplicate, and rollback images through the boot/update state machine; cut power after every persistent write or state transition, force watchdog resets before and after confirmation, and boot both A/B or journal recovery paths.",
+      "acceptance": "No unauthorized or lower-version image executes, every power cut leaves at least one authenticated bootable image or a bounded recovery mode, metadata transitions are atomic and wear-aware, an unconfirmed image automatically rolls back, and only a successfully booted confirmed image becomes permanent."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让合法签名、无效签名、截断、损坏、重复和回滚版本镜像通过 boot/update 状态机；在每次持久写入或状态转换后断电，在确认前后强制 watchdog reset，并启动 A/B 或 journal 的两条恢复路径。",
+      "acceptance": "未授权或较低版本镜像不得执行；每次断电后至少保留一个通过认证的可启动镜像或进入有界恢复模式；元数据转换具有原子性并考虑磨损；未确认镜像自动回滚；只有成功启动且被确认的镜像才成为永久版本。"
+    }
+  },
+  "q-emb-low-power-logger": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Construct a one-year spreadsheet or simulation from battery usable energy, sleep and active currents, sensor/radio/storage duty cycles, conversion losses, retry distributions, clock drift, and update reserve; separately simulate the longest radio outage and storage backpressure.",
+      "acceptance": "Energy units and duty cycles reconcile to at least the stated one-year life with an explicit reserve, storage holds the declared outage volume or applies the stated loss policy, timestamps stay within the accuracy budget, wake deadlines and retries are bounded, and secure update energy cannot strand the device."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "依据电池可用能量、睡眠与活动电流、传感器/无线/存储占空比、转换损耗、重试分布、时钟漂移和更新预留，建立一年的计算表或仿真；另行仿真最长无线中断和存储背压。",
+      "acceptance": "能量单位与占空比计算应支持至少声明的一年寿命并保留明确余量；存储可容纳声明的中断数据量或按既定策略丢失；时间戳处于精度预算内；唤醒截止期和重试有界；安全更新所需能量不会使设备无法启动。"
+    }
+  },
+  "q-emb-sensor-hub-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Replay a controlled peak-traffic workload with synchronized power, reset-cause, stack-watermark, watchdog, scheduler, bus, and persistent-log traces; inject one candidate fault at a time, preserve pre-reset evidence, and compare the repaired design with the same workload and a wedged-peripheral boot case.",
+      "acceptance": "The investigation separates observed evidence from inference and identifies a discriminating root-cause experiment; the redesign survives the peak workload without reset or silent record loss, preserves a bounded crash tail across reset, detects and recovers or isolates the wedged peripheral, fits RAM limits, and leaves residual risks tied to tests."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在可控峰值流量下同步采集电源、reset cause、stack watermark、watchdog、调度器、总线和持久日志轨迹；每次只注入一个候选故障，保留 reset 前证据，再使用相同工作负载和外设卡死启动案例验证修复后的设计。",
+      "acceptance": "调查必须区分观测证据与推断，并给出具有区分力的根因实验；重构后系统在峰值流量下不复位且不静默丢记录，reset 后保留有界的崩溃尾部，能够检测并恢复或隔离卡死外设，满足 RAM 限制，并把残余风险关联到具体测试。"
+    }
+  },
+  "q-embedded-foundation-volatile-poll": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compile a minimal polling function with optimization and inspect the emitted load instructions or instrumented platform accessors.",
+      "acceptance": "The fixed loop performs a fresh device read on each poll; the answer does not claim atomicity or universal memory ordering."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "开启编译优化来编译一个最小轮询函数，并检查生成的加载指令或经过插桩的平台访问器。",
+      "acceptance": "修复后的循环在每次轮询时都会重新读取设备；答案不得声称该方案提供原子性或适用于所有平台的内存顺序保证。"
+    }
+  },
+  "q-embedded-foundation-isr-counter": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run an interleaving harness that injects an ISR increment at every foreground operation boundary and compares generated versus processed-plus-pending events.",
+      "acceptance": "The protected implementation conserves all events for every injected interleaving and keeps the critical section limited to snapshot-and-clear."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "运行一个交错测试框架：在前台操作的每个边界注入一次 ISR 递增，并比较已产生事件数与“已处理事件数加待处理事件数”。",
+      "acceptance": "对于每一种注入交错，受保护的实现都不丢失任何事件，并且临界区只包含快照与清零操作。"
+    }
+  },
+  "q-embedded-foundation-uart-frame": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compute the sum of each arrival bit shifted by its zero-based arrival index.",
+      "acceptance": "The sum is 165 decimal = 0xA5, start is low, stop is high, and exactly eight data bits are consumed."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "将每个到达的数据位左移其从 0 开始的到达序号后求和。",
+      "acceptance": "求和结果为十进制 165，即 0xA5；起始位为低，停止位为高，且恰好读取 8 个数据位。"
+    }
+  }
+}

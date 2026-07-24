@@ -1,0 +1,342 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-23",
+  "overrides": [
+    {
+      "roleId": "rf-eda-rd",
+      "baseQuestionId": "q-eda-routing-congestion-log",
+      "archetype": "scale",
+      "skillId": "sk-linear-algebra",
+      "focusEn": "Represent sparse capacity and demand as indexed vectors or matrices, and make the reduction order and numerical conditioning explicit.",
+      "focusZh": "把稀疏容量与需求表示为带索引的向量或矩阵，并明确归约顺序与数值条件。"
+    },
+    {
+      "roleId": "rf-eda-rd",
+      "baseQuestionId": "q-eda-billion-pin-memory",
+      "archetype": "incident",
+      "skillId": "sk-linux-shell",
+      "focusEn": "Use safe Linux process, memory-map, file-descriptor, signal, and resource observations to distinguish allocation growth from mapping or I/O behavior.",
+      "focusZh": "使用安全的 Linux 进程、内存映射、文件描述符、信号和资源观测，区分分配增长、映射行为与 I/O 行为。"
+    },
+    {
+      "roleId": "rf-eda-rd",
+      "baseQuestionId": "q-eda-differential-transform",
+      "archetype": "incident",
+      "skillId": "sk-git-workflows",
+      "focusEn": "Preserve a reviewable history and use a reproducible commit-range bisect to isolate the first logic-transform regression.",
+      "focusZh": "保留可评审历史，并对可复现提交区间执行二分，定位首次出现的逻辑变换回归。"
+    },
+    {
+      "roleId": "rf-eda-rd",
+      "baseQuestionId": "q-eda-hpwl-delta",
+      "archetype": "tradeoff",
+      "skillId": "sk-eda-optimization-objectives",
+      "focusEn": "Formulate wirelength, legality, congestion, and runtime as constrained objectives with explicit penalties, Pareto evidence, and a convergence stop rule.",
+      "focusZh": "把线长、合法性、拥塞和运行时间写成带显式惩罚的约束目标，并给出 Pareto 证据与收敛停止规则。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-netlist-gnn",
+      "archetype": "scale",
+      "skillId": "sk-complexity-analysis",
+      "focusEn": "Derive time and memory bounds in nodes, edges, feature width, layers, and batch size before choosing a sampling or partitioning strategy.",
+      "focusZh": "先用节点数、边数、特征宽度、层数和批大小推导时间与内存上限，再选择采样或分区策略。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-netlist-gnn",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-data-structures",
+      "focusEn": "Choose explicit adjacency, feature, ownership, and batching data structures and justify their update and traversal costs.",
+      "focusZh": "明确选择邻接、特征、所有权和批处理数据结构，并说明其更新与遍历成本。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-netlist-gnn",
+      "archetype": "worked-example",
+      "skillId": "sk-graph-algorithms",
+      "focusEn": "Trace one message-passing neighborhood with explicit traversal order, component boundaries, and duplicate-edge handling.",
+      "focusZh": "以明确的遍历顺序、连通分量边界和重复边处理，逐步追踪一次消息传递邻域。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-netlist-gnn",
+      "archetype": "oracle",
+      "skillId": "sk-linear-algebra",
+      "focusEn": "Build the independent reference from an explicit adjacency operator and feature matrix, including shape checks and a conditioning-sensitive case.",
+      "focusZh": "用显式邻接算子和特征矩阵构建独立参考，并包含形状检查与一个对数值条件敏感的案例。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-repro-manifest",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-python-scripting",
+      "focusEn": "Implement the manifest check as testable Python with deterministic parsing, explicit errors, and no hidden global state.",
+      "focusZh": "把清单检查实现为可测试的 Python，采用确定性解析、显式错误，并避免隐藏全局状态。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-hotspot-metrics",
+      "archetype": "oracle",
+      "skillId": "sk-test-design",
+      "focusEn": "Design boundary, negative, class-imbalance, threshold, and metamorphic checks against an independently computed confusion matrix.",
+      "focusZh": "围绕独立计算的混淆矩阵设计边界、负面、类别不平衡、阈值和变形检查。"
+    },
+    {
+      "roleId": "rf-cad-flow",
+      "baseQuestionId": "q-cad-flow-dag",
+      "archetype": "scale",
+      "skillId": "sk-complexity-analysis",
+      "focusEn": "Express scheduling, invalidation, and traversal costs in vertices, edges, artifacts, and concurrent workers before redesigning the hot path.",
+      "focusZh": "先用顶点、边、工件和并发工作进程表示调度、失效传播与遍历成本，再重构热点路径。"
+    },
+    {
+      "roleId": "rf-rtl",
+      "baseQuestionId": "q-rtl-pulse-cdc",
+      "archetype": "tradeoff",
+      "skillId": "sk-fpga-async-fifo",
+      "focusEn": "Compare a pulse synchronizer or handshake with an asynchronous FIFO using event rate, burst depth, Gray-pointer safety, reset convergence, latency, and loss guarantees.",
+      "focusZh": "依据事件速率、突发深度、Gray 指针安全、复位收敛、延迟和无丢失保证，比较脉冲同步器或握手与异步 FIFO。"
+    },
+    {
+      "roleId": "rf-dv",
+      "baseQuestionId": "q-dv-formal-vacuity",
+      "archetype": "worked-example",
+      "skillId": "sk-boolean-logic",
+      "focusEn": "Reduce the antecedent and assumptions with a truth table or Boolean identities to expose the exact unreachable condition.",
+      "focusZh": "使用真值表或布尔恒等式化简前件与假设，暴露确切的不可达条件。"
+    },
+    {
+      "roleId": "rf-dv",
+      "baseQuestionId": "q-dv-constraint-unsat",
+      "archetype": "worked-example",
+      "skillId": "sk-probability-basics",
+      "focusEn": "After restoring satisfiability, compute the conditional probability of the target class and show how the constraint changes the sampled distribution.",
+      "focusZh": "恢复可满足性后，计算目标类别的条件概率，并说明约束如何改变采样分布。"
+    },
+    {
+      "roleId": "rf-dv",
+      "baseQuestionId": "q-dv-simulation-race",
+      "archetype": "incident",
+      "skillId": "sk-eda-event-simulation",
+      "focusEn": "Reconstruct active, inactive, nonblocking-assignment, observed, and reactive scheduling events, including every delta cycle that can change the observation.",
+      "focusZh": "重构 active、inactive、非阻塞赋值、observed 和 reactive 调度事件，并包含所有可能改变观测的 delta cycle。"
+    },
+    {
+      "roleId": "rf-dv",
+      "baseQuestionId": "q-dv-formal-vacuity",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-eda-sat-bdd",
+      "focusEn": "Encode the antecedent and assumptions as clauses or a decision diagram, then return a witness or unsatisfiable core instead of only a pass result.",
+      "focusZh": "把前件与假设编码为子句或决策图，并返回见证或不可满足核，而不只是给出通过结果。"
+    },
+    {
+      "roleId": "rf-dv",
+      "baseQuestionId": "q-dv-dma-verification-boss",
+      "archetype": "integration",
+      "skillId": "sk-rtl-cdc",
+      "focusEn": "Verify every DMA clock-domain boundary with an explicit synchronizer, handshake, or FIFO contract, reset convergence, CDC constraints, and failure injection.",
+      "focusZh": "用显式同步器、握手或 FIFO 契约、复位收敛、CDC 约束与故障注入，验证每个 DMA 时钟域边界。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-resource-mapping",
+      "archetype": "worked-example",
+      "skillId": "sk-binary-representation",
+      "focusEn": "Trace fixed-width values, masks, sign interpretation, and overflow at the exact point where the mapping choice changes.",
+      "focusZh": "在资源映射选择发生变化的确切位置，追踪固定宽度数值、掩码、有符号解释和溢出。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-resource-mapping",
+      "archetype": "contract",
+      "skillId": "sk-boolean-logic",
+      "focusEn": "State the truth-table or Boolean function boundary that justifies LUT realization and distinguishes it from storage or arithmetic behavior.",
+      "focusZh": "声明能够证明 LUT 实现合理性的真值表或布尔函数边界，并将其与存储或算术行为区分。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-bram-latency",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-rtl-synthesizable-sv",
+      "focusEn": "Write deterministic synthesizable SystemVerilog with explicit read latency, enables, collision policy, and synthesis intent.",
+      "focusZh": "编写确定性的可综合 SystemVerilog，明确读延迟、使能、碰撞策略与综合意图。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-bram-latency",
+      "archetype": "worked-example",
+      "skillId": "sk-rtl-sequential-logic",
+      "focusEn": "Trace sampled addresses, enables, registered outputs, and hold behavior edge by edge using nonblocking-assignment semantics.",
+      "focusZh": "依据非阻塞赋值语义，逐边沿追踪采样地址、使能、寄存输出与保持行为。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-fifo-pointer-wave",
+      "archetype": "fault-injection",
+      "skillId": "sk-rtl-reset-design",
+      "focusEn": "Inject skewed reset assertion or release across the two domains and identify the first reset-convergence invariant that fails.",
+      "focusZh": "在两个时钟域间注入错开的复位断言或释放，并定位首个失效的复位收敛不变量。"
+    },
+    {
+      "roleId": "rf-fpga",
+      "baseQuestionId": "q-fpga-stream-accelerator-boss",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-rtl-width-signedness",
+      "focusEn": "Declare every intermediate width and signedness rule, then test truncation, extension, saturation, and mixed-sign boundaries.",
+      "focusZh": "声明每个中间值的位宽和有符号规则，并测试截断、扩展、饱和与混合符号边界。"
+    },
+    {
+      "roleId": "rf-architecture",
+      "baseQuestionId": "q-arch-cpi-stack",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-cpp-resource-safety",
+      "focusEn": "Implement the analyzer with RAII, explicit ownership, value semantics, const-correct interfaces, and a safe boundary for any parallel reduction.",
+      "focusZh": "使用 RAII、显式所有权、值语义、const 正确接口，以及安全的并行归约边界实现分析器。"
+    },
+    {
+      "roleId": "rf-architecture",
+      "baseQuestionId": "q-arch-noc-deadlock",
+      "archetype": "integration",
+      "skillId": "sk-rtl-ready-valid",
+      "focusEn": "Specify ready/valid transfer, backpressure stability, buffering, and combinational-loop rules at every NoC adapter boundary.",
+      "focusZh": "在每个 NoC 适配器边界声明 ready/valid 传输、背压稳定性、缓冲与组合环路规则。"
+    },
+    {
+      "roleId": "rf-physical-design",
+      "baseQuestionId": "q-pd-congestion-heatmap",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-graph-algorithms",
+      "focusEn": "Model the routing grid as a graph and make traversal, connected-region, cut, and capacity-update behavior explicit.",
+      "focusZh": "把布线网格建模为图，并明确遍历、连通区域、割与容量更新行为。"
+    },
+    {
+      "roleId": "rf-physical-design",
+      "baseQuestionId": "q-pd-setup-hold-math",
+      "archetype": "oracle",
+      "skillId": "sk-eda-timing-graph",
+      "focusEn": "Build an independent timing graph with vertices, arcs, constraints, arrival and required times, then compare propagated slack with the hand calculation.",
+      "focusZh": "构建包含顶点、弧、约束、到达时间与要求时间的独立时序图，并将传播得到的裕量与手算结果比较。"
+    },
+    {
+      "roleId": "rf-embedded",
+      "baseQuestionId": "q-emb-priority-inversion",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-cpp-resource-safety",
+      "focusEn": "Use explicit ownership, RAII guards, const-correct interfaces, and bounded concurrency boundaries without hiding the RTOS scheduling contract.",
+      "focusZh": "使用显式所有权、RAII 守卫、const 正确接口和有界并发边界，同时不得掩盖 RTOS 调度契约。"
+    },
+    {
+      "roleId": "rf-embedded",
+      "baseQuestionId": "q-emb-boot-linker",
+      "archetype": "incident",
+      "skillId": "sk-linux-shell",
+      "focusEn": "Use safe shell inspection of binaries, sections, symbols, permissions, processes, logs, and resource limits to separate build, load, and runtime causes.",
+      "focusZh": "使用安全的 Shell 检查二进制、段、符号、权限、进程、日志和资源限制，区分构建、装载与运行时原因。"
+    },
+    {
+      "roleId": "rf-embedded",
+      "baseQuestionId": "q-emb-boot-linker",
+      "archetype": "fault-injection",
+      "skillId": "sk-git-workflows",
+      "focusEn": "Create a reproducible failing commit range and bisect linker script, startup code, and build metadata without rewriting shared history.",
+      "focusZh": "构造可复现的失败提交区间，在不重写共享历史的前提下二分链接脚本、启动代码与构建元数据。"
+    },
+    {
+      "roleId": "rf-embedded",
+      "baseQuestionId": "q-emb-sensor-hub-boss",
+      "archetype": "integration",
+      "skillId": "sk-dft-jtag",
+      "focusEn": "Define a board-safe JTAG/TAP bring-up and boundary-scan observation path, including reset state, pin ownership, instruction/data-register use, and production lockout.",
+      "focusZh": "定义板级安全的 JTAG/TAP 启动与边界扫描观测路径，覆盖复位状态、引脚所有权、指令/数据寄存器使用和量产锁定。"
+    },
+    {
+      "roleId": "rf-manufacturing-automation",
+      "baseQuestionId": "q-mfg-spc-false-alarm",
+      "archetype": "worked-example",
+      "skillId": "sk-probability-basics",
+      "focusEn": "Compute the false-alarm probability under the stated distribution and sampling rule, then show the smallest dependence or tail assumption that changes it.",
+      "focusZh": "在声明的分布与采样规则下计算误报警概率，再说明会改变结果的最小相关性或尾部分布假设。"
+    },
+    {
+      "roleId": "rf-manufacturing-automation",
+      "baseQuestionId": "q-mfg-factory-timeseries",
+      "archetype": "incident",
+      "skillId": "sk-linux-shell",
+      "focusEn": "Use safe Linux inspection of service processes, files, permissions, pipes, signals, clocks, and resource limits while preserving production evidence.",
+      "focusZh": "在保留生产证据的同时，安全检查 Linux 服务进程、文件、权限、管道、信号、时钟和资源限制。"
+    },
+    {
+      "roleId": "rf-manufacturing-automation",
+      "baseQuestionId": "q-mfg-fdc-drift",
+      "archetype": "oracle",
+      "skillId": "sk-dft-diagnosis-yield",
+      "focusEn": "Map signatures and fail logs to ranked defect mechanisms, systematic patterns, affected populations, and a discriminating yield-learning action.",
+      "focusZh": "把特征签名与失败日志映射到排序后的缺陷机理、系统性模式、受影响群体和具有区分力的良率学习行动。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-aieda-hotspot-metrics",
+      "archetype": "tradeoff",
+      "skillId": "sk-statistical-inference",
+      "focusEn": "Compare estimators and thresholds with explicit sampling assumptions, uncertainty intervals, error costs, and the evidence required to reverse the decision.",
+      "focusZh": "在明确采样假设、不确定性区间、错误成本和逆转决策所需证据的前提下，比较估计量与阈值。"
+    },
+    {
+      "roleId": "rf-cad-flow",
+      "baseQuestionId": "q-cad-failure-clustering",
+      "archetype": "fault-injection",
+      "skillId": "sk-debug-hypothesis",
+      "focusEn": "Rank mutually distinguishable hypotheses, predict one observation for each, and choose the first measurement by information gain rather than convenience.",
+      "focusZh": "对可相互区分的假设排序，为每项预测一个观测，并按信息增益而不是便利性选择第一项测量。"
+    },
+    {
+      "roleId": "rf-english-communication",
+      "baseQuestionId": "q-eng-clarification-ladder",
+      "archetype": "english-clarify",
+      "skillId": "sk-requirement-clarification",
+      "focusEn": "Resolve audience, objective, measurable success, constraints, ownership, and missing context before restating the agreed requirement in English.",
+      "focusZh": "先澄清受众、目标、可衡量成功标准、约束、责任和缺失背景，再用英文重述已达成共识的需求。"
+    },
+    {
+      "roleId": "rf-behavioral",
+      "baseQuestionId": "q-beh-technical-conflict",
+      "archetype": "conflict-reflection",
+      "skillId": "sk-tradeoff-communication",
+      "focusEn": "Present both alternatives with the same criteria, quantified assumptions, reversal condition, and residual risk before explaining the relationship outcome.",
+      "focusZh": "先用相同标准、量化假设、逆转条件和残余风险呈现双方方案，再说明合作关系结果。"
+    },
+    {
+      "roleId": "rf-ai-eda",
+      "baseQuestionId": "q-ai-eda-foundation-rare-violation",
+      "archetype": "minimal-implementation",
+      "skillId": "sk-ml-supervised-basics",
+      "focusEn": "Define features, labels, split, loss, baseline, fitted prediction path, and held-out evaluation without leaking target information.",
+      "focusZh": "在不泄漏目标信息的前提下，定义特征、标签、数据划分、损失、基线、拟合预测路径和留出评估。"
+    },
+    {
+      "roleId": "rf-cad-flow",
+      "baseQuestionId": "q-cad-license-starvation",
+      "archetype": "tradeoff",
+      "skillId": "sk-cad-compute-scheduler",
+      "focusEn": "Compare queueing and placement policies using capacity, fairness, starvation bounds, affinity, preemption cost, failure recovery, and measurable service objectives.",
+      "focusZh": "依据容量、公平性、饥饿上限、亲和性、抢占成本、故障恢复和可测服务目标比较排队与放置策略。"
+    },
+    {
+      "roleId": "rf-architecture",
+      "baseQuestionId": "q-arch-foundation-load-use",
+      "archetype": "contract",
+      "skillId": "sk-arch-isa-contract",
+      "focusEn": "Separate architecturally visible instruction results and exceptions from pipeline timing, forwarding, stalls, and other implementation choices.",
+      "focusZh": "把架构可见的指令结果与异常，同流水线时序、前递、停顿及其他实现选择分开。"
+    },
+    {
+      "roleId": "rf-project-deep-dive",
+      "baseQuestionId": "q-proj-root-cause-replay",
+      "archetype": "artifact-proof",
+      "skillId": "sk-git-workflows",
+      "focusEn": "Use a reviewable commit history, reproducible revisions, and an evidence-preserving bisect to support the root-cause timeline.",
+      "focusZh": "使用可评审提交历史、可复现版本和保留证据的二分过程，支撑根因时间线。"
+    }
+  ]
+}

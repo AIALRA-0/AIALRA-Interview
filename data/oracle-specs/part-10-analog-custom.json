@@ -1,0 +1,170 @@
+{
+  "q-analog-mos-bias": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Solve the stated load-line and MOS equations under each candidate operating-region assumption, reject any solution that violates its own inequalities, then compare gm, ro, gain, and output headroom with an independent DC operating-point calculation.",
+      "acceptance": "The retained bias point simultaneously satisfies KCL, the selected region inequalities, supply and output-swing limits, and the declared channel-length-modulation model; gm, ro, and gain use consistent units and agree with the independent calculation within the stated approximation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "分别在每个候选工作区假设下求解给定负载线和 MOS 方程，拒绝任何违反自身区域不等式的解；再把 gm、ro、增益和输出电压余量与独立的 DC 工作点计算比较。",
+      "acceptance": "保留的偏置点必须同时满足 KCL、所选工作区不等式、电源与输出摆幅限制以及声明的沟道长度调制模型；gm、ro 与增益单位一致，并在声明的近似范围内与独立计算相符。"
+    }
+  },
+  "q-analog-two-stage-opamp": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Build a first-order spreadsheet from the proposed topology and bias allocation, independently calculate stage gains, gm/C unity bandwidth, dominant and nondominant poles, compensation zero, slew rate, output swing, and quiescent power, then sweep the stated load and common-mode boundaries.",
+      "acceptance": "The same device and current choices close DC gain, unity bandwidth, phase margin, slew, load, swing, common-mode, and power budgets without contradictory headroom; every unmet second-order effect is listed as a simulation risk with a measurable follow-up."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "依据所选拓扑和偏置分配建立一阶计算表，独立计算各级增益、gm/C 单位增益带宽、主极点与非主极点、补偿零点、压摆率、输出摆幅和静态功耗，再扫描给定负载与共模边界。",
+      "acceptance": "同一组器件与电流选择应在不产生电压余量矛盾的前提下同时闭合 DC 增益、单位增益带宽、相位裕度、压摆率、负载、摆幅、共模和功耗预算；所有未覆盖的二阶效应都作为可测量的仿真风险列出。"
+    }
+  },
+  "q-analog-bode-stability": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Digitize the supplied loop-gain magnitude and unwrapped phase, identify every 0 dB crossing and its local phase margin, correlate each with load-corner transient ringing, then rerun one-variable compensation experiments that move the suspected pole or zero.",
+      "acceptance": "The analysis does not report only the first crossing: it identifies the crossing that governs the unstable load corner, predicts the observed ringing direction, and proposes a compensation change whose measured loop gain improves the limiting margin without violating bandwidth or another stated corner."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "把给定环路增益幅值和展开相位数字化，识别每一个 0 dB 交越点及其局部相位裕度，并与各负载角的瞬态振铃对应；随后执行每次只移动一个可疑极点或零点的补偿实验。",
+      "acceptance": "分析不能只报告第一个交越点；必须指出决定不稳定负载角的交越点，正确预测观测到的振铃趋势，并提出一种经测量可改善限制性裕度、同时不破坏带宽或其他声明角落的补偿修改。"
+    }
+  },
+  "q-analog-noise-budget": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "For each source, preserve its spectral-density units, divide downstream power spectral density by the squared preceding gain (or amplitude spectral density by the preceding gain) to refer it to the input, integrate over the stated transfer function and bandwidth, and compare the root-sum-square total with an independent noise simulation or numerical integration.",
+      "acceptance": "Source contributions add in noise power rather than amplitude, 1/f and white-noise regions use declared limits, later-stage terms include the correct gain referral, the total agrees with the independent result within the stated model tolerance, and each proposed improvement shows its power or area cost."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "对每个噪声源保留其谱密度单位：后级功率谱密度除以前级增益平方（或后级幅度谱密度除以前级增益）以折算到输入端；依据给定传递函数和带宽积分，并将均方根平方和总量与独立噪声仿真或数值积分比较。",
+      "acceptance": "各噪声贡献必须按噪声功率而非幅度相加；1/f 与白噪声区域使用声明的积分边界；后级项包含正确的增益折算；总量在声明模型容差内与独立结果一致，且每项改进都说明其功耗或面积代价。"
+    }
+  },
+  "q-analog-monte-carlo-yield": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Reconstruct the 200 Bernoulli outcomes and the 3 failing common-mode conditions, calculate a binomial confidence interval for pass probability, stratify failures by process, mismatch, and operating condition, then compare targeted boundary sampling with an independent worst-case or importance-sampling run.",
+      "acceptance": "The report distinguishes the observed 98.5% sample pass rate from a confidence-bounded production-yield claim, does not treat clustered boundary failures as independent random misses, and defines enough additional samples and corner coverage to support a stated decision threshold."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "重建 200 次伯努利试验结果及 3 个极端共模条件下的失败，计算通过概率的二项分布置信区间，按工艺、失配和运行条件分层失败，再把定向边界抽样与独立的最坏情况或重要性抽样运行比较。",
+      "acceptance": "报告必须区分观测到的 98.5% 样本通过率与带置信界的量产良率主张，不能把聚集在边界条件的失败当作相互独立的随机漏失，并应定义足以支持声明决策阈值的附加样本数与角落覆盖。"
+    }
+  },
+  "q-analog-common-centroid": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Expand the 1:4 ratio into identical unit devices, annotate centroid, orientation, edge environment, dummies, source/drain connectivity, routing resistance, shielding, and thermal and switching-bus gradients; independently compute weighted centroids and run matching-aware extraction checks.",
+      "acceptance": "The unit count implements exactly 1:4, both weighted centroids coincide under the declared pattern, corresponding units see symmetric orientation and edge conditions, dummies are excluded electrically, routing and contacts do not create systematic ratio error, and the heat and coupling mitigations are testable after extraction."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把 1:4 比例展开为相同单位器件，标注几何中心、方向、边缘环境、dummy、源漏连通、布线电阻、屏蔽以及热源和开关总线梯度；独立计算加权中心并执行面向匹配的提取检查。",
+      "acceptance": "单位器件数量必须精确实现 1:4；在声明的排列下，两组加权中心重合；对应单元具有对称方向与边缘条件；dummy 在电气上被排除；布线和接触不会产生系统性比例误差；热与耦合缓解措施可在提取后验证。"
+    }
+  },
+  "q-analog-lvs-mismatch": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Reduce the layout to the smallest mismatching shared-diffusion fixture, compare raw extracted devices and nets before any series/parallel reduction with the 24-finger schematic, then vary one pin label, diffusion cut, contact, or extraction-recognition condition at a time.",
+      "acceptance": "The experiment reproduces the 22-versus-24 device count and two shorts, identifies the exact geometry or label that merges or omits the two fingers, and after repair yields matched device multiplicity and connectivity without introducing a DRC error or relying on an unjustified LVS waiver."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "把版图缩减为最小的 shared-diffusion 失配样例，在任何串并联归并前，将原始提取器件和网络与 24 finger 原理图比较；随后每次只改变一个引脚标签、扩散区切断、接触孔或提取识别条件。",
+      "acceptance": "实验必须复现 22 对 24 的器件数量差异和两处短路，定位导致两个 finger 被合并或遗漏的精确几何或标签；修复后器件倍数与连通性匹配，不新增 DRC 错误，也不依赖无依据的 LVS waiver。"
+    }
+  },
+  "q-analog-postlayout-regression": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Start from the same schematic operating point, compare C-only, R-only, coupling-disabled, selected-net, and full-RC extracted views; rank parasitic deltas at each high-impedance node and correlate them with unity bandwidth, phase margin, DC gain, and load.",
+      "acceptance": "Controlled reduction identifies one or more parasitic terms that reproduce the 35% unity-bandwidth loss and phase-margin change while leaving DC gain nearly constant; the proposed layout or compensation fix recovers the target metrics in full extraction and does not merely alter the extraction setup."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "从同一个原理图工作点出发，比较仅 C、仅 R、关闭耦合、选定网络和完整 RC 等提取视图；对每个高阻节点的寄生增量排序，并与单位增益带宽、相位裕度、DC 增益和负载关联。",
+      "acceptance": "受控删减必须识别出能够复现 35% 单位增益带宽损失和相位裕度变化、同时使 DC 增益基本不变的一项或多项寄生；所提版图或补偿修复应在完整提取中恢复目标指标，而不是只修改提取设置。"
+    }
+  },
+  "q-analog-bias-startup": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Solve both the zero-current and intended equilibria, then run transient startup across minimum, nominal, and maximum supply ramps, cold and hot PVT, leakage extremes, shutdown release, and randomized initial conditions with and without the proposed startup path.",
+      "acceptance": "Without intervention the fixture can reproduce the undesired equilibrium; with the startup circuit every declared legal case reaches the intended bias within the time budget, startup injection turns off or becomes negligible at steady state, and shutdown, leakage, and loading do not create a new DC error."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "求解零电流与目标工作点两个平衡态；随后在最小、典型和最大电源斜率、冷热 PVT、漏电极值、shutdown 释放和随机初始条件下，分别使用和不使用拟定启动支路运行瞬态仿真。",
+      "acceptance": "无干预时样例能够复现非期望平衡态；加入启动电路后，每个声明的合法情况都在时间预算内到达目标偏置；启动注入在稳态关闭或可忽略，且 shutdown、漏电和负载不会产生新的 DC 误差。"
+    }
+  },
+  "q-analog-ams-boundary": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Drive a shared transaction suite through the transistor-level model and the proposed real-number or electrical abstraction, including legal trim changes, asynchronous enable, X control, power collapse, reset, ready timeout, alarm, and tolerance-boundary cases; compare time-aligned outputs and assertions.",
+      "acceptance": "Both models agree within declared voltage, time, and state tolerances for every supported case, illegal code timing and X or power states produce an explicit deterministic policy, synchronizers and reset sequencing prevent ambiguous digital observations, and correlation limits are versioned rather than silently widened."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让晶体管级模型与拟定的 real-number 或 electrical 抽象运行同一组事务，包括合法 trim 修改、异步 enable、X 控制、电源掉电、reset、ready 超时、alarm 和容差边界案例；比较时间对齐后的输出与断言。",
+      "acceptance": "在所有支持案例中，两种模型都应在声明的电压、时间和状态容差内一致；非法 code 时序、X 或电源状态具有明确且确定的处理策略；同步与 reset 时序避免数字观测歧义；相关性边界经过版本管理而不能被静默放宽。"
+    }
+  },
+  "q-analog-front-end-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Trace every gain, bandwidth, offset, noise, common-mode, load, PVT, yield, area, startup, and power requirement through the proposed topology, hand budgets, schematic test, layout constraint, extracted test, and signoff owner; independently recompute the three tightest budgets and one end-to-end corner.",
+      "acceptance": "All requirements have quantitative allocations and pass/fail measurements, hand calculations are dimensionally and mutually consistent, schematic and post-layout verification cover nominal, PVT, mismatch, startup, load, and stability risks, layout intent addresses matching and parasitics, and residual risks have explicit retirement evidence."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把每项增益、带宽、失调、噪声、共模、负载、PVT、良率、面积、启动和功耗要求追溯到所选拓扑、手算预算、原理图测试、版图约束、提取后测试和签核责任人；独立重算最紧的三个预算及一个端到端角落。",
+      "acceptance": "所有要求都有量化分配和通过/失败测量；手算在量纲和相互关系上保持一致；原理图与版图后验证覆盖典型、PVT、失配、启动、负载和稳定性风险；版图意图处理匹配与寄生；残余风险具有明确的消除证据。"
+    }
+  },
+  "q-analog-foundation-gm": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate 2×100e-6/0.2 with a calculator.",
+      "acceptance": "The result is 0.001 S = 1 mS and the answer states at least one non-ideality or model limitation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器计算 2×100e-6/0.2。",
+      "acceptance": "结果为 0.001 S = 1 mS，且答案说明至少一种非理想因素或模型局限。"
+    }
+  },
+  "q-analog-foundation-feedback-gain": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the closed-loop formula and relative error in a calculator.",
+      "acceptance": "Gain is approximately 9.901 and the relative shortfall from 10 is approximately 0.99%."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器计算闭环增益公式和相对误差。",
+      "acceptance": "增益约为 9.901，相对于 10 的不足约为 0.99%。"
+    }
+  },
+  "q-analog-foundation-rc-pole": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate both pole frequencies with a calculator using C=1e-9 F and C=2e-9 F.",
+      "acceptance": "The frequencies are approximately 159 kHz and 79.6 kHz, with consistent inverse scaling."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器分别以 C=1e-9 F 和 C=2e-9 F 计算两个极点频率。",
+      "acceptance": "两个频率分别约为 159 kHz 和 79.6 kHz，并呈现一致的反比例缩放关系。"
+    }
+  }
+}

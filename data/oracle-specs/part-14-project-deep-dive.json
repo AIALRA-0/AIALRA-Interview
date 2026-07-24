@@ -1,0 +1,170 @@
+{
+  "q-proj-project-one-liner": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Write the 1-sentence version, record the 45-second expansion, and label user or customer, problem, scale, personal ownership, and measured result in both. Diff the two claim sets and link every scale, ownership, and result claim to a repository, report, demo, or explicit evidence gap; then replay both framings for the selected target role.",
+      "acceptance": "The 1 sentence contains all 5 required elements without becoming a list, the 45-second version adds explanation but no new unsupported claim, and both versions identify the same project boundary and personal contribution. Every numerical result is traceable or qualified, and the role-specific reframing changes emphasis without changing facts."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "写出 1 句话版本，录制 45 秒扩展版，并在两版中标注用户或客户、问题、规模、个人责任和实测结果。比较两版的主张集合，把每项规模、责任和结果主张链接到代码仓库、报告、演示或明确的证据缺口，再针对所选目标岗位重放两种表述。",
+      "acceptance": "这 1 句话包含全部 5 项必需元素且没有变成清单；45 秒版本只增加解释，不新增无依据主张；两版界定的是同一项目边界与个人贡献。每个数字结果均可追溯或带有限定，岗位化重述只改变重点而不改变事实。"
+    }
+  },
+  "q-proj-architecture-whiteboard": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Draw a diagram with at least 3 interacting components and record the 5-minute narration. Number every component and interface, label inputs, outputs, stateful boundaries, data versus control flow, invariants, failure containment, and the owned component, then have a reviewer trace one nominal transaction and one component-unavailable path against project artifacts.",
+      "acceptance": "All components are connected through named interfaces, each state transition and critical invariant has an owner, and both reviewer traces reach the declared output or failure boundary without an unexplained jump. The 5-minute account distinguishes the candidate's block from dependencies and uses sanitized names without changing architecture semantics."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "绘制一张包含至少 3 个交互组件的架构图并录制 5 分钟讲解。为每个组件和接口编号，标注输入、输出、有状态边界、数据流与控制流、不变量、故障隔离边界和本人负责的组件，再由评审者结合项目工件追踪一条正常事务路径和一条组件不可用路径。",
+      "acceptance": "所有组件均通过具名接口连接，每个状态转换与关键不变量都有负责人，两条评审路径都能到达已声明输出或故障边界，且没有无法解释的跳跃。5 分钟讲解区分候选人的模块与外部依赖，使用脱敏名称但不改变架构语义。"
+    }
+  },
+  "q-proj-metric-defense": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Create a metric evidence sheet containing definition and unit, baseline, evaluated value, workload or sample, environment, measurement method, repeats and variance, exclusions, attribution, and practical impact. Give the cited artifact and instructions to an independent reviewer, who recomputes the metric and tests the strongest plausible confounder or selection-bias explanation.",
+      "acceptance": "The independent recomputation matches within a tolerance declared before review, baseline and evaluated runs use comparable scope or disclose the difference, exclusions include failed cases or justify their removal, and attribution is narrowed when the confounder survives. No resume number passes solely because it matches a presentation slide."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立指标证据表，包含定义与单位、基线、评估值、工作负载或样本、环境、测量方法、重复次数与方差、排除项、归因和实际影响。把引用工件和操作说明交给独立评审者，由其复算指标并检验最强的合理混杂因素或选择偏差解释。",
+      "acceptance": "独立复算值在评审前声明的容差内一致；基线与评估运行使用可比范围，否则明确披露差异；排除项包含失败案例或合理说明其移除；若混杂解释仍成立，则收窄归因。简历数字不能仅因与演示幻灯片一致而通过。"
+    }
+  },
+  "q-proj-decision-replay": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Reconstruct a dated decision record with at least 2 viable alternatives, criteria, evidence available at that date, unknowns, reversibility and migration cost, decision owner, selected path, and later outcome. Compare it with contemporaneous design notes or version history, then separately write whether the original judgment was sound and whether the later result was good.",
+      "acceptance": "Every alternative was feasible under the information then available, the chosen option follows the stated criteria, ownership and reversal triggers are explicit, and hindsight evidence is not backdated. The review can conclude that a sound decision had a poor outcome or vice versa, and any claimed preserved migration path is supported by an artifact."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "重建一份带日期的决策记录，包含至少 2 个可行替代方案、标准、当时可用证据、未知项、可逆性与迁移成本、决策负责人、所选路径和后续结果。用同期设计笔记或版本历史核对，再分别写明原决策判断是否合理以及后来结果是否良好。",
+      "acceptance": "每个替代方案在当时信息下都确实可行，所选方案符合已声明标准，责任人和反转触发条件明确，事后证据没有被倒填到决策时点。评审可以得出“合理决策但结果不佳”或相反结论，任何声称保留的迁移路径都必须有工件支持。"
+    }
+  },
+  "q-proj-root-cause-replay": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the 5-minute debug replay and build a hypothesis matrix with symptom timestamp, ranked causes, prewritten expected observations, experiment logs, disconfirming evidence, root cause, fix, and prevention. Reproduce the failure on the smallest available fixture, apply only the proposed causal change, and run a prevention test before and after the fix.",
+      "acceptance": "The timeline and logs agree, at least 1 initially plausible hypothesis is rejected by its predicted observation, and the minimal causal change removes the failure while a rollback restores it or an independent test confirms causality. The prevention check fails before the fix and passes after it, and the story names any wasted experiment without rewriting its original prediction."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制 5 分钟调试重演并建立假设矩阵，包含症状时间戳、排序后的原因、事先写下的预期观测、实验日志、反证、根因、修复和预防措施。在可获得的最小样例上复现故障，只施加所提出的因果修改，并在修复前后运行预防性测试。",
+      "acceptance": "时间线与日志一致，至少 1 个最初合理的假设被其预测观测排除；最小因果修改能够消除故障，且回退后故障恢复，或由独立测试确认因果关系。预防检查在修复前失败、修复后通过，叙述还需指出浪费时间的实验，而不能改写其原始预测。"
+    }
+  },
+  "q-proj-scale-counterfactual": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Build a capacity table from measured current load to the proposed 10× load with fixed headcount, including units, service time, throughput, memory or storage, queueing, external limits, safety margin, and the formula behind each projection. Identify the first saturated boundary, prototype or replay around that threshold, and define a staged migration with trigger, rollback, and validation signals.",
+      "acceptance": "The first bottleneck follows from measured inputs and dimensionally consistent arithmetic, the 10× projection includes uncertainty rather than a single unsupported multiplier, and only boundaries required by the evidence are redesigned. Migration begins at an explicit observed threshold, each stage preserves correctness and rollback, and the plan does not hide extra staffing."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "从实测当前负载到计划的 10× 负载建立容量表，并保持人员数量不变；表中包含单位、服务时间、吞吐量、内存或存储、排队、外部限制、安全余量及每项预测公式。识别第一个饱和边界，在该阈值附近进行原型或回放，并定义带触发条件、回滚和验证信号的分阶段迁移。",
+      "acceptance": "第一个瓶颈来自实测输入和量纲一致的计算；10× 预测包含不确定性，而不是一个无依据的单一倍数；只重构证据要求的边界。迁移在明确的观测阈值启动，每一阶段都保持正确性与可回滚性，且计划没有隐含增加人员。"
+    }
+  },
+  "q-proj-testing-strategy": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Map each requirement and ranked risk to unit, property, differential, integration, performance, hardware or lab, and production checks, naming the oracle and artifact for each layer. Replay 1 escaped defect through the matrix to locate the missing or ineffective layer, then model a 50% test-runtime cut and identify the first test removed plus the newly exposed risk.",
+      "acceptance": "Every critical risk has a check whose oracle is independent of the implementation under test, the escaped defect maps to a specific coverage or detection gap, and the proposed prevention would fail on the pre-fix artifact and pass on the fixed one. The 50% runtime plan states what evidence is lost and does not preserve speed by silently deleting the highest-severity signal."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把每项需求和排序后的风险映射到单元、性质、差分、集成、性能、硬件或实验室及生产检查，并为每一层写明判定器和工件。让 1 个逃逸缺陷沿矩阵回放，定位缺失或失效的层，再模拟削减 50% 测试运行时间，指出第一个被删除的测试及新暴露的风险。",
+      "acceptance": "每项关键风险都有独立于被测实现的检查判定器；逃逸缺陷映射到具体覆盖或检测缺口；建议的预防检查在修复前工件上失败、在修复后通过。50% 运行时间方案说明损失了哪些证据，不能通过静默删除最高严重度信号来换取速度。"
+    }
+  },
+  "q-proj-ownership-boundary": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the 2-minute answer and create a contribution map separating decisions owned, implementation completed, dependencies owned by others, help received, and impact attributable to the candidate's portion. Link map entries to commits, reviews, design documents, reports, demos, or named verification gaps, and ask a reviewer to challenge any claim that expands from a component to the whole project.",
+      "acceptance": "The recording and map agree on a deliberately narrow ownership boundary, team dependencies and help are credited, and every personal implementation or decision claim has supporting evidence or an explicit limitation. Project-level outcomes are not attributed solely to the candidate unless the causal link is demonstrated."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制 2 分钟回答并建立贡献地图，区分本人负责的决策、完成的实现、由他人负责的依赖、获得的帮助以及可归因于本人部分的影响。把地图条目链接到提交、评审、设计文档、报告、演示或具名验证缺口，并请评审者质疑任何从组件扩张到整个项目的主张。",
+      "acceptance": "录音与地图对一个有意收窄的责任边界保持一致，团队依赖与帮助得到署名，每项个人实现或决策主张都有证据或明确限制。除非因果联系得到证明，否则不得把项目整体结果完全归因于候选人。"
+    }
+  },
+  "q-proj-failed-project": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Construct a dated postmortem from original thesis and success criteria through leading assumptions, contrary signals, continuation or stop decisions, final outcome, personal responsibility, and the later project where the lesson was applied. Compare the stated signals with contemporaneous artifacts and write the evidence threshold that should have triggered stopping.",
+      "acceptance": "The account names a genuinely missed, cancelled, or low-value outcome without relabeling it as success, identifies the earliest credible contrary signal and who owned the sunk-cost decision, and separates personal responsibility from team context. A specific later design or process change is supported by evidence; a generic lesson without transfer evidence does not pass."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立带日期的复盘，从原始论点和成功标准开始，依次记录领先假设、反向信号、继续或停止决定、最终结果、个人责任，以及后来应用该教训的项目。用同期工件核对所述信号，并写出本应触发停止的证据阈值。",
+      "acceptance": "叙述明确承认确实未达目标、被取消或价值较弱的结果，没有把失败重新包装成成功；指出最早可信的反向信号以及沉没成本决定的负责人；区分个人责任与团队背景。有证据支持一项后来具体的设计或流程改变；只有泛泛教训而无迁移证据则不通过。"
+    }
+  },
+  "q-proj-five-minute-defense": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the 5-minute presentation and the following 5-minute adversarial Q&A without edits, transcribe both, and timestamp problem, constraints, architecture, ownership, hardest decision, evidence, failure or lesson, and significance. Build a claim-evidence ledger from the transcript, then record the requested 2-minute compression and compare which technical signals were retained.",
+      "acceptance": "The first presentation lasts 5 minutes and covers all required sections before Q&A; answers remain consistent with the cited artifacts under challenge and explicitly mark uncertainty or confidentiality. The 2-minute version preserves problem, ownership, one decision, and one supported result, and no challenged claim survives after its evidence is shown inadequate."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "不经剪辑地录制 5 分钟陈述及随后 5 分钟对抗性问答，转写两部分，并为问题、约束、架构、个人责任、最难决策、证据、失败或教训及意义标注时间戳。根据转写建立主张—证据台账，再录制要求的 2 分钟压缩版并比较保留了哪些技术信号。",
+      "acceptance": "第一段陈述时长为 5 分钟，并在问答前覆盖全部必需部分；受到质疑时，回答仍与引用工件一致，并明确标注不确定性或保密边界。2 分钟版本保留问题、个人责任、一项决策和一项有证据的结果；任何被证明证据不足的主张都不能继续保留。"
+    }
+  },
+  "q-proj-project-loop-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Run and record the 8-stage loop—pitch, architecture, metric challenge, design alternative, failure debug, scale counterfactual, ownership audit, and lessons—using one real project and dynamic follow-ups. Attach the architecture and evidence pack, log every question, mark confidential or uncertain claims, and independently trace each answer back to the same project timeline, metric definitions, and ownership map.",
+      "acceptance": "All 8 stages are present and mutually consistent, architecture interfaces agree with the debug and scaling answers, metric scope survives or is revised under selection-bias challenge, and ownership does not expand across stages. The recording shows responsive reasoning rather than a fixed script, and every confidential or unsupported detail is withheld or qualified."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "使用同一个真实项目和动态追问，运行并录制 8 阶段整轮：简介、架构、指标质疑、设计替代、故障调试、规模反事实、责任审计和教训。附上架构与证据包，记录每个问题，标出保密或不确定主张，并将每个回答独立追溯到同一项目时间线、指标定义和责任地图。",
+      "acceptance": "全部 8 个阶段均存在且相互一致；架构接口与调试、扩展回答一致；指标范围在选择偏差质疑下仍成立或被修正；责任边界不会随阶段扩大。录音体现针对追问的即时推理而不是固定脚本，每项保密或无依据细节都被省略或限定。"
+    }
+  },
+  "q-project-foundation-architecture-sketch": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Cross-check every block, interface, and ownership claim against the project's repository, report, or demo artifacts.",
+      "acceptance": "The sketch has 3–5 connected blocks, all required labels, and no ownership or interface claim contradicted by the available artifacts."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "将每个模块、接口和责任归属主张，与该项目的代码仓库、报告或演示工件逐一交叉核对。",
+      "acceptance": "架构图包含 3–5 个相互连接的模块和所有必需标签，且现有工件不反驳其中任何责任归属或接口主张。"
+    }
+  },
+  "q-project-foundation-metric-proof": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Ask a reviewer to recompute the metric from the cited artifact using the declared definition.",
+      "acceptance": "The recomputed value matches within the declared tolerance, or the card explicitly records why verification is currently impossible."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "让评审者依据已声明的指标定义，使用所引用的工件重新计算该指标。",
+      "acceptance": "复算值在已声明的容差内一致；如果当前无法验证，则证据卡必须明确记录原因。"
+    }
+  },
+  "q-project-foundation-hypothesis-tree": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Review the table for distinct predicted outcomes, then compare the experiment record with the prewritten predictions.",
+      "acceptance": "At least two hypotheses can be ruled in or out by the selected observation, and hindsight is not substituted for the original prediction."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "审查表格中各假设是否具有不同的预期结果，然后将实验记录与事先写下的预测进行比较。",
+      "acceptance": "所选观察至少能支持或排除两个假设，且不得用事后解释替代原始预测。"
+    }
+  }
+}

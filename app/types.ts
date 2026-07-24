@@ -56,35 +56,93 @@ export type SkillNode = {
   evidence?: Evidence[];
 };
 
+export type QuestionOracle =
+  | string
+  | {
+      kind: string;
+      procedure: string;
+      acceptance: string;
+    };
+
 export type InterviewQuestion = {
   id: string;
   title: string;
   titleZh?: string;
   roleFamilies: string[];
   skills: string[];
+  prerequisiteSkills?: string[];
   level: string;
   difficulty: string;
   type: string;
   prompt: string;
+  promptZh?: string;
   deliverables: string[];
+  deliverablesZh?: string[];
   rubric: string[];
+  rubricZh?: string[];
   commonFailures: string[];
+  commonFailuresZh?: string[];
   followUps: string[];
+  followUpsZh?: string[];
   sourcePolicy: string;
   sourceRefs: Evidence[] | string[];
   estimatedMinutes: number;
   evidenceDate: string;
   status: string;
   referenceOutline?: string[];
-  oracle?:
-    | string
-    | {
-        kind: string;
-        procedure: string;
-        acceptance: string;
-      }
-    | null;
+  referenceOutlineZh?: string[];
+  oracle?: QuestionOracle | null;
+  oracleZh?: QuestionOracle | null;
+  blueprintId?: string;
   contentVersion: string;
+};
+
+export type InterviewQuestionSummary = Pick<
+  InterviewQuestion,
+  | "id"
+  | "title"
+  | "titleZh"
+  | "roleFamilies"
+  | "skills"
+  | "level"
+  | "difficulty"
+  | "type"
+  | "estimatedMinutes"
+  | "status"
+  | "contentVersion"
+  | "blueprintId"
+> & {
+  promptPreview: string;
+  promptPreviewZh: string;
+  shardId: string;
+};
+
+export type QuestionBankIndex = {
+  schemaVersion: string;
+  assetVersion: string;
+  sourceSha256: string;
+  questionCount: number;
+  previewLength: number;
+  questions: InterviewQuestionSummary[];
+};
+
+export type QuestionBankBootstrap = {
+  schemaVersion: string;
+  assetVersion: string;
+  sourceSha256: string;
+  questionCount: number;
+  previewLength: number;
+  indexUrl: string;
+  indexSha256: string;
+  shardSha256ById: Record<string, string>;
+};
+
+export type QuestionBankShard = {
+  schemaVersion: string;
+  assetVersion: string;
+  shardId: string;
+  questionCount: number;
+  questions: InterviewQuestion[];
 };
 
 export type Profile = {

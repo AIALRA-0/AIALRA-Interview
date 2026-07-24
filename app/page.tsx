@@ -1,15 +1,15 @@
 import cnCompaniesRaw from "../data/companies.cn.json";
 import usCompaniesRaw from "../data/companies.us.json";
 import profileRaw from "../data/profile.json";
-import questionsRaw from "../data/questions.seed.json";
 import roleFamiliesRaw from "../data/role-families.json";
 import roleMappingRaw from "../data/role-mapping.json";
 import skillGraphRaw from "../data/skill-graph.json";
+import questionManifestRaw from "../public/question-bank/manifest.json";
 import { CareerDojoApp } from "./CareerDojoApp";
 import type {
   Company,
-  InterviewQuestion,
   Profile,
+  QuestionBankBootstrap,
   RoleFamily,
   SkillNode,
 } from "./types";
@@ -41,7 +41,18 @@ const companies = [
 }));
 const roles = roleFamiliesRaw.roleFamilies as unknown as RoleFamily[];
 const skills = skillGraphRaw.skills as unknown as SkillNode[];
-const questions = questionsRaw.questions as unknown as InterviewQuestion[];
+const questionBank: QuestionBankBootstrap = {
+  schemaVersion: questionManifestRaw.schemaVersion,
+  assetVersion: questionManifestRaw.assetVersion,
+  sourceSha256: questionManifestRaw.sourceSha256,
+  questionCount: questionManifestRaw.questionCount,
+  previewLength: questionManifestRaw.previewLength,
+  indexUrl: "/question-bank/index.json",
+  indexSha256: questionManifestRaw.index.sha256,
+  shardSha256ById: Object.fromEntries(
+    questionManifestRaw.shards.map((shard) => [shard.id, shard.sha256]),
+  ),
+};
 const profile = profileRaw as unknown as Profile;
 
 export default function Home() {
@@ -50,7 +61,7 @@ export default function Home() {
       companies={companies}
       roles={roles}
       skills={skills}
-      questions={questions}
+      questionBank={questionBank}
       profile={profile}
     />
   );

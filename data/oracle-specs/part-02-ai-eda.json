@@ -1,0 +1,170 @@
+{
+  "q-aieda-split-leakage": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Build sample, parent-block, design, timestamp, and technology manifests; compute all train/validation/test group intersections, fit preprocessing on train only, and compare random-row, group-aware, and future-design holdout results against naive baselines.",
+      "acceptance": "No parent block or design crosses a split, temporal ordering and preprocessing provenance are preserved, the final holdout contains a genuinely unseen design or technology, and performance claims use that holdout rather than the leaked 99% result."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "建立样本、父模块、设计、时间戳和工艺清单；计算训练、验证和测试之间所有分组交集，只在训练集上拟合预处理，并将随机按行划分、分组划分和未来设计留出结果与朴素基线比较。",
+      "acceptance": "任何父模块或设计都不跨越数据集，时间顺序和预处理来源均被保留，最终留出集包含真正未见的设计或工艺，且性能主张依据该留出集而不是存在泄漏的 99% 结果。"
+    }
+  },
+  "q-aieda-congestion-labels": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Trace each candidate label to the flow stage, tool version, spatial aggregation, censoring rule, and downstream action; apply the proposed contract to fixtures containing a successful route, overflow later repaired, a tool failure, and a censored run.",
+      "acceptance": "The chosen label is unavailable before the declared prediction horizon, has one versioned unit and aggregation rule, distinguishes censored from negative examples, maps to an explicit decision cost, and assigns every fixture without silently changing semantics."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把每个候选标签追溯到流程阶段、工具版本、空间聚合、删失规则和下游行动；将拟定契约应用于成功布线、后续修复的溢出、工具失败和被删失运行等样例。",
+      "acceptance": "所选标签在声明的预测时点之前不可获得，具有唯一且版本化的单位与聚合规则，能够区分删失样本和负样本，并映射到明确的决策成本；所有样例都可归类且语义不会被静默改变。"
+    }
+  },
+  "q-aieda-netlist-gnn": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Encode small hierarchical netlists with a high-degree hyperedge, two repeated modules, and a flattened equivalent; check connectivity reconstruction, node-order permutation behavior, graph-size growth, split membership, and one forward pass.",
+      "acceptance": "The representation preserves directed connectivity and hierarchy intent, avoids quadratic expansion of the high-degree net unless explicitly budgeted, produces permutation-consistent predictions, keeps repeated parent modules in one split, and supports inference on an unseen design."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "编码若干小型层次化网表，其中包含一条高扇出超边、两个重复模块及其等价展平版本；检查连通性重建、节点顺序置换行为、图规模增长、数据划分归属和一次前向计算。",
+      "acceptance": "表示保留有向连通性和层次语义；除非明确计入预算，否则不会把高扇出网络扩张为二次规模；预测对节点置换保持一致；同一父模块的重复实例不跨数据集；并支持在未见设计上推理。"
+    }
+  },
+  "q-aieda-hotspot-metrics": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate a fixed rare-event prediction table with 0.2% positives, compute precision-recall, recall at the stated review budget, expected asymmetric cost, calibration by design slice, and bootstrap confidence intervals; compare several thresholds using validation data only.",
+      "acceptance": "Raw accuracy is not used as the decision metric, the selected threshold stays within the review budget, reported recall and cost match an independent calculation, confidence intervals and high-risk slices are shown, and the untouched test set is used only after threshold selection."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在一个正例占 0.2% 的固定稀有事件预测表上，计算精确率—召回率、给定审核预算下的召回率、非对称期望成本、按设计切片的校准情况和 bootstrap 置信区间；只使用验证集比较多个阈值。",
+      "acceptance": "不把原始准确率作为决策指标；所选阈值不超过审核预算；报告的召回率和成本与独立计算一致；展示置信区间和高风险切片；且未触碰的测试集只在阈值确定后使用。"
+    }
+  },
+  "q-aieda-abstaining-model": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay labeled in-distribution, shifted, and deliberately out-of-domain queries through prediction, uncertainty, abstention, and fallback paths; plot calibration and risk-versus-coverage curves and compare fallback results with full simulation.",
+      "acceptance": "Uncertainty is calibrated on declared slices, shifted and out-of-domain cases abstain at the promised rate, accepted predictions meet the stated error bound, every abstention reaches a deterministic safe fallback, and monitoring would detect a sustained calibration or coverage breach."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让带标签的域内、已偏移和刻意构造的域外查询依次经过预测、不确定性、拒答和回退路径；绘制校准曲线及风险—覆盖率曲线，并把回退结果与完整仿真比较。",
+      "acceptance": "不确定性在已声明切片上得到校准；偏移和域外样本按承诺比例拒答；被接受预测满足声明误差界；每次拒答都进入确定性的安全回退；监控能够发现持续的校准或覆盖率违约。"
+    }
+  },
+  "q-aieda-node-domain-shift": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Compare feature distributions, label definitions, tool and corner metadata, and residuals on matched old-node and new-node slices; inject one known label-version mismatch and evaluate retrain, adapt, and reject policies on a held-out new-node set.",
+      "acceptance": "The planted mismatch is detected rather than attributed to features, residual shift is quantified with uncertainty by meaningful slice, unsupported regions have an explicit no-go rule, and the chosen policy meets its predeclared new-node error and coverage criteria."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在匹配的新旧工艺节点切片上比较特征分布、标签定义、工具与工艺角元数据及残差；注入一个已知标签版本失配，并在留出的新节点数据上评估重训、适配和拒绝策略。",
+      "acceptance": "注入的失配被识别而不是误归因为特征变化；按有意义切片量化残差偏移及其不确定性；不受支持区域具有明确禁用规则；所选策略满足事先声明的新节点误差和覆盖率标准。"
+    }
+  },
+  "q-aieda-active-learning": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "On a fixed unlabeled pool and labeling budget, run the proposed batched acquisition and equal-budget random, uncertainty-only, and diversity-only baselines across multiple seeds while keeping the final test set inaccessible.",
+      "acceptance": "Acquisition never reads final-test labels, selected batches satisfy feasibility and compute limits without near-duplicate collapse, learning curves include uncertainty across seeds, and any claimed gain over random is supported at the same routing-label budget."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在固定未标注池和标注预算下，以多个随机种子运行所提批量采集策略，以及同预算的随机、仅不确定性和仅多样性基线；最终测试集全程不可访问。",
+      "acceptance": "采集过程从不读取最终测试标签；所选批次满足可行性和计算限制且不会坍缩为近重复样本；学习曲线包含跨随机种子不确定性；任何优于随机策略的主张都基于相同的布线标注预算。"
+    }
+  },
+  "q-aieda-ppa-service": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run contract tests for valid and stale feature schemas, model and tool-version routing, two isolated projects, batching, cache keys, timeout fallback, audit replay, and rollback to the previous model.",
+      "acceptance": "Schema or provenance mismatches fail closed, no request or cache entry crosses project boundaries, identical pinned requests replay identically, timeout reaches the declared fallback, model rollback restores prior behavior, and calibration telemetry is attributable to one model and schema version."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "针对有效和过期特征模式、模型与工具版本路由、两个隔离项目、批处理、缓存键、超时回退、审计重放及回滚到上一模型运行契约测试。",
+      "acceptance": "模式或来源失配以安全关闭方式失败；请求和缓存均不跨项目边界；相同固定版本请求可得到相同重放结果；超时进入已声明回退；模型回滚恢复先前行为；校准遥测可归属到唯一模型和模式版本。"
+    }
+  },
+  "q-aieda-repro-manifest": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Rebuild one experiment from the manifest in a clean environment, verify every content hash and split ID, compare metrics within a predeclared tolerance, then mutate the design snapshot and feature schema separately.",
+      "acceptance": "The clean replay resolves immutable data, code, tool, container, seed, and split identities and reproduces the metric within tolerance; each mutation is detected before training; and no mutable latest tag or undocumented environment input remains."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在干净环境中依据清单重建一次实验，校验每个内容哈希和数据划分 ID，并在预先声明的容差内比较指标；随后分别修改设计快照和特征模式。",
+      "acceptance": "干净重放能够解析不可变的数据、代码、工具、容器、随机种子和划分标识，并在容差内复现指标；两种修改都会在训练前被发现；不存在可变的 latest 标签或未记录的环境输入。"
+    }
+  },
+  "q-aieda-shortcut-feature": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Build a feature-availability timeline, train matched models with and without the post-timing warning count, evaluate them on a production-faithful split where the warning is absent, and test only proxies generated before the prediction horizon.",
+      "acceptance": "The warning is classified as unavailable target-time information and removed, the apparent gain disappears or is reported honestly on the faithful split, any replacement proxy has documented pre-horizon provenance, and ablation conclusions include uncertainty and an unchanged baseline."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "建立特征可用时间线，训练包含和不包含时序分析后 warning 数量的匹配模型，在该 warning 缺失的生产真实划分上评估，并只测试预测时点之前产生的代理特征。",
+      "acceptance": "该 warning 被判定为预测时点不可用信息并被移除；表面收益在真实划分上消失或得到诚实报告；任何替代代理都具有预测前来源记录；消融结论包含不确定性和未改变的基线。"
+    }
+  },
+  "q-aieda-routing-triage-boss": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay a versioned historical cohort through proceed, tune, human-review, and abstain actions; independently recompute labels and cost, then simulate project shift, calibration drift, unavailable features, human override, and model rollback.",
+      "acceptance": "Every action follows a documented calibrated threshold and cost rule, false-negative and review loads stay within declared limits, shifted or invalid inputs abstain or fall back safely, human decisions and provenance are auditable, and rollback reproduces the prior policy."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让一个版本化历史样本集经过继续运行、调整布局、人工审核和拒答四种行动；独立复算标签与成本，再模拟项目偏移、校准漂移、特征不可用、人工覆盖和模型回滚。",
+      "acceptance": "每项行动都遵循有记录的校准阈值和成本规则；漏报与审核负载处于声明上限内；偏移或无效输入会安全拒答或回退；人工决定及来源可审计；回滚能够复现先前策略。"
+    }
+  },
+  "q-ai-eda-foundation-split": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Compute the intersection of parent-design IDs across train, validation, and test manifests.",
+      "acceptance": "Every pairwise intersection is empty and rerunning the pinned split procedure reproduces the same manifests."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "计算训练集、验证集和测试集清单之间父设计 ID 的交集。",
+      "acceptance": "任意两组之间的交集均为空；使用固定版本的划分流程重新运行后，能够复现完全相同的清单。"
+    }
+  },
+  "q-ai-eda-foundation-rare-violation": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Pass the stated labels and all-clean predictions to a public metrics implementation.",
+      "acceptance": "The confusion matrix is [[990,0],[10,0]], positive-class recall is 0, and any precision warning or zero-division policy is disclosed."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "将题目给出的标签和“全部预测为无违例”的结果传给一个公开的指标计算实现。",
+      "acceptance": "混淆矩阵为 [[990,0],[10,0]]，正类召回率为 0，并明确披露任何精确率警告或除零处理策略。"
+    }
+  },
+  "q-ai-eda-foundation-feature-leakage": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run a schema guard against a manifest that labels each feature with its producing flow stage.",
+      "acceptance": "The two post-route columns are rejected for a pre-route model and the pipeline fails closed on an unlabeled feature."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "对一份清单运行模式校验器；该清单为每个特征标注其产生于流程中的哪个阶段。",
+      "acceptance": "用于布线前模型时，两个布线后字段都被拒绝；遇到未标注来源阶段的特征时，流水线以安全关闭方式失败。"
+    }
+  }
+}

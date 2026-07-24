@@ -5,8 +5,13 @@ import type {
   ApplicationRecord,
   Company,
   InterviewQuestion,
+  InterviewQuestionSummary,
   PersistedState,
   Profile,
+  QuestionBankBootstrap,
+  QuestionBankIndex,
+  QuestionBankShard,
+  QuestionOracle,
   RoleFamily,
   SkillNode,
 } from "./types";
@@ -20,12 +25,15 @@ type ViewId =
   | "evidence";
 
 type AtlasLayout = "tree" | "cards";
+type QuestionLanguageMode = "bilingual" | "zh-first" | "en-first";
+type QuestionIndexState = "loading" | "ready" | "error";
+type QuestionDetailState = "idle" | "loading" | "ready" | "error";
 
 type AppProps = {
   companies: Company[];
   roles: RoleFamily[];
   skills: SkillNode[];
-  questions: InterviewQuestion[];
+  questionBank: QuestionBankBootstrap;
   profile: Profile;
 };
 
@@ -186,6 +194,545 @@ function sourceUrl(source: string | { url?: string }) {
   return typeof source === "string" ? source : source.url || "";
 }
 
+function sourceTitle(
+  source: string | { title?: string; url?: string },
+  index: number,
+) {
+  if (typeof source !== "string" && source.title?.trim()) {
+    return source.title.trim();
+  }
+  const url = sourceUrl(source);
+  try {
+    const hostname = new URL(url).hostname.replace(/^www\./, "");
+    return `公开依据 ${String(index + 1).padStart(2, "0")} · ${hostname}`;
+  } catch {
+    return `公开依据 ${String(index + 1).padStart(2, "0")} / Source ${index + 1}`;
+  }
+}
+
+const languageModeOptions: Array<{
+  id: QuestionLanguageMode;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "bilingual",
+    label: "中英对照",
+    description: "Chinese and English side by side",
+  },
+  {
+    id: "zh-first",
+    label: "中文优先",
+    description: "Chinese first, English retained",
+  },
+  {
+    id: "en-first",
+    label: "English first",
+    description: "English first, Chinese retained",
+  },
+];
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+const questionIndexKeys = new Set([
+  "schemaVersion",
+  "assetVersion",
+  "sourceSha256",
+  "questionCount",
+  "previewLength",
+  "questions",
+]);
+const questionSummaryKeys = new Set([
+  "id",
+  "title",
+  "titleZh",
+  "roleFamilies",
+  "skills",
+  "level",
+  "difficulty",
+  "type",
+  "promptPreview",
+  "promptPreviewZh",
+  "estimatedMinutes",
+  "status",
+  "contentVersion",
+  "shardId",
+  "blueprintId",
+]);
+const questionShardKeys = new Set([
+  "schemaVersion",
+  "assetVersion",
+  "shardId",
+  "questionCount",
+  "questions",
+]);
+const publishedQuestionKeys = new Set([
+  "id",
+  "title",
+  "titleZh",
+  "roleFamilies",
+  "skills",
+  "prerequisiteSkills",
+  "level",
+  "difficulty",
+  "type",
+  "prompt",
+  "promptZh",
+  "deliverables",
+  "deliverablesZh",
+  "rubric",
+  "rubricZh",
+  "commonFailures",
+  "commonFailuresZh",
+  "followUps",
+  "followUpsZh",
+  "sourcePolicy",
+  "sourceRefs",
+  "estimatedMinutes",
+  "evidenceDate",
+  "status",
+  "referenceOutline",
+  "referenceOutlineZh",
+  "oracle",
+  "oracleZh",
+  "blueprintId",
+  "contentVersion",
+]);
+
+function hasOnlyKeys(value: Record<string, unknown>, allowed: Set<string>) {
+  return Object.keys(value).every((key) => allowed.has(key));
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && Boolean(value.trim());
+}
+
+function isNonEmptyStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every(isNonEmptyString)
+  );
+}
+
+function isEvidenceRef(value: unknown) {
+  if (isNonEmptyString(value)) return true;
+  if (!isRecord(value)) return false;
+  const allowed = new Set(["title", "url", "type", "observedAt"]);
+  return (
+    hasOnlyKeys(value, allowed) &&
+    isNonEmptyString(value.title) &&
+    isNonEmptyString(value.url) &&
+    (value.type === undefined || typeof value.type === "string") &&
+    (value.observedAt === undefined || typeof value.observedAt === "string")
+  );
+}
+
+function isQuestionOracle(value: unknown): value is QuestionOracle {
+  if (isNonEmptyString(value)) return true;
+  return (
+    isRecord(value) &&
+    hasOnlyKeys(value, new Set(["kind", "procedure", "acceptance"])) &&
+    isNonEmptyString(value.kind) &&
+    isNonEmptyString(value.procedure) &&
+    isNonEmptyString(value.acceptance)
+  );
+}
+
+function arraysEqual(left: string[], right: string[]) {
+  return (
+    left.length === right.length &&
+    left.every((item, index) => item === right[index])
+  );
+}
+
+function previewText(value: string, maxLength: number) {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  const characters = Array.from(normalized);
+  if (characters.length <= maxLength) return normalized;
+  return `${characters.slice(0, maxLength - 1).join("").trimEnd()}…`;
+}
+
+async function sha256Hex(value: string) {
+  if (!globalThis.crypto?.subtle) {
+    throw new Error(
+      "当前浏览器不支持题库完整性校验 / This browser cannot verify question-bank integrity.",
+    );
+  }
+  const digest = await globalThis.crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value),
+  );
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
+async function parseVerifiedJson(
+  response: Response,
+  expectedSha256: string,
+  label: string,
+): Promise<unknown> {
+  if (!/^[0-9a-f]{64}$/.test(expectedSha256)) {
+    throw new Error(`${label} 缺少可信摘要 / ${label} has no trusted digest.`);
+  }
+  const rawText = await response.text();
+  const actualSha256 = await sha256Hex(rawText);
+  if (actualSha256 !== expectedSha256) {
+    throw new Error(
+      `${label} 完整性校验失败 / ${label} failed its integrity check.`,
+    );
+  }
+  try {
+    return JSON.parse(rawText) as unknown;
+  } catch {
+    throw new Error(`${label} JSON 无效 / ${label} contains invalid JSON.`);
+  }
+}
+
+function validateQuestionBankIndex(
+  value: unknown,
+  expected: QuestionBankBootstrap,
+): QuestionBankIndex {
+  if (!isRecord(value) || !hasOnlyKeys(value, questionIndexKeys)) {
+    throw new Error("题库索引格式无效 / Invalid question index payload.");
+  }
+  if (value.schemaVersion !== expected.schemaVersion) {
+    throw new Error(
+      "题库索引结构版本不匹配 / Question index schema version mismatch.",
+    );
+  }
+  if (value.assetVersion !== expected.assetVersion) {
+    throw new Error(
+      "题库资源版本不匹配 / Question bank asset version mismatch.",
+    );
+  }
+  if (
+    value.sourceSha256 !== expected.sourceSha256 ||
+    value.previewLength !== expected.previewLength
+  ) {
+    throw new Error(
+      "题库索引来源或预览契约不匹配 / Question index source or preview contract mismatch.",
+    );
+  }
+  if (
+    value.questionCount !== expected.questionCount ||
+    !Array.isArray(value.questions) ||
+    value.questions.length !== expected.questionCount
+  ) {
+    throw new Error(
+      "题库索引数量不匹配 / Question index count mismatch.",
+    );
+  }
+  if (
+    !/^[0-9a-f]{64}$/.test(value.sourceSha256 as string) ||
+    typeof value.previewLength !== "number" ||
+    !Number.isInteger(value.previewLength) ||
+    value.previewLength < 80 ||
+    value.previewLength > 320
+  ) {
+    throw new Error(
+      "题库索引元数据无效 / Invalid question index metadata.",
+    );
+  }
+
+  const seen = new Set<string>();
+  for (const summary of value.questions) {
+    if (
+      !isRecord(summary) ||
+      !hasOnlyKeys(summary, questionSummaryKeys) ||
+      typeof summary.id !== "string" ||
+      !summary.id ||
+      seen.has(summary.id) ||
+      !isNonEmptyString(summary.title) ||
+      !isNonEmptyString(summary.titleZh) ||
+      !isNonEmptyStringArray(summary.roleFamilies) ||
+      !isNonEmptyStringArray(summary.skills) ||
+      !isNonEmptyString(summary.level) ||
+      !isNonEmptyString(summary.difficulty) ||
+      !isNonEmptyString(summary.type) ||
+      !isNonEmptyString(summary.promptPreview) ||
+      !isNonEmptyString(summary.promptPreviewZh) ||
+      Array.from(summary.promptPreview as string).length >
+        (value.previewLength as number) ||
+      Array.from(summary.promptPreviewZh as string).length >
+        (value.previewLength as number) ||
+      typeof summary.estimatedMinutes !== "number" ||
+      !Number.isFinite(summary.estimatedMinutes as number) ||
+      (summary.estimatedMinutes as number) <= 0 ||
+      !isNonEmptyString(summary.status) ||
+      !isNonEmptyString(summary.contentVersion) ||
+      typeof summary.shardId !== "string" ||
+      !/^[0-9a-f]{2}$/.test(summary.shardId) ||
+      !/^[0-9a-f]{64}$/.test(
+        expected.shardSha256ById[summary.shardId] || "",
+      ) ||
+      (summary.blueprintId !== undefined &&
+        !isNonEmptyString(summary.blueprintId))
+    ) {
+      throw new Error(
+        "题目摘要结构无效或 ID 重复 / Invalid or duplicate question summary.",
+      );
+    }
+    seen.add(summary.id);
+  }
+
+  return value as unknown as QuestionBankIndex;
+}
+
+function assertPublishedQuestion(
+  value: unknown,
+): asserts value is InterviewQuestion {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, publishedQuestionKeys) ||
+    !isNonEmptyString(value.id) ||
+    !isNonEmptyString(value.title) ||
+    !isNonEmptyString(value.titleZh) ||
+    !isNonEmptyStringArray(value.roleFamilies) ||
+    !isNonEmptyStringArray(value.skills) ||
+    (value.prerequisiteSkills !== undefined &&
+      (!Array.isArray(value.prerequisiteSkills) ||
+        !value.prerequisiteSkills.every(isNonEmptyString))) ||
+    !isNonEmptyString(value.level) ||
+    !isNonEmptyString(value.difficulty) ||
+    !isNonEmptyString(value.type) ||
+    !isNonEmptyString(value.prompt) ||
+    !isNonEmptyString(value.promptZh) ||
+    !isNonEmptyStringArray(value.deliverables) ||
+    !isNonEmptyStringArray(value.deliverablesZh) ||
+    !isNonEmptyStringArray(value.rubric) ||
+    !isNonEmptyStringArray(value.rubricZh) ||
+    !isNonEmptyStringArray(value.commonFailures) ||
+    !isNonEmptyStringArray(value.commonFailuresZh) ||
+    !isNonEmptyStringArray(value.followUps) ||
+    !isNonEmptyStringArray(value.followUpsZh) ||
+    !isNonEmptyString(value.sourcePolicy) ||
+    !Array.isArray(value.sourceRefs) ||
+    value.sourceRefs.length === 0 ||
+    !value.sourceRefs.every(isEvidenceRef) ||
+    typeof value.estimatedMinutes !== "number" ||
+    !Number.isFinite(value.estimatedMinutes) ||
+    value.estimatedMinutes <= 0 ||
+    !isNonEmptyString(value.evidenceDate) ||
+    !isNonEmptyString(value.status) ||
+    !isNonEmptyStringArray(value.referenceOutline) ||
+    !isNonEmptyStringArray(value.referenceOutlineZh) ||
+    !isQuestionOracle(value.oracle) ||
+    !isQuestionOracle(value.oracleZh) ||
+    !isNonEmptyString(value.blueprintId) ||
+    !isNonEmptyString(value.contentVersion)
+  ) {
+    throw new Error(
+      "题目详情结构无效或含未发布字段 / Invalid detail or unpublished fields present.",
+    );
+  }
+}
+
+async function validateQuestionBankShard(
+  value: unknown,
+  expected: QuestionBankBootstrap,
+  expectedShardId: string,
+  index: QuestionBankIndex,
+): Promise<QuestionBankShard> {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, questionShardKeys) ||
+    value.schemaVersion !== expected.schemaVersion ||
+    value.assetVersion !== expected.assetVersion ||
+    value.shardId !== expectedShardId ||
+    !Array.isArray(value.questions) ||
+    value.questionCount !== value.questions.length
+  ) {
+    throw new Error("题目分片版本或结构不匹配");
+  }
+
+  const summaries = new Map(
+    index.questions.map((summary) => [summary.id, summary]),
+  );
+  const expectedIds = new Set(
+    index.questions
+      .filter((summary) => summary.shardId === expectedShardId)
+      .map((summary) => summary.id),
+  );
+  if (
+    value.questions.length !== expectedIds.size ||
+    value.questions.length === 0
+  ) {
+    throw new Error("题目分片数量与已验证索引不匹配");
+  }
+
+  const seen = new Set<string>();
+  for (const candidate of value.questions) {
+    assertPublishedQuestion(candidate);
+    const summary = summaries.get(candidate.id);
+    if (
+      !summary ||
+      summary.shardId !== expectedShardId ||
+      seen.has(candidate.id) ||
+      !expectedIds.has(candidate.id) ||
+      candidate.title !== summary.title ||
+      (candidate.titleZh || "") !== summary.titleZh ||
+      !arraysEqual(candidate.roleFamilies, summary.roleFamilies) ||
+      !arraysEqual(candidate.skills, summary.skills) ||
+      candidate.level !== summary.level ||
+      candidate.difficulty !== summary.difficulty ||
+      candidate.type !== summary.type ||
+      candidate.estimatedMinutes !== summary.estimatedMinutes ||
+      candidate.status !== summary.status ||
+      candidate.contentVersion !== summary.contentVersion ||
+      candidate.blueprintId !== summary.blueprintId ||
+      previewText(candidate.prompt, index.previewLength) !==
+        summary.promptPreview ||
+      previewText(candidate.promptZh || "", index.previewLength) !==
+        summary.promptPreviewZh
+    ) {
+      throw new Error("题目详情与已验证摘要不一致");
+    }
+    const derivedShardId = (await sha256Hex(candidate.id)).slice(0, 2);
+    if (derivedShardId !== expectedShardId) {
+      throw new Error("题目 ID 与确定性分片不一致");
+    }
+    seen.add(candidate.id);
+  }
+
+  if (seen.size !== expectedIds.size) {
+    throw new Error("题目分片缺失索引中的题目");
+  }
+  return value as unknown as QuestionBankShard;
+}
+
+function BilingualCopy({
+  zh,
+  en,
+  mode,
+  className = "",
+}: {
+  zh?: string | null;
+  en?: string | null;
+  mode: QuestionLanguageMode;
+  className?: string;
+}) {
+  const copies = [
+    {
+      id: "zh",
+      label: "中",
+      language: "zh-CN",
+      text: zh?.trim() || "中文版本待校订",
+      missing: !zh?.trim(),
+    },
+    {
+      id: "en",
+      label: "EN",
+      language: "en",
+      text: en?.trim() || "English version pending editorial review.",
+      missing: !en?.trim(),
+    },
+  ];
+  if (mode === "en-first") copies.reverse();
+
+  return (
+    <span className={`bilingual-copy mode-${mode} ${className}`.trim()}>
+      {copies.map((copy, index) => (
+        <span
+          className={`language-copy ${index === 0 ? "primary-copy" : ""} ${
+            copy.missing ? "translation-missing" : ""
+          }`}
+          lang={copy.language}
+          key={copy.id}
+        >
+          <span className="language-tag" aria-hidden="true">
+            {copy.label}
+          </span>
+          <span>{copy.text}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function BilingualList({
+  zh,
+  en,
+  mode,
+  ordered = false,
+}: {
+  zh?: string[];
+  en?: string[];
+  mode: QuestionLanguageMode;
+  ordered?: boolean;
+}) {
+  const length = Math.max(zh?.length || 0, en?.length || 0);
+  const Tag = ordered ? "ol" : "ul";
+  return (
+    <Tag className="bilingual-list">
+      {Array.from({ length }, (_, index) => (
+        <li key={`${index}-${en?.[index] || zh?.[index] || "item"}`}>
+          <BilingualCopy
+            zh={zh?.[index]}
+            en={en?.[index]}
+            mode={mode}
+            className="bilingual-list-copy"
+          />
+        </li>
+      ))}
+    </Tag>
+  );
+}
+
+function oracleField(
+  oracle: QuestionOracle | null | undefined,
+  field: "kind" | "procedure" | "acceptance",
+) {
+  if (!oracle) return "";
+  if (typeof oracle === "string") {
+    return field === "procedure" ? oracle : "";
+  }
+  return oracle[field];
+}
+
+function BilingualOracle({
+  oracle,
+  oracleZh,
+  mode,
+}: {
+  oracle?: QuestionOracle | null;
+  oracleZh?: QuestionOracle | null;
+  mode: QuestionLanguageMode;
+}) {
+  if (typeof oracle === "string" && typeof oracleZh === "string") {
+    return (
+      <p className="oracle-copy">
+        <BilingualCopy zh={oracleZh} en={oracle} mode={mode} />
+      </p>
+    );
+  }
+
+  const fields = [
+    ["kind", "类型 / Kind"],
+    ["procedure", "验证步骤 / Procedure"],
+    ["acceptance", "通过标准 / Acceptance"],
+  ] as const;
+  return (
+    <dl className="oracle-copy oracle-details bilingual-oracle">
+      {fields.map(([field, label]) => (
+        <div key={field}>
+          <dt>{label}</dt>
+          <dd>
+            <BilingualCopy
+              zh={oracleField(oracleZh, field)}
+              en={oracleField(oracle, field)}
+              mode={mode}
+            />
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function Metric({
   value,
   label,
@@ -232,7 +779,7 @@ export function CareerDojoApp({
   companies,
   roles,
   skills,
-  questions,
+  questionBank,
   profile,
 }: AppProps) {
   const [view, setView] = useState<ViewId>("mission");
@@ -251,9 +798,23 @@ export function CareerDojoApp({
   const [questionType, setQuestionType] = useState("ALL");
   const [questionLevel, setQuestionLevel] = useState("ALL");
   const [questionDifficulty, setQuestionDifficulty] = useState("ALL");
+  const [questionLanguageMode, setQuestionLanguageMode] =
+    useState<QuestionLanguageMode>("bilingual");
+  const [questions, setQuestions] = useState<InterviewQuestionSummary[]>([]);
+  const [questionIndexState, setQuestionIndexState] =
+    useState<QuestionIndexState>("loading");
+  const [questionIndexError, setQuestionIndexError] = useState("");
+  const [questionIndexRetryKey, setQuestionIndexRetryKey] = useState(0);
+  const [questionPage, setQuestionPage] = useState(1);
+  const [questionPageSize, setQuestionPageSize] = useState(24);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedQuestion, setSelectedQuestion] =
+    useState<InterviewQuestionSummary | null>(null);
+  const [selectedQuestionDetail, setSelectedQuestionDetail] =
     useState<InterviewQuestion | null>(null);
+  const [questionDetailState, setQuestionDetailState] =
+    useState<QuestionDetailState>("idle");
+  const [questionDetailError, setQuestionDetailError] = useState("");
   const [rubricVisible, setRubricVisible] = useState(false);
   const [attemptScore, setAttemptScore] = useState(50);
   const [attemptConfidence, setAttemptConfidence] = useState(50);
@@ -267,6 +828,13 @@ export function CareerDojoApp({
   );
   const companyModalRef = useRef<HTMLElement>(null);
   const questionModalRef = useRef<HTMLElement>(null);
+  const questionResultsRef = useRef<HTMLDivElement>(null);
+  const questionIndexRef = useRef<QuestionBankIndex | null>(null);
+  const questionDetailCacheRef = useRef(new Map<string, InterviewQuestion>());
+  const questionShardCacheRef = useRef(
+    new Map<string, Promise<QuestionBankShard>>(),
+  );
+  const questionLoadRequestRef = useRef(0);
   const mutationQueueRef = useRef<Promise<void>>(Promise.resolve());
   const effectiveProfile = useMemo(() => {
     const stored = persisted.preferences.candidateProfile;
@@ -285,6 +853,66 @@ export function CareerDojoApp({
     }
     return profile;
   }, [persisted.preferences.candidateProfile, profile]);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const separator = questionBank.indexUrl.includes("?") ? "&" : "?";
+    const indexUrl = `${questionBank.indexUrl}${separator}v=${encodeURIComponent(
+      questionBank.assetVersion,
+    )}`;
+
+    questionLoadRequestRef.current += 1;
+    questionIndexRef.current = null;
+    questionDetailCacheRef.current.clear();
+    questionShardCacheRef.current.clear();
+
+    fetch(indexUrl, {
+      cache: "no-store",
+      headers: { accept: "application/json" },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(
+            `题库索引请求失败（${response.status}）/ Question index request failed (${response.status}).`,
+          );
+        }
+        return parseVerifiedJson(
+          response,
+          questionBank.indexSha256,
+          "题库索引 / Question index",
+        );
+      })
+      .then((value) => {
+        const index = validateQuestionBankIndex(value, questionBank);
+        if (!active) return;
+        questionIndexRef.current = index;
+        setQuestions(index.questions);
+        setQuestionIndexState("ready");
+      })
+      .catch((error: unknown) => {
+        if (
+          !active ||
+          (error instanceof DOMException && error.name === "AbortError")
+        ) {
+          return;
+        }
+        questionIndexRef.current = null;
+        setQuestions([]);
+        setQuestionIndexState("error");
+        setQuestionIndexError(
+          error instanceof Error
+            ? error.message
+            : "题库索引暂时无法加载 / Question index is temporarily unavailable.",
+        );
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [questionBank, questionIndexRetryKey]);
 
   useEffect(() => {
     let active = true;
@@ -314,6 +942,7 @@ export function CareerDojoApp({
         ? questionModalRef.current
         : null;
     if (!modal) return;
+    const focusModal = modal;
 
     const previousFocus =
       document.activeElement instanceof HTMLElement
@@ -321,7 +950,15 @@ export function CareerDojoApp({
         : null;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    modal.focus();
+
+    const getFocusableElements = () =>
+      Array.from(
+        modal.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+    const initialFocusable = getFocusableElements();
+    (initialFocusable[0] || modal).focus();
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -330,31 +967,59 @@ export function CareerDojoApp({
           setApplicationBuilderVisible(false);
           setSelectedCompany(null);
         } else {
+          questionLoadRequestRef.current += 1;
           setSelectedQuestion(null);
+          setSelectedQuestionDetail(null);
+          setQuestionDetailState("idle");
+          setQuestionDetailError("");
         }
         return;
       }
       if (event.key !== "Tab" || !modal) return;
-      const focusable = Array.from(
-        modal.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      );
-      if (!focusable.length) return;
+      const focusable = getFocusableElements();
+      if (!focusable.length) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
+      const activeElement = document.activeElement;
+      const focusIsOutside = !(
+        activeElement instanceof Node && modal.contains(activeElement)
+      );
+      if (
+        event.shiftKey &&
+        (activeElement === first ||
+          activeElement === modal ||
+          focusIsOutside)
+      ) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
+      } else if (
+        !event.shiftKey &&
+        (activeElement === last ||
+          activeElement === modal ||
+          focusIsOutside)
+      ) {
         event.preventDefault();
         first.focus();
       }
     }
 
+    function handleFocusIn(event: FocusEvent) {
+      const target = event.target;
+      if (target instanceof Node && !focusModal.contains(target)) {
+        const focusable = getFocusableElements();
+        (focusable[0] || focusModal).focus();
+      }
+    }
+
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", handleFocusIn);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", handleFocusIn);
       document.body.style.overflow = previousOverflow;
       previousFocus?.focus();
     };
@@ -471,7 +1136,8 @@ export function CareerDojoApp({
         return [
           question.title,
           question.titleZh || "",
-          question.prompt,
+          question.promptPreview,
+          question.promptPreviewZh,
           ...question.skills,
         ]
           .join(" ")
@@ -493,6 +1159,40 @@ export function CareerDojoApp({
     roleFilter,
     search,
   ]);
+
+  const questionPageCount = Math.max(
+    1,
+    Math.ceil(filteredQuestions.length / questionPageSize),
+  );
+  const safeQuestionPage = Math.min(questionPage, questionPageCount);
+  const visibleQuestions = filteredQuestions.slice(
+    (safeQuestionPage - 1) * questionPageSize,
+    safeQuestionPage * questionPageSize,
+  );
+  const questionResultStart = filteredQuestions.length
+    ? (safeQuestionPage - 1) * questionPageSize + 1
+    : 0;
+  const questionResultEnd = Math.min(
+    safeQuestionPage * questionPageSize,
+    filteredQuestions.length,
+  );
+  const activeQuestionFilterCount = [
+    search.trim() ? search : "",
+    roleFilter,
+    questionType,
+    questionLevel,
+    questionDifficulty,
+  ].filter((value) => value && value !== "ALL").length;
+  const visibleQuestionPages = Array.from(
+    { length: Math.min(5, questionPageCount) },
+    (_, offset) => {
+      const firstPage = Math.min(
+        Math.max(1, safeQuestionPage - 2),
+        Math.max(1, questionPageCount - 4),
+      );
+      return firstPage + offset;
+    },
+  );
 
   const companyTree = useMemo(
     () =>
@@ -823,15 +1523,143 @@ export function CareerDojoApp({
       notes: attemptNotes,
     });
     if (saved) {
-      setSelectedQuestion(null);
-      setRubricVisible(false);
+      closeQuestion();
       setAttemptNotes("");
     }
+  }
+
+  async function loadQuestionDetail(question: InterviewQuestionSummary) {
+    if (questionIndexState !== "ready") return;
+    const requestId = ++questionLoadRequestRef.current;
+    setQuestionDetailError("");
+    const cached = questionDetailCacheRef.current.get(question.id);
+    if (cached?.contentVersion === question.contentVersion) {
+      setSelectedQuestionDetail(cached);
+      setQuestionDetailState("ready");
+      return;
+    }
+
+    setSelectedQuestionDetail(null);
+    setQuestionDetailState("loading");
+    try {
+      const verifiedIndex = questionIndexRef.current;
+      const expectedShardSha256 =
+        questionBank.shardSha256ById[question.shardId];
+      if (
+        !verifiedIndex ||
+        !/^[0-9a-f]{64}$/.test(expectedShardSha256 || "")
+      ) {
+        throw new Error("题库索引或分片摘要尚未通过校验");
+      }
+      let shardPromise = questionShardCacheRef.current.get(question.shardId);
+      if (!shardPromise) {
+        shardPromise = fetch(
+          `/question-bank/shards/${question.shardId}.json?v=${encodeURIComponent(
+            questionBank.assetVersion,
+          )}`,
+          {
+            cache: "no-store",
+            headers: { accept: "application/json" },
+          },
+        ).then(async (response) => {
+          if (!response.ok) {
+            throw new Error(`详情分片返回 ${response.status}`);
+          }
+          const value = await parseVerifiedJson(
+            response,
+            expectedShardSha256,
+            `题目分片 ${question.shardId} / Question shard ${question.shardId}`,
+          );
+          const payload = await validateQuestionBankShard(
+            value,
+            questionBank,
+            question.shardId,
+            verifiedIndex,
+          );
+          for (const detail of payload.questions) {
+            questionDetailCacheRef.current.set(detail.id, detail);
+          }
+          return payload;
+        });
+        questionShardCacheRef.current.set(question.shardId, shardPromise);
+        shardPromise.catch(() => {
+          if (questionShardCacheRef.current.get(question.shardId) === shardPromise) {
+            questionShardCacheRef.current.delete(question.shardId);
+          }
+        });
+      }
+
+      await shardPromise;
+      const detail = questionDetailCacheRef.current.get(question.id);
+      if (!detail || detail.contentVersion !== question.contentVersion) {
+        throw new Error("分片中找不到当前版本的题目详情");
+      }
+      if (questionLoadRequestRef.current !== requestId) return;
+      setSelectedQuestionDetail(detail);
+      setQuestionDetailState("ready");
+    } catch (error) {
+      if (questionLoadRequestRef.current !== requestId) return;
+      setSelectedQuestionDetail(null);
+      setQuestionDetailState("error");
+      setQuestionDetailError(
+        error instanceof Error ? error.message : "题目详情加载失败",
+      );
+    }
+  }
+
+  function openQuestion(question: InterviewQuestionSummary) {
+    if (questionIndexState !== "ready") return;
+    setSelectedQuestion(question);
+    setSelectedQuestionDetail(null);
+    setRubricVisible(false);
+    setAttemptScore(50);
+    setAttemptConfidence(50);
+    setAttemptNotes("");
+    void loadQuestionDetail(question);
+  }
+
+  function closeQuestion() {
+    questionLoadRequestRef.current += 1;
+    setSelectedQuestion(null);
+    setSelectedQuestionDetail(null);
+    setQuestionDetailState("idle");
+    setQuestionDetailError("");
+    setRubricVisible(false);
+  }
+
+  function retryQuestionIndex() {
+    questionLoadRequestRef.current += 1;
+    setQuestions([]);
+    setQuestionPage(1);
+    setSelectedQuestion(null);
+    setSelectedQuestionDetail(null);
+    setQuestionDetailState("idle");
+    setQuestionDetailError("");
+    setQuestionIndexState("loading");
+    setQuestionIndexError("");
+    setQuestionIndexRetryKey((value) => value + 1);
+  }
+
+  function resetQuestionFilters() {
+    setSearch("");
+    setRoleFilter("ALL");
+    setQuestionType("ALL");
+    setQuestionLevel("ALL");
+    setQuestionDifficulty("ALL");
+    setQuestionPage(1);
+  }
+
+  function goToQuestionPage(page: number) {
+    setQuestionPage(Math.min(Math.max(1, page), questionPageCount));
+    window.requestAnimationFrame(() => {
+      questionResultsRef.current?.scrollIntoView({ block: "start" });
+    });
   }
 
   function openRoleDojo(roleId: string) {
     setRoleFilter(roleId);
     setSearch("");
+    setQuestionPage(1);
     setView("dojo");
   }
 
@@ -855,6 +1683,7 @@ export function CareerDojoApp({
             <button
               key={item.id}
               className={view === item.id ? "active" : ""}
+              aria-current={view === item.id ? "page" : undefined}
               onClick={() => {
                 setView(item.id);
                 setSearch("");
@@ -970,7 +1799,11 @@ export function CareerDojoApp({
               <Metric value={usCompanies.length} label="美国机会宇宙" note="美国优先" />
               <Metric value={cnCompanies.length} label="中国发展节点" note="企业 + 研究院" />
               <Metric value={skills.length} label="原子能力" note="带先修依赖" />
-              <Metric value={questions.length} label="高质量训练任务" note="原创与可追溯" />
+              <Metric
+                value={questionBank.questionCount}
+                label="高质量训练任务"
+                note="原创与可追溯"
+              />
               <Metric
                 value={persisted.applications.length}
                 label="投递管线"
@@ -1048,17 +1881,18 @@ export function CareerDojoApp({
                 {missionQuestions.map((question, index) => (
                   <button
                     key={question.id}
-                    onClick={() => {
-                      setSelectedQuestion(question);
-                      setRubricVisible(false);
-                      setAttemptScore(50);
-                      setAttemptConfidence(50);
-                      setAttemptNotes("");
-                    }}
+                    onClick={() => openQuestion(question)}
                   >
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <div>
-                      <strong>{question.titleZh || question.title}</strong>
+                      <strong>
+                        <BilingualCopy
+                          zh={question.titleZh}
+                          en={question.title}
+                          mode={questionLanguageMode}
+                          className="mission-question-title"
+                        />
+                      </strong>
                       <small>
                         {question.type} · {question.estimatedMinutes} 分钟 ·{" "}
                         {latestQuestionScore.has(question.id)
@@ -1098,6 +1932,7 @@ export function CareerDojoApp({
                   <button
                     key={value}
                     className={region === value ? "active" : ""}
+                    aria-pressed={region === value}
                     onClick={() => {
                       setRegion(value);
                       setCompanyLimit(60);
@@ -1153,12 +1988,14 @@ export function CareerDojoApp({
                 <div className="segmented atlas-layout-toggle">
                   <button
                     className={atlasLayout === "tree" ? "active" : ""}
+                    aria-pressed={atlasLayout === "tree"}
                     onClick={() => setAtlasLayout("tree")}
                   >
                     组织树
                   </button>
                   <button
                     className={atlasLayout === "cards" ? "active" : ""}
+                    aria-pressed={atlasLayout === "cards"}
                     onClick={() => setAtlasLayout("cards")}
                   >
                     档案卡
@@ -1307,9 +2144,12 @@ export function CareerDojoApp({
                       role.id.includes(item) ||
                       item.includes(role.id.replace("rf-", "")),
                   ) || readiness >= 60;
-                const roleQuestions = questions.filter((question) =>
-                  question.roleFamilies.includes(role.id),
-                ).length;
+                const roleQuestions =
+                  questionIndexState === "ready"
+                    ? questions.filter((question) =>
+                        question.roleFamilies.includes(role.id),
+                      ).length
+                    : null;
                 return (
                   <article
                     className={`role-card ${priority ? "priority" : ""}`}
@@ -1324,7 +2164,11 @@ export function CareerDojoApp({
                     <ProgressBar value={readiness} />
                     <div className="role-stats">
                       <span>{role.primarySkillDomains.length} 个能力域</span>
-                      <span>{roleQuestions} 道训练任务</span>
+                      <span>
+                        {roleQuestions === null
+                          ? "题库加载中 / Loading"
+                          : `${roleQuestions} 道训练任务`}
+                      </span>
                     </div>
                     <div className="stage-list">
                       {role.interviewStages.slice(0, 4).map((stage) => (
@@ -1435,48 +2279,169 @@ export function CareerDojoApp({
                 <span className="section-kicker">INTERVIEW DOJO</span>
                 <h2>训练真实工程判断，而不是背答案。</h2>
                 <p>
-                  每道任务都对应岗位信号、先修能力、交付物、评分规则、常见失败和追问。
-                  当前题库是研究沙箱；未完成专家与 learner pilot
-                  的自评分不会改变岗位准备度。
+                  每道任务同时提供中文与 English
+                  题干、交付物、评分规则、常见失败、追问和参考框架，并对应岗位信号与先修能力。
+                  当前题库是研究沙箱；未完成专家与 learner pilot 的自评分不会改变岗位准备度。
+                </p>
+                <p className="dojo-lineage-summary">
+                  <strong>
+                    题库口径：210 个基础场景 + 每场 9 个递进训练 = 2,100
+                    个任务。
+                  </strong>
+                  <span lang="en">
+                    210 anchor scenarios + 1,890 progressive drills = 2,100
+                    tasks.
+                  </span>
                 </p>
               </div>
               <div className="dojo-score">
                 <strong>{completedQuestions.size}</strong>
                 <span>已完成任务</span>
-                <small>{totalAttemptCount} 次可追溯尝试</small>
+                <small>
+                  {totalAttemptCount} 次可追溯尝试 ·{" "}
+                  {questionBank.questionCount.toLocaleString()} 题
+                </small>
               </div>
+            </div>
+
+            {questionIndexState !== "ready" ? (
+              <div
+                className={`question-index-state ${questionIndexState}`}
+                role={questionIndexState === "error" ? "alert" : "status"}
+                aria-live={questionIndexState === "error" ? "assertive" : "polite"}
+                aria-busy={questionIndexState === "loading"}
+              >
+                <span className="question-index-state-mark" aria-hidden="true">
+                  {questionIndexState === "error" ? "!" : ""}
+                </span>
+                <div>
+                  <span className="section-kicker">
+                    {questionIndexState === "loading"
+                      ? "QUESTION BANK SYNC"
+                      : "QUESTION BANK ERROR"}
+                  </span>
+                  <h3>
+                    {questionIndexState === "loading"
+                      ? "正在装载完整双语题库 / Loading the bilingual question index"
+                      : "题库索引暂时无法加载 / Question index unavailable"}
+                  </h3>
+                  <p>
+                    {questionIndexState === "loading"
+                      ? `首屏保持轻量；正在校验并载入 ${questionBank.questionCount.toLocaleString()} 道题目的中英摘要。 / The first screen stays lightweight while ${questionBank.questionCount.toLocaleString()} bilingual summaries are fetched and validated.`
+                      : questionIndexError ||
+                        "请检查连接后重试。 / Check your connection and try again."}
+                  </p>
+                  {questionIndexState === "error" ? (
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={retryQuestionIndex}
+                    >
+                      重试题库加载 / Retry question index
+                    </button>
+                  ) : (
+                    <small>
+                      版本校验、数量校验与摘要结构校验进行中。 / Validating
+                      version, count, and summary schema.
+                    </small>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+            <div className="dojo-toolbar">
+              <div
+                className="dojo-results-summary"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <strong>{filteredQuestions.length.toLocaleString()}</strong>
+                <span>
+                  道匹配任务 / matched · 共{" "}
+                  {questionBank.questionCount.toLocaleString()} 题
+                </span>
+                <small>
+                  当前显示 {questionResultStart.toLocaleString()}–
+                  {questionResultEnd.toLocaleString()} · 第 {safeQuestionPage} /{" "}
+                  {questionPageCount} 页
+                </small>
+              </div>
+              <label className="question-page-size">
+                <span>每页 / Page size</span>
+                <select
+                  value={questionPageSize}
+                  onChange={(event) => {
+                    setQuestionPageSize(Number(event.target.value));
+                    setQuestionPage(1);
+                  }}
+                >
+                  {[24, 48, 96].map((size) => (
+                    <option value={size} key={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <fieldset className="language-switcher">
+                <legend>阅读顺序 / Reading mode</legend>
+                <div className="segmented">
+                  {languageModeOptions.map((option) => (
+                    <button
+                      type="button"
+                      key={option.id}
+                      className={
+                        questionLanguageMode === option.id ? "active" : ""
+                      }
+                      aria-pressed={questionLanguageMode === option.id}
+                      title={option.description}
+                      onClick={() => setQuestionLanguageMode(option.id)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
             </div>
 
             <div className="filter-bar dojo-filters">
               <label className="search-field">
-                <span>搜索</span>
+                <span>搜索 / Search</span>
                 <input
                   value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  placeholder="题目、技能、故障类型…"
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    setQuestionPage(1);
+                  }}
+                  placeholder="题目、技能、故障类型 / title, skill, failure…"
                 />
               </label>
               <label>
-                <span>岗位</span>
+                <span>岗位 / Role</span>
                 <select
                   value={roleFilter}
-                  onChange={(event) => setRoleFilter(event.target.value)}
+                  onChange={(event) => {
+                    setRoleFilter(event.target.value);
+                    setQuestionPage(1);
+                  }}
                 >
-                  <option value="ALL">全部岗位</option>
+                  <option value="ALL">全部岗位 / All roles</option>
                   {roles.map((role) => (
                     <option key={role.id} value={role.id}>
-                      {role.nameZh}
+                      {role.nameZh} / {role.name}
                     </option>
                   ))}
                 </select>
               </label>
               <label>
-                <span>任务类型</span>
+                <span>任务类型 / Type</span>
                 <select
                   value={questionType}
-                  onChange={(event) => setQuestionType(event.target.value)}
+                  onChange={(event) => {
+                    setQuestionType(event.target.value);
+                    setQuestionPage(1);
+                  }}
                 >
-                  <option value="ALL">全部类型</option>
+                  <option value="ALL">全部类型 / All types</option>
                   {questionTypes.map((type) => (
                     <option key={type} value={type}>
                       {type}
@@ -1485,12 +2450,15 @@ export function CareerDojoApp({
                 </select>
               </label>
               <label>
-                <span>学习层级</span>
+                <span>学习层级 / Level</span>
                 <select
                   value={questionLevel}
-                  onChange={(event) => setQuestionLevel(event.target.value)}
+                  onChange={(event) => {
+                    setQuestionLevel(event.target.value);
+                    setQuestionPage(1);
+                  }}
                 >
-                  <option value="ALL">全部层级</option>
+                  <option value="ALL">全部层级 / All levels</option>
                   {Array.from(
                     new Set(questions.map((question) => question.level)),
                   ).map((level) => (
@@ -1501,14 +2469,15 @@ export function CareerDojoApp({
                 </select>
               </label>
               <label>
-                <span>难度</span>
+                <span>难度 / Difficulty</span>
                 <select
                   value={questionDifficulty}
-                  onChange={(event) =>
-                    setQuestionDifficulty(event.target.value)
-                  }
+                  onChange={(event) => {
+                    setQuestionDifficulty(event.target.value);
+                    setQuestionPage(1);
+                  }}
                 >
-                  <option value="ALL">全部难度</option>
+                  <option value="ALL">全部难度 / All difficulties</option>
                   {Array.from(
                     new Set(questions.map((question) => question.difficulty)),
                   ).map((difficulty) => (
@@ -1518,50 +2487,151 @@ export function CareerDojoApp({
                   ))}
                 </select>
               </label>
+              <button
+                type="button"
+                className="filter-reset"
+                onClick={resetQuestionFilters}
+                disabled={activeQuestionFilterCount === 0}
+              >
+                重置筛选 / Reset
+                {activeQuestionFilterCount
+                  ? ` (${activeQuestionFilterCount})`
+                  : ""}
+              </button>
             </div>
 
-            <div className="question-grid">
-              {filteredQuestions.map((question) => (
-                <article
-                  className={`question-card ${
-                    question.type.toLowerCase().includes("boss") ? "boss" : ""
-                  }`}
-                  key={question.id}
-                >
-                  <div className="question-card-top">
-                    <span>{question.type}</span>
-                    <span>
-                      {question.estimatedMinutes} MIN · {question.status}
-                    </span>
-                  </div>
-                  <h3>{question.titleZh || question.title}</h3>
-                  <p>{question.prompt}</p>
-                  <div className="question-skills">
-                    {question.skills.slice(0, 4).map((skill) => (
-                      <span key={skill}>
-                        {skillName(skillById.get(skill) || { id: skill })}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="question-card-bottom">
-                    <span>
-                      {question.difficulty} · {question.level}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setSelectedQuestion(question);
-                        setRubricVisible(false);
-                        setAttemptScore(50);
-                        setAttemptConfidence(50);
-                        setAttemptNotes("");
-                      }}
+            <div ref={questionResultsRef} className="question-results-anchor">
+              {visibleQuestions.length ? (
+                <div className="question-grid">
+                  {visibleQuestions.map((question) => (
+                    <article
+                      className={`question-card ${
+                        question.type.toLowerCase().includes("boss") ? "boss" : ""
+                      }`}
+                      key={question.id}
                     >
-                      {completedQuestions.has(question.id) ? "再次训练" : "开始任务"} →
-                    </button>
-                  </div>
-                </article>
-              ))}
+                      <div className="question-card-top">
+                        <span>{question.type}</span>
+                        <span>
+                          {question.estimatedMinutes} MIN · {question.status}
+                        </span>
+                      </div>
+                      <h3>
+                        <BilingualCopy
+                          zh={question.titleZh}
+                          en={question.title}
+                          mode={questionLanguageMode}
+                          className="question-card-title"
+                        />
+                      </h3>
+                      <div className="question-card-prompt">
+                        <BilingualCopy
+                          zh={question.promptPreviewZh}
+                          en={question.promptPreview}
+                          mode={questionLanguageMode}
+                          className="compact-bilingual"
+                        />
+                      </div>
+                      <div className="question-skills">
+                        {question.skills.slice(0, 4).map((skill) => (
+                          <span key={skill}>
+                            {skillName(skillById.get(skill) || { id: skill })}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="question-card-bottom">
+                        <span>
+                          {question.difficulty} · {question.level}
+                        </span>
+                        <button
+                          onClick={() => openQuestion(question)}
+                          aria-label={`${
+                            completedQuestions.has(question.id)
+                              ? "再次训练"
+                              : "开始任务"
+                          }：${question.titleZh || question.title} / ${
+                            question.title
+                          }`}
+                        >
+                          {completedQuestions.has(question.id)
+                            ? "再次训练 / Retry"
+                            : "开始任务 / Start"}{" "}
+                          →
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state question-empty">
+                  <span>00</span>
+                  <h3>没有匹配题目 / No matching tasks</h3>
+                  <p>
+                    放宽关键词或筛选条件，即可返回完整双语题库。
+                    <br />
+                    Clear or broaden the filters to return to the full bilingual
+                    library.
+                  </p>
+                  <button className="secondary-button" onClick={resetQuestionFilters}>
+                    重置筛选 / Reset filters
+                  </button>
+                </div>
+              )}
             </div>
+
+            {filteredQuestions.length > questionPageSize ? (
+              <nav
+                className="question-pagination"
+                aria-label="题库分页 / Question library pagination"
+              >
+                <button
+                  type="button"
+                  onClick={() => goToQuestionPage(1)}
+                  disabled={safeQuestionPage === 1}
+                  aria-label="第一页 / First page"
+                >
+                  «
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToQuestionPage(safeQuestionPage - 1)}
+                  disabled={safeQuestionPage === 1}
+                >
+                  上一页 / Prev
+                </button>
+                <div className="pagination-pages">
+                  {visibleQuestionPages.map((page) => (
+                    <button
+                      type="button"
+                      key={page}
+                      className={page === safeQuestionPage ? "active" : ""}
+                      aria-current={page === safeQuestionPage ? "page" : undefined}
+                      aria-label={`第 ${page} 页 / Page ${page}`}
+                      onClick={() => goToQuestionPage(page)}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => goToQuestionPage(safeQuestionPage + 1)}
+                  disabled={safeQuestionPage === questionPageCount}
+                >
+                  下一页 / Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToQuestionPage(questionPageCount)}
+                  disabled={safeQuestionPage === questionPageCount}
+                  aria-label="最后一页 / Last page"
+                >
+                  »
+                </button>
+              </nav>
+            ) : null}
+              </>
+            )}
           </section>
         ) : null}
 
@@ -1843,6 +2913,16 @@ export function CareerDojoApp({
               <p>
                 数量不是终点。每个节点都要说明从哪里来、何时观察、可信到什么程度，以及还有什么未知。
               </p>
+              <p className="evidence-bank-lineage">
+                <strong>
+                  题库口径：210 个基础场景 + 每场 9 个递进训练 = 2,100
+                  个任务。
+                </strong>
+                <span lang="en">
+                  210 anchor scenarios + 1,890 progressive drills = 2,100
+                  tasks.
+                </span>
+              </p>
             </div>
 
             <div className="metric-grid evidence-metrics">
@@ -1873,7 +2953,10 @@ export function CareerDojoApp({
                 }
                 label="硬门槛节点"
               />
-              <Metric value={questions.length} label="合规训练任务" />
+              <Metric
+                value={questionBank.questionCount}
+                label="合规训练任务"
+              />
               <Metric value={skills.length} label="能力覆盖节点" />
             </div>
 
@@ -1996,6 +3079,7 @@ export function CareerDojoApp({
           <button
             key={item.id}
             className={view === item.id ? "active" : ""}
+            aria-current={view === item.id ? "page" : undefined}
             onClick={() => {
               setView(item.id);
               setSearch("");
@@ -2333,8 +3417,8 @@ export function CareerDojoApp({
           >
             <button
               className="modal-close"
-              onClick={() => setSelectedQuestion(null)}
-              aria-label="关闭训练任务"
+              onClick={closeQuestion}
+              aria-label="关闭训练任务 / Close task"
             >
               ×
             </button>
@@ -2345,168 +3429,269 @@ export function CareerDojoApp({
                   {selectedQuestion.status} · V{selectedQuestion.contentVersion}
                 </span>
                 <h2 id="question-dialog-title">
-                  {selectedQuestion.titleZh || selectedQuestion.title}
+                  <BilingualCopy
+                    zh={selectedQuestion.titleZh}
+                    en={selectedQuestion.title}
+                    mode={questionLanguageMode}
+                    className="question-dialog-title"
+                  />
                 </h2>
+                {selectedQuestion.blueprintId ? (
+                  <small className="question-lineage">
+                    课程谱系 / Curriculum lineage ·{" "}
+                    <code>{selectedQuestion.blueprintId}</code>
+                  </small>
+                ) : null}
               </div>
               <span className="difficulty-badge">
                 {selectedQuestion.difficulty}
               </span>
             </div>
 
-            <div className="prompt-box">{selectedQuestion.prompt}</div>
-            {selectedQuestion.status === "review-ready" ? (
-              <div className="scope-notice">
-                <strong>待校准题</strong>
-                <span>
-                  已通过结构与来源检查；尚未完成领域专家与真实练习者 pilot，
-                  分数只用于自我比较，不写入岗位准备度。
-                </span>
-              </div>
-            ) : null}
-            <div className="question-modal-grid">
-              <div>
-                <h3>你需要交付</h3>
-                <ol>
-                  {selectedQuestion.deliverables.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ol>
-              </div>
-              <div>
-                <h3>面试官可能追问</h3>
-                <ol>
-                  {selectedQuestion.followUps.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-
-            <label className="attempt-notes">
-              <span>作答记录 / 复盘</span>
-              <textarea
-                value={attemptNotes}
-                onChange={(event) => setAttemptNotes(event.target.value)}
-                placeholder="先独立写出思路、假设、关键取舍和验证方法…"
-              />
-            </label>
-
-            <button
-              className="rubric-toggle"
-              onClick={() => setRubricVisible((value) => !value)}
+            <div
+              className="modal-language-switcher segmented"
+              role="group"
+              aria-label="阅读顺序 / Reading mode"
             >
-              {rubricVisible ? "收起评分规则" : "完成后查看评分规则"}
-            </button>
-
-            {rubricVisible ? (
-              <div className="rubric-grid">
-                <div>
-                  <h3>评分规则</h3>
-                  <ul>
-                    {selectedQuestion.rubric.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3>常见失败</h3>
-                  <ul>
-                    {selectedQuestion.commonFailures.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                {selectedQuestion.referenceOutline?.length ? (
-                  <div>
-                    <h3>参考解题骨架</h3>
-                    <ol>
-                      {selectedQuestion.referenceOutline.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ol>
-                  </div>
-                ) : null}
-                {selectedQuestion.oracle ? (
-                  <div>
-                    <h3>可验证完成标准</h3>
-                    {typeof selectedQuestion.oracle === "string" ? (
-                      <p className="oracle-copy">{selectedQuestion.oracle}</p>
-                    ) : (
-                      <dl className="oracle-copy oracle-details">
-                        <div>
-                          <dt>类型</dt>
-                          <dd>{selectedQuestion.oracle.kind}</dd>
-                        </div>
-                        <div>
-                          <dt>验证步骤</dt>
-                          <dd>{selectedQuestion.oracle.procedure}</dd>
-                        </div>
-                        <div>
-                          <dt>通过标准</dt>
-                          <dd>{selectedQuestion.oracle.acceptance}</dd>
-                        </div>
-                      </dl>
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-
-            <div className="self-score">
-              <label>
-                <span>本次表现</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="5"
-                  value={attemptScore}
-                  onChange={(event) => setAttemptScore(Number(event.target.value))}
-                />
-                <strong>{attemptScore}</strong>
-              </label>
-              <label>
-                <span>自评置信度</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="5"
-                  value={attemptConfidence}
-                  onChange={(event) =>
-                    setAttemptConfidence(Number(event.target.value))
+              {languageModeOptions.map((option) => (
+                <button
+                  type="button"
+                  key={option.id}
+                  className={
+                    questionLanguageMode === option.id ? "active" : ""
                   }
-                />
-                <strong>{attemptConfidence}</strong>
-              </label>
+                  aria-pressed={questionLanguageMode === option.id}
+                  onClick={() => setQuestionLanguageMode(option.id)}
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
 
-            <div className="modal-actions">
-              <button
-                className="secondary-button"
-                onClick={() => setSelectedQuestion(null)}
-              >
-                暂不保存
-              </button>
-              <button className="primary-button" onClick={saveAttempt}>
-                保存本次训练
-              </button>
-              {selectedQuestion.sourceRefs
-                .map(sourceUrl)
-                .filter(Boolean)
-                .slice(0, 1)
-                .map((url) => (
-                  <a
-                    className="text-link"
-                    href={url}
-                    target="_blank"
-                    rel="noreferrer"
-                    key={url}
+            {questionDetailState === "loading" ? (
+              <div className="question-detail-state" role="status" aria-live="polite">
+                <span className="question-detail-loader" aria-hidden="true" />
+                <div>
+                  <strong>正在加载完整双语任务 / Loading full task</strong>
+                  <p>
+                    首屏只携带轻量索引；当前仅请求这道题所在的小型静态分片。
+                    Only this task&apos;s deterministic detail shard is being
+                    requested.
+                  </p>
+                </div>
+                <BilingualCopy
+                  zh={selectedQuestion.promptPreviewZh}
+                  en={selectedQuestion.promptPreview}
+                  mode={questionLanguageMode}
+                  className="detail-preview-copy"
+                />
+              </div>
+            ) : questionDetailState === "error" ? (
+              <div className="question-detail-state error-state" role="alert">
+                <span aria-hidden="true">!</span>
+                <div>
+                  <strong>题目详情暂时无法加载 / Detail unavailable</strong>
+                  <p>
+                    {questionDetailError ||
+                      "请检查连接后重试；已加载的题目不会受影响。"}
+                  </p>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => void loadQuestionDetail(selectedQuestion)}
                   >
-                    查看公开依据 ↗
-                  </a>
-                ))}
-            </div>
+                    重试 / Retry
+                  </button>
+                </div>
+              </div>
+            ) : selectedQuestionDetail ? (
+              <>
+                <div className="prompt-box">
+                  <BilingualCopy
+                    zh={selectedQuestionDetail.promptZh}
+                    en={selectedQuestionDetail.prompt}
+                    mode={questionLanguageMode}
+                  />
+                </div>
+                {selectedQuestion.status === "review-ready" ? (
+                  <div className="scope-notice">
+                    <strong>待校准 / Calibration pending</strong>
+                    <span>
+                      已通过结构与来源检查；尚未完成领域专家与真实练习者 pilot，
+                      分数只用于自我比较，不写入岗位准备度。 Structure and source
+                      checks are complete; expert and learner pilots are still
+                      pending.
+                    </span>
+                  </div>
+                ) : null}
+                <div className="question-modal-grid">
+                  <div>
+                    <h3>你需要交付 / Deliverables</h3>
+                    <BilingualList
+                      zh={selectedQuestionDetail.deliverablesZh}
+                      en={selectedQuestionDetail.deliverables}
+                      mode={questionLanguageMode}
+                      ordered
+                    />
+                  </div>
+                  <div>
+                    <h3>面试官可能追问 / Follow-ups</h3>
+                    <BilingualList
+                      zh={selectedQuestionDetail.followUpsZh}
+                      en={selectedQuestionDetail.followUps}
+                      mode={questionLanguageMode}
+                      ordered
+                    />
+                  </div>
+                </div>
+
+                <label className="attempt-notes">
+                  <span>作答记录与复盘 / Answer notes &amp; reflection</span>
+                  <textarea
+                    value={attemptNotes}
+                    onChange={(event) => setAttemptNotes(event.target.value)}
+                    placeholder="先独立写出思路、假设、关键取舍和验证方法 / Capture your reasoning, assumptions, trade-offs, and validation plan…"
+                  />
+                </label>
+
+                <button
+                  className="rubric-toggle"
+                  onClick={() => setRubricVisible((value) => !value)}
+                  aria-expanded={rubricVisible}
+                >
+                  {rubricVisible
+                    ? "收起评分与参考 / Hide rubric & reference"
+                    : "完成后查看评分与参考 / Reveal after attempting"}
+                </button>
+
+                {rubricVisible ? (
+                  <div className="rubric-grid">
+                    <div>
+                      <h3>评分规则 / Rubric</h3>
+                      <BilingualList
+                        zh={selectedQuestionDetail.rubricZh}
+                        en={selectedQuestionDetail.rubric}
+                        mode={questionLanguageMode}
+                      />
+                    </div>
+                    <div>
+                      <h3>常见失败 / Common failures</h3>
+                      <BilingualList
+                        zh={selectedQuestionDetail.commonFailuresZh}
+                        en={selectedQuestionDetail.commonFailures}
+                        mode={questionLanguageMode}
+                      />
+                    </div>
+                    {selectedQuestionDetail.referenceOutline?.length ||
+                    selectedQuestionDetail.referenceOutlineZh?.length ? (
+                      <div>
+                        <h3>参考解题骨架 / Reference outline</h3>
+                        <BilingualList
+                          zh={selectedQuestionDetail.referenceOutlineZh}
+                          en={selectedQuestionDetail.referenceOutline}
+                          mode={questionLanguageMode}
+                          ordered
+                        />
+                      </div>
+                    ) : null}
+                    {selectedQuestionDetail.oracle ||
+                    selectedQuestionDetail.oracleZh ? (
+                      <div>
+                        <h3>可验证完成标准 / Verifiable oracle</h3>
+                        <BilingualOracle
+                          oracle={selectedQuestionDetail.oracle}
+                          oracleZh={selectedQuestionDetail.oracleZh}
+                          mode={questionLanguageMode}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                <div className="self-score">
+                  <label>
+                    <span>本次表现 / Score</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="5"
+                      value={attemptScore}
+                      onChange={(event) =>
+                        setAttemptScore(Number(event.target.value))
+                      }
+                    />
+                    <strong>{attemptScore}</strong>
+                  </label>
+                  <label>
+                    <span>自评置信度 / Confidence</span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="5"
+                      value={attemptConfidence}
+                      onChange={(event) =>
+                        setAttemptConfidence(Number(event.target.value))
+                      }
+                    />
+                    <strong>{attemptConfidence}</strong>
+                  </label>
+                </div>
+
+                <details className="question-sources">
+                  <summary>
+                    <span>公开依据 / Public sources</span>
+                    <strong>
+                      {selectedQuestionDetail.sourceRefs.length} 个链接 / links
+                    </strong>
+                  </summary>
+                  <div className="question-source-list">
+                    {selectedQuestionDetail.sourceRefs.map((source, index) => {
+                      const url = sourceUrl(source);
+                      if (!url) return null;
+                      const title = sourceTitle(source, index);
+                      return (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`${title}，打开公开依据`}
+                          key={`${url}-${index}`}
+                        >
+                          <span>{String(index + 1).padStart(2, "0")}</span>
+                          <strong>{title}</strong>
+                          <small>{url} ↗</small>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </details>
+
+                <div className="modal-actions">
+                  <button className="secondary-button" onClick={closeQuestion}>
+                    暂不保存 / Close
+                  </button>
+                  <button className="primary-button" onClick={saveAttempt}>
+                    保存本次训练 / Save attempt
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="question-detail-state error-state" role="alert">
+                <span aria-hidden="true">!</span>
+                <div>
+                  <strong>详情状态异常 / Unexpected detail state</strong>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => void loadQuestionDetail(selectedQuestion)}
+                  >
+                    重试 / Retry
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         </div>
       ) : null}

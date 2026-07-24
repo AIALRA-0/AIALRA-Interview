@@ -1,0 +1,170 @@
+{
+  "q-beh-failure-ownership": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the 2-minute STAR answer and its 60-second cut, timestamp the situation, personal mistake, measurable consequence, early warning, repair, and prevention change in both transcripts, and link each material claim to a project artifact or an explicit evidence gap. Have an independent reviewer mark personal action versus team context and check that the shorter cut preserves ownership rather than only the outcome.",
+      "acceptance": "Both recordings identify the same real error and timeline; evidence supports the consequence and recovery without invented numbers; the candidate owns one specific decision or execution act, names what was knowable at the time, and shows one prevention mechanism that persisted; confidential details are redacted consistently."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制 2 分钟 STAR 回答及其 60 秒精简版，在两份转写中为情境、个人错误、可衡量后果、早期预警、修复和预防性改变标注时间点，并把每项关键主张链接到项目工件或明确的证据缺口。由独立评审者标出个人行动与团队背景，并检查精简版是否保留了责任归属，而不是只保留结果。",
+      "acceptance": "两段录音指向同一个真实错误和一致时间线；证据支持后果与恢复情况，且没有编造数字；候选人承担一项具体决策或执行行为，说明当时可知的信息，并展示一项持续生效的预防机制；保密细节在两版中均被一致脱敏。"
+    }
+  },
+  "q-beh-technical-conflict": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Capture a 2-minute story plus a decision-criteria table that records both positions, each side's valid concern, evidence available before the decision, decision authority, the candidate's listening or experiment, the chosen path, and the relationship outcome. Cross-check dates and technical claims against a review note, issue, message, or other contemporaneous record where available.",
+      "acceptance": "The answer steel-mans both options, separates evidence known then from hindsight, states who decided and whether the candidate's preference won, and ties the technical and relationship outcomes to observable evidence. It passes only if disagreement is resolved without depicting the other person as irrational or claiming sole credit."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "形成一段 2 分钟故事和一张决策标准表，记录双方立场、各自合理顾虑、决策前已有证据、决策权限、候选人的倾听或实验、最终路径及关系结果。在可获得的情况下，用评审记录、问题单、消息或其他同期记录交叉核对日期和技术主张。",
+      "acceptance": "回答能够以最强形式呈现两个方案，区分当时已知证据与事后认识，说明由谁决策以及候选人的偏好是否获选，并用可观察证据支持技术结果和关系结果。只有在没有把对方描述成不理性、也没有独占团队功劳时才通过。"
+    }
+  },
+  "q-beh-ambiguous-task": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Build a chronological assumption-and-experiment timeline from the first unclear request through the final scope. For every major assumption, record owner, confidence, the smallest discriminating experiment, predicted outcomes written before the result, checkpoint date, evidence received, and resulting scope decision; compare the timeline with project notes or version history.",
+      "acceptance": "Initial unknowns and conflicting constraints remain visible, the first experiment can distinguish at least 2 plausible outcomes, every scope change points to new evidence, and ownership is explicit at each checkpoint. The story fails if uncertainty is erased in hindsight, an experiment has no decision consequence, or the final result is unsupported."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "从最初的模糊请求到最终范围建立按时间排序的假设—实验时间线。对每项主要假设记录负责人、置信度、最小区分实验、结果出现前写下的预测、检查点日期、收到的证据和由此作出的范围决定，并用项目笔记或版本历史核对时间线。",
+      "acceptance": "初始未知项与冲突约束仍然清晰可见，第一个实验能够区分至少 2 种合理结果，每次范围变化都指向新增证据，且每个检查点的责任人明确。若回答用事后视角抹去不确定性、实验不影响任何决定，或最终结果没有证据支持，则不通过。"
+    }
+  },
+  "q-beh-priority-tradeoff": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Reconstruct the 2 competing deliverables in a priority matrix covering impact, urgency, dependencies, risk, opportunity cost, and non-negotiable quality. Add the original and negotiated scope/deadline, stakeholder messages with timestamps, the bounded execution plan, and the actual disposition of deferred work; verify the sequence against planning or delivery records.",
+      "acceptance": "The selected order follows the declared criteria rather than convenience, critical safety or correctness is preserved, affected stakeholders are notified before the commitment is missed, and deferred scope has an owner and review point. Outcome claims and any schedule or quality change must match the cited record for both deliverables."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "把 2 个相互竞争的交付物还原到一张优先级矩阵中，覆盖影响、紧迫性、依赖、风险、机会成本和不可妥协的质量要求。补充原始与协商后的范围/截止时间、带时间戳的利益相关方消息、有边界的执行计划以及延期工作的实际去向，并用计划或交付记录核验顺序。",
+      "acceptance": "所选顺序依据已声明标准而非个人便利，关键安全性或正确性得到保护，受影响方在承诺落空前收到通知，且延期范围有负责人和复查点。两个交付物的结果主张以及任何进度或质量变化都必须与引用记录一致。"
+    }
+  },
+  "q-beh-influence-no-authority": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Create a stakeholder map showing incentives, objections, formal authority, and the candidate's actual relationship to each participant. Attach the pilot hypothesis, adoption metric, pre-pilot baseline, objection log, messages or review evidence, and the final adoption or non-adoption decision; ask a reviewer to identify any point where managerial direction is being mislabeled as personal influence.",
+      "acceptance": "The change mechanism is evidence, empathy, coalition building, or a low-risk pilot rather than positional pressure; at least one valid objection and the response to it are preserved; adoption or learning is measured against the baseline; and a non-adopted proposal is reported honestly without converting team action into individual credit."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立利益相关方地图，展示各方激励、异议、正式权限以及候选人与每位参与者的真实关系。附上试点假设、采用指标、试点前基线、异议日志、消息或评审证据及最终采用或未采用的决定；请评审者识别是否存在把管理命令误称为个人影响力的环节。",
+      "acceptance": "改变机制来自证据、同理心、联盟建立或低风险试点，而不是职权压力；至少保留一项合理异议及其应对；采用或学习结果相对于基线可测量；若方案未被采用，必须如实报告，且不得把团队行动转换为个人功劳。"
+    }
+  },
+  "q-beh-quality-schedule": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Produce a risk decision record that names the verification or review proposed for removal, the protected integrity or safety boundary, severity and likelihood evidence, feasible alternatives, escalation timestamps, decision owner, accepted residual risk, monitoring, and final outcome. Compare the record with the actual test, review, release, or incident artifacts.",
+      "acceptance": "No integrity or safety boundary is silently waived; reversible scope is distinguished from non-negotiable evidence; any accepted risk has an explicit owner, condition, monitoring signal, and closure point; and the story reports the actual release and consequence even when the candidate's recommendation was not chosen."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "形成风险决策记录，写明拟删除的验证或评审、受保护的诚信或安全边界、严重度与发生可能性的证据、可行替代方案、升级时间戳、决策负责人、已接受的剩余风险、监控方式和最终结果。将该记录与实际测试、评审、发布或事件工件进行比较。",
+      "acceptance": "任何诚信或安全边界都没有被静默放弃；可逆范围与不可妥协证据被明确区分；每项已接受风险都有明确负责人、适用条件、监控信号和关闭点；即使候选人的建议未被采纳，故事也如实报告实际发布及后果。"
+    }
+  },
+  "q-beh-negative-feedback": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the answer and build a before/after behavior timeline containing the specific feedback, the part accepted and the part still disputed, how it was validated, one changed habit or process, and later observations from work products or another person. Check that the later evidence postdates the change and is not merely the candidate's self-rating.",
+      "acceptance": "The feedback is concrete and at least partly correct, the initial reaction is candid without becoming the story's focus, and one observable behavior changes. Passage requires independent or artifact-based evidence that the new behavior persisted, plus an honest account of remaining disagreement; instant perfection or an invented success signal fails."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制回答并建立行为改变前后时间线，包含具体反馈、接受的部分与仍有异议的部分、验证方式、一项改变后的习惯或流程，以及来自工作产物或他人的后续观察。检查后续证据发生在改变之后，且不是候选人的单方面自评分。",
+      "acceptance": "反馈具体且至少部分正确，初始反应被坦诚说明但没有喧宾夺主，并且有一项可观察行为发生改变。通过条件是存在独立证据或工件证明新行为持续生效，同时诚实说明尚存分歧；声称立即变得完美或编造成功信号均不通过。"
+    }
+  },
+  "q-beh-cross-functional": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Pair a 3-minute recording with an interface map that lists each team's input, output, assumption, owner, handoff signal, and escalation path before and after the breakdown. Reconstruct the event timeline from tickets, logs, meeting notes, or delivery evidence, then identify the leading signal that could have exposed the gap earlier.",
+      "acceptance": "The timeline explains the missed expectation through interface, incentive, or ownership failures rather than a scapegoat; the candidate's contribution and mistake are explicit; the repaired contract assigns every handoff an owner and observable completion signal; and the new operating mechanism is shown working in at least 1 later instance."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "将 3 分钟录音与接口地图配对，列出协作失效前后各团队的输入、输出、假设、负责人、交接信号和升级路径。利用问题单、日志、会议记录或交付证据重构事件时间线，再指出本可更早暴露缺口的领先信号。",
+      "acceptance": "时间线通过接口、激励或责任缺口解释预期落空，而不是寻找替罪羊；候选人的贡献和错误都明确；修复后的契约为每次交接指定负责人和可观察完成信号；并且有至少 1 个后续实例证明新运行机制确实生效。"
+    }
+  },
+  "q-beh-ethical-data": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Create an evidence-preserving incident timeline from discovery through verification, containment, correction, escalation, and stakeholder notice. For a biased benchmark, retain the inclusion rule and recomputation with failed cases; for confidential material, record classification and removal without copying the sensitive content. Review the communication draft for facts, uncertainty, decision impact, and absence of motive speculation.",
+      "acceptance": "The original evidence remains auditable, downstream users of the misleading result are identified and corrected, and confidential material is contained rather than repeated. The response distinguishes verified facts from suspected causes, uses the appropriate escalation path, and either publishes a corrected result with scope or clearly withdraws the unsupported claim."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立一条保全证据的事件时间线，覆盖发现、核验、止损、纠正、升级和利益相关方通知。对于有偏 benchmark，保留纳入规则以及加入失败案例后的复算；对于保密材料，记录密级与移除过程，但不复制敏感内容。审查沟通草稿是否包含事实、不确定性、决策影响，且没有推测他人动机。",
+      "acceptance": "原始证据仍可审计，使用过误导性结果的下游人员得到识别和纠正，保密材料被限制传播而非再次披露。回答区分已验证事实与推测原因，采用适当升级路径，并且要么发布带适用范围的纠正结果，要么明确撤回无依据主张。"
+    }
+  },
+  "q-beh-lead-small-team": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Build a responsibility and decision map showing the initiative goal, baseline and success metric, work decomposition, delegates, decision cadence, risks, coaching moments, conflicts, and credit attribution. Cross-check the candidate's claimed leverage and team outcome against plans, reviews, commits, reports, or peer-confirmable events, including one delegation mistake and its correction.",
+      "acceptance": "The account demonstrates results through other people rather than personal heroics, distinguishes decisions owned from work delegated or received, and shares credit by named contribution. Success metrics and risks match available evidence, a delegation or coaching adjustment is concrete, and no managerial authority is invented."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "建立责任与决策地图，展示项目目标、基线与成功指标、工作拆分、被委派者、决策节奏、风险、辅导时刻、冲突和功劳归属。利用计划、评审、提交、报告或可由同伴确认的事件，交叉核对候选人声称的杠杆作用和团队结果，并包含一次委派失误及其纠正。",
+      "acceptance": "叙述展示通过他人取得结果，而不是个人英雄主义；区分本人负责的决策、委派出去的工作和得到的帮助，并按具体贡献分享功劳。成功指标和风险与可用证据一致，委派或辅导调整具体明确，且没有虚构管理权限。"
+    }
+  },
+  "q-beh-behavioral-loop-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record all 6 answers and adaptive follow-ups in one loop, then create a story-to-competency matrix for failure, conflict, ambiguity, prioritization, leadership, and integrity. Run transcript-level claim-to-evidence and example-overlap checks, score each story with the same rubric, select the 2 weakest signals, rewrite them, and make a second recording of those 2 stories.",
+      "acceptance": "There are 6 distinct truthful examples covering all 6 competencies, with personal ownership, time-consistent claims, evidence or explicit gaps, and no confidential detail. The overlap audit finds no event reused as a different story, and both of the 2 redone answers correct their predeclared weakness while remaining consistent with the original evidence."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在一轮中录制全部 6 个回答及自适应追问，然后建立故事—能力矩阵，覆盖失败、冲突、模糊性、优先级、领导力和诚信。对转写执行主张—证据和案例重叠检查，用同一评分规则评估每个故事，选出信号最弱的 2 个进行重写，并再次录制这 2 个故事。",
+      "acceptance": "共有 6 个彼此不同且真实的案例，覆盖全部 6 项能力，个人责任清晰，主张在时间上自洽，有证据或明确缺口，且不含保密细节。重叠审计没有发现同一事件被包装成不同故事，重新录制的 2 个回答都修复了预先声明的弱点，同时与原始证据保持一致。"
+    }
+  },
+  "q-behavioral-foundation-star": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Use a transcript checker to mark S, T, A, and R sentences, then manually verify the cited evidence exists in the candidate's portfolio or records.",
+      "acceptance": "All four labels are present, at least one personal action is explicit, and no unsupported number is stated as fact."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "使用转写检查器标记 S、T、A、R 对应的句子，然后人工确认所引用证据确实存在于候选人的作品集或记录中。",
+      "acceptance": "四个标签全部存在，至少明确写出一个由本人采取的行动，且没有将无依据的数字陈述为事实。"
+    }
+  },
+  "q-behavioral-foundation-priority": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Review the written response against a checklist for impact, deadline, time box, owner, stakeholder notice, and reassessment trigger.",
+      "acceptance": "Every checklist item is explicit and the proposed schedule fits within the supplied one-hour window."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "依据影响、截止时间、时间盒、负责人、利益相关者通知和重新评估触发条件的检查清单，审查书面回答。",
+      "acceptance": "检查清单中的每一项都被明确说明，且建议的安排能够在题目给出的一小时窗口内完成。"
+    }
+  },
+  "q-behavioral-foundation-unknown-risk": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Annotate the response for an observation, uncertainty label, audience-protection action, next check, and decision boundary.",
+      "acceptance": "All five elements are present and no unverified result is phrased as established fact."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在回答中标注一项观察、一个不确定性标签、一项保护受众的行动、下一项检查和决策边界。",
+      "acceptance": "五项要素全部存在，且没有把尚未验证的结果表述为既定事实。"
+    }
+  }
+}

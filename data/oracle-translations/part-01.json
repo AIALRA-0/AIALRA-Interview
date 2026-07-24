@@ -1,0 +1,227 @@
+{
+  "q-eda-foundation-fanout-count": {
+    "kind": "可执行",
+    "procedure": "在一个固定测试样例上运行该伪代码实现；样例包含四条边、一条重复边和一个未知端点。",
+    "acceptance": "输出与独立枚举得到的唯一接收端集合一致，且格式错误的记录按照已声明的策略处理。"
+  },
+  "q-eda-foundation-path-delay": {
+    "kind": "可执行",
+    "procedure": "使用计算器或不超过五行的脚本计算题目给出的算式。",
+    "acceptance": "到达时间为 300 ps；按“要求时间减到达时间”的约定，裕量为 +50 ps。"
+  },
+  "q-eda-foundation-transform-invariant": {
+    "kind": "可观察",
+    "procedure": "在三个测试样例上运行该变换，枚举所有布尔输入，并比较输出、连通性和源码位置记录。",
+    "acceptance": "所有输出均一致，每个预期接收端仍然可达，且每个被保留的逻辑对象都有可追溯的元数据。"
+  },
+  "q-ai-eda-foundation-split": {
+    "kind": "可执行",
+    "procedure": "计算训练集、验证集和测试集清单之间父设计 ID 的交集。",
+    "acceptance": "任意两组之间的交集均为空；使用固定版本的划分流程重新运行后，能够复现完全相同的清单。"
+  },
+  "q-ai-eda-foundation-rare-violation": {
+    "kind": "可执行",
+    "procedure": "将题目给出的标签和“全部预测为无违例”的结果传给一个公开的指标计算实现。",
+    "acceptance": "混淆矩阵为 [[990,0],[10,0]]，正类召回率为 0，并明确披露任何精确率警告或除零处理策略。"
+  },
+  "q-ai-eda-foundation-feature-leakage": {
+    "kind": "可执行",
+    "procedure": "对一份清单运行模式校验器；该清单为每个特征标注其产生于流程中的哪个阶段。",
+    "acceptance": "用于布线前模型时，两个布线后字段都被拒绝；遇到未标注来源阶段的特征时，流水线以安全关闭方式失败。"
+  },
+  "q-cad-foundation-stage-contract": {
+    "kind": "可执行",
+    "procedure": "将一个模拟流程阶段执行两次：第一次生成有效产物，第二次以退出码 0 结束但不生成产物。",
+    "acceptance": "包装器只接受第一次运行，并为第二次运行记录一种明确且独立的“缺失产物”失败。"
+  },
+  "q-cad-foundation-provenance": {
+    "kind": "可观察",
+    "procedure": "比较两次受控运行的清单；两次运行之间只有约束文件发生了变化。",
+    "acceptance": "差异结果识别出约束文件的内容哈希已变化，同时源码、工具和配置标识符均保持相同。"
+  },
+  "q-cad-foundation-retry": {
+    "kind": "可执行",
+    "procedure": "向分类器输入两份具有稳定错误码的合成日志，并模拟五次调度决策。",
+    "acceptance": "超时失败的重试次数不超过配置上限；语法错误的重试次数为 0；两者都产生可审计的终止原因。"
+  },
+  "q-rtl-foundation-signed-width": {
+    "kind": "可执行",
+    "procedure": "穷举所有有符号 8 位输入对，并将其数学求和结果与有符号 9 位表示进行比较。",
+    "acceptance": "每个数学求和结果都能用 9 位精确表示，而截断为 8 位后至少有一组输入无法得到正确结果。"
+  },
+  "q-rtl-foundation-reset-trace": {
+    "kind": "可执行",
+    "procedure": "使用题目给出的激励，对一个经历四个时钟边沿的 SystemVerilog 参考寄存器进行仿真。",
+    "acceptance": "采样得到的 q 序列依次为复位值、3、5、复位值，且时钟边沿之间没有跳变。"
+  },
+  "q-rtl-foundation-ready-valid": {
+    "kind": "可执行",
+    "procedure": "对题目给出的向量逐元素计算 valid && ready。",
+    "acceptance": "传输向量为 0,1,0,0,1，成功接收的数据项数量为 2。"
+  },
+  "q-dv-foundation-handshake-property": {
+    "kind": "可执行",
+    "procedure": "使用三条最小轨迹编译并运行该属性：req 后出现 ack、req 后未出现 ack，以及复位期间出现 req。",
+    "acceptance": "第一条轨迹通过，第二条轨迹在预期的时钟边沿失败，复位轨迹不产生任何后续义务。"
+  },
+  "q-dv-foundation-scoreboard": {
+    "kind": "可执行",
+    "procedure": "在独立脚本中计算 (250 + 10) & 0xff，并将结果与观测到的字节进行比较。",
+    "acceptance": "独立计算结果为 4，且该事务连同完整上下文被记录为通过。"
+  },
+  "q-dv-foundation-coverage-bins": {
+    "kind": "可执行",
+    "procedure": "在仿真器或四值参考计数器中，用 00、01、10 和 11 对该覆盖点进行采样。",
+    "acceptance": "每个合法覆盖箱各命中一次，非法覆盖箱机制报告 11 这一采样值。"
+  },
+  "q-fpga-foundation-period-slack": {
+    "kind": "可执行",
+    "procedure": "使用计算器计算 1/(200e6)，再减去 5.30 ns。",
+    "acceptance": "时钟周期为 5.00 ns，裕量为 -0.30 ns；在题目给定的假设下，答案将其判定为建立时间违例。"
+  },
+  "q-fpga-foundation-sync-scope": {
+    "kind": "可观察",
+    "procedure": "在目的时钟边沿附近随机改变源端信号，并监测接收到的总线字是否属于完整发送字的集合。",
+    "acceptance": "所选的相干跨域方案绝不输出混合字；单比特输出只在经历同步器延迟后发生变化。"
+  },
+  "q-fpga-foundation-probe-plan": {
+    "kind": "可观察",
+    "procedure": "回放两个合成场景：一个违反源端稳定性，另一个填满内部队列；同时采集所选的三个信号。",
+    "acceptance": "采集规则能够将两个场景判为不同类别，并定位相关不变量首次失效的时钟边沿。"
+  },
+  "q-arch-foundation-weighted-cpi": {
+    "kind": "可执行",
+    "procedure": "使用计算器计算加权和，并将结果与 [1,3] 的范围进行比较。",
+    "acceptance": "平均 CPI 为 1.7，且答案指出至少一种题目未纳入的微架构影响因素。"
+  },
+  "q-arch-foundation-load-use": {
+    "kind": "可观察",
+    "procedure": "将候选答案中的逐周期表，与加载数据在各流水级的可用性表逐级比较。",
+    "acceptance": "在 load 完成 MEM 阶段之前，add 绝不进入 EX 阶段，并且恰好出现一个气泡。"
+  },
+  "q-arch-foundation-row-buffer": {
+    "kind": "可观察",
+    "procedure": "让一个三状态 bank 模型依次经历预充电、行 A 已打开、行 A 已打开和行 B 已打开四种状态。",
+    "acceptance": "三次访问依次分类为激活、命中、冲突；在通常的时序假设下，命中的访问定性上最快。"
+  },
+  "q-pd-foundation-setup-slack": {
+    "kind": "可执行",
+    "procedure": "以纳秒为单位，使用计算器计算题目给出的三个等式。",
+    "acceptance": "到达时间为 0.76 ns，要求时间为 0.88 ns，裕量为 +0.12 ns，且该路径被判定为满足建立时间要求。"
+  },
+  "q-pd-foundation-hold-fix": {
+    "kind": "可观察",
+    "procedure": "在端点处加入模型化的 60 ps 数据延迟，并在同一组工艺角下重新运行建立/保持时序报告。",
+    "acceptance": "保持时间裕量变为非负，建立时间裕量仍为非负，且修改后的路径没有出现新的电气违例。"
+  },
+  "q-pd-foundation-missing-clock": {
+    "kind": "可观察",
+    "procedure": "在添加预期的 create_clock 约束前后，分别运行时钟报告和未约束路径报告。",
+    "acceptance": "预期时钟出现在报告中，同步端点数量变为已约束，并且真实的建立/保持路径得到分析而不是被豁免。"
+  },
+  "q-dft-foundation-stuck-at": {
+    "kind": "可执行",
+    "procedure": "计算与门真值表，并分别代入两种输出固定故障。",
+    "acceptance": "向量 11 能区分正常值 1 与 stuck-at-0 故障值 0；任选一个能产生 0 的向量，能区分正常值 0 与 stuck-at-1 故障值 1。"
+  },
+  "q-dft-foundation-scan-cycles": {
+    "kind": "可执行",
+    "procedure": "仿真一个 8 位移位寄存器：执行 8 次装载移位、1 次捕获替换和 8 次卸载移位。",
+    "acceptance": "预期图样在 8 次移位后完全装入；两者之间间隔 1 个捕获时钟，再经过 8 次移位后，所有捕获位均被移出。"
+  },
+  "q-dft-foundation-mbist-walk": {
+    "kind": "可执行",
+    "procedure": "在一个含四个元素的位数组上运行该操作序列，然后将地址 2 强制为 1 后再次运行。",
+    "acceptance": "正常运行中的所有读取均返回 0；强制故障运行在写 1 操作之前，恰好将地址 2 的那次读取报告为失败。"
+  },
+  "q-analog-foundation-gm": {
+    "kind": "可执行",
+    "procedure": "使用计算器计算 2×100e-6/0.2。",
+    "acceptance": "结果为 0.001 S = 1 mS，且答案说明至少一种非理想因素或模型局限。"
+  },
+  "q-analog-foundation-feedback-gain": {
+    "kind": "可执行",
+    "procedure": "使用计算器计算闭环增益公式和相对误差。",
+    "acceptance": "增益约为 9.901，相对于 10 的不足约为 0.99%。"
+  },
+  "q-analog-foundation-rc-pole": {
+    "kind": "可执行",
+    "procedure": "使用计算器分别以 C=1e-9 F 和 C=2e-9 F 计算两个极点频率。",
+    "acceptance": "两个频率分别约为 159 kHz 和 79.6 kHz，并呈现一致的反比例缩放关系。"
+  },
+  "q-embedded-foundation-volatile-poll": {
+    "kind": "可执行",
+    "procedure": "开启编译优化来编译一个最小轮询函数，并检查生成的加载指令或经过插桩的平台访问器。",
+    "acceptance": "修复后的循环在每次轮询时都会重新读取设备；答案不得声称该方案提供原子性或适用于所有平台的内存顺序保证。"
+  },
+  "q-embedded-foundation-isr-counter": {
+    "kind": "可执行",
+    "procedure": "运行一个交错测试框架：在前台操作的每个边界注入一次 ISR 递增，并比较已产生事件数与“已处理事件数加待处理事件数”。",
+    "acceptance": "对于每一种注入交错，受保护的实现都不丢失任何事件，并且临界区只包含快照与清零操作。"
+  },
+  "q-embedded-foundation-uart-frame": {
+    "kind": "可执行",
+    "procedure": "将每个到达的数据位左移其从 0 开始的到达序号后求和。",
+    "acceptance": "求和结果为十进制 165，即 0xA5；起始位为低，停止位为高，且恰好读取 8 个数据位。"
+  },
+  "q-mfg-foundation-interlock-state": {
+    "kind": "可执行",
+    "procedure": "在三个许可条件的全部 8 种布尔组合上计算状态转换函数。",
+    "acceptance": "只有三个条件全为真的组合进入 RUN；其他组合均保持 IDLE，并给出至少一个正确的阻断原因。该判定仅验证题目中的练习模型，不构成真实设备安全认证。"
+  },
+  "q-mfg-foundation-spc-limit": {
+    "kind": "可执行",
+    "procedure": "计算两个控制限以及谓词 measurement > upperLimit 的结果。",
+    "acceptance": "两个控制限分别为 7.0 和 13.0；13.5 被标记为超限；答案不包含没有证据支持的物理原因断言。"
+  },
+  "q-mfg-foundation-oee": {
+    "kind": "可执行",
+    "procedure": "使用计算器将三个十进制因子相乘，并将乘积与每个输入因子进行比较。",
+    "acceptance": "结果为 68.4%；性能被识别为最低因子；任何改进优先级都必须以证据为条件。"
+  },
+  "q-behavioral-foundation-star": {
+    "kind": "可观察",
+    "procedure": "使用转写检查器标记 S、T、A、R 对应的句子，然后人工确认所引用证据确实存在于候选人的作品集或记录中。",
+    "acceptance": "四个标签全部存在，至少明确写出一个由本人采取的行动，且没有将无依据的数字陈述为事实。"
+  },
+  "q-behavioral-foundation-priority": {
+    "kind": "可观察",
+    "procedure": "依据影响、截止时间、时间盒、负责人、利益相关者通知和重新评估触发条件的检查清单，审查书面回答。",
+    "acceptance": "检查清单中的每一项都被明确说明，且建议的安排能够在题目给出的一小时窗口内完成。"
+  },
+  "q-behavioral-foundation-unknown-risk": {
+    "kind": "可观察",
+    "procedure": "在回答中标注一项观察、一个不确定性标签、一项保护受众的行动、下一项检查和决策边界。",
+    "acceptance": "五项要素全部存在，且没有把尚未验证的结果表述为既定事实。"
+  },
+  "q-project-foundation-architecture-sketch": {
+    "kind": "可观察",
+    "procedure": "将每个模块、接口和责任归属主张，与该项目的代码仓库、报告或演示工件逐一交叉核对。",
+    "acceptance": "架构图包含 3–5 个相互连接的模块和所有必需标签，且现有工件不反驳其中任何责任归属或接口主张。"
+  },
+  "q-project-foundation-metric-proof": {
+    "kind": "可观察",
+    "procedure": "让评审者依据已声明的指标定义，使用所引用的工件重新计算该指标。",
+    "acceptance": "复算值在已声明的容差内一致；如果当前无法验证，则证据卡必须明确记录原因。"
+  },
+  "q-project-foundation-hypothesis-tree": {
+    "kind": "可观察",
+    "procedure": "审查表格中各假设是否具有不同的预期结果，然后将实验记录与事先写下的预测进行比较。",
+    "acceptance": "所选观察至少能支持或排除两个假设，且不得用事后解释替代原始预测。"
+  },
+  "q-english-foundation-summary": {
+    "kind": "可观察",
+    "procedure": "测量录音时长，并在转写文本中标注问题、个人贡献、结果和岗位相关性四部分。",
+    "acceptance": "录音时长为 25–35 秒，四部分全部存在，且每个数字主张都有可用证据支持或带有明确限定语。"
+  },
+  "q-english-foundation-clarify": {
+    "kind": "可观察",
+    "procedure": "将每个问题映射到“输入/规模、可测量性能、输出/错误契约”检查清单，再检查复述中是否标明了假设。",
+    "acceptance": "三个检查领域各覆盖一次，问题总数恰好为三个，且复述将任何假设性的回答明确标注为假设。"
+  },
+  "q-english-foundation-unknown": {
+    "kind": "可观察",
+    "procedure": "测量录音时长，并标注一句诚实说明知识缺口的话、一句带限定条件的相关知识衔接，以及一个明确的继续讨论请求。",
+    "acceptance": "回答时长为 20–40 秒，包含上述三项要素，且没有提出无依据的定义性主张。"
+  }
+}

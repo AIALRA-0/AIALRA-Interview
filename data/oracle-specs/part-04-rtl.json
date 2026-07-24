@@ -1,0 +1,170 @@
+{
+  "q-rtl-priority-encoder-latch": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Lint, synthesize, and exhaustively simulate the rewritten encoder for no request and every single or simultaneous request pattern, comparing output index and valid with an independent priority table.",
+      "acceptance": "Simulation matches the declared priority table for every input, no-request produces the explicit default with valid deasserted, every combinational output is assigned on every path, and lint and synthesis report no inferred latch or width truncation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "对重写后的编码器进行 lint、综合和穷举仿真，覆盖无请求、单个请求及所有同时请求组合，并将输出索引和 valid 与独立优先级表比较。",
+      "acceptance": "每个输入的仿真结果都与声明的优先级表一致；无请求时输出显式默认值且 valid 拉低；每条组合路径都为全部输出赋值；lint 和综合均不报告锁存器推断或位宽截断。"
+    }
+  },
+  "q-rtl-ready-valid-wave": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay the stated D0 stall waveform and randomized stalls against the repaired RTL, a transaction scoreboard, and assertions for transfer, stable data while valid&&!ready, and capacity-safe overwrite.",
+      "acceptance": "D0 and valid remain stable through all three stalled cycles, the first ready&&valid edge transfers D0 rather than D1, accepted items match the scoreboard with no loss or duplication, and all protocol assertions pass."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在修复后 RTL 上回放题目给出的 D0 停顿波形和随机停顿，并使用事务 scoreboard 以及传输、valid&&!ready 时数据稳定和容量安全覆盖等断言检查。",
+      "acceptance": "D0 与 valid 在三个停顿周期内始终稳定；第一个 ready&&valid 边沿传输 D0 而不是 D1；接收事务与 scoreboard 一致且无丢失或重复；所有协议断言通过。"
+    }
+  },
+  "q-rtl-reset-release": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Sweep reset assertion and deassertion phase around edges of all three unrelated clocks, monitor each domain synchronizer and dependency enable, and run assertions for asynchronous assertion, synchronized release, ordering, and no partial operation.",
+      "acceptance": "Assertion reaches every required state under the declared asynchronous policy, each domain releases only after its own complete synchronization latency, dependency ordering is never violated, no domain performs visible work while a prerequisite remains reset, and recovery is repeatable for all swept phases."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "扫描复位置位和释放相对于三个无关时钟边沿的相位，监测各域同步器与依赖使能，并运行异步置位、同步释放、顺序及无部分运行断言。",
+      "acceptance": "在声明的异步策略下，复位置位到达所有必需状态；每个域只在完成自身同步延迟后释放；依赖顺序从不被破坏；当前置域仍处于复位时不存在对外可见操作；所有扫描相位均可重复恢复。"
+    }
+  },
+  "q-rtl-pulse-cdc": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate source events over all relative clock phases at the declared maximum event rate, including back-to-back events and reset on either side, and compare source and destination event counts for the selected toggle, stretch, or handshake scheme.",
+      "acceptance": "Every event allowed by the stated rate contract is observed exactly once at the destination, no event is invented during reset or wraparound, metastability protection is separated from event storage, and any unsupported faster rate is explicitly detected or backpressured."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在声明的最大事件速率下，遍历源时钟与目的时钟的全部相对相位进行仿真，包含连续事件和任一侧复位，并比较所选 toggle、脉冲展宽或握手方案的源端与目的端事件计数。",
+      "acceptance": "速率契约允许的每个事件都在目的端恰好出现一次；复位或计数回绕不会凭空产生事件；亚稳态保护与事件存储被明确区分；任何不支持的更高速率都会被显式检测或施加背压。"
+    }
+  },
+  "q-rtl-sat-counter": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Exhaustively simulate WIDTH=1 and WIDTH=2, then run constrained-random tests at a larger WIDTH for clear, increment, decrement, simultaneous controls, zero, maximum, and one-away boundaries; compare with a mathematical saturating reference.",
+      "acceptance": "Every cycle matches the reference and declared operation priority, zero never decrements by wraparound, maximum never increments by wraparound, simultaneous increment/decrement holds, synchronous clear wins as declared, and parameterization introduces no unsized or signed-width error."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "穷举仿真 WIDTH=1 和 WIDTH=2，并在更大 WIDTH 上对 clear、递增、递减、同时控制、零、最大值及相邻边界运行约束随机测试；与数学饱和参考模型逐周期比较。",
+      "acceptance": "每个周期都与参考模型和声明的操作优先级一致；零不会下溢回绕；最大值不会上溢回绕；递增和递减同时有效时保持；同步 clear 按声明优先；参数化不引入无尺寸常量或有符号位宽错误。"
+    }
+  },
+  "q-rtl-pipeline-alignment": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Drive tagged transactions through bubbles, independent stalls, flushes, and simultaneous accept/retire events, and compare data, tag, and valid at every stage with an atomic transaction reference queue plus alignment assertions.",
+      "acceptance": "Every output value retains its original tag and packet position, bubbles never acquire stale metadata, all atomic fields advance under the same acceptance condition, flush removes exactly the intended younger items, and no assertion fails under randomized backpressure."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让带 tag 的事务经过气泡、独立停顿、flush 及同时接收/退休事件，并把每级的数据、tag 和 valid 与原子事务参考队列及对齐断言比较。",
+      "acceptance": "每个输出值都保留原始 tag 和顺序；气泡不会获得陈旧元数据；所有原子字段在同一接收条件下推进；flush 恰好移除预期的年轻事务；随机背压下没有断言失败。"
+    }
+  },
+  "q-rtl-signed-mac": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Derive product and 32-tap sum bounds independently, compile the proposed SystemVerilog with width and signedness warnings enabled, and compare extreme, negative, alternating-sign, overflow, saturation, and wrap cases with an arbitrary-precision reference.",
+      "acceptance": "All in-range sums match the mathematical reference exactly, negative products retain sign, expression and accumulator widths cover the derived range before any explicit reduction, saturation or wrap follows one declared policy, and no implicit unsigned cast or truncation remains."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "独立推导乘积和 32 tap 求和范围，开启位宽与有符号警告编译拟定的 SystemVerilog，并将极值、负数、符号交替、溢出、饱和和回绕案例与任意精度参考模型比较。",
+      "acceptance": "所有范围内求和都与数学参考精确一致；负乘积保留符号；表达式和累加器位宽在任何显式缩减前覆盖推导范围；饱和或回绕遵循唯一声明策略；不存在隐式无符号转换或截断。"
+    }
+  },
+  "q-rtl-ram-collision": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Enumerate both-port read/write/no-op combinations for same and different addresses, including reset and byte-enable cases, and compare the wrapper's cycle-visible outputs with one portable reference model while running against two backends with different native collision behavior.",
+      "acceptance": "Every collision combination is either assigned the declared deterministic value or rejected by an assertion, read latency and write visibility are identical across both backends, legal non-colliding accesses preserve data, and target-specific native behavior never leaks through the wrapper."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "枚举双端口在相同和不同地址上的读、写及空操作组合，并覆盖复位和字节使能；把 wrapper 的逐周期可见输出与一个可移植参考模型比较，同时在两种原生冲突行为不同的后端上运行。",
+      "acceptance": "每种冲突组合要么得到声明的确定值，要么被断言拒绝；两种后端的读延迟和写可见性完全一致；合法非冲突访问保持数据；目标特有原生行为不会穿透 wrapper。"
+    }
+  },
+  "q-rtl-clock-gating": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Toggle en and test-enable across all phases of clk in event simulation and gate-level timing checks, measure every gclk pulse width and edge, and run generated-clock, reset, and scan-mode assertions for the latch or ICG implementation.",
+      "acceptance": "No gclk edge occurs except as a full-width permitted clk pulse, en changes while clk is high cannot create a runt pulse, test mode propagates clocks as declared, functional disabling stops future pulses without truncating one in progress, and clock constraints cover the gated endpoints."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在事件仿真和门级时序检查中，于 clk 的全部相位切换 en 与 test-enable，测量每个 gclk 脉宽和边沿，并为 latch 或 ICG 实现运行 generated clock、复位和扫描模式断言。",
+      "acceptance": "除完整且被允许的 clk 脉冲外，gclk 不产生其他边沿；clk 为高时改变 en 不会产生窄脉冲；测试模式按声明传播时钟；功能关闭只阻止后续脉冲而不截断当前脉冲；时钟约束覆盖所有门控端点。"
+    }
+  },
+  "q-rtl-fsm-deadlock": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Model-check the original and repaired FSM with an environment that may delay but eventually supplies valid, capture the original circular-wait counterexample, and prove handshake safety plus bounded or eventual progress under the declared fairness assumption.",
+      "acceptance": "The original model produces the expected circular-wait trace, the repaired model never consumes without ready&&valid or duplicates a response, ready does not depend circularly on future valid, and every accepted request eventually completes under the explicit environment fairness condition."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在“环境可以延迟但最终会给出 valid”的模型下，对原始和修复后 FSM 做模型检查，捕获原始循环等待反例，并在声明的公平性假设下证明握手安全及有界或最终进展。",
+      "acceptance": "原始模型产生预期循环等待轨迹；修复后模型不会在非 ready&&valid 时消费或重复响应；ready 不会循环依赖未来 valid；在明确的环境公平条件下，每个已接收请求最终完成。"
+    }
+  },
+  "q-rtl-width-converter-boss": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Generate randomized byte streams and packet boundaries for both 32-to-128 and 128-to-32 modes, vary byte enables, reset, and arbitrary backpressure, and compare accepted input bytes with emitted output bytes using a packet-aware scoreboard and protocol assertions.",
+      "acceptance": "For every completed packet, enabled bytes and end-of-packet boundaries match exactly in declared order with no loss, duplication, or cross-packet mixing; partial final beats are encoded correctly; reset follows policy; no combinational ready-valid loop exists; and sustained no-stall throughput meets the stated target."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "为 32 转 128 和 128 转 32 两种模式生成随机字节流与包边界，改变字节使能、复位和任意背压，并使用感知数据包的 scoreboard 与协议断言比较已接收输入字节和已发出输出字节。",
+      "acceptance": "每个完整数据包的有效字节和包结束边界都按声明顺序精确一致，无丢失、重复或跨包混合；部分尾拍编码正确；复位遵循策略；不存在组合 ready-valid 环；无停顿持续吞吐达到声明目标。"
+    }
+  },
+  "q-rtl-foundation-signed-width": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Exhaustively enumerate all pairs of signed 8-bit inputs and compare mathematical sums with a signed 9-bit representation.",
+      "acceptance": "Every mathematical sum is represented exactly in 9 bits, while at least one pair fails after 8-bit truncation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "穷举所有有符号 8 位输入对，并将其数学求和结果与有符号 9 位表示进行比较。",
+      "acceptance": "每个数学求和结果都能用 9 位精确表示，而截断为 8 位后至少有一组输入无法得到正确结果。"
+    }
+  },
+  "q-rtl-foundation-reset-trace": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Simulate a four-edge SystemVerilog reference register with the supplied stimulus.",
+      "acceptance": "The sampled q sequence is reset value, 3, 5, reset value, with no between-edge transitions."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用题目给出的激励，对一个经历四个时钟边沿的 SystemVerilog 参考寄存器进行仿真。",
+      "acceptance": "采样得到的 q 序列依次为复位值、3、5、复位值，且时钟边沿之间没有跳变。"
+    }
+  },
+  "q-rtl-foundation-ready-valid": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate valid && ready element-wise for the supplied vectors.",
+      "acceptance": "The transfer vector is 0,1,0,0,1 and the accepted-item count is 2."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "对题目给出的向量逐元素计算 valid && ready。",
+      "acceptance": "传输向量为 0,1,0,0,1，成功接收的数据项数量为 2。"
+    }
+  }
+}

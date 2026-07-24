@@ -19,6 +19,13 @@ local integrated-circuit platforms, open-source communities, foundries,
 equipment/material suppliers, design services, system companies, automotive,
 and robotics.
 
+The v2 evidence freeze retains 529 canonical organization nodes: 256 in the
+US/global-first universe and 273 in the China-first universe. This is an
+auditable coverage snapshot, not a mathematical claim that every legal entity,
+lab, team, or future startup in both markets has been enumerated. A new node is
+retained only when it has an independent identity, a plausible path to one of
+the target role families, and first-party or authoritative evidence.
+
 ## Evidence states
 
 - `verified`: supported by a current first-party or authoritative source.
@@ -64,3 +71,24 @@ Question completeness means coverage of role signals and atomic skills, not
 copying every reported prompt. Every published task requires provenance policy,
 learning objective, prerequisites, deliverables, rubric, common failure modes,
 follow-ups, version, and review status.
+
+The v2 release baseline is at least 2,100 tasks: at least 140 for each of the 15
+canonical role families. Every counted task must provide semantically parallel
+English and Chinese titles, prompts, deliverables, rubric items, failure modes,
+follow-ups, reference outlines, and observable or executable oracles. Bilingual
+arrays are equal-length and item-aligned. Exact duplicates, metadata-exposing
+prompts, missing generation provenance, cosmetic numeric/name permutations,
+and role families below the declared baseline fail the release audit.
+
+The bank reports its learning topology explicitly: 210 independently authored
+anchor scenarios, each followed by nine progressively different exercises,
+produce 2,100 countable tasks. A drill must change the observed hiring signal,
+required artifact, reasoning path, or validation burden; lineage membership is
+not represented as 2,100 unrelated employer-reported prompts.
+
+`review-ready` means these structural and source gates pass. It does not mean a
+task is an employer-reported question, technically certified, psychometrically
+calibrated, or safe for consequential scoring. Promotion to `active` requires
+domain-expert review, bilingual sampling, executable/reference validation where
+applicable, and candidate pilot calibration under the interview content
+contract.

@@ -16,12 +16,17 @@ infer rejection causes or automatically reweight skills from sparse outcomes.
 
 Evidence date: **2026-07-23**
 
-- **390** company, institute, university-lab, foundry, equipment, IP, startup,
-  and open-source ecosystem nodes: 200 US/global-first and 190 China-first
-- **15** normalized role families and **1,168** company-to-role edges
+- **529** company, institute, university-lab, national-lab, foundry, equipment,
+  IP, startup, and open-source ecosystem nodes: 256 US/global-first and 273
+  China-first
+- **15** normalized role families with auditable company-to-role edges
 - **130** atomic skills with prerequisite relationships
-- **210** original training tasks, including 45 short foundation drills and
-  role-specific multi-stage Boss Fights
+- **2,100** fully bilingual training tasks: 210 independently authored,
+  field-aligned anchor scenarios plus 1,890 progressively harder drills
+  (nine per anchor), yielding 140 tasks per role family without pretending
+  that every drill is an unrelated interview prompt
+- Question-bank content version **2026-07-23.5**; deterministic SHA-256
+  `a93d82520aca72c50eed147126aacf1b059451ac5156dac865bc74cc3bc25590`
 - Persistent applications, bookmarks, skill progress, attempts, aggregate
   mastery statistics, and private candidate preferences
 
@@ -36,8 +41,10 @@ specific official job posting before applying.
 - Searchable US/China company and research-institute atlas
 - Canonical company → role → skill → prerequisite graph
 - Foundation-to-advanced Interview Dojo with provenance and review status
-- Rubrics, failure patterns, reference outlines, and observable completion
-  oracles
+- Complete side-by-side Chinese/English prompts, rubrics, failure patterns,
+  follow-ups, reference outlines, and observable completion oracles
+- Compact question index with on-demand static shards so the full bank does not
+  inflate the first page
 - Role-specific readiness estimates based on evidence, not fabricated
   acceptance probabilities
 - Editable requisition tracker for JD URL, deadline, eligibility signals,
@@ -52,6 +59,10 @@ specific official job posting before applying.
 - [Strategy framework](research/strategy-framework.md)
 - [Competitive landscape](research/competitive-landscape.md)
 - [Interview content contract](research/interview-content-contract.md)
+- [Bilingual question-bank v2 design and audit](research/bilingual-question-bank-v2.md)
+- [Pre-fix independent quality audit](research/question-bank-quality-audit-v2.md)
+- [Post-fix independent quality audit](research/question-bank-quality-audit-v3.md)
+- [v3 release verification](research/release-verification-v3.md)
 
 ## Evidence and content policy
 
@@ -92,9 +103,11 @@ npm run validate
 ```
 
 The gate audits cross-file IDs, graph cycles, role mapping, evidence fields,
-question quality and coverage, privacy boundaries, TypeScript, lint, production
-build output, server rendering, API authentication, user isolation, request
-validation, cache privacy, and the generated D1 migration.
+question quality and coverage, all 1,512 technical source-scenario payloads,
+all 168 minimal-invalid-fixture exercises, all 168 contract-only exercises,
+the complete TAP fixture lineage, privacy boundaries, TypeScript, lint,
+production build output, server rendering, API authentication, user isolation,
+request validation, cache privacy, and the generated D1 migration.
 
 Run the separate network audit when refreshing the evidence snapshot:
 

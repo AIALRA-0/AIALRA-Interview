@@ -1,0 +1,170 @@
+{
+  "q-eng-sixty-second-intro": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the introduction in English at 60 seconds, then record 45-second and 75-second variants. Label present identity, 2 role-relevant strengths with evidence, one project and result, and the logical next-step link; verify every claim against the candidate evidence map and compare recruiter, hiring-manager, and staff-engineer adaptations.",
+      "acceptance": "All 3 durations preserve the same supported facts and role direction, the 60-second version includes every required move, and audience adaptations change depth rather than identity or evidence. Accent is excluded from the score; only English content accuracy, organization, intelligibility, timing, and audience fit are evaluated."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "用英文录制 60 秒自我介绍，再录制 45 秒和 75 秒变体。标注当前身份、2 项带证据的岗位相关优势、一个项目及结果，以及为何该岗位是合理下一步；用候选人证据地图核验每项主张，并比较面向招聘人员、招聘经理和资深工程师的改编。",
+      "acceptance": "3 个时长版本保留相同的有证据事实和岗位方向，60 秒版本包含全部必需环节，不同听众版本只改变技术深度，不改变身份或证据。评分明确排除口音，只评估英文内容准确性、组织、可理解度、时间控制和听众适配。"
+    }
+  },
+  "q-eng-clarification-ladder": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "In English, ask an ordered ladder of questions for the chip-flow checker covering objective and users, inputs, scale, correctness oracle, latency, failure handling, and out-of-scope boundaries. Record or transcribe the exchange, label each answer versus assumption, then deliver an English assumption summary before proposing a design.",
+      "acceptance": "Every contract area is covered without prematurely solving, questions move from objective to implementation constraints, and the final English summary distinguishes supplied facts, reasonable assumptions, and the highest-risk unknown. No pass or fail decision depends on accent; evaluators score question precision, listening, intelligibility, and assumption control."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "用英文按顺序提出芯片设计流程检查器的澄清问题，覆盖目标与用户、输入、规模、正确性判定器、延迟、故障处理和范围外边界。录制或转写交流，标注每项内容来自回答还是假设，然后在提出设计前用英文总结假设。",
+      "acceptance": "所有契约领域都被覆盖，且没有过早进入解法；问题从目标逐步推进到实现约束；最终英文总结区分已给事实、合理假设和风险最高的未知项。通过与否不取决于口音，只评估问题精度、倾听、可理解度和假设控制。"
+    }
+  },
+  "q-eng-coding-think-aloud": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Solve the selected medium task while recording screen and English audio, then annotate transcript spans for examples, brute force, invariant, data structure, complexity, coding checkpoints, tests, and corrections. Compare the spoken invariant and complexity with the submitted code, inject the deliberate bug, and verify that the candidate detects and repairs it aloud using test evidence.",
+      "acceptance": "The English narration keeps the interviewer oriented at each decision boundary without reading every keystroke, the final code satisfies the stated invariant and tests, and any correction names the failed expectation before changing code. Pronunciation variety and accent are not scored; technical reasoning, intelligibility, evidence-led repair, and communication cadence are."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "在录制屏幕和英文音频的同时解决所选中等难度任务，再在转写中标注示例、暴力解、不变量、数据结构、复杂度、编码检查点、测试和修正。将口述不变量与复杂度同提交代码比较，注入预设错误，并验证候选人能依据测试证据用英文识别和修复它。",
+      "acceptance": "英文口述在每个决策边界都让面试官清楚当前思路，但不逐字念出每次按键；最终代码满足所述不变量和测试；任何修正都先说明失败预期再改代码。不评分发音差异或口音，只评估技术推理、可理解度、证据驱动修复和沟通节奏。"
+    }
+  },
+  "q-eng-tradeoff-language": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record a 2-minute English comparison using the declared sequence: criteria, option A, option B, recommendation, reversal conditions, and residual risk. Build a phrase-to-function map from the transcript, check quantitative claims against domain evidence, then rerun the final section after the interviewer changes the priority criterion.",
+      "acceptance": "The 2-minute answer treats both options as plausible, the recommendation follows the stated criteria, and the revised recommendation changes only when the new criterion warrants it. Accent carries zero scoring weight; the decision is based on precise English contrasts, uncertainty language, intelligibility, and technical consistency."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制 2 分钟英文比较，严格采用已声明顺序：评估标准、方案 A、方案 B、建议、反转条件和剩余风险。根据转写建立短语—功能地图，用领域证据核对定量主张，然后在面试官改变优先标准后重新回答结论部分。",
+      "acceptance": "2 分钟回答把两个方案都视为合理选项，建议确实来自已声明标准，只有当新标准足以改变判断时才修改建议。口音评分权重为零，只依据精准的英文对比、不确定性表达、可理解度和技术一致性判定。"
+    }
+  },
+  "q-eng-misunderstanding-repair": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the English answer before and after discovering the synchronous-versus-asynchronous clock mismatch. Timestamp the polite interruption, explicit mismatch, corrected requirement, reusable reasoning, discarded reasoning, and revised plan; then simulate failure to understand a term after 2 clarification attempts and record the safe continuation or pause.",
+      "acceptance": "The repaired answer no longer relies on the synchronous assumption, preserves only reasoning valid for asynchronous clocks, and obtains or clearly requests confirmation before continuing. The rubric ignores accent and judges English acknowledgment, requirement restatement, technical correction, intelligibility, and non-defensive recovery."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制发现同步与异步时钟理解不一致之前和之后的英文回答。为礼貌打断、明确指出不一致、复述纠正后的需求、可复用推理、废弃推理和修订方案标注时间戳；再模拟经过 2 次澄清仍不理解术语的情况，并录制安全继续或暂停的处理。",
+      "acceptance": "修复后的回答不再依赖同步假设，只保留对异步时钟仍有效的推理，并在继续前获得或明确请求确认。评分规则忽略口音，只判断英文承认误解、需求复述、技术纠正、可理解度和非防御性恢复。"
+    }
+  },
+  "q-eng-concise-debug-summary": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "After preserving the 20-minute debug notes, record a 45-second English update and write a 6-line summary aligned to symptom, strongest evidence, ruled-out hypotheses, leading cause, next discriminating experiment, and risk. Verify each line against the debug log, then produce the nontechnical program-manager version without changing the decision-relevant risk.",
+      "acceptance": "The 45-second recording and 6-line text contain the same current state, distinguish a leading cause from a confirmed root cause, and name an experiment with predicted outcomes. No accent criterion is used; scoring covers English compression, intelligibility, evidence fidelity, audience adaptation, and preservation of risk."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "保留 20 分钟调试讨论笔记后，录制 45 秒英文更新，并写出与症状、最强证据、已排除假设、领先原因、下一项区分实验和风险对应的 6 行总结。用调试日志核对每一行，再生成面向非技术项目经理的版本，同时保持影响决策的风险不变。",
+      "acceptance": "45 秒录音和 6 行文字包含相同的当前状态，区分领先原因与已确认根因，并提出带预测结果的实验。不设置口音评分项，只评估英文压缩、可理解度、证据忠实度、听众适配和风险保留。"
+    }
+  },
+  "q-eng-pushback": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the English response to the complexity challenge and annotate acknowledgment, justifying constraint, simple baseline, crossover estimate with evidence, chosen necessary mechanism, and residual risk. Remove the constraint in a second prompt and require an English simplified architecture response within 1 minute, comparing removed versus retained mechanisms in the table.",
+      "acceptance": "The first answer engages the concern before defending complexity, quantifies or bounds the crossover, and keeps only mechanisms justified by the named constraint; the 1-minute rerun actually simplifies when that constraint disappears. Scoring is accent-neutral and measures technical responsiveness, English clarity, evidence, and willingness to revise."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "录制对复杂度质疑的英文回应，并标注认可顾虑、支撑复杂度的约束、简单基线、带证据的交叉点估计、所选必要机制和剩余风险。在第二次提示中移除该约束，要求在 1 分钟内用英文给出简化架构，并在表中比较删除与保留的机制。",
+      "acceptance": "第一次回答先回应顾虑再为复杂度辩护，量化或界定交叉点，只保留由具名约束支持的机制；移除约束后，1 分钟重答确实简化方案。评分对口音中立，只衡量技术响应性、英文清晰度、证据和修改判断的意愿。"
+    }
+  },
+  "q-eng-unknown-answer": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the answer in English and annotate every statement as fact, inference, assumption, or unknown. Check for an explicit knowledge boundary, a related fact that is not falsely equated with the unknown term, one focused clarification, a bounded derivation, and a concrete verification source or experiment; replay the answer for both an unfamiliar tool and an unfamiliar vendor detail.",
+      "acceptance": "The candidate never invents a definition or experience, adjacent knowledge is qualified, and the proposed verification could resolve the stated gap. An accent never reduces the score; evaluators consider honesty, English intelligibility, fact-versus-inference control, useful reasoning, and verification quality."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "用英文录制回答，并把每项陈述标为事实、推断、假设或未知。检查是否明确说明知识边界，是否给出但未错误等同于未知术语的相关事实，是否提出一个聚焦澄清问题、进行有边界推导并给出具体核验来源或实验；分别针对陌生工具和陌生厂商细节重演回答。",
+      "acceptance": "候选人不编造定义或经验，相关知识带有限定，建议的核验能够解决所述缺口。口音不会降低分数；评审只考虑诚信、英文可理解度、事实与推断控制、有用推理和核验质量。"
+    }
+  },
+  "q-eng-project-presentation": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the 5-minute English presentation to a simulated software, hardware, and program panel, attach the glossary, and timestamp plain-language problem framing, necessary term definitions, architecture, trade-off, quantified result, uncertainty, and invitation for questions. Run the panel-specific Q&A, including the statistical-significance challenge, and cross-check claims with project evidence.",
+      "acceptance": "The 5-minute presentation is understandable across all panel functions without removing essential technical content, every number and uncertainty matches the evidence, and the significance response states sample and limitation rather than bluffing. Panel review does not grade accent; it grades English intelligibility, structure, definition discipline, factual accuracy, and Q&A adaptation."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "面向模拟的软件、硬件和项目管理评审组录制 5 分钟英文陈述，附上术语表，并为通俗问题框定、必要术语定义、架构、权衡、量化结果、不确定性和邀请提问标注时间戳。完成针对各类评审者的问答，包括统计显著性质疑，并用项目证据核对主张。",
+      "acceptance": "5 分钟陈述让所有评审职能都能理解，同时没有删除必要技术内容；每个数字与不确定性都同证据一致；显著性回答说明样本与限制，而不是虚张声势。评审不评价口音，只评价英文可理解度、结构、定义纪律、事实准确性和问答适配。"
+    }
+  },
+  "q-eng-questions-for-interviewer": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Using current evidence for one company, team, and role, prepare and rehearse an English question set for the final 5 minutes. Cover all 6 topics—success in 90 days, technical bottlenecks, decision ownership, review culture, role level, and team interfaces—with a reason, priority, and tailored follow-up for each; remove anything already answered by the job description.",
+      "acceptance": "The prioritized set fits within 5 minutes, all 6 topics are grounded in the selected company and role, the 90-day question seeks an observable success definition, and each vague answer has a respectful evidence-seeking follow-up. Accent is out of scope; scoring focuses on English concision, specificity, listening readiness, and research quality."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "使用一家具体公司、团队和岗位的当前证据，准备并演练面试最后 5 分钟的英文问题集。覆盖全部 6 个主题：入职 90 天成功标准、技术瓶颈、决策责任、评审文化、岗位级别和团队接口；为每题写明原因、优先级和定制追问，并删除职位描述已回答的内容。",
+      "acceptance": "排序后的问题集能在 5 分钟内完成，全部 6 个主题都基于所选公司和岗位，90 天问题寻求可观察的成功定义，每个模糊回答都有礼貌且追求证据的后续问题。口音不在评价范围内，只评估英文简洁性、具体性、倾听准备和调研质量。"
+    }
+  },
+  "q-eng-english-loop-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Record the full English loop in one take and segment the transcript into all 8 required events: introduction, ambiguous problem, coding or design think-aloud, pushback, misunderstanding repair, unknown question, summary, and interviewer questions. Annotate unsupported claims, clarification misses, long silences, filler patterns, and repair quality, then rerecord only the weakest segment against its named defect.",
+      "acceptance": "All 8 segments occur in order and remain technically and biographically consistent under interruption, uncertainty is labeled, and the targeted redo measurably fixes the preselected clarity defect without introducing a new unsupported claim. The loop is assessed without an accent score; only English intelligibility, technical content, interaction, repair, and evidence discipline count."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "一次完成并录制完整英文面试整轮，把转写划分为全部 8 个必需事件：自我介绍、模糊问题、编程或设计口述推理、技术质疑、误解修复、未知问题、总结和向面试官提问。标注无依据主张、错失的澄清、长时间停顿、填充词模式和修复质量，再只针对最弱片段及其具名缺陷重新录制。",
+      "acceptance": "全部 8 个片段按顺序出现，在被打断时仍保持技术和经历一致，且明确标注不确定性；定向重录可测量地修复预先选定的清晰度缺陷，同时不引入新的无依据主张。整轮不设置口音分数，只评价英文可理解度、技术内容、互动、修复和证据纪律。"
+    }
+  },
+  "q-english-foundation-summary": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Measure recording duration and label transcript spans for problem, contribution, result, and role relevance.",
+      "acceptance": "Duration is 25–35 seconds, all four spans are present, and every numerical claim has available support or an explicit qualifier."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "测量录音时长，并在转写文本中标注问题、个人贡献、结果和岗位相关性四部分。",
+      "acceptance": "录音时长为 25–35 秒，四部分全部存在，且每个数字主张都有可用证据支持或带有明确限定语。"
+    }
+  },
+  "q-english-foundation-clarify": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Map each question to a checklist of input/scale, measurable performance, and output/error contract, then inspect the restatement for assumption labels.",
+      "acceptance": "Each checklist area is covered once, there are exactly three questions, and the restatement labels any hypothetical answer as an assumption."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "将每个问题映射到“输入/规模、可测量性能、输出/错误契约”检查清单，再检查复述中是否标明了假设。",
+      "acceptance": "三个检查领域各覆盖一次，问题总数恰好为三个，且复述将任何假设性的回答明确标注为假设。"
+    }
+  },
+  "q-english-foundation-unknown": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Time the recording and annotate one honest gap statement, one qualified bridge, and one explicit continuation request.",
+      "acceptance": "The response lasts 20–40 seconds, contains all three elements, and makes no unsupported definition claim."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "测量录音时长，并标注一句诚实说明知识缺口的话、一句带限定条件的相关知识衔接，以及一个明确的继续讨论请求。",
+      "acceptance": "回答时长为 20–40 秒，包含上述三项要素，且没有提出无依据的定义性主张。"
+    }
+  }
+}

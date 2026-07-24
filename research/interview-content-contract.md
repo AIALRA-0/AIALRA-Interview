@@ -1,8 +1,8 @@
-# Interview Content Contract v1
+# Interview Content Contract v2
 
 Status: normative for seed content
 
-Version: 1.0.0
+Version: 2.0.0
 
 Effective date: 2026-07-23
 
@@ -16,7 +16,7 @@ This contract governs role families, atomic skills, interview tasks, model-gener
 4. prevent low-quality volume from outrunning technical correctness;
 5. ensure AI feedback is evidence-based, calibrated, and able to abstain.
 
-The v1 seed files are content inputs, not proof that a learner is interview-ready. A `review-ready` task still requires the release gates in this document before it may be used for consequential scoring.
+The v2 seed files are content inputs, not proof that a learner is interview-ready. A `review-ready` task still requires the release gates in this document before it may be used for consequential scoring.
 
 ## 2. Canonical files and wrappers
 
@@ -69,22 +69,74 @@ Every seed or published question must include:
 - `difficulty`
 - `type`
 - `prompt`
+- `promptZh`
 - `deliverables[]`
+- `deliverablesZh[]`
 - `rubric[]`
+- `rubricZh[]`
 - `commonFailures[]`
+- `commonFailuresZh[]`
 - `followUps[]`
+- `followUpsZh[]`
+- `referenceOutline[]`
+- `referenceOutlineZh[]`
+- `oracle`
+- `oracleZh`
 - `sourcePolicy`
 - `sourceRefs[]`
 - `estimatedMinutes`
 - `evidenceDate`
 - `status`
 - `contentVersion`
+- `blueprintId`
+- `generationSpec`
 
-The v1 type vocabulary is:
+The v2 type vocabulary is:
 
 `conceptual`, `coding`, `debugging`, `design`, `waveform-analysis`, `log-analysis`, `system-task`, `behavioral`, `project-deep-dive`, `english-communication`, and `boss-fight`.
 
 New types require a schema-minor change and at least one calibrated example. A UI-only label is not a new type.
+
+### 3.1 Bilingual isomorphism
+
+English and Chinese are equally authoritative learning surfaces. Chinese is not an
+optional synopsis and English is not an ornamental translation.
+
+- `title` and `titleZh`, and `prompt` and `promptZh`, must express the same task,
+  constraints, facts, ambiguity, and expected scope.
+- Each bilingual array pair must have the same length. Item `n` in the English
+  array and item `n` in the Chinese array must be semantic counterparts:
+  `deliverables*`, `rubric*`, `commonFailures*`, `followUps*`, and
+  `referenceOutline*`.
+- `oracle` and `oracleZh` must be isomorphic objects with the same keys and
+  equivalent `kind`, `procedure`, and `acceptance` meaning.
+- Numbers, units, signal names, API names, file names, commands, protocol tokens,
+  standards clauses, and code identifiers must remain technically identical unless
+  the prompt explicitly teaches localization.
+- Acronyms may retain their canonical English form, but the first use should
+  include a natural-language expansion appropriate to the target level.
+- A translation may reorder clauses for natural prose, but it must not add hints,
+  remove failure conditions, soften mandatory language, or change difficulty.
+- Both languages must use role-appropriate professional terminology. Literal,
+  machine-like phrasing and unexplained region-specific slang fail editorial review.
+- English-communication tasks still require a complete Chinese learning surface;
+  the Chinese text explains the same exercise while preserving the required English
+  response mode.
+
+A question cannot be `review-ready` or `active` while any bilingual field is empty,
+misaligned, or semantically abridged.
+
+### 3.2 Blueprint and generation provenance
+
+`blueprintId` identifies the stable competency-and-artifact pattern. `generationSpec`
+records the lawful production path for reproducibility and audit, including at least
+an origin, archetype, deterministic seed, context index, and skill index.
+
+Provenance metadata does not make a weak permutation original. Two tasks that differ
+only in names, numeric constants, or translated wording are structural duplicates.
+Every retained task must change at least one hiring-relevant dimension such as the
+artifact inspected, failure mechanism, operating constraint, evidence path,
+abstraction layer, or trade-off.
 
 ## 4. Source and copyright policy
 
@@ -111,7 +163,7 @@ The preferred default is an original isomorphic task: preserve the underlying co
 - `user-submitted-consented-and-redacted`
 - `link-only-metadata-no-reproduction`
 
-The v1 seed uses `original-isomorphic-public-concepts-only`.
+The v2 seed uses `original-isomorphic-public-concepts-only`.
 
 ### 4.3 Prohibited material
 
@@ -217,7 +269,12 @@ Boss fights and advanced safety-, signoff-, or silicon-critical tasks require tw
 
 ### Gate 2 — Editorial and bilingual review
 
-- English and Chinese titles are semantically aligned.
+- Every bilingual scalar, array item, and oracle field passes the isomorphism rules
+  in section 3.1.
+- A reviewer fluent in the target technical domain checks meaning in both
+  directions rather than approving one language from surface fluency alone.
+- Neither language exposes a solution, clue, or evaluation criterion that the other
+  omits.
 - The prompt avoids culture-specific idiom unless that idiom is the lesson.
 - Acronyms are expanded when the target level cannot be assumed to know them.
 - Instructions distinguish facts, supplied assumptions, and matters the candidate should clarify.
@@ -252,7 +309,7 @@ For design and system tasks:
 
 ### Gate 4 — Rubric review
 
-Rubrics are ten-point analytic rubrics in v1:
+Rubrics are ten-point analytic rubrics in v2:
 
 - technical/content correctness: 0–4;
 - reasoning or evidence quality: 0–2;
@@ -282,6 +339,10 @@ CI or a content-validation command must fail on:
 - duplicate prerequisites;
 - self-prerequisites or prerequisite cycles;
 - empty prompt or required arrays;
+- an empty required Chinese or English field;
+- unequal lengths in any bilingual array pair;
+- missing or structurally non-isomorphic `oracle` and `oracleZh` objects;
+- a missing, malformed, or non-deterministic generation provenance record;
 - unsupported enum values;
 - non-positive or implausible `estimatedMinutes`;
 - invalid ISO evidence dates;
@@ -289,10 +350,16 @@ CI or a content-validation command must fail on:
 - a question with fewer than one deliverable, two rubric items, one common failure, or one follow-up;
 - a skill graph with an unreachable non-foundation skill unless explicitly justified;
 - source URLs containing credentials, private tokens, local paths, or personal identifiers.
+- an exact normalized title or prompt duplicate in either language;
+- a role family with fewer than the declared release-baseline number of tasks;
+- a role family that lacks the declared minimum spread of levels, difficulties,
+  modalities, and skill coverage.
 
 Warnings, rather than automatic failure, may cover:
 
 - high semantic similarity;
+- high cross-language semantic divergence;
+- repeated sentence frames or n-gram clusters that indicate cosmetic permutations;
 - a question linked to unusually many skills;
 - a question level below an explicit `prerequisiteSkills[]` node;
 - evidence older than the source-class refresh interval;
@@ -350,6 +417,30 @@ Every generated variant must:
 - avoid invented company attribution or frequency.
 
 Changing names and numbers alone is not a meaningful variant.
+
+### 11.1 Volume is a coverage constraint, not a quality claim
+
+The v2 baseline is at least 2,100 review-ready tasks across the 15 canonical role
+families. The release manifest must declare the expected count per role and the
+minimum distribution by level, difficulty, type, and skill. A count is accepted
+only after schema, bilingual, duplicate, provenance, and coverage checks pass.
+
+For every role family:
+
+- every linked atomic skill appears in at least one task;
+- foundational, intermediate, advanced, transfer, and integrative evidence are all
+  represented, using the role's applicable level and difficulty labels;
+- no single type, blueprint, context, or opening sentence dominates the bank;
+- follow-ups alter constraints or demand deeper evidence rather than restating the
+  prompt;
+- the reference outline gives an evaluation path without turning the exercise into
+  answer memorization;
+- tasks generated from the same blueprint remain distinguishable after proper nouns,
+  numeric literals, and incidental identifiers are normalized.
+
+The automated audit is necessary but not sufficient. A statistically diverse bank
+still requires sampled technical SME and bilingual human review before any task
+moves from `review-ready` to `active`.
 
 ## 12. AI scoring calibration
 
@@ -426,11 +517,19 @@ Practice environments should clearly label whether AI use is:
 
 The mode is part of the task contract and must be visible before the attempt starts.
 
-## 14. v1 release note
+## 14. v2 release note
 
-The v1 dataset deliberately favors broad, original coverage across EDA, silicon, embedded, manufacturing automation, project, behavioral, and English interview signals. Its `review-ready` status means:
+The v2 dataset expands the breadth of the v1 seed by an order of magnitude and makes
+the complete learning surface bilingual. It deliberately favors broad, original
+coverage across EDA, silicon, embedded, manufacturing automation, project,
+behavioral, and English interview signals. Its `review-ready` status means:
 
 - schemas and cross-references are expected to validate;
+- every task contains isomorphic English and Chinese prompts, deliverables, rubrics,
+  failure modes, follow-ups, reference outlines, and oracles;
 - prompts are original isomorphic tasks based on public concepts;
 - no task is represented as an actual company or NDA interview question;
-- technical SME review, executable artifacts, response anchors, and empirical scoring calibration remain required before production readiness claims.
+- deterministic provenance, coverage, and duplicate controls are expected to pass;
+- technical SME review, executable artifacts, response anchors, bilingual sampling,
+  and empirical scoring calibration remain required before production readiness
+  claims.

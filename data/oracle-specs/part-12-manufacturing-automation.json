@@ -1,0 +1,170 @@
+{
+  "q-mfg-gem-state": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay a reconnect trace containing a lost transition event, duplicate event, delayed host message, and an equipment snapshot showing EXECUTING while the host cache shows IDLE; apply the reconciliation protocol and compare its final state and audit log with an independently ordered event ledger.",
+      "acceptance": "The equipment or other declared authority determines physical execution state, stale or duplicate messages cannot move state backward, ambiguity blocks unsafe commands rather than guessing, the host converges to EXECUTING or an explicit quarantined unknown state, and every correction records source, sequence, time, and operator or system decision."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "重放一条重连轨迹，其中包含丢失的状态转换事件、重复事件、延迟主机消息，以及设备为 EXECUTING 而主机缓存为 IDLE 的快照；应用对账协议，并将最终状态与审计日志同独立排序的事件账本比较。",
+      "acceptance": "设备或另行声明的权威源决定物理执行状态；陈旧或重复消息不能使状态倒退；歧义必须阻止不安全命令而不是猜测；主机收敛到 EXECUTING 或明确隔离的未知状态；每次修正都记录来源、序号、时间以及操作员或系统决策。"
+    }
+  },
+  "q-mfg-carrier-mismatch": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Run the state machine on fixtures with a correct carrier ID but conflicting equipment, material-control, and MES slot maps; include an active reservation, in-process job, stale update, duplicate carrier ID, empty physical slot, and operator-verified wafer, then reconcile against a signed physical inventory.",
+      "acceptance": "No wafer or slot is silently reassigned, active jobs and reservations are frozen before correction, duplicate identity or unresolved physical evidence leads to quarantine, stale messages are rejected by version or sequence, and the released map has one carrier, one slot ownership record, and an auditable operator decision for every discrepancy."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "让状态机处理载具 ID 正确但设备、物料控制系统和 MES 槽位图冲突的样例；其中包含活动 reservation、执行中 job、陈旧更新、重复载具 ID、物理空槽和经操作员核验的晶圆，再依据签名物理盘点结果对账。",
+      "acceptance": "任何晶圆或槽位都不能被静默重分配；修正前冻结活动 job 与 reservation；重复身份或无法解决的物理证据进入 quarantine；陈旧消息按版本或序号拒绝；放行后的映射中，每个载具和槽位只有一份所有权记录，且每项差异都有可审计的操作员决策。"
+    }
+  },
+  "q-mfg-plc-sequence": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Execute the transition table in a training-only simulator for the nominal open-move-confirm-close path, then inject each permissive loss, sensor timeout, operator pause, command-without-confirmation, emergency stop, and restart at every state boundary.",
+      "acceptance": "Motion commands occur only when all declared permissives and safe positions are true, every command has a bounded confirmation or alarm path, timeout and pause preserve a known material location, emergency stop immediately reaches the defined safe behavior, and recovery requires explicit validation rather than resuming from an ambiguous step."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在仅用于训练的仿真器中执行状态转换表，先运行正常的开腔—搬运—确认—关腔路径，再在每个状态边界分别注入 permissive 丢失、传感器超时、操作员暂停、命令无确认、急停和重新启动。",
+      "acceptance": "只有在所有声明的 permissive 与安全位置均成立时才发出运动命令；每个命令都有有界确认或报警路径；超时和暂停保留已知物料位置；急停立即进入定义的安全行为；恢复必须显式验证，不能从歧义步骤直接继续。"
+    }
+  },
+  "q-mfg-opc-idempotency": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Publish a numbered event set through a fault harness that drops, duplicates, reorders, delays, and redelivers messages and acknowledgements across process restarts; inspect the durable outbox, inbox, deduplication key, ordering partition, MES side effects, and poison-message queue.",
+      "acceptance": "Each logical completion creates at most one MES lot or other side effect, every accepted event eventually reaches a terminal acknowledged or quarantined state, restart loses neither unacknowledged data nor deduplication history, ordering is preserved where the contract requires it, and poison messages cannot block unrelated partitions."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "通过故障测试器发布一组带序号事件，在进程重启前后丢弃、复制、乱序、延迟并重新投递消息与 acknowledgement；检查持久 outbox、inbox、去重键、排序分区、MES 副作用和 poison-message 队列。",
+      "acceptance": "每个逻辑完成事件最多创建一次 MES lot 或其他副作用；每个接收事件最终进入已确认或已隔离终态；重启既不丢失未确认数据，也不丢失去重历史；契约要求的顺序得到保持；poison message 不能阻塞无关分区。"
+    }
+  },
+  "q-mfg-recipe-version": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Create an approved recipe and a locally modified file with the same display name, distribute both through the proposed lifecycle, and simulate approval, signature verification, equipment download, pre-run content check, out-of-bound parameter, rollback, and audit retrieval.",
+      "acceptance": "Content identity changes when any recipe byte or governed parameter changes, only an approved and validly signed digest can become runnable, equipment verifies identity and bounds before execution, the same-name local edit is rejected, rollback selects a previously approved immutable version, and the complete approver-to-tool history is recoverable."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "创建一个已批准配方和一个显示名称相同但本地修改过的文件，让两者通过拟定生命周期，并仿真审批、签名验证、设备下载、运行前内容检查、参数越界、回滚和审计检索。",
+      "acceptance": "任何配方字节或受管参数变化都会改变内容身份；只有已批准且签名有效的摘要可进入可运行状态；设备执行前验证身份与边界；同名本地修改被拒绝；回滚只能选择此前批准的不可变版本；从审批人到设备的完整历史可检索。"
+    }
+  },
+  "q-mfg-spc-false-alarm": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Backtest the original and revised chart on labeled stable periods before and after the product-mix change, preserving product, subgroup size, variance, time order, and maintenance context; estimate false-alarm rate and detection delay with block or time-aware resampling.",
+      "acceptance": "The revised protocol uses rational homogeneous subgroups or justified normalization, establishes limits only from stable baseline data, handles unequal variance and autocorrelation explicitly, controls the combined effect of multiple rules, reduces false alarms on stable mixed-product data, and still detects an injected equipment shift within the stated delay."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在产品组合变化前后带标签的稳定时段上回测原控制图与修订控制图，保留产品、子组大小、方差、时间顺序和维护上下文；使用分块或时间感知重采样估算误报警率与检测延迟。",
+      "acceptance": "修订协议应使用合理的同质子组或有依据的归一化，只用稳定基线数据建立控制限，明确处理不等方差与自相关，控制多规则组合效应，降低稳定混合产品数据上的误报警，同时仍能在声明延迟内检测注入的设备偏移。"
+    }
+  },
+  "q-mfg-fdc-drift": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Train only on versioned baseline lots, align pressure, flow, RF power, and temperature within recipe-step boundaries, and evaluate on time-later runs containing normal recipe changes, known drift before delayed defects, variable-length traces, missing sensors, and an unseen product context.",
+      "acceptance": "No future defect label or post-outcome signal leaks into features, alignment does not merge different recipe steps, thresholds are calibrated to a stated false-alarm and miss trade-off, known drift is detected before the actionable deadline, uncertainty or novel context triggers human review, and feedback cannot silently relabel the baseline."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "只在版本化基线 lot 上训练，在 recipe step 边界内对齐压力、流量、RF 功率和温度；在时间更晚的运行上评估，其中包含正常配方变化、延迟缺陷前的已知漂移、变长轨迹、传感器缺失和未见产品上下文。",
+      "acceptance": "特征中不能泄漏未来缺陷标签或结果后信号；对齐不能合并不同 recipe step；阈值按声明的误报警与漏检权衡校准；已知漂移在可行动截止期前被检测；不确定或新上下文触发人工复核；反馈不能静默重写基线标签。"
+    }
+  },
+  "q-mfg-oee-window": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Apply the interval-normalization code to a small hand-labeled calendar containing overlapping downtime reasons, planned maintenance, micro-stops, rework, product changes, duplicate events, and clock skew; independently union intervals and calculate availability, performance, quality, and OEE.",
+      "acceptance": "No wall-clock interval is counted twice, the documented reason hierarchy resolves every overlap deterministically, planned time and micro-stop policy are explicit, rework and product change affect the correct factors, durations remain nonnegative after clock normalization, and all three factors and their product match the independent calculation."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "把区间归一化代码应用于一个手工标注的小型日历，其中包含重叠停机原因、计划维护、micro-stop、返工、产品切换、重复事件和时钟偏差；独立求区间并集并计算 availability、performance、quality 与 OEE。",
+      "acceptance": "任何墙钟区间都不能被重复计数；文档化原因层级以确定方式解决所有重叠；计划时间与 micro-stop 策略明确；返工和产品切换影响正确因子；时钟归一化后时长非负；三个因子及其乘积都与独立计算一致。"
+    }
+  },
+  "q-mfg-interlock-review": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Review the decision record against a scenario in which output pressure continues while the interlock intermittently fails; trace stop-work authority, material and energy isolation, evidence preservation, safety and maintenance escalation, repair validation, management-of-change, and signed restart approval.",
+      "acceptance": "The answer refuses an unapproved bypass and places people and equipment in a known safe state, separates safety integrity from production convenience, preserves fault evidence without repeated hazardous exposure, proposes only independently assessed safe temporary alternatives, and requires documented functional proof and authorized restart before production resumes."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "依据一个产出压力持续存在且联锁间歇失效的情景审查决策记录；追踪 stop-work 权限、物料与能源隔离、证据保全、安全与维护升级、修复验证、变更管理和签字复产批准。",
+      "acceptance": "回答必须拒绝未经批准的 bypass，并把人员和设备置于已知安全状态；把安全完整性与生产便利分开；在不重复暴露危险的前提下保留故障证据；只提出经独立评估的安全临时替代方案；复产前必须具有文档化功能证明和授权批准。"
+    }
+  },
+  "q-mfg-factory-timeseries": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Replay a capacity fixture with high-rate telemetry, alarms, recipe and lot changes, metrology, duplicate and late events, edge disconnection, clock offset, schema evolution, and one unauthorized cross-tenant query; measure loss, lag, lineage, query latency, and tiered retention.",
+      "acceptance": "Edge buffering survives the declared outage without silent loss, canonical events preserve source time, ingest time, identity, schema version, quality, recipe and lot context, late corrections remain auditable, access isolation blocks the unauthorized query, retention and lineage survive tier movement, and measured throughput and incident-query latency meet stated SLOs."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "重放一个容量样例，包含高频 telemetry、alarm、recipe 与 lot 变化、metrology、重复和迟到事件、边缘断连、时钟偏差、schema 演进及一次未授权跨租户查询；测量丢失、延迟、血缘、查询时延和分层留存。",
+      "acceptance": "边缘缓冲在声明的断连期间不静默丢失；规范事件保留源时间、摄取时间、身份、schema 版本、质量、recipe 与 lot 上下文；迟到修正可审计；访问隔离阻止未授权查询；分层迁移后留存与血缘仍存在；实测吞吐和事故查询时延满足声明的 SLO。"
+    }
+  },
+  "q-mfg-equipment-integration-boss": {
+    "oracle": {
+      "kind": "observable",
+      "procedure": "Freeze a reconstructed timeline of tool state, host state, recipe digest, material identity, commands, events, acknowledgements, reconnects, and operator actions; replay the wrong-recipe, duplicate-completion, and ambiguous-material failures against the corrected protocol, then run staged shadow and fault-injection release tests.",
+      "acceptance": "Containment prevents further processing while preserving evidence and material identity, the causal timeline explains all three symptoms without unsupported certainty, the redesign makes recipe and material preconditions authoritative and message effects idempotent, reconnect reconciliation reaches a safe known state, and release requires passing fault injection, audit, rollback, and monitored canary gates."
+    },
+    "oracleZh": {
+      "kind": "可观察",
+      "procedure": "冻结一条重建时间线，包含设备状态、主机状态、recipe 摘要、物料身份、命令、事件、acknowledgement、重连和操作员行动；依据修正协议重放错误配方、重复完成和物料歧义故障，再执行分阶段 shadow 与故障注入发布测试。",
+      "acceptance": "止损措施在保留证据和物料身份的同时阻止继续生产；因果时间线能解释全部三个症状且不作无依据确定结论；重构方案使 recipe 与物料前置条件具有权威性并使消息副作用幂等；重连对账进入安全已知状态；发布前必须通过故障注入、审计、回滚和受监控 canary 闸门。"
+    }
+  },
+  "q-mfg-foundation-interlock-state": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the transition function over all eight Boolean combinations of the three permissives.",
+      "acceptance": "Only the all-true row enters RUN; every other row remains IDLE with at least one correct blocking reason. This oracle validates only the exercise model, not real equipment safety certification."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "在三个许可条件的全部 8 种布尔组合上计算状态转换函数。",
+      "acceptance": "只有三个条件全为真的组合进入 RUN；其他组合均保持 IDLE，并给出至少一个正确的阻断原因。该判定仅验证题目中的练习模型，不构成真实设备安全认证。"
+    }
+  },
+  "q-mfg-foundation-spc-limit": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Evaluate the two limits and the predicate measurement > upperLimit.",
+      "acceptance": "Limits are 7.0 and 13.0, 13.5 is flagged, and the answer includes no unsupported physical-cause claim."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "计算两个控制限以及谓词 measurement > upperLimit 的结果。",
+      "acceptance": "两个控制限分别为 7.0 和 13.0；13.5 被标记为超限；答案不包含没有证据支持的物理原因断言。"
+    }
+  },
+  "q-mfg-foundation-oee": {
+    "oracle": {
+      "kind": "executable",
+      "procedure": "Multiply the three decimal factors with a calculator and compare the product against each input factor.",
+      "acceptance": "The result is 68.4%, performance is identified as the lowest factor, and prioritization remains conditional on evidence."
+    },
+    "oracleZh": {
+      "kind": "可执行",
+      "procedure": "使用计算器将三个十进制因子相乘，并将乘积与每个输入因子进行比较。",
+      "acceptance": "结果为 68.4%；性能被识别为最低因子；任何改进优先级都必须以证据为条件。"
+    }
+  }
+}

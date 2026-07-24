@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-23",
+  "questions": {
+    "q-beh-failure-ownership": {
+      "appendPrompt": "Protect confidential information; do not fabricate experience, metrics, or another person's behavior.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-technical-conflict": {
+      "appendPrompt": "The example must be truthful and protect confidential information; do not misrepresent the other person as irrational.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-ambiguous-task": {
+      "appendPrompt": "Do not pretend the uncertainty disappeared completely, fabricate the outcome, or disclose confidential detail.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-priority-tradeoff": {
+      "appendPrompt": "Name who bore the cost of delay or reduced scope; do not hide the trade-off behind invented overtime or metrics.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-influence-no-authority": {
+      "appendPrompt": "Do not present a manager's directive as evidence of your personal influence.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-quality-schedule": {
+      "appendPrompt": "Do not fabricate or disclose confidential information.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-negative-feedback": {
+      "appendPrompt": "The story must be truthful; do not pretend you accepted the feedback perfectly and immediately, or fabricate the later result.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-cross-functional": {
+      "appendPrompt": "Avoid a scapegoat narrative; protect confidential information and state your own responsibility truthfully.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-ethical-data": {
+      "appendPrompt": "Do not expand the confidential disclosure to prove integrity, and do not infer another person's motive without evidence.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-lead-small-team": {
+      "appendPrompt": "Emphasize how you created leverage through other people rather than packaging the team's outcome as a personal hero story.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-beh-behavioral-loop-boss": {
+      "appendPrompt": "Do not fabricate metrics or experience, and do not disclose confidential detail.",
+      "appendPromptZh": "说明所有对回答真实性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-project-one-liner": {
+      "appendPrompt": "Protect confidential information and distinguish your personal contribution from the team's result.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-architecture-whiteboard": {
+      "appendPrompt": "Explicitly label anything that cannot be disclosed or supported by evidence.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-metric-defense": {
+      "appendPrompt": "Use only supportable data; explicitly label every evidence gap or confidentiality limit.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-decision-replay": {
+      "appendPrompt": "Do not project the eventual outcome backward as if it had been known when the decision was made.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-root-cause-replay": {
+      "appendPrompt": "Protect confidential information; do not present the root cause learned later as if it had been certain at the start of the investigation.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-scale-counterfactual": {
+      "appendPrompt": "Do not substitute an evidence-free call to distribute the system for a load model.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-testing-strategy": {
+      "appendPrompt": "State only project facts supported by evidence and protect internal implementation details.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-ownership-boundary": {
+      "appendPrompt": "Give collaborators full credit without erasing your own independent judgment and execution.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-failed-project": {
+      "appendPrompt": "Do not relabel a merely difficult but successful project as a failure, and do not place all responsibility on the market or management.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-five-minute-defense": {
+      "appendPrompt": "Explicitly label every uncertain or confidential point; do not use a memorized script to evade follow-up.",
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-proj-project-loop-boss": {
+      "appendPromptZh": "说明所有对技术正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    },
+    "q-eng-misunderstanding-repair": {
+      "appendPrompt": "Respond in English."
+    },
+    "q-eng-concise-debug-summary": {
+      "appendPrompt": "Respond in English."
+    },
+    "q-eng-pushback": {
+      "appendPrompt": "Respond in English."
+    },
+    "q-eng-unknown-answer": {
+      "appendPrompt": "Respond in English."
+    },
+    "q-eng-questions-for-interviewer": {
+      "appendPrompt": "Respond in English."
+    },
+    "q-dft-tap-trace": {
+      "prompt": "Starting in an unknown TAP state, trace this exact fixture on successive TCK rising edges. TMS is `1,1,1,1,1, 0,1,1,0,0, 0,0,0,1, 1,0, 1,0,0, 0,0,1, 1,0`. During the four Shift-IR sampling edges, TDI is `1,0,1,0` LSB-first; during the three Shift-DR sampling edges, TDI is `1,1,0` LSB-first. Determine when the controller reaches Test-Logic-Reset, captures, shifts, and updates the instruction and data registers. Trace the state entered on every TCK rising edge, and declare the convention used for TDI sampling and TDO change timing. State all assumptions that materially affect correctness; do not rely on undisclosed vendor behavior or confidential interview knowledge.",
+      "promptZh": "从未知 TAP 状态开始，在连续的 TCK 上升沿逐拍追踪以下精确样例。TMS 为 `1,1,1,1,1, 0,1,1,0,0, 0,0,0,1, 1,0, 1,0,0, 0,0,1, 1,0`。四个 Shift-IR 采样边沿上的 TDI 按最低有效位优先为 `1,0,1,0`；三个 Shift-DR 采样边沿上的 TDI 按最低有效位优先为 `1,1,0`。判断控制器何时进入 Test-Logic-Reset，以及何时捕获、移位和更新指令寄存器与数据寄存器。列出每个 TCK 上升沿进入的状态，并声明所采用的 TDI 采样与 TDO 变化时序约定。说明所有对正确性有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。"
+    }
+  }
+}
