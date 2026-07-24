@@ -1,0 +1,446 @@
+{
+  "AI-acceleration": {
+    "zh": "AI 加速",
+    "en": "AI Acceleration"
+  },
+  "AI-engineering": {
+    "zh": "AI 工程",
+    "en": "AI Engineering"
+  },
+  "MEMS-foundry": {
+    "zh": "MEMS 代工",
+    "en": "MEMS Foundry"
+  },
+  "MRAM": {
+    "zh": "磁阻式随机存储器",
+    "en": "MRAM"
+  },
+  "accelerator-science": {
+    "zh": "加速器科学",
+    "en": "Accelerator Science"
+  },
+  "advanced-instrumentation": {
+    "zh": "先进仪器",
+    "en": "Advanced Instrumentation"
+  },
+  "advanced-materials": {
+    "zh": "先进材料",
+    "en": "Advanced Materials"
+  },
+  "applications": {
+    "zh": "应用工程",
+    "en": "Applications Engineering"
+  },
+  "applied-research": {
+    "zh": "应用研究",
+    "en": "Applied Research"
+  },
+  "associative-computing": {
+    "zh": "关联计算",
+    "en": "Associative Computing"
+  },
+  "astronomy": {
+    "zh": "天文学",
+    "en": "Astronomy"
+  },
+  "autonomous-vehicles": {
+    "zh": "自动驾驶车辆",
+    "en": "Autonomous Vehicles"
+  },
+  "avionics": {
+    "zh": "航空电子",
+    "en": "Avionics"
+  },
+  "biomedical": {
+    "zh": "生物医学",
+    "en": "Biomedical Technology"
+  },
+  "chip-monitoring": {
+    "zh": "芯片监测",
+    "en": "Chip Monitoring"
+  },
+  "cloud-platform": {
+    "zh": "云平台",
+    "en": "Cloud Platforms"
+  },
+  "compound-semiconductors": {
+    "zh": "化合物半导体",
+    "en": "Compound Semiconductors"
+  },
+  "control-systems": {
+    "zh": "控制系统",
+    "en": "Control Systems"
+  },
+  "controls": {
+    "zh": "控制工程",
+    "en": "Controls Engineering"
+  },
+  "critical-infrastructure": {
+    "zh": "关键基础设施",
+    "en": "Critical Infrastructure"
+  },
+  "critical-materials": {
+    "zh": "关键材料",
+    "en": "Critical Materials"
+  },
+  "cryogenics": {
+    "zh": "低温工程",
+    "en": "Cryogenics"
+  },
+  "cryptography": {
+    "zh": "密码学",
+    "en": "Cryptography"
+  },
+  "cyber-physical-systems": {
+    "zh": "信息物理系统",
+    "en": "Cyber-Physical Systems"
+  },
+  "cybersecurity": {
+    "zh": "网络安全",
+    "en": "Cybersecurity"
+  },
+  "data-analytics": {
+    "zh": "数据分析",
+    "en": "Data Analytics"
+  },
+  "data-platform": {
+    "zh": "数据平台",
+    "en": "Data Platforms"
+  },
+  "data-systems": {
+    "zh": "数据系统",
+    "en": "Data Systems"
+  },
+  "detector-electronics": {
+    "zh": "探测器电子",
+    "en": "Detector Electronics"
+  },
+  "device-engineering": {
+    "zh": "器件工程",
+    "en": "Device Engineering"
+  },
+  "device-fabrication": {
+    "zh": "器件制造",
+    "en": "Device Fabrication"
+  },
+  "diamond-materials": {
+    "zh": "金刚石材料",
+    "en": "Diamond Materials"
+  },
+  "digital-control": {
+    "zh": "数字控制",
+    "en": "Digital Control"
+  },
+  "digital-engineering": {
+    "zh": "数字工程",
+    "en": "Digital Engineering"
+  },
+  "earth-science": {
+    "zh": "地球科学",
+    "en": "Earth Science"
+  },
+  "electron-spin": {
+    "zh": "电子自旋",
+    "en": "Electron Spin"
+  },
+  "electronic-warfare": {
+    "zh": "电子战",
+    "en": "Electronic Warfare"
+  },
+  "embedded-systems": {
+    "zh": "嵌入式系统",
+    "en": "Embedded Systems"
+  },
+  "embodied-intelligence": {
+    "zh": "具身智能",
+    "en": "Embodied Intelligence"
+  },
+  "energy-research": {
+    "zh": "能源研究",
+    "en": "Energy Research"
+  },
+  "environmental-management": {
+    "zh": "环境治理",
+    "en": "Environmental Management"
+  },
+  "federal-employment": {
+    "zh": "联邦就业",
+    "en": "Federal Employment"
+  },
+  "federal-research": {
+    "zh": "联邦研究",
+    "en": "Federal Research"
+  },
+  "fleet-systems": {
+    "zh": "车队系统",
+    "en": "Fleet Systems"
+  },
+  "foundation-models": {
+    "zh": "基础模型",
+    "en": "Foundation Models"
+  },
+  "fusion-energy": {
+    "zh": "聚变能源",
+    "en": "Fusion Energy"
+  },
+  "gallium-nitride": {
+    "zh": "氮化镓",
+    "en": "Gallium Nitride"
+  },
+  "government-services": {
+    "zh": "政府技术服务",
+    "en": "Government Technology Services"
+  },
+  "guidance-systems": {
+    "zh": "制导系统",
+    "en": "Guidance Systems"
+  },
+  "habitats": {
+    "zh": "空间栖息系统",
+    "en": "Space Habitats"
+  },
+  "high-reliability-electronics": {
+    "zh": "高可靠电子",
+    "en": "High-Reliability Electronics"
+  },
+  "human-robot-interaction": {
+    "zh": "人机交互",
+    "en": "Human-Robot Interaction"
+  },
+  "human-spaceflight": {
+    "zh": "载人航天",
+    "en": "Human Spaceflight"
+  },
+  "industrial-inspection": {
+    "zh": "工业检测",
+    "en": "Industrial Inspection"
+  },
+  "industrial-systems": {
+    "zh": "工业系统",
+    "en": "Industrial Systems"
+  },
+  "instrumentation": {
+    "zh": "仪器工程",
+    "en": "Instrumentation"
+  },
+  "last-mile-delivery": {
+    "zh": "末端配送",
+    "en": "Last-Mile Delivery"
+  },
+  "logistics": {
+    "zh": "物流",
+    "en": "Logistics"
+  },
+  "lunar-systems": {
+    "zh": "月球系统",
+    "en": "Lunar Systems"
+  },
+  "manufacturing-automation": {
+    "zh": "制造自动化",
+    "en": "Manufacturing Automation"
+  },
+  "materials-characterization": {
+    "zh": "材料表征",
+    "en": "Materials Characterization"
+  },
+  "materials-research": {
+    "zh": "材料研究",
+    "en": "Materials Research"
+  },
+  "microcontrollers": {
+    "zh": "微控制器",
+    "en": "Microcontrollers"
+  },
+  "microwave-electronics": {
+    "zh": "微波电子",
+    "en": "Microwave Electronics"
+  },
+  "mobility": {
+    "zh": "智能出行",
+    "en": "Mobility"
+  },
+  "nanoelectronics": {
+    "zh": "纳米电子",
+    "en": "Nanoelectronics"
+  },
+  "national-laboratory-management": {
+    "zh": "国家实验室运营",
+    "en": "National Laboratory Operations"
+  },
+  "national-security": {
+    "zh": "国家安全",
+    "en": "National Security"
+  },
+  "neutral-atoms": {
+    "zh": "中性原子",
+    "en": "Neutral Atoms"
+  },
+  "nuclear-energy": {
+    "zh": "核能",
+    "en": "Nuclear Energy"
+  },
+  "optimization": {
+    "zh": "优化算法",
+    "en": "Optimization"
+  },
+  "power-semiconductors": {
+    "zh": "功率半导体",
+    "en": "Power Semiconductors"
+  },
+  "process-engineering": {
+    "zh": "工艺工程",
+    "en": "Process Engineering"
+  },
+  "process-technology": {
+    "zh": "工艺技术",
+    "en": "Process Technology"
+  },
+  "propulsion": {
+    "zh": "推进系统",
+    "en": "Propulsion"
+  },
+  "quantum-computing": {
+    "zh": "量子计算",
+    "en": "Quantum Computing"
+  },
+  "quantum-control": {
+    "zh": "量子控制",
+    "en": "Quantum Control"
+  },
+  "quantum-devices": {
+    "zh": "量子器件",
+    "en": "Quantum Devices"
+  },
+  "quantum-enabling-hardware": {
+    "zh": "量子使能硬件",
+    "en": "Quantum-Enabling Hardware"
+  },
+  "quantum-information": {
+    "zh": "量子信息",
+    "en": "Quantum Information"
+  },
+  "quantum-networking": {
+    "zh": "量子网络",
+    "en": "Quantum Networking"
+  },
+  "quantum-sensing": {
+    "zh": "量子传感",
+    "en": "Quantum Sensing"
+  },
+  "quantum-software": {
+    "zh": "量子软件",
+    "en": "Quantum Software"
+  },
+  "radio-astronomy": {
+    "zh": "射电天文学",
+    "en": "Radio Astronomy"
+  },
+  "real-time-systems": {
+    "zh": "实时系统",
+    "en": "Real-Time Systems"
+  },
+  "reentry-systems": {
+    "zh": "再入系统",
+    "en": "Reentry Systems"
+  },
+  "research-consortium": {
+    "zh": "科研联盟",
+    "en": "Research Consortium"
+  },
+  "satellite-communications": {
+    "zh": "卫星通信",
+    "en": "Satellite Communications"
+  },
+  "satellites": {
+    "zh": "卫星",
+    "en": "Satellites"
+  },
+  "scientific-computing": {
+    "zh": "科学计算",
+    "en": "Scientific Computing"
+  },
+  "scientific-instrumentation": {
+    "zh": "科学仪器",
+    "en": "Scientific Instrumentation"
+  },
+  "scientific-software": {
+    "zh": "科学软件",
+    "en": "Scientific Software"
+  },
+  "semiconductor-design": {
+    "zh": "半导体设计",
+    "en": "Semiconductor Design"
+  },
+  "semiconductor-fabrication": {
+    "zh": "半导体制造",
+    "en": "Semiconductor Fabrication"
+  },
+  "semiconductor-manufacturing": {
+    "zh": "半导体量产",
+    "en": "Semiconductor Manufacturing"
+  },
+  "semiconductor-services": {
+    "zh": "半导体服务",
+    "en": "Semiconductor Services"
+  },
+  "sensing": {
+    "zh": "传感",
+    "en": "Sensing"
+  },
+  "shared-research-facility": {
+    "zh": "共享科研设施",
+    "en": "Shared Research Facilities"
+  },
+  "signal-processing": {
+    "zh": "信号处理",
+    "en": "Signal Processing"
+  },
+  "silicon-carbide": {
+    "zh": "碳化硅",
+    "en": "Silicon Carbide"
+  },
+  "silicon-lifecycle-management": {
+    "zh": "芯片全生命周期管理",
+    "en": "Silicon Lifecycle Management"
+  },
+  "silicon-spin": {
+    "zh": "硅自旋",
+    "en": "Silicon Spin"
+  },
+  "software-engineering": {
+    "zh": "软件工程",
+    "en": "Software Engineering"
+  },
+  "space-systems": {
+    "zh": "空间系统",
+    "en": "Space Systems"
+  },
+  "superconducting-electronics": {
+    "zh": "超导电子",
+    "en": "Superconducting Electronics"
+  },
+  "systems-analysis": {
+    "zh": "系统分析",
+    "en": "Systems Analysis"
+  },
+  "systems-engineering": {
+    "zh": "系统工程",
+    "en": "Systems Engineering"
+  },
+  "systems-integration": {
+    "zh": "系统集成",
+    "en": "Systems Integration"
+  },
+  "telecommunications": {
+    "zh": "电信技术",
+    "en": "Telecommunications"
+  },
+  "test": {
+    "zh": "测试工程",
+    "en": "Test Engineering"
+  },
+  "trucking": {
+    "zh": "公路货运",
+    "en": "Trucking"
+  }
+}

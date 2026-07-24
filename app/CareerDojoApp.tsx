@@ -3,12 +3,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import categoryLabelsEnRaw from "../data/organization-category-labels.en.json";
 import categoryLabelsZhRaw from "../data/organization-category-labels.zh.json";
+import expansionCnCategoryLabelsRaw from "../data/expansion-cn-category-labels.json";
+import expansionCnCompanyTypeLabelsRaw from "../data/expansion-cn-company-type-labels.json";
+import expansionUsCategoryLabelsRaw from "../data/expansion-us-category-labels.json";
 import organizationLabelsRaw from "../data/organization-labels.json";
+import organizationIntelligenceRaw from "../data/organization-intelligence.json";
+import rolePresentationRaw from "../data/role-presentation.json";
+import skillPresentationRaw from "../data/skill-presentation.json";
+import { evidenceTypeLabel } from "./organization-intelligence";
 import type {
   ApplicationRecord,
+  BilingualTerm,
   Company,
   InterviewQuestion,
   InterviewQuestionSummary,
+  OrganizationBankBootstrap,
+  OrganizationRelation,
+  OrganizationUniverseAsset,
   PersistedState,
   Profile,
   QuestionBankBootstrap,
@@ -20,20 +31,18 @@ import type {
 } from "./types";
 
 type ViewId =
-  | "mission"
-  | "atlas"
-  | "roles"
-  | "dojo"
-  | "applications"
-  | "evidence";
+  "mission" | "atlas" | "roles" | "dojo" | "applications" | "evidence";
 
 type AtlasLayout = "tree" | "cards";
 type QuestionLanguageMode = "bilingual" | "zh-first" | "en-first";
 type QuestionIndexState = "loading" | "ready" | "error";
 type QuestionDetailState = "idle" | "loading" | "ready" | "error";
+type OrganizationIndexState = "loading" | "ready" | "error";
 
 type AppProps = {
-  companies: Company[];
+  initialCompanies: Company[];
+  organizationBank: OrganizationBankBootstrap;
+  organizationRelations: OrganizationRelation[];
   roles: RoleFamily[];
   skills: SkillNode[];
   questionBank: QuestionBankBootstrap;
@@ -83,9 +92,7 @@ function normalizePersistedState(
   value: Partial<PersistedState> | null | undefined,
 ): PersistedState {
   return {
-    applications: Array.isArray(value?.applications)
-      ? value.applications
-      : [],
+    applications: Array.isArray(value?.applications) ? value.applications : [],
     bookmarks: Array.isArray(value?.bookmarks) ? value.bookmarks : [],
     skillProgress: Array.isArray(value?.skillProgress)
       ? value.skillProgress
@@ -106,53 +113,287 @@ function normalizePersistedState(
 }
 
 const views: Array<{ id: ViewId; label: string; short: string }> = [
-  { id: "mission", label: "任务总览", short: "总览" },
-  { id: "atlas", label: "公司宇宙", short: "公司" },
-  { id: "roles", label: "岗位与能力", short: "岗位" },
-  { id: "dojo", label: "Interview Dojo", short: "训练" },
-  { id: "applications", label: "投递作战室", short: "投递" },
-  { id: "evidence", label: "证据与覆盖", short: "证据" },
+  { id: "mission", label: "任务总览 / Mission", short: "总览 / Home" },
+  {
+    id: "atlas",
+    label: "组织宇宙 / Organization Atlas",
+    short: "组织 / Atlas",
+  },
+  {
+    id: "roles",
+    label: "岗位能力图 / Role Capability Map",
+    short: "岗位 / Roles",
+  },
+  { id: "dojo", label: "面试道场 / Interview Dojo", short: "训练 / Dojo" },
+  {
+    id: "applications",
+    label: "投递作战室 / Application War Room",
+    short: "投递 / Apply",
+  },
+  {
+    id: "evidence",
+    label: "研究证据 / Research Evidence",
+    short: "证据 / Evidence",
+  },
 ];
 
 const applicationStages = [
-  ["researching", "调研中"],
-  ["ready", "准备投递"],
-  ["applied", "已投递"],
-  ["oa", "OA"],
-  ["interview", "面试"],
-  ["offer", "Offer"],
-  ["closed", "关闭"],
+  ["researching", "调研中 / Researching"],
+  ["ready", "准备投递 / Ready"],
+  ["applied", "已投递 / Applied"],
+  ["oa", "在线测评 / OA"],
+  ["interview", "面试 / Interview"],
+  ["offer", "录用 / Offer"],
+  ["closed", "关闭 / Closed"],
+] as const;
+
+const employmentTypeOptions = [
+  ["internship", "实习 / Internship"],
+  ["co-op", "合作教育 / Co-op"],
+  ["research", "科研 / Research"],
+  ["part-time", "兼职 / Part-time"],
+  ["new-grad", "应届岗位 / New graduate"],
+  ["unpaid", "无薪机会 / Unpaid opportunity"],
+  ["open-source", "开源贡献 / Open-source contribution"],
+] as const;
+
+const screeningSignalOptions = [
+  ["green", "可投初筛 / Initial fit"],
+  ["yellow", "赞助待核 / Sponsorship check"],
+  ["orange", "出口复核 / Export review"],
+  ["red", "硬门槛 / Restricted"],
+  ["unknown", "待核验 / Unverified"],
 ] as const;
 
 const regionLabels = organizationLabelsRaw.regionGroups;
-const companyTypeLabels = organizationLabelsRaw.companyTypes as Record<
-  string,
-  { zh: string; en: string }
->;
+const companyTypeLabels = {
+  ...organizationLabelsRaw.companyTypes,
+  ...expansionCnCompanyTypeLabelsRaw,
+} as Record<string, { zh: string; en: string }>;
+const chinaOwnershipLabels: Record<string, { zh: string; en: string }> = {
+  "central-state-owned": {
+    zh: "中央国有独资或中央企业集团",
+    en: "Central State-Owned Enterprise or Group",
+  },
+  "central-state-controlled": {
+    zh: "中央国有控股",
+    en: "Central State-Controlled",
+  },
+  "central-state-subsidiary": {
+    zh: "中央企业子公司",
+    en: "Central State-Owned Subsidiary",
+  },
+  "local-state-owned": {
+    zh: "地方国有企业",
+    en: "Local State-Owned Enterprise",
+  },
+  "state-controlled": {
+    zh: "国有控股",
+    en: "State-Controlled",
+  },
+  "state-invested": {
+    zh: "国有参股",
+    en: "State-Invested",
+  },
+  "state-joint-venture": {
+    zh: "国有合资",
+    en: "State Joint Venture",
+  },
+  private: {
+    zh: "民营控制",
+    en: "Privately Controlled",
+  },
+  "foreign-controlled": {
+    zh: "外资控制",
+    en: "Foreign-Controlled",
+  },
+  "mixed-or-unknown": {
+    zh: "混合或未知",
+    en: "Mixed or Unknown",
+  },
+};
+Object.assign(companyTypeLabels, chinaOwnershipLabels);
+const chinaOwnershipOrder = Object.keys(chinaOwnershipLabels);
 const categoryLabels = {
   ...categoryLabelsEnRaw.labels,
   ...categoryLabelsZhRaw.labels,
+  ...expansionUsCategoryLabelsRaw,
+  ...expansionCnCategoryLabelsRaw,
 } as Record<string, { zh: string; en: string }>;
+const categoryAtomOverrides =
+  organizationIntelligenceRaw.categoryAtomOverrides as Record<
+    string,
+    BilingualTerm[]
+  >;
+const rolePresentation = rolePresentationRaw.roles as Record<
+  string,
+  {
+    descriptionZh: string;
+    descriptionEn: string;
+    typicalTitleAtoms: BilingualTerm[];
+    interviewStageAtoms: BilingualTerm[];
+  }
+>;
+const skillPresentation = skillPresentationRaw.skills as Record<
+  string,
+  { displayTerms: BilingualTerm[] }
+>;
+
+function rolePresentationFor(role: RoleFamily) {
+  return (
+    rolePresentation[role.id] || {
+      descriptionZh: role.nameZh,
+      descriptionEn: role.description,
+      typicalTitleAtoms: [
+        { id: `${role.id}:primary`, zh: role.nameZh, en: role.name },
+      ],
+      interviewStageAtoms: role.interviewStages.map((stage, index) => ({
+        id: `${role.id}:stage:${index + 1}`,
+        zh: stage,
+        en: stage,
+      })),
+    }
+  );
+}
+
+const skillDomainLabels: Record<string, { zh: string; en: string }> = {
+  "shared-foundations": { zh: "通用基础", en: "Shared Foundations" },
+  "shared-communication": { zh: "通用沟通", en: "Shared Communication" },
+  "eda-rd": { zh: "EDA 研发", en: "EDA Research" },
+  "ai-for-eda": { zh: "EDA 智能", en: "AI for EDA" },
+  "cad-flow": { zh: "CAD 流程", en: "CAD Flow" },
+  rtl: { zh: "RTL 设计", en: "RTL Design" },
+  verification: { zh: "设计验证", en: "Design Verification" },
+  fpga: { zh: "FPGA 工程", en: "FPGA Engineering" },
+  architecture: { zh: "计算机体系结构", en: "Computer Architecture" },
+  "physical-design": { zh: "物理实现", en: "Physical Implementation" },
+  dft: { zh: "可测试性设计", en: "Design for Test" },
+  "analog-custom": { zh: "模拟电路设计", en: "Analog Circuit Design" },
+  embedded: { zh: "嵌入式系统", en: "Embedded Systems" },
+  "manufacturing-automation": {
+    zh: "制造自动化",
+    en: "Manufacturing Automation",
+  },
+  behavioral: { zh: "行为面试", en: "Behavioral Interview" },
+  "project-deep-dive": { zh: "项目深挖", en: "Project Deep Dive" },
+  "technical-english": { zh: "技术英语", en: "Technical English" },
+};
+
+const questionTypeLabels: Record<string, { zh: string; en: string }> = {
+  conceptual: { zh: "概念推理", en: "Conceptual Reasoning" },
+  coding: { zh: "编程任务", en: "Coding Task" },
+  debugging: { zh: "调试任务", en: "Debugging Task" },
+  design: { zh: "设计任务", en: "Design Task" },
+  "log-analysis": { zh: "日志分析", en: "Log Analysis" },
+  "waveform-analysis": { zh: "波形分析", en: "Waveform Analysis" },
+  "system-task": { zh: "系统任务", en: "System Task" },
+  "boss-fight": { zh: "综合挑战", en: "Boss Challenge" },
+  behavioral: { zh: "行为面试", en: "Behavioral Interview" },
+  "project-deep-dive": { zh: "项目深挖", en: "Project Deep Dive" },
+  "english-communication": {
+    zh: "英文表达",
+    en: "English Communication",
+  },
+};
+
+const learningLevelLabels: Record<string, { zh: string; en: string }> = {
+  entry: { zh: "入门", en: "Entry" },
+  foundation: { zh: "基础", en: "Foundation" },
+  intermediate: { zh: "进阶", en: "Intermediate" },
+  advanced: { zh: "高级", en: "Advanced" },
+};
+
+const difficultyLabels: Record<string, { zh: string; en: string }> = {
+  entry: { zh: "入门", en: "Entry" },
+  easy: { zh: "容易", en: "Easy" },
+  medium: { zh: "中等", en: "Medium" },
+  hard: { zh: "困难", en: "Hard" },
+};
+
+const questionStatusLabels: Record<string, { zh: string; en: string }> = {
+  active: { zh: "已发布", en: "Active" },
+  "review-ready": { zh: "可供审阅", en: "Review Ready" },
+};
+
+const relationTypeLabels: Record<string, { zh: string; en: string }> = {
+  "corporate-family": { zh: "企业家族", en: "Corporate Family" },
+  acquisition: { zh: "收购", en: "Acquisition" },
+  combination: { zh: "合并", en: "Combination" },
+  "technology-license": { zh: "技术许可", en: "Technology License" },
+};
+
+const relationStatusLabels: Record<string, { zh: string; en: string }> = {
+  active: { zh: "有效", en: "Active" },
+  pending: { zh: "待完成", en: "Pending" },
+  completed: { zh: "已完成", en: "Completed" },
+  terminated: { zh: "已终止", en: "Terminated" },
+};
+
+function bilingualLabel(
+  value: string,
+  catalog: Record<string, { zh: string; en: string }>,
+) {
+  const label = catalog[value];
+  return label ? `${label.zh} / ${label.en}` : value;
+}
 
 function regionOf(company: Company): "US" | "CN" | "Global" {
   return company.opportunityMarket;
 }
 
-function regionLabel(region: "US" | "CN" | "Global") {
-  const label = regionLabels[region];
+function regionLabel(region: string) {
+  const label =
+    regionLabels[region as keyof typeof organizationLabelsRaw.regionGroups];
+  return label ? `${label.zh} / ${label.en}` : "地区待核验 / Region unverified";
+}
+
+function organizationClassKey(company: Company) {
+  if (regionOf(company) !== "CN" || company.companyType !== "company") {
+    return company.companyType;
+  }
+  if (company.ownership) return company.ownership.ownershipClass;
+
+  const categories = new Set(company.categories);
+  if (categories.has("央企子公司")) return "central-state-subsidiary";
+  if (categories.has("央企控股")) return "central-state-controlled";
+  if (categories.has("央企")) return "central-state-owned";
+  if (categories.has("地方国企")) return "local-state-owned";
+  if (categories.has("国企控股")) return "state-controlled";
+  if (categories.has("国企参股")) return "state-invested";
+  if (categories.has("国企合资")) return "state-joint-venture";
+  if (categories.has("民营") || categories.has("民营上市")) {
+    return "private";
+  }
+  return "mixed-or-unknown";
+}
+
+function organizationClassLabel(company: Company) {
+  const label = organizationClassTerm(company);
   return `${label.zh} / ${label.en}`;
 }
 
-function companyTypeLabel(companyType: string) {
-  const label = companyTypeLabels[companyType];
-  if (!label) return "未分类 / Unclassified";
-  return `${label.zh} / ${label.en}`;
+function organizationClassTerm(company: Company) {
+  return company.ownership
+    ? { zh: company.ownership.labelZh, en: company.ownership.labelEn }
+    : companyTypeLabels[organizationClassKey(company)] || {
+        zh: "未分类",
+        en: "Unclassified",
+      };
 }
 
 function categoryLabel(category: string) {
   const label = categoryLabels[category];
   if (!label) return "未分类 / Unclassified";
   return `${label.zh} / ${label.en}`;
+}
+
+function categoryAtoms(category: string): BilingualTerm[] {
+  const override = categoryAtomOverrides[category];
+  if (override) return override;
+  const label = categoryLabels[category];
+  return label
+    ? [{ id: `category:${canonicalCategoryId(category)}`, ...label }]
+    : [];
 }
 
 function canonicalCategoryId(category: string) {
@@ -163,15 +404,52 @@ function canonicalCategoryId(category: string) {
     .replace(/[\s\-–—_/（）()，,：:·.]/g, "");
 }
 
-function BilingualNodeLabel({
-  label,
-}: {
-  label: { zh: string; en: string };
-}) {
+function BilingualNodeLabel({ label }: { label: { zh: string; en: string } }) {
   return (
     <span className="bilingual-node-label">
       <span lang="zh-CN">{label.zh}</span>
       <span lang="en">{label.en}</span>
+    </span>
+  );
+}
+
+function BilingualTermLabel({
+  term,
+  className = "",
+}: {
+  term: Pick<BilingualTerm, "zh" | "en">;
+  className?: string;
+}) {
+  return (
+    <span className={`bilingual-term ${className}`.trim()}>
+      <span lang="zh-CN">{term.zh}</span>
+      <span lang="en">{term.en}</span>
+    </span>
+  );
+}
+
+function BilingualHeading({ zh, en }: { zh: string; en: string }) {
+  return (
+    <span className="bilingual-heading">
+      <span lang="zh-CN">{zh}</span>
+      <span lang="en">{en}</span>
+    </span>
+  );
+}
+
+function BilingualParagraph({
+  zh,
+  en,
+  className = "",
+}: {
+  zh: string;
+  en: string;
+  className?: string;
+}) {
+  return (
+    <span className={`bilingual-paragraph ${className}`.trim()}>
+      <span lang="zh-CN">{zh}</span>
+      <span lang="en">{en}</span>
     </span>
   );
 }
@@ -185,7 +463,10 @@ function companyName(company: Company) {
 function CompanyName({ company }: { company: Company }) {
   return (
     <span className="bilingual-organization-name">
-      <span lang={company.nameZh ? "zh-CN" : "en"} className="organization-name-primary">
+      <span
+        lang={company.nameZh ? "zh-CN" : "en"}
+        className="organization-name-primary"
+      >
         {company.nameZh || company.nameEn}
       </span>
       {company.nameZh ? (
@@ -197,7 +478,9 @@ function CompanyName({ company }: { company: Company }) {
   );
 }
 
-function signalKey(signal: string): "green" | "yellow" | "orange" | "red" | "unknown" {
+function signalKey(
+  signal: string,
+): "green" | "yellow" | "orange" | "red" | "unknown" {
   const value = signal.toLowerCase();
   if (value.includes("green") || value.includes("friendly")) return "green";
   if (value.includes("yellow") || value.includes("mixed")) return "yellow";
@@ -208,10 +491,54 @@ function signalKey(signal: string): "green" | "yellow" | "orange" | "red" | "unk
 
 function confidenceLabel(value: string) {
   const normalized = String(value).toLowerCase();
-  if (normalized.includes("high") || normalized.includes("高")) return "高置信";
-  if (normalized.includes("medium") || normalized.includes("中")) return "中置信";
-  if (normalized.includes("low") || normalized.includes("低")) return "待核验";
-  return value || "待核验";
+  if (normalized.includes("high") || normalized.includes("高")) {
+    return "高置信 / High confidence";
+  }
+  if (normalized.includes("medium") || normalized.includes("中")) {
+    return "中置信 / Medium confidence";
+  }
+  if (normalized.includes("low") || normalized.includes("低")) {
+    return "待核验 / Needs verification";
+  }
+  return value || "待核验 / Needs verification";
+}
+
+function ownershipReviewStatusLabel(value: string) {
+  return value === "provisionally-audited"
+    ? "暂定审计完成 / Provisionally audited"
+    : "待补直接控制权来源 / Direct control source needed";
+}
+
+function ownershipClassificationBasisLabel(value: string) {
+  return value === "existing-explicit-ownership-category"
+    ? "已有明确源类别 / Existing explicit source tag"
+    : "直接控制权证据不足 / Insufficient direct control evidence";
+}
+
+function ownershipEvidenceScopeLabel(value: string) {
+  return value === "direct-ownership-registry"
+    ? "直接所有制名录 / Direct ownership registry"
+    : "组织资料复核入口 / Organization-context review source";
+}
+
+function fitTierLabel(value: string) {
+  const normalized = String(value || "TBD").toUpperCase();
+  if (normalized === "P0") return "P0 · 核心 / Core";
+  if (normalized === "P1") return "P1 · 优先 / Priority";
+  if (normalized === "P2") return "P2 · 扩展 / Expansion";
+  if (normalized === "P3") return "P3 · 观察 / Watch";
+  return "待评估 / To assess";
+}
+
+function organizationDifficultyLabel(value: string) {
+  const normalized = String(value).toLowerCase();
+  if (normalized === "s") return "极高竞争 / Extremely competitive";
+  if (normalized === "a") return "高竞争 / Highly competitive";
+  if (normalized === "b") return "选择性竞争 / Selective";
+  if (normalized === "role-specific") {
+    return "按具体岗位核验 / Verify per requisition";
+  }
+  return "待核验 / Unverified";
 }
 
 function signalLabel(signal: string) {
@@ -225,6 +552,23 @@ function signalLabel(signal: string) {
         : key === "red"
           ? "硬门槛 / Restricted"
           : "待核验 / Unverified";
+}
+
+function employmentTypeLabel(value: string) {
+  return (
+    employmentTypeOptions.find(([id]) => id === value)?.[1] ||
+    `${value} / Posting-specific type`
+  );
+}
+
+function priorityLabel(value: string) {
+  return value === "high"
+    ? "高 / High"
+    : value === "medium"
+      ? "中 / Medium"
+      : value === "low"
+        ? "低 / Low"
+        : `${value} / Unclassified`;
 }
 
 function fitRank(value: string) {
@@ -241,8 +585,32 @@ function fitRank(value: string) {
   return 3;
 }
 
-function skillName(skill: SkillNode) {
-  return skill.titleZh || skill.nameZh || skill.title || skill.name || skill.id;
+function skillTerms(skill: SkillNode): BilingualTerm[] {
+  return (
+    skillPresentation[skill.id]?.displayTerms || [
+      {
+        id: skill.id,
+        zh:
+          skill.titleZh ||
+          skill.nameZh ||
+          skill.title ||
+          skill.name ||
+          skill.id,
+        en:
+          skill.title ||
+          skill.name ||
+          skill.titleZh ||
+          skill.nameZh ||
+          skill.id,
+      },
+    ]
+  );
+}
+
+function skillLabel(skill: SkillNode) {
+  return skillTerms(skill)
+    .map((term) => `${term.zh} / ${term.en}`)
+    .join(" · ");
 }
 
 function sourceUrl(source: string | { url?: string }) {
@@ -259,7 +627,9 @@ function sourceTitle(
   const url = sourceUrl(source);
   try {
     const hostname = new URL(url).hostname.replace(/^www\./, "");
-    return `公开依据 ${String(index + 1).padStart(2, "0")} · ${hostname}`;
+    return `公开依据 ${String(index + 1).padStart(2, "0")} / Public source ${String(
+      index + 1,
+    ).padStart(2, "0")} · ${hostname}`;
   } catch {
     return `公开依据 ${String(index + 1).padStart(2, "0")} / Source ${index + 1}`;
   }
@@ -272,18 +642,18 @@ const languageModeOptions: Array<{
 }> = [
   {
     id: "bilingual",
-    label: "中英对照",
-    description: "Chinese and English side by side",
+    label: "中英对照 / Bilingual",
+    description: "中英并列 / Chinese and English side by side",
   },
   {
     id: "zh-first",
-    label: "中文优先",
-    description: "Chinese first, English retained",
+    label: "中文优先 / Chinese first",
+    description: "中文在前，保留英文 / Chinese first, English retained",
   },
   {
     id: "en-first",
-    label: "English first",
-    description: "English first, Chinese retained",
+    label: "英文优先 / English first",
+    description: "英文在前，保留中文 / English first, Chinese retained",
   },
 ];
 
@@ -366,9 +736,7 @@ function isNonEmptyString(value: unknown): value is string {
 
 function isNonEmptyStringArray(value: unknown): value is string[] {
   return (
-    Array.isArray(value) &&
-    value.length > 0 &&
-    value.every(isNonEmptyString)
+    Array.isArray(value) && value.length > 0 && value.every(isNonEmptyString)
   );
 }
 
@@ -407,13 +775,16 @@ function previewText(value: string, maxLength: number) {
   const normalized = value.replace(/\s+/g, " ").trim();
   const characters = Array.from(normalized);
   if (characters.length <= maxLength) return normalized;
-  return `${characters.slice(0, maxLength - 1).join("").trimEnd()}…`;
+  return `${characters
+    .slice(0, maxLength - 1)
+    .join("")
+    .trimEnd()}…`;
 }
 
 async function sha256Hex(value: string) {
   if (!globalThis.crypto?.subtle) {
     throw new Error(
-      "当前浏览器不支持题库完整性校验 / This browser cannot verify question-bank integrity.",
+      "当前浏览器不支持资源完整性校验 / This browser cannot verify asset integrity.",
     );
   }
   const digest = await globalThis.crypto.subtle.digest(
@@ -477,9 +848,7 @@ function validateQuestionBankIndex(
     !Array.isArray(value.questions) ||
     value.questions.length !== expected.questionCount
   ) {
-    throw new Error(
-      "题库索引数量不匹配 / Question index count mismatch.",
-    );
+    throw new Error("题库索引数量不匹配 / Question index count mismatch.");
   }
   if (
     !/^[0-9a-f]{64}$/.test(value.sourceSha256 as string) ||
@@ -488,9 +857,7 @@ function validateQuestionBankIndex(
     value.previewLength < 80 ||
     value.previewLength > 320
   ) {
-    throw new Error(
-      "题库索引元数据无效 / Invalid question index metadata.",
-    );
+    throw new Error("题库索引元数据无效 / Invalid question index metadata.");
   }
 
   const seen = new Set<string>();
@@ -521,9 +888,7 @@ function validateQuestionBankIndex(
       !isNonEmptyString(summary.contentVersion) ||
       typeof summary.shardId !== "string" ||
       !/^[0-9a-f]{2}$/.test(summary.shardId) ||
-      !/^[0-9a-f]{64}$/.test(
-        expected.shardSha256ById[summary.shardId] || "",
-      ) ||
+      !/^[0-9a-f]{64}$/.test(expected.shardSha256ById[summary.shardId] || "") ||
       (summary.blueprintId !== undefined &&
         !isNonEmptyString(summary.blueprintId))
     ) {
@@ -535,6 +900,82 @@ function validateQuestionBankIndex(
   }
 
   return value as unknown as QuestionBankIndex;
+}
+
+function validateOrganizationUniverse(
+  value: unknown,
+  expected: OrganizationBankBootstrap,
+): OrganizationUniverseAsset {
+  if (
+    !isRecord(value) ||
+    value.schemaVersion !== expected.schemaVersion ||
+    value.assetVersion !== expected.assetVersion ||
+    value.sourceSha256 !== expected.sourceSha256 ||
+    value.evidenceDate !== expected.evidenceDate ||
+    value.organizationCount !== expected.organizationCount ||
+    !Array.isArray(value.organizations) ||
+    value.organizations.length !== expected.organizationCount
+  ) {
+    throw new Error(
+      "组织资料版本或数量不匹配 / Organization-universe version or count mismatch.",
+    );
+  }
+  const ids = new Set<string>();
+  for (const organization of value.organizations) {
+    if (
+      !isRecord(organization) ||
+      !isNonEmptyString(organization.id) ||
+      ids.has(organization.id) ||
+      !isNonEmptyString(organization.nameEn) ||
+      !isNonEmptyString(organization.descriptionZh) ||
+      !isNonEmptyString(organization.descriptionEn) ||
+      !isNonEmptyString(organization.relevanceZh) ||
+      !isNonEmptyString(organization.relevanceEn) ||
+      !["US", "CN", "Global"].includes(
+        String(organization.opportunityMarket),
+      ) ||
+      !Array.isArray(organization.focusAtoms) ||
+      !Array.isArray(organization.roleAtoms) ||
+      !Array.isArray(organization.opportunityAtoms) ||
+      !Array.isArray(organization.requirementAtoms) ||
+      !Array.isArray(organization.preparationAtoms) ||
+      (organization.ownership !== undefined &&
+        (!isRecord(organization.ownership) ||
+          !isNonEmptyString(organization.ownership.ownershipClass) ||
+          !isNonEmptyString(organization.ownership.labelZh) ||
+          !isNonEmptyString(organization.ownership.labelEn) ||
+          !isNonEmptyString(organization.ownership.definitionZh) ||
+          !isNonEmptyString(organization.ownership.definitionEn) ||
+          !isNonEmptyString(organization.ownership.summaryZh) ||
+          !isNonEmptyString(organization.ownership.summaryEn) ||
+          !isNonEmptyString(organization.ownership.confidence) ||
+          !isNonEmptyString(organization.ownership.classificationBasis) ||
+          !(
+            organization.ownership.sourceOwnershipTag === null ||
+            isNonEmptyString(organization.ownership.sourceOwnershipTag)
+          ) ||
+          !isNonEmptyString(organization.ownership.reviewStatus) ||
+          !isNonEmptyString(organization.ownership.reviewedAt) ||
+          !Array.isArray(organization.ownership.evidence) ||
+          organization.ownership.evidence.length === 0 ||
+          organization.ownership.evidence.some(
+            (evidence) =>
+              !isRecord(evidence) ||
+              !isNonEmptyString(evidence.titleZh) ||
+              !isNonEmptyString(evidence.titleEn) ||
+              !isNonEmptyString(evidence.url) ||
+              !isNonEmptyString(evidence.evidenceScope) ||
+              !isNonEmptyString(evidence.noteZh) ||
+              !isNonEmptyString(evidence.noteEn),
+          )))
+    ) {
+      throw new Error(
+        "组织资料包含无效或重复节点 / Organization universe contains an invalid or duplicate node.",
+      );
+    }
+    ids.add(organization.id);
+  }
+  return value as unknown as OrganizationUniverseAsset;
 }
 
 function assertPublishedQuestion(
@@ -601,7 +1042,9 @@ async function validateQuestionBankShard(
     !Array.isArray(value.questions) ||
     value.questionCount !== value.questions.length
   ) {
-    throw new Error("题目分片版本或结构不匹配");
+    throw new Error(
+      "题目分片版本或结构不匹配 / Question shard version or structure mismatch.",
+    );
   }
 
   const summaries = new Map(
@@ -616,7 +1059,9 @@ async function validateQuestionBankShard(
     value.questions.length !== expectedIds.size ||
     value.questions.length === 0
   ) {
-    throw new Error("题目分片数量与已验证索引不匹配");
+    throw new Error(
+      "题目分片数量与已验证索引不匹配 / Question shard count does not match the verified index.",
+    );
   }
 
   const seen = new Set<string>();
@@ -644,17 +1089,23 @@ async function validateQuestionBankShard(
       previewText(candidate.promptZh || "", index.previewLength) !==
         summary.promptPreviewZh
     ) {
-      throw new Error("题目详情与已验证摘要不一致");
+      throw new Error(
+        "题目详情与已验证摘要不一致 / Question detail does not match the verified summary.",
+      );
     }
     const derivedShardId = (await sha256Hex(candidate.id)).slice(0, 2);
     if (derivedShardId !== expectedShardId) {
-      throw new Error("题目 ID 与确定性分片不一致");
+      throw new Error(
+        "题目 ID 与确定性分片不一致 / Question ID does not match its deterministic shard.",
+      );
     }
     seen.add(candidate.id);
   }
 
   if (seen.size !== expectedIds.size) {
-    throw new Error("题目分片缺失索引中的题目");
+    throw new Error(
+      "题目分片缺失索引中的题目 / Question shard is missing an indexed task.",
+    );
   }
   return value as unknown as QuestionBankShard;
 }
@@ -675,7 +1126,7 @@ function BilingualCopy({
       id: "zh",
       label: "中",
       language: "zh-CN",
-      text: zh?.trim() || "中文版本待校订",
+      text: zh?.trim() || "中文版本待校订 / Chinese version pending review",
       missing: !zh?.trim(),
     },
     {
@@ -821,6 +1272,7 @@ function ProgressBar({ value }: { value: number }) {
     <div
       className="progress-track"
       role="progressbar"
+      aria-label="岗位准备度 / Role readiness"
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={value}
@@ -831,13 +1283,20 @@ function ProgressBar({ value }: { value: number }) {
 }
 
 export function CareerDojoApp({
-  companies,
+  initialCompanies,
+  organizationBank,
+  organizationRelations,
   roles,
   skills,
   questionBank,
   profile,
 }: AppProps) {
   const [view, setView] = useState<ViewId>("mission");
+  const [companies, setCompanies] = useState<Company[]>(initialCompanies);
+  const [organizationIndexState, setOrganizationIndexState] =
+    useState<OrganizationIndexState>("loading");
+  const [organizationIndexError, setOrganizationIndexError] = useState("");
+  const [organizationIndexRetryKey, setOrganizationIndexRetryKey] = useState(0);
   const [persisted, setPersisted] = useState<PersistedState>(emptyState);
   const [syncState, setSyncState] = useState<"loading" | "ready" | "offline">(
     "loading",
@@ -845,6 +1304,7 @@ export function CareerDojoApp({
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("ALL");
   const [category, setCategory] = useState("ALL");
+  const [ownership, setOwnership] = useState("ALL");
   const [visa, setVisa] = useState("ALL");
   const [companyLimit, setCompanyLimit] = useState(60);
   const [atlasLayout, setAtlasLayout] = useState<AtlasLayout>("tree");
@@ -908,6 +1368,58 @@ export function CareerDojoApp({
     }
     return profile;
   }, [persisted.preferences.candidateProfile, profile]);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const separator = organizationBank.assetUrl.includes("?") ? "&" : "?";
+    const assetUrl = `${organizationBank.assetUrl}${separator}v=${encodeURIComponent(
+      organizationBank.assetVersion,
+    )}`;
+
+    fetch(assetUrl, {
+      cache: "no-store",
+      headers: { accept: "application/json" },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(
+            `组织资料请求失败（${response.status}）/ Organization-universe request failed (${response.status}).`,
+          );
+        }
+        return parseVerifiedJson(
+          response,
+          organizationBank.assetSha256,
+          "组织资料 / Organization universe",
+        );
+      })
+      .then((value) => {
+        const universe = validateOrganizationUniverse(value, organizationBank);
+        if (!active) return;
+        setCompanies(universe.organizations);
+        setOrganizationIndexState("ready");
+      })
+      .catch((error: unknown) => {
+        if (
+          !active ||
+          (error instanceof DOMException && error.name === "AbortError")
+        ) {
+          return;
+        }
+        setOrganizationIndexState("error");
+        setOrganizationIndexError(
+          error instanceof Error
+            ? error.message
+            : "组织资料暂时无法加载 / Organization universe is temporarily unavailable.",
+        );
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [organizationBank, organizationIndexRetryKey]);
 
   useEffect(() => {
     let active = true;
@@ -1045,17 +1557,13 @@ export function CareerDojoApp({
       );
       if (
         event.shiftKey &&
-        (activeElement === first ||
-          activeElement === modal ||
-          focusIsOutside)
+        (activeElement === first || activeElement === modal || focusIsOutside)
       ) {
         event.preventDefault();
         last.focus();
       } else if (
         !event.shiftKey &&
-        (activeElement === last ||
-          activeElement === modal ||
-          focusIsOutside)
+        (activeElement === last || activeElement === modal || focusIsOutside)
       ) {
         event.preventDefault();
         first.focus();
@@ -1114,21 +1622,20 @@ export function CareerDojoApp({
       companies.flatMap((company) => company.categories),
     )) {
       if (!rawCategory) continue;
-      const id = canonicalCategoryId(rawCategory);
-      const label = categoryLabels[rawCategory];
-      const current = groups.get(id);
-      if (!current) {
-        groups.set(id, {
-          id,
-          values: [rawCategory],
-          zh: label.zh,
-          en: label.en,
-        });
-        continue;
+      for (const atom of categoryAtoms(rawCategory)) {
+        const filterId = `category-filter:${canonicalCategoryId(atom.en)}`;
+        const current = groups.get(filterId);
+        if (!current) {
+          groups.set(filterId, {
+            id: filterId,
+            values: [rawCategory],
+            zh: atom.zh,
+            en: atom.en,
+          });
+          continue;
+        }
+        current.values.push(rawCategory);
       }
-      current.values.push(rawCategory);
-      if (label.zh.length < current.zh.length) current.zh = label.zh;
-      if (label.en.length < current.en.length) current.en = label.en;
     }
     return [...groups.values()].sort((a, b) =>
       `${a.zh} / ${a.en}`.localeCompare(`${b.zh} / ${b.en}`),
@@ -1141,10 +1648,53 @@ export function CareerDojoApp({
       ),
     [categoryOptions],
   );
+  const ownershipOptions = useMemo(() => {
+    const options = new Map<
+      string,
+      { id: string; label: { zh: string; en: string }; count: number }
+    >();
+    for (const company of companies) {
+      if (
+        regionOf(company) !== "CN" ||
+        company.companyType !== "company" ||
+        !company.ownership
+      ) {
+        continue;
+      }
+      const id = company.ownership.ownershipClass;
+      const current = options.get(id);
+      options.set(id, {
+        id,
+        label: {
+          zh: company.ownership.labelZh,
+          en: company.ownership.labelEn,
+        },
+        count: (current?.count || 0) + 1,
+      });
+    }
+    return chinaOwnershipOrder
+      .map((id) => options.get(id))
+      .filter(
+        (
+          option,
+        ): option is {
+          id: string;
+          label: { zh: string; en: string };
+          count: number;
+        } => Boolean(option),
+      );
+  }, [companies]);
   const companyById = useMemo(
     () => new Map(companies.map((company) => [company.id, company])),
     [companies],
   );
+  const selectedCompanyRelations = selectedCompany
+    ? organizationRelations.filter(
+        (relation) =>
+          relation.fromOrganizationId === selectedCompany.id ||
+          relation.toOrganizationId === selectedCompany.id,
+      )
+    : [];
 
   const questionTypes = useMemo(
     () =>
@@ -1166,7 +1716,11 @@ export function CareerDojoApp({
       )
       .filter(
         (company) =>
-          visa === "ALL" || signalKey(company.visaSignal) === visa,
+          ownership === "ALL" ||
+          company.ownership?.ownershipClass === ownership,
+      )
+      .filter(
+        (company) => visa === "ALL" || signalKey(company.visaSignal) === visa,
       )
       .filter((company) => {
         if (!term) return true;
@@ -1177,7 +1731,11 @@ export function CareerDojoApp({
           ...company.aliases,
           ...company.categories,
           ...company.categories.map(categoryLabel),
-          companyTypeLabel(company.companyType),
+          organizationClassLabel(company),
+          company.ownership?.summaryZh || "",
+          company.ownership?.summaryEn || "",
+          company.ownership?.definitionZh || "",
+          company.ownership?.definitionEn || "",
           regionLabel(regionOf(company)),
           company.country,
           company.region,
@@ -1188,6 +1746,15 @@ export function CareerDojoApp({
           ...company.requirements,
           ...company.gaps,
           company.whyRelevant,
+          company.descriptionZh,
+          company.descriptionEn,
+          company.relevanceZh,
+          company.relevanceEn,
+          ...company.focusAtoms.flatMap((item) => [item.zh, item.en]),
+          ...company.roleAtoms.flatMap((item) => [item.zh, item.en]),
+          ...company.opportunityAtoms.flatMap((item) => [item.zh, item.en]),
+          ...company.requirementAtoms.flatMap((item) => [item.zh, item.en]),
+          ...company.preparationAtoms.flatMap((item) => [item.zh, item.en]),
         ]
           .join(" ")
           .toLowerCase()
@@ -1202,6 +1769,7 @@ export function CareerDojoApp({
     category,
     categoryValuesById,
     companies,
+    ownership,
     region,
     search,
     visa,
@@ -1310,13 +1878,28 @@ export function CareerDojoApp({
             (company) => regionOf(company) === treeRegion,
           );
           const groups = Array.from(
-            new Set(nodes.map((company) => company.companyType)),
+            new Set(nodes.map((company) => organizationClassKey(company))),
           )
-            .sort((a, b) => a.localeCompare(b))
-            .map((companyType) => ({
-              companyType,
+            .sort((a, b) => {
+              const leftOwnershipRank = chinaOwnershipOrder.indexOf(a);
+              const rightOwnershipRank = chinaOwnershipOrder.indexOf(b);
+              if (leftOwnershipRank >= 0 || rightOwnershipRank >= 0) {
+                return (
+                  (leftOwnershipRank < 0
+                    ? Number.POSITIVE_INFINITY
+                    : leftOwnershipRank) -
+                  (rightOwnershipRank < 0
+                    ? Number.POSITIVE_INFINITY
+                    : rightOwnershipRank)
+                );
+              }
+              return a.localeCompare(b);
+            })
+            .map((organizationClass) => ({
+              organizationClass,
               companies: nodes.filter(
-                (company) => company.companyType === companyType,
+                (company) =>
+                  organizationClassKey(company) === organizationClass,
               ),
             }));
           return { region: treeRegion, nodes, groups };
@@ -1325,8 +1908,6 @@ export function CareerDojoApp({
     [filteredCompanies],
   );
 
-  const usCompanies = companies.filter((company) => regionOf(company) === "US");
-  const cnCompanies = companies.filter((company) => regionOf(company) === "CN");
   const priorityCompanies = companies
     .filter((company) => fitRank(company.fitTier) <= 1)
     .sort((a, b) => fitRank(a.fitTier) - fitRank(b.fitTier))
@@ -1335,14 +1916,12 @@ export function CareerDojoApp({
   const currentQuestionVersion = new Map(
     questions.map((question) => [question.id, question.contentVersion]),
   );
-  const completedQuestions = new Set(
-    [
-      ...persisted.questionStats
-        .filter((stat) => stat.attempts > 0)
-        .map((stat) => stat.question_id),
-      ...persisted.questionAttempts.map((attempt) => attempt.question_id),
-    ],
-  );
+  const completedQuestions = new Set([
+    ...persisted.questionStats
+      .filter((stat) => stat.attempts > 0)
+      .map((stat) => stat.question_id),
+    ...persisted.questionAttempts.map((attempt) => attempt.question_id),
+  ]);
   const skillById = new Map(skills.map((skill) => [skill.id, skill]));
   const latestQuestionScore = new Map(
     persisted.questionStats
@@ -1363,10 +1942,7 @@ export function CareerDojoApp({
     }
   }
   const totalAttemptCount = persisted.questionStats.length
-    ? persisted.questionStats.reduce(
-        (total, stat) => total + stat.attempts,
-        0,
-      )
+    ? persisted.questionStats.reduce((total, stat) => total + stat.attempts, 0)
     : persisted.questionAttempts.length;
   const missionQuestions = [...questions]
     .sort((a, b) => {
@@ -1397,8 +1973,7 @@ export function CareerDojoApp({
       questions
         .filter(
           (question) =>
-            question.status === "active" &&
-            question.skills.includes(skillId),
+            question.status === "active" && question.skills.includes(skillId),
         )
         .map((question) => question.id),
     );
@@ -1406,8 +1981,7 @@ export function CareerDojoApp({
       (stat) =>
         stat.attempts > 0 &&
         relatedQuestionIds.has(stat.question_id) &&
-        currentQuestionVersion.get(stat.question_id) ===
-          stat.question_version,
+        currentQuestionVersion.get(stat.question_id) === stat.question_version,
     );
     if (stats.length) {
       const attempts = stats.reduce((total, stat) => total + stat.attempts, 0);
@@ -1426,8 +2000,7 @@ export function CareerDojoApp({
       questions
         .filter(
           (question) =>
-            question.status === "active" &&
-            question.skills.includes(skillId),
+            question.status === "active" && question.skills.includes(skillId),
         )
         .map((question) => question.id),
     );
@@ -1435,8 +2008,7 @@ export function CareerDojoApp({
       (stat) =>
         stat.attempts > 0 &&
         relatedQuestionIds.has(stat.question_id) &&
-        currentQuestionVersion.get(stat.question_id) ===
-          stat.question_version,
+        currentQuestionVersion.get(stat.question_id) === stat.question_version,
     );
   }
 
@@ -1472,10 +2044,14 @@ export function CareerDojoApp({
 
   function beginApplication(company: Company) {
     const role = roleForCompany(company);
+    const titleTerm = role
+      ? rolePresentationFor(role).typicalTitleAtoms[0]
+      : company.roleAtoms[0];
     const rank = fitRank(company.fitTier);
     setApplicationDraft({
-      roleTitle:
-        role?.nameZh || company.roleFamilies[0] || "目标岗位待确认",
+      roleTitle: titleTerm
+        ? `${titleTerm.zh} / ${titleTerm.en}`
+        : "目标岗位待确认 / Target role to verify",
       employmentType: "internship",
       jobUrl: company.careerUrl,
       deadline: "",
@@ -1484,10 +2060,12 @@ export function CareerDojoApp({
         signalKey(company.visaSignal) === "red" ? "orange" : "unknown",
       contact: "",
       resumeVersion: "",
-      jdKeywords: company.requirements.join(", "),
+      jdKeywords: company.requirementAtoms
+        .map((term) => `${term.zh} / ${term.en}`)
+        .join(" · "),
       sourceObservedAt: company.lastVerified,
       matchScore: rank === 0 ? 88 : rank === 1 ? 76 : rank === 2 ? 62 : 45,
-      notes: company.whyRelevant,
+      notes: `${company.relevanceZh}\n${company.relevanceEn}`,
     });
     setApplicationBuilderVisible(true);
   }
@@ -1545,7 +2123,7 @@ export function CareerDojoApp({
       : application.company_name;
     if (
       !window.confirm(
-        `确认从投递作战室删除 ${currentCompanyName} — ${application.role_title}？`,
+        `确认从投递作战室删除 ${currentCompanyName} — ${application.role_title}？ / Remove ${currentCompanyName} — ${application.role_title} from the application war room?`,
       )
     ) {
       return;
@@ -1591,7 +2169,9 @@ export function CareerDojoApp({
       }
       const serialized = JSON.stringify(parsed);
       if (serialized.length > 8000) {
-        setPrivateProfileMessage("画像超过 8,000 字符，请精简后重试。");
+        setPrivateProfileMessage(
+          "画像超过 8,000 字符，请精简后重试。 / The profile exceeds 8,000 characters; shorten it and try again.",
+        );
         return;
       }
       const saved = await mutate({
@@ -1601,13 +2181,17 @@ export function CareerDojoApp({
       });
       if (saved) {
         setPrivateProfileDraft("");
-        setPrivateProfileMessage("私有画像已保存并应用。");
+        setPrivateProfileMessage(
+          "私有画像已保存并应用。 / Private profile saved and applied.",
+        );
       } else {
-        setPrivateProfileMessage("暂时无法保存，请稍后重试。");
+        setPrivateProfileMessage(
+          "暂时无法保存，请稍后重试。 / Unable to save right now; please try again later.",
+        );
       }
     } catch {
       setPrivateProfileMessage(
-        "画像格式无效：请使用完整 JSON，并保留教育、目标岗位和关键缺口字段。",
+        "画像格式无效：请使用完整 JSON，并保留教育、目标岗位和关键缺口字段。 / Invalid profile format: use complete JSON and retain the education, target-role, and critical-gap fields.",
       );
     }
   }
@@ -1620,7 +2204,9 @@ export function CareerDojoApp({
     });
     setPrivateProfileDraft("");
     setPrivateProfileMessage(
-      saved ? "已恢复公开安全的匿名模板。" : "暂时无法清除，请稍后重试。",
+      saved
+        ? "已恢复公开安全的匿名模板。 / Restored the public-safe anonymous template."
+        : "暂时无法清除，请稍后重试。 / Unable to clear the profile right now; please try again later.",
     );
   }
 
@@ -1657,11 +2243,10 @@ export function CareerDojoApp({
       const verifiedIndex = questionIndexRef.current;
       const expectedShardSha256 =
         questionBank.shardSha256ById[question.shardId];
-      if (
-        !verifiedIndex ||
-        !/^[0-9a-f]{64}$/.test(expectedShardSha256 || "")
-      ) {
-        throw new Error("题库索引或分片摘要尚未通过校验");
+      if (!verifiedIndex || !/^[0-9a-f]{64}$/.test(expectedShardSha256 || "")) {
+        throw new Error(
+          "题库索引或分片摘要尚未通过校验 / The question index or shard digest has not been verified.",
+        );
       }
       let shardPromise = questionShardCacheRef.current.get(question.shardId);
       if (!shardPromise) {
@@ -1675,7 +2260,9 @@ export function CareerDojoApp({
           },
         ).then(async (response) => {
           if (!response.ok) {
-            throw new Error(`详情分片返回 ${response.status}`);
+            throw new Error(
+              `详情分片返回 ${response.status} / Detail shard returned ${response.status}.`,
+            );
           }
           const value = await parseVerifiedJson(
             response,
@@ -1695,7 +2282,9 @@ export function CareerDojoApp({
         });
         questionShardCacheRef.current.set(question.shardId, shardPromise);
         shardPromise.catch(() => {
-          if (questionShardCacheRef.current.get(question.shardId) === shardPromise) {
+          if (
+            questionShardCacheRef.current.get(question.shardId) === shardPromise
+          ) {
             questionShardCacheRef.current.delete(question.shardId);
           }
         });
@@ -1704,7 +2293,9 @@ export function CareerDojoApp({
       await shardPromise;
       const detail = questionDetailCacheRef.current.get(question.id);
       if (!detail || detail.contentVersion !== question.contentVersion) {
-        throw new Error("分片中找不到当前版本的题目详情");
+        throw new Error(
+          "分片中找不到当前版本的题目详情 / The current question version is missing from its shard.",
+        );
       }
       if (questionLoadRequestRef.current !== requestId) return;
       setSelectedQuestionDetail(detail);
@@ -1714,7 +2305,9 @@ export function CareerDojoApp({
       setSelectedQuestionDetail(null);
       setQuestionDetailState("error");
       setQuestionDetailError(
-        error instanceof Error ? error.message : "题目详情加载失败",
+        error instanceof Error
+          ? error.message
+          : "题目详情加载失败 / Question detail failed to load.",
       );
     }
   }
@@ -1781,7 +2374,7 @@ export function CareerDojoApp({
         <button
           className="brand"
           onClick={() => setView("mission")}
-          aria-label="回到任务总览"
+          aria-label="回到任务总览 / Return to mission overview"
         >
           <span className="brand-mark">A</span>
           <span>
@@ -1790,7 +2383,7 @@ export function CareerDojoApp({
           </span>
         </button>
 
-        <nav aria-label="主要导航">
+        <nav aria-label="主要导航 / Primary navigation">
           {views.map((item, index) => (
             <button
               key={item.id}
@@ -1812,12 +2405,12 @@ export function CareerDojoApp({
           <div>
             <strong>
               {syncState === "ready"
-                ? "进度已保存"
+                ? "进度已保存 / Progress saved"
                 : syncState === "loading"
-                  ? "正在同步"
-                  : "只读研究模式"}
+                  ? "正在同步 / Syncing"
+                  : "只读研究模式 / Read-only research"}
             </strong>
-            <small>D1 · evidence snapshot</small>
+            <small>D1 · 证据快照 / evidence snapshot</small>
           </div>
         </div>
       </aside>
@@ -1825,25 +2418,39 @@ export function CareerDojoApp({
       <main>
         <header className="topbar">
           <div>
-            <span className="eyebrow">
-              {effectiveProfile.targetWindow} · {effectiveProfile.education.program} ·{" "}
-              {effectiveProfile.education.workAuthorization}
+            <span className="eyebrow topbar-context-full">
+              {effectiveProfile.targetWindow} /{" "}
+              {effectiveProfile.targetWindowEn || "Target window"} ·{" "}
+              {effectiveProfile.education.program} /{" "}
+              {effectiveProfile.education.programEn || "Education"} ·{" "}
+              {effectiveProfile.education.workAuthorization} /{" "}
+              {effectiveProfile.education.workAuthorizationEn ||
+                "Work authorization not configured"}
+            </span>
+            <span className="eyebrow topbar-context-mobile">
+              {effectiveProfile.targetWindow} /{" "}
+              {effectiveProfile.targetWindowEn || "Target window"}
             </span>
             <h1>{views.find((item) => item.id === view)?.label}</h1>
           </div>
           <div className="topbar-actions">
             <span className="evidence-pill">
               <i />
-              证据日期 {effectiveProfile.evidenceDate}
+              证据日期 / Evidence date {effectiveProfile.evidenceDate}
             </span>
             <button
               className="primary-button"
               onClick={() => {
-                setRoleFilter(effectiveProfile.priorityRoleFamilies[0] || "ALL");
+                setRoleFilter(
+                  effectiveProfile.priorityRoleFamilies[0] || "ALL",
+                );
                 setView("dojo");
               }}
             >
-              开始今日训练
+              <span className="topbar-action-full">
+                开始今日训练 / Start today&apos;s training
+              </span>
+              <span className="topbar-action-mobile">训练 / Train</span>
             </button>
           </div>
         </header>
@@ -1851,6 +2458,11 @@ export function CareerDojoApp({
         {syncState === "offline" ? (
           <div className="sync-banner">
             持久化服务暂不可用；公司与题库仍可浏览，进度写入将在部署后恢复。
+            <span lang="en">
+              Persistence is temporarily unavailable. The atlas and question
+              bank remain readable; progress writes will resume after
+              deployment.
+            </span>
           </div>
         ) : null}
 
@@ -1859,67 +2471,119 @@ export function CareerDojoApp({
             <div className="hero-grid">
               <article className="hero-card">
                 <div>
-                  <span className="section-kicker">EVIDENCE → MASTERY</span>
-                  <h2>不是盲投，也不是盲刷。</h2>
+                  <span className="section-kicker">
+                    证据 → 掌握 / EVIDENCE → MASTERY
+                  </span>
+                  <h2>
+                    不是盲投，也不是盲刷。 / Apply with evidence. Train with
+                    purpose.
+                  </h2>
                   <p>
                     以公司和岗位证据为起点，把每个缺口变成可验证项目、训练任务和下一次投递行动。
+                    <span className="inline-translation" lang="en">
+                      Start from organization and role evidence, then turn every
+                      gap into a verifiable project, training task, and next
+                      application action.
+                    </span>
                   </p>
                 </div>
                 <div className="positioning">
-                  <small>你的主叙事</small>
-                  <p>{effectiveProfile.positioning}</p>
+                  <small>你的主叙事 / Your positioning</small>
+                  <p>
+                    <BilingualParagraph
+                      zh={effectiveProfile.positioning}
+                      en={
+                        effectiveProfile.positioningEn ||
+                        "English positioning statement not configured."
+                      }
+                    />
+                  </p>
                 </div>
                 <div className="hero-actions">
                   <button
                     className="primary-button"
                     onClick={() => setView("atlas")}
                   >
-                    浏览目标公司
+                    浏览目标组织 / Explore targets
                   </button>
                   <button
                     className="secondary-button"
                     onClick={() => setView("roles")}
                   >
-                    查看能力缺口
+                    查看能力缺口 / Review skill gaps
                   </button>
                 </div>
               </article>
 
               <article className="countdown-card">
-                <span className="section-kicker">CURRENT WINDOW</span>
-                <strong>现在开始</strong>
-                <h3>{effectiveProfile.targetWindow}</h3>
+                <span className="section-kicker">
+                  当前窗口 / CURRENT WINDOW
+                </span>
+                <strong>现在开始 / Start now</strong>
+                <h3>
+                  <BilingualHeading
+                    zh={effectiveProfile.targetWindow}
+                    en={effectiveProfile.targetWindowEn || "Target window"}
+                  />
+                </h3>
                 <ol>
                   <li>
                     <span>01</span>
                     立即投递已开放岗位，不等待全量研究结束
+                    <small>
+                      Apply to open roles now; do not wait for research to end.
+                    </small>
                   </li>
                   <li>
                     <span>02</span>
                     8–11 月覆盖大厂、EDA、芯片和设备公司主峰
+                    <small>
+                      Cover the main big-tech, EDA, silicon, and equipment cycle
+                      from August through November.
+                    </small>
                   </li>
                   <li>
                     <span>03</span>
                     同步争取校内实验室、开源上游和教授背书
+                    <small>
+                      Pursue campus labs, upstream open source, and faculty
+                      evidence in parallel.
+                    </small>
                   </li>
                 </ol>
               </article>
             </div>
 
             <div className="metric-grid">
-              <Metric value={companies.length} label="公司与组织" note="中美双市场" />
-              <Metric value={usCompanies.length} label="美国机会宇宙" note="美国优先" />
-              <Metric value={cnCompanies.length} label="中国发展节点" note="企业 + 研究院" />
-              <Metric value={skills.length} label="原子能力" note="带先修依赖" />
+              <Metric
+                value={organizationBank.organizationCount}
+                label="组织节点 / Organizations"
+                note="中美双市场 / Two markets"
+              />
+              <Metric
+                value={organizationBank.regionCounts.US}
+                label="美国机会宇宙 / U.S. universe"
+                note="美国优先 / U.S. first"
+              />
+              <Metric
+                value={organizationBank.regionCounts.CN}
+                label="中国发展节点 / China nodes"
+                note="企业与研究机构 / Employers and research"
+              />
+              <Metric
+                value={skills.length}
+                label="原子能力 / Atomic skills"
+                note="带先修依赖 / Prerequisite-aware"
+              />
               <Metric
                 value={questionBank.questionCount}
-                label="高质量训练任务"
-                note="原创与可追溯"
+                label="高质量训练任务 / Quality tasks"
+                note="原创可追溯 / Original and traceable"
               />
               <Metric
                 value={persisted.applications.length}
-                label="投递管线"
-                note={`${totalAttemptCount} 次训练记录`}
+                label="投递管线 / Pipeline"
+                note={`${totalAttemptCount} 次训练 / attempts`}
               />
             </div>
 
@@ -1927,10 +2591,14 @@ export function CareerDojoApp({
               <article className="panel priority-panel">
                 <div className="panel-heading">
                   <div>
-                    <span className="section-kicker">TARGET RADAR</span>
-                    <h3>高匹配目标雷达</h3>
+                    <span className="section-kicker">
+                      目标雷达 / TARGET RADAR
+                    </span>
+                    <h3>高匹配目标雷达 / High-fit target radar</h3>
                   </div>
-                  <button onClick={() => setView("atlas")}>查看全部 →</button>
+                  <button onClick={() => setView("atlas")}>
+                    查看全部 / View all →
+                  </button>
                 </div>
                 <div className="target-list">
                   {priorityCompanies.map((company, index) => (
@@ -1943,16 +2611,18 @@ export function CareerDojoApp({
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="target-name">
-                        <strong><CompanyName company={company} /></strong>
-                        <small>
-                          {company.categories
-                            .slice(0, 2)
-                            .map(categoryLabel)
-                            .join(" · ") ||
-                            companyTypeLabel(company.companyType)}
+                        <strong>
+                          <CompanyName company={company} />
+                        </strong>
+                        <small className="target-focus-atoms">
+                          {company.focusAtoms.slice(0, 2).map((term) => (
+                            <BilingualTermLabel term={term} key={term.id} />
+                          ))}
                         </small>
                       </span>
-                      <span className="tier-badge">{company.fitTier || "TBD"}</span>
+                      <span className="tier-badge">
+                        {fitTierLabel(company.fitTier)}
+                      </span>
                       <StatusDot signal={company.visaSignal} />
                     </button>
                   ))}
@@ -1962,8 +2632,10 @@ export function CareerDojoApp({
               <article className="panel gap-panel">
                 <div className="panel-heading">
                   <div>
-                    <span className="section-kicker">EVIDENCE GAPS</span>
-                    <h3>最值钱的下一步</h3>
+                    <span className="section-kicker">
+                      证据缺口 / EVIDENCE GAPS
+                    </span>
+                    <h3>最值钱的下一步 / Highest-leverage next steps</h3>
                   </div>
                 </div>
                 <ul className="gap-list">
@@ -1971,11 +2643,19 @@ export function CareerDojoApp({
                     <li key={gap}>
                       <span>{String(index + 1).padStart(2, "0")}</span>
                       <div>
-                        <strong>{gap}</strong>
+                        <strong>
+                          <BilingualParagraph
+                            zh={gap}
+                            en={
+                              effectiveProfile.criticalGapsEn?.[index] ||
+                              "English translation not configured."
+                            }
+                          />
+                        </strong>
                         <small>
                           {index < 2
-                            ? "最高杠杆 · 直接影响面试转化"
-                            : "转化为可复现实验与公开证据"}
+                            ? "最高杠杆 / Highest leverage"
+                            : "转化为可复现实验 / Convert into reproducible evidence"}
                         </small>
                       </div>
                     </li>
@@ -1987,10 +2667,14 @@ export function CareerDojoApp({
             <article className="panel mission-queue-panel">
               <div className="panel-heading">
                 <div>
-                  <span className="section-kicker">ADAPTIVE MISSION QUEUE</span>
-                  <h3>下一组最值得训练的任务</h3>
+                  <span className="section-kicker">
+                    自适应任务队列 / ADAPTIVE MISSION QUEUE
+                  </span>
+                  <h3>下一组最值得训练的任务 / Next best training tasks</h3>
                 </div>
-                <button onClick={() => setView("dojo")}>打开完整 Dojo →</button>
+                <button onClick={() => setView("dojo")}>
+                  打开完整 Dojo / Open Dojo →
+                </button>
               </div>
               <div className="mission-queue">
                 {missionQuestions.map((question, index) => (
@@ -2009,13 +2693,14 @@ export function CareerDojoApp({
                         />
                       </strong>
                       <small>
-                        {question.type} · {question.estimatedMinutes} 分钟 ·{" "}
+                        {bilingualLabel(question.type, questionTypeLabels)} ·{" "}
+                        {question.estimatedMinutes} 分钟 / min ·{" "}
                         {latestQuestionScore.has(question.id)
-                          ? `上次 ${latestQuestionScore.get(question.id)} 分`
-                          : "尚未训练"}
+                          ? `上次 / last ${latestQuestionScore.get(question.id)} 分`
+                          : "尚未训练 / Not attempted"}
                       </small>
                     </div>
-                    <b>开始 →</b>
+                    <b>开始 / Start →</b>
                   </button>
                 ))}
               </div>
@@ -2025,225 +2710,322 @@ export function CareerDojoApp({
 
         {view === "atlas" ? (
           <section className="view">
-            <div className="filter-bar">
-              <label className="search-field">
-                <span>搜索</span>
-                <input
-                  value={search}
-                  onChange={(event) => {
-                    setSearch(event.target.value);
-                    setCompanyLimit(60);
-                  }}
-                  placeholder="公司、方向、岗位、技术栈…"
-                />
-              </label>
-              <div className="segmented" aria-label="地区筛选">
-                {[
-                  ["ALL", "全部 / All"],
-                  ["US", "美国 / U.S."],
-                  ["CN", "中国 / China"],
-                  ["Global", "全球 / Global"],
-                ].map(([value, label]) => (
+            {organizationIndexState !== "ready" ? (
+              <article
+                className="empty-state organization-loading-state"
+                aria-live="polite"
+                aria-busy={organizationIndexState === "loading"}
+              >
+                <span>{organizationIndexState === "loading" ? "…" : "!"}</span>
+                <h2>
+                  {organizationIndexState === "loading"
+                    ? "正在校验完整组织资料 / Verifying the full organization universe"
+                    : "组织资料暂时无法加载 / Organization universe is temporarily unavailable"}
+                </h2>
+                <p>
+                  {organizationIndexState === "loading"
+                    ? `正在加载 ${organizationBank.organizationCount} 个组织节点并校验内容摘要。 / Loading ${organizationBank.organizationCount} organization nodes and verifying their content digest.`
+                    : organizationIndexError}
+                </p>
+                {organizationIndexState === "error" ? (
                   <button
-                    key={value}
-                    className={region === value ? "active" : ""}
-                    aria-pressed={region === value}
+                    className="secondary-button"
                     onClick={() => {
-                      setRegion(value);
-                      setCompanyLimit(60);
+                      setOrganizationIndexState("loading");
+                      setOrganizationIndexError("");
+                      setOrganizationIndexRetryKey((value) => value + 1);
                     }}
                   >
-                    {label}
+                    重试组织资料 / Retry organization universe
                   </button>
-                ))}
-              </div>
-              <label>
-                <span>产业节点 / Industry node</span>
-                <select
-                  value={category}
-                  onChange={(event) => {
-                    setCategory(event.target.value);
-                    setCompanyLimit(60);
-                  }}
-                >
-                  <option value="ALL">全部产业节点 / All industry nodes</option>
-                  {categoryOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.zh} / {option.en}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>资格信号</span>
-                <select
-                  value={visa}
-                  onChange={(event) => {
-                    setVisa(event.target.value);
-                    setCompanyLimit(60);
-                  }}
-                >
-                  <option value="ALL">全部信号</option>
-                  <option value="green">可投初筛</option>
-                  <option value="yellow">赞助待核</option>
-                  <option value="orange">出口复核</option>
-                  <option value="red">硬门槛</option>
-                  <option value="unknown">待核验</option>
-                </select>
-              </label>
-            </div>
-
-            <div className="results-heading">
-              <div>
-                <span className="section-kicker">COMPANY ATLAS</span>
-                <h2>{filteredCompanies.length} 个匹配节点</h2>
-              </div>
-              <div className="results-actions">
-                <p>所有难度与身份判断均落到具体岗位；公司级信号只用于初筛。</p>
-                <div className="segmented atlas-layout-toggle">
-                  <button
-                    className={atlasLayout === "tree" ? "active" : ""}
-                    aria-pressed={atlasLayout === "tree"}
-                    onClick={() => setAtlasLayout("tree")}
-                  >
-                    组织树 / Tree
-                  </button>
-                  <button
-                    className={atlasLayout === "cards" ? "active" : ""}
-                    aria-pressed={atlasLayout === "cards"}
-                    onClick={() => setAtlasLayout("cards")}
-                  >
-                    档案卡
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {atlasLayout === "tree" ? (
-              <div className="company-tree">
-                {companyTree.map((regionGroup) => (
-                  <section key={regionGroup.region}>
-                    <div className="company-tree-heading">
-                      <h3>
-                        <BilingualNodeLabel
-                          label={regionLabels[regionGroup.region]}
-                        />
-                      </h3>
-                      <span>{regionGroup.nodes.length} 个节点 / nodes</span>
-                    </div>
-                    {regionGroup.groups.map((typeGroup) => {
-                      const groupId = `${regionGroup.region}:${typeGroup.companyType}`;
-                      const expanded = expandedTreeGroups.includes(groupId);
-                      return (
-                        <details
-                          key={groupId}
-                          open={expanded}
-                          onToggle={(event) => {
-                            const shouldOpen = event.currentTarget.open;
-                            setExpandedTreeGroups((current) => {
-                              const hasGroup = current.includes(groupId);
-                              if (hasGroup === shouldOpen) return current;
-                              return shouldOpen
-                                ? [...current, groupId]
-                                : current.filter((item) => item !== groupId);
-                            });
-                          }}
-                        >
-                          <summary>
-                            <BilingualNodeLabel
-                              label={
-                                companyTypeLabels[typeGroup.companyType] || {
-                                  zh: "未分类",
-                                  en: "Unclassified",
-                                }
-                              }
-                            />
-                            <b>{typeGroup.companies.length}</b>
-                          </summary>
-                          {expanded ? (
-                            <div className="tree-company-list">
-                              {typeGroup.companies.map((company) => (
-                                <button
-                                  key={company.id}
-                                  onClick={() => setSelectedCompany(company)}
-                                >
-                                  <CompanyName company={company} />
-                                  <small>
-                                    {company.fitTier || "TBD"} ·{" "}
-                                    {signalLabel(company.visaSignal)}
-                                  </small>
-                                </button>
-                              ))}
-                            </div>
-                          ) : null}
-                        </details>
-                      );
-                    })}
-                  </section>
-                ))}
-              </div>
+                ) : null}
+              </article>
             ) : (
               <>
-                <div className="company-grid">
-                  {filteredCompanies.slice(0, companyLimit).map((company) => (
-                    <article className="company-card" key={company.id}>
-                      <div className="company-card-top">
-                        <span className="company-avatar">
-                          {company.nameEn.slice(0, 2).toUpperCase()}
-                        </span>
-                        <button
-                          className={`bookmark-button ${
-                            bookmarks.has(company.id) ? "active" : ""
-                          }`}
-                          aria-label={
-                            bookmarks.has(company.id) ? "取消收藏" : "收藏公司"
+                <div className="filter-bar">
+                  <label className="search-field">
+                    <span>搜索 / Search</span>
+                    <input
+                      value={search}
+                      onChange={(event) => {
+                        setSearch(event.target.value);
+                        setCompanyLimit(60);
+                      }}
+                      placeholder="组织、方向、岗位、技术栈 / Organization, domain, role, stack"
+                    />
+                  </label>
+                  <div
+                    className="segmented"
+                    aria-label="地区筛选 / Region filter"
+                  >
+                    {[
+                      ["ALL", "全部 / All"],
+                      ["US", "美国 / U.S."],
+                      ["CN", "中国 / China"],
+                      ["Global", "全球 / Global"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        className={region === value ? "active" : ""}
+                        aria-pressed={region === value}
+                        onClick={() => {
+                          setRegion(value);
+                          if (value !== "CN" && value !== "ALL") {
+                            setOwnership("ALL");
                           }
-                          onClick={() => toggleBookmark(company)}
-                        >
-                          {bookmarks.has(company.id) ? "★" : "☆"}
-                        </button>
-                      </div>
-                      <div>
-                        <div className="company-title-row">
-                          <h3><CompanyName company={company} /></h3>
-                          <span className="tier-badge">
-                            {company.fitTier || "TBD"}
-                          </span>
-                        </div>
-                        <p>
-                          {company.whyRelevant || company.focusAreas.join(" · ")}
-                        </p>
-                      </div>
-                      <div className="tag-row">
-                        {company.categories.slice(0, 3).map((item) => (
-                          <span key={item}>{categoryLabel(item)}</span>
-                        ))}
-                      </div>
-                      <div className="company-meta">
-                        <span>{regionLabel(regionOf(company))}</span>
-                        <span>{company.difficulty || "难度待核"}</span>
-                        <span>{confidenceLabel(company.confidence)}</span>
-                      </div>
-                      <div className="company-card-bottom">
-                        <StatusDot signal={company.visaSignal} />
-                        <button onClick={() => setSelectedCompany(company)}>
-                          打开档案 →
-                        </button>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-                {companyLimit < filteredCompanies.length ? (
-                  <div className="load-more-row">
-                    <button
-                      className="secondary-button"
-                      onClick={() => setCompanyLimit((value) => value + 60)}
-                    >
-                      再加载 60 个节点（已显示 {companyLimit}/
-                      {filteredCompanies.length}）
-                    </button>
+                          setCompanyLimit(60);
+                        }}
+                      >
+                        {label}
+                      </button>
+                    ))}
                   </div>
-                ) : null}
+                  <label>
+                    <span>产业节点 / Industry node</span>
+                    <select
+                      value={category}
+                      onChange={(event) => {
+                        setCategory(event.target.value);
+                        setCompanyLimit(60);
+                      }}
+                    >
+                      <option value="ALL">
+                        全部产业节点 / All industry nodes
+                      </option>
+                      {categoryOptions.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.zh} / {option.en}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>中国企业所有制 / China ownership</span>
+                    <select
+                      value={ownership}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        setOwnership(value);
+                        if (value !== "ALL") setRegion("CN");
+                        setCompanyLimit(60);
+                      }}
+                    >
+                      <option value="ALL">
+                        全部所有制 / All ownership classes
+                      </option>
+                      {ownershipOptions.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.label.zh} / {option.label.en} ({option.count})
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>资格信号 / Eligibility signal</span>
+                    <select
+                      value={visa}
+                      onChange={(event) => {
+                        setVisa(event.target.value);
+                        setCompanyLimit(60);
+                      }}
+                    >
+                      <option value="ALL">全部信号 / All signals</option>
+                      <option value="green">可投初筛 / Initial fit</option>
+                      <option value="yellow">
+                        赞助待核 / Sponsorship check
+                      </option>
+                      <option value="orange">出口复核 / Export review</option>
+                      <option value="red">硬门槛 / Restricted</option>
+                      <option value="unknown">待核验 / Unverified</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div className="results-heading">
+                  <div>
+                    <span className="section-kicker">
+                      组织图谱 / COMPANY ATLAS
+                    </span>
+                    <h2>
+                      {filteredCompanies.length} 个匹配节点 / matching nodes
+                    </h2>
+                  </div>
+                  <div className="results-actions">
+                    <p>
+                      所有难度与身份判断均落到具体岗位；组织级信号只用于初筛。
+                      <span lang="en">
+                        Difficulty and eligibility are decided at requisition
+                        level; organization signals are triage only.
+                      </span>
+                    </p>
+                    <div className="segmented atlas-layout-toggle">
+                      <button
+                        className={atlasLayout === "tree" ? "active" : ""}
+                        aria-pressed={atlasLayout === "tree"}
+                        onClick={() => setAtlasLayout("tree")}
+                      >
+                        组织树 / Tree
+                      </button>
+                      <button
+                        className={atlasLayout === "cards" ? "active" : ""}
+                        aria-pressed={atlasLayout === "cards"}
+                        onClick={() => setAtlasLayout("cards")}
+                      >
+                        档案卡 / Cards
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {atlasLayout === "tree" ? (
+                  <div className="company-tree">
+                    {companyTree.map((regionGroup) => (
+                      <section key={regionGroup.region}>
+                        <div className="company-tree-heading">
+                          <h3>
+                            <BilingualNodeLabel
+                              label={regionLabels[regionGroup.region]}
+                            />
+                          </h3>
+                          <span>{regionGroup.nodes.length} 个节点 / nodes</span>
+                        </div>
+                        {regionGroup.groups.map((typeGroup) => {
+                          const groupId = `${regionGroup.region}:${typeGroup.organizationClass}`;
+                          const expanded = expandedTreeGroups.includes(groupId);
+                          return (
+                            <details
+                              key={groupId}
+                              open={expanded}
+                              onToggle={(event) => {
+                                const shouldOpen = event.currentTarget.open;
+                                setExpandedTreeGroups((current) => {
+                                  const hasGroup = current.includes(groupId);
+                                  if (hasGroup === shouldOpen) return current;
+                                  return shouldOpen
+                                    ? [...current, groupId]
+                                    : current.filter(
+                                        (item) => item !== groupId,
+                                      );
+                                });
+                              }}
+                            >
+                              <summary>
+                                <BilingualNodeLabel
+                                  label={organizationClassTerm(
+                                    typeGroup.companies[0],
+                                  )}
+                                />
+                                <b>{typeGroup.companies.length}</b>
+                              </summary>
+                              {expanded ? (
+                                <div className="tree-company-list">
+                                  {typeGroup.companies.map((company) => (
+                                    <button
+                                      key={company.id}
+                                      onClick={() =>
+                                        setSelectedCompany(company)
+                                      }
+                                    >
+                                      <span className="tree-company-info">
+                                        <CompanyName company={company} />
+                                        {company.focusAtoms[0] ? (
+                                          <BilingualTermLabel
+                                            term={company.focusAtoms[0]}
+                                            className="tree-company-focus"
+                                          />
+                                        ) : null}
+                                      </span>
+                                      <small>
+                                        {fitTierLabel(company.fitTier)} ·{" "}
+                                        {signalLabel(company.visaSignal)}
+                                      </small>
+                                    </button>
+                                  ))}
+                                </div>
+                              ) : null}
+                            </details>
+                          );
+                        })}
+                      </section>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <div className="company-grid">
+                      {filteredCompanies
+                        .slice(0, companyLimit)
+                        .map((company) => (
+                          <article className="company-card" key={company.id}>
+                            <div className="company-card-top">
+                              <span className="company-avatar">
+                                {company.nameEn.slice(0, 2).toUpperCase()}
+                              </span>
+                              <button
+                                className={`bookmark-button ${
+                                  bookmarks.has(company.id) ? "active" : ""
+                                }`}
+                                aria-label={
+                                  bookmarks.has(company.id)
+                                    ? "取消收藏 / Remove bookmark"
+                                    : "收藏组织 / Bookmark organization"
+                                }
+                                onClick={() => toggleBookmark(company)}
+                              >
+                                {bookmarks.has(company.id) ? "★" : "☆"}
+                              </button>
+                            </div>
+                            <div>
+                              <div className="company-title-row">
+                                <h3>
+                                  <CompanyName company={company} />
+                                </h3>
+                                <span className="tier-badge">
+                                  {fitTierLabel(company.fitTier)}
+                                </span>
+                              </div>
+                              <p className="company-overview-preview">
+                                <BilingualParagraph
+                                  zh={company.descriptionZh}
+                                  en={company.descriptionEn}
+                                />
+                              </p>
+                            </div>
+                            <div className="tag-row atomic-tag-row">
+                              {company.focusAtoms.slice(0, 3).map((term) => (
+                                <span key={term.id}>
+                                  <BilingualTermLabel term={term} />
+                                </span>
+                              ))}
+                            </div>
+                            <div className="company-meta">
+                              <span>{regionLabel(regionOf(company))}</span>
+                              <span>{organizationClassLabel(company)}</span>
+                              <span>{confidenceLabel(company.confidence)}</span>
+                            </div>
+                            <div className="company-card-bottom">
+                              <StatusDot signal={company.visaSignal} />
+                              <button
+                                onClick={() => setSelectedCompany(company)}
+                              >
+                                打开档案 / Open profile →
+                              </button>
+                            </div>
+                          </article>
+                        ))}
+                    </div>
+                    {companyLimit < filteredCompanies.length ? (
+                      <div className="load-more-row">
+                        <button
+                          className="secondary-button"
+                          onClick={() => setCompanyLimit((value) => value + 60)}
+                        >
+                          再加载 60 个节点 / Load 60 more（已显示 / shown{" "}
+                          {companyLimit}/{filteredCompanies.length}）
+                        </button>
+                      </div>
+                    ) : null}
+                  </>
+                )}
               </>
             )}
           </section>
@@ -2253,16 +3035,27 @@ export function CareerDojoApp({
           <section className="view">
             <div className="results-heading role-heading">
               <div>
-                <span className="section-kicker">ROLE × SKILL GRAPH</span>
-                <h2>一条主线，两条副线，多层扩容</h2>
+                <span className="section-kicker">
+                  岗位 × 能力图 / ROLE × SKILL GRAPH
+                </span>
+                <h2>
+                  <BilingualHeading
+                    zh="一条主线，两条副线，多层扩容"
+                    en="One core track, two adjacent tracks, layered expansion"
+                  />
+                </h2>
               </div>
               <p>
-                分数是基于现有证据的准备度估计，不是录取概率；只有完成校准的训练才会更新它。
+                <BilingualParagraph
+                  zh="分数是基于现有证据的准备度估计，不是录取概率；只有完成校准的训练才会更新它。"
+                  en="Scores estimate readiness from current evidence; they are not hiring probabilities. Only calibrated training updates them."
+                />
               </p>
             </div>
 
             <div className="role-grid">
               {roles.map((role) => {
+                const presentation = rolePresentationFor(role);
                 const readiness = readinessForRole(role.id);
                 const priority =
                   effectiveProfile.priorityRoleFamilies.some(
@@ -2282,27 +3075,50 @@ export function CareerDojoApp({
                     key={role.id}
                   >
                     <div className="role-card-heading">
-                      <span>{priority ? "CORE TRACK" : "EXPANSION"}</span>
+                      <span>
+                        {priority
+                          ? "核心方向 / CORE TRACK"
+                          : "扩展方向 / EXPANSION"}
+                      </span>
                       <strong>{readiness}%</strong>
                     </div>
-                    <h3>{role.nameZh}</h3>
-                    <p>{role.description}</p>
+                    <h3>
+                      <BilingualTermLabel
+                        term={presentation.typicalTitleAtoms[0]}
+                      />
+                    </h3>
+                    <p>
+                      <BilingualParagraph
+                        zh={presentation.descriptionZh}
+                        en={presentation.descriptionEn}
+                      />
+                    </p>
                     <ProgressBar value={readiness} />
                     <div className="role-stats">
-                      <span>{role.primarySkillDomains.length} 个能力域</span>
+                      <span>
+                        {role.primarySkillDomains.length} 个能力域 / skill
+                        domains
+                      </span>
                       <span>
                         {roleQuestions === null
                           ? "题库加载中 / Loading"
-                          : `${roleQuestions} 道训练任务`}
+                          : `${roleQuestions} 道训练任务 / drills`}
                       </span>
                     </div>
-                    <div className="stage-list">
-                      {role.interviewStages.slice(0, 4).map((stage) => (
-                        <span key={stage}>{stage}</span>
-                      ))}
+                    <div
+                      className="stage-list atomic-stage-list"
+                      aria-label="面试环节 / Interview stages"
+                    >
+                      {presentation.interviewStageAtoms
+                        .slice(0, 4)
+                        .map((stage) => (
+                          <span key={stage.id}>
+                            <BilingualTermLabel term={stage} />
+                          </span>
+                        ))}
                     </div>
                     <button onClick={() => openRoleDojo(role.id)}>
-                      进入定向训练 →
+                      进入定向训练 / Start targeted training →
                     </button>
                   </article>
                 );
@@ -2312,85 +3128,106 @@ export function CareerDojoApp({
             <article className="panel skill-map-panel">
               <div className="panel-heading">
                 <div>
-                  <span className="section-kicker">ATOMIC CAPABILITIES</span>
-                  <h3>原子能力地图</h3>
+                  <span className="section-kicker">
+                    原子能力 / ATOMIC CAPABILITIES
+                  </span>
+                  <h3>原子能力地图 / Atomic capability map</h3>
                 </div>
-                <span>{skills.length} 个节点 · 带先修依赖</span>
+                <span>
+                  {skills.length} 个节点 / nodes · 带先修依赖 / prerequisites
+                </span>
               </div>
               <div className="skill-ladder">
                 {["foundation", "intermediate", "advanced"].map(
                   (level, levelIndex) => {
-                  const levelSkills = skills.filter(
-                    (skill) => (skill.level || "intermediate") === level,
-                  );
-                  const domains = Array.from(
-                    new Set(
-                      levelSkills.map(
-                        (skill) => skill.domain || skill.category || "工程基础",
+                    const levelSkills = skills.filter(
+                      (skill) => (skill.level || "intermediate") === level,
+                    );
+                    const domains = Array.from(
+                      new Set(
+                        levelSkills.map(
+                          (skill) =>
+                            skill.domain || skill.category || "工程基础",
+                        ),
                       ),
-                    ),
-                  );
-                  return (
-                    <section className="skill-level" key={level}>
-                      <div className="skill-level-heading">
-                        <span>{String(levelIndex + 1).padStart(2, "0")}</span>
-                        <div>
-                          <strong>
-                            {level === "foundation"
-                              ? "基础层"
-                              : level === "intermediate"
-                                ? "核心工程层"
-                                : "高级与系统层"}
-                          </strong>
-                          <small>{levelSkills.length} 个能力节点</small>
+                    );
+                    return (
+                      <section className="skill-level" key={level}>
+                        <div className="skill-level-heading">
+                          <span>{String(levelIndex + 1).padStart(2, "0")}</span>
+                          <div>
+                            <strong>
+                              {level === "foundation"
+                                ? "基础层 / Foundation"
+                                : level === "intermediate"
+                                  ? "核心工程层 / Core engineering"
+                                  : "高级系统层 / Advanced systems"}
+                            </strong>
+                            <small>
+                              {levelSkills.length} 个能力节点 / capability nodes
+                            </small>
+                          </div>
                         </div>
-                      </div>
-                      <div className="skill-columns">
-                        {domains.map((domain) => (
-                          <div className="skill-domain" key={`${level}-${domain}`}>
-                            <strong>{domain}</strong>
-                            {levelSkills
-                              .filter(
-                                (skill) =>
-                                  (skill.domain ||
-                                    skill.category ||
-                                    "工程基础") === domain,
-                              )
-                              .map((skill) => {
-                                const mastery = masteryForSkill(skill.id);
-                                const trained = hasTrainingForSkill(skill.id);
-                                return (
-                                  <div className="skill-node" key={skill.id}>
-                                    <span
-                                      className={mastery >= 70 ? "mastered" : ""}
-                                      title={`当前掌握度 ${mastery}%`}
-                                    />
-                                    <div>
-                                      <b>{skillName(skill)}</b>
-                                      <small>
-                                        {(skill.prerequisites || []).length
-                                          ? `先修：${(skill.prerequisites || [])
-                                              .map(
-                                                (id) =>
+                        <div className="skill-columns">
+                          {domains.map((domain) => (
+                            <div
+                              className="skill-domain"
+                              key={`${level}-${domain}`}
+                            >
+                              <strong>
+                                {bilingualLabel(domain, skillDomainLabels)}
+                              </strong>
+                              {levelSkills
+                                .filter(
+                                  (skill) =>
+                                    (skill.domain ||
+                                      skill.category ||
+                                      "工程基础") === domain,
+                                )
+                                .map((skill) => {
+                                  const mastery = masteryForSkill(skill.id);
+                                  const trained = hasTrainingForSkill(skill.id);
+                                  return (
+                                    <div className="skill-node" key={skill.id}>
+                                      <span
+                                        className={
+                                          mastery >= 70 ? "mastered" : ""
+                                        }
+                                        title={`当前掌握度 ${mastery}% / Current mastery ${mastery}%`}
+                                      />
+                                      <div>
+                                        <div className="skill-node-terms">
+                                          {skillTerms(skill).map((term) => (
+                                            <b key={`${skill.id}:${term.id}`}>
+                                              <BilingualTermLabel term={term} />
+                                            </b>
+                                          ))}
+                                        </div>
+                                        <small>
+                                          {(skill.prerequisites || []).length
+                                            ? `先修 / Prerequisites：${(
+                                                skill.prerequisites || []
+                                              )
+                                                .map((id) =>
                                                   skillById.has(id)
-                                                    ? skillName(
+                                                    ? skillLabel(
                                                         skillById.get(id)!,
                                                       )
                                                     : id,
-                                              )
-                                              .join(" / ")}`
-                                          : "课程起点"}
-                                        {trained ? ` · ${mastery}%` : ""}
-                                      </small>
+                                                )
+                                                .join(" · ")}`
+                                            : "课程起点 / Entry point"}
+                                          {trained ? ` · ${mastery}%` : ""}
+                                        </small>
+                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  );
+                                  );
+                                })}
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    );
                   },
                 )}
               </div>
@@ -2402,12 +3239,25 @@ export function CareerDojoApp({
           <section className="view">
             <div className="dojo-hero">
               <div>
-                <span className="section-kicker">INTERVIEW DOJO</span>
-                <h2>训练真实工程判断，而不是背答案。</h2>
+                <span className="section-kicker">
+                  面试道场 / INTERVIEW DOJO
+                </span>
+                <h2>
+                  训练真实工程判断，而不是背答案。 / Train engineering judgment,
+                  not memorization.
+                </h2>
                 <p>
                   每道任务同时提供中文与 English
                   题干、交付物、评分规则、常见失败、追问和参考框架，并对应岗位信号与先修能力。
-                  当前题库是研究沙箱；未完成专家与 learner pilot 的自评分不会改变岗位准备度。
+                  当前题库是研究沙箱；未完成专家与 learner pilot
+                  的自评分不会改变岗位准备度。
+                  <span className="inline-translation" lang="en">
+                    Every task pairs Chinese and English prompts, deliverables,
+                    rubrics, failure modes, follow-ups, and reference outlines
+                    with role signals and prerequisites. This bank remains a
+                    research sandbox; uncalibrated self-scores do not change
+                    role readiness.
+                  </span>
                 </p>
                 <p className="dojo-lineage-summary">
                   <strong>
@@ -2422,10 +3272,10 @@ export function CareerDojoApp({
               </div>
               <div className="dojo-score">
                 <strong>{completedQuestions.size}</strong>
-                <span>已完成任务</span>
+                <span>已完成任务 / Completed tasks</span>
                 <small>
-                  {totalAttemptCount} 次可追溯尝试 ·{" "}
-                  {questionBank.questionCount.toLocaleString()} 题
+                  {totalAttemptCount} 次可追溯尝试 / traceable attempts ·{" "}
+                  {questionBank.questionCount.toLocaleString()} 题 / tasks
                 </small>
               </div>
             </div>
@@ -2434,7 +3284,9 @@ export function CareerDojoApp({
               <div
                 className={`question-index-state ${questionIndexState}`}
                 role={questionIndexState === "error" ? "alert" : "status"}
-                aria-live={questionIndexState === "error" ? "assertive" : "polite"}
+                aria-live={
+                  questionIndexState === "error" ? "assertive" : "polite"
+                }
                 aria-busy={questionIndexState === "loading"}
               >
                 <span className="question-index-state-mark" aria-hidden="true">
@@ -2443,8 +3295,8 @@ export function CareerDojoApp({
                 <div>
                   <span className="section-kicker">
                     {questionIndexState === "loading"
-                      ? "QUESTION BANK SYNC"
-                      : "QUESTION BANK ERROR"}
+                      ? "题库同步 / QUESTION BANK SYNC"
+                      : "题库错误 / QUESTION BANK ERROR"}
                   </span>
                   <h3>
                     {questionIndexState === "loading"
@@ -2475,287 +3327,327 @@ export function CareerDojoApp({
               </div>
             ) : (
               <>
-            <div className="dojo-toolbar">
-              <div
-                className="dojo-results-summary"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <strong>{filteredQuestions.length.toLocaleString()}</strong>
-                <span>
-                  道匹配任务 / matched · 共{" "}
-                  {questionBank.questionCount.toLocaleString()} 题
-                </span>
-                <small>
-                  当前显示 {questionResultStart.toLocaleString()}–
-                  {questionResultEnd.toLocaleString()} · 第 {safeQuestionPage} /{" "}
-                  {questionPageCount} 页
-                </small>
-              </div>
-              <label className="question-page-size">
-                <span>每页 / Page size</span>
-                <select
-                  value={questionPageSize}
-                  onChange={(event) => {
-                    setQuestionPageSize(Number(event.target.value));
-                    setQuestionPage(1);
-                  }}
-                >
-                  {[24, 48, 96].map((size) => (
-                    <option value={size} key={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <fieldset className="language-switcher">
-                <legend>阅读顺序 / Reading mode</legend>
-                <div className="segmented">
-                  {languageModeOptions.map((option) => (
-                    <button
-                      type="button"
-                      key={option.id}
-                      className={
-                        questionLanguageMode === option.id ? "active" : ""
-                      }
-                      aria-pressed={questionLanguageMode === option.id}
-                      title={option.description}
-                      onClick={() => setQuestionLanguageMode(option.id)}
+                <div className="dojo-toolbar">
+                  <div
+                    className="dojo-results-summary"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    <strong>{filteredQuestions.length.toLocaleString()}</strong>
+                    <span>
+                      道匹配任务 / matched tasks · 共 / total{" "}
+                      {questionBank.questionCount.toLocaleString()}
+                    </span>
+                    <small>
+                      当前显示 / showing {questionResultStart.toLocaleString()}–
+                      {questionResultEnd.toLocaleString()} · 第 / page{" "}
+                      {safeQuestionPage} / {questionPageCount}
+                    </small>
+                  </div>
+                  <label className="question-page-size">
+                    <span>每页 / Page size</span>
+                    <select
+                      value={questionPageSize}
+                      onChange={(event) => {
+                        setQuestionPageSize(Number(event.target.value));
+                        setQuestionPage(1);
+                      }}
                     >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-            </div>
-
-            <div className="filter-bar dojo-filters">
-              <label className="search-field">
-                <span>搜索 / Search</span>
-                <input
-                  value={search}
-                  onChange={(event) => {
-                    setSearch(event.target.value);
-                    setQuestionPage(1);
-                  }}
-                  placeholder="题目、技能、故障类型 / title, skill, failure…"
-                />
-              </label>
-              <label>
-                <span>岗位 / Role</span>
-                <select
-                  value={roleFilter}
-                  onChange={(event) => {
-                    setRoleFilter(event.target.value);
-                    setQuestionPage(1);
-                  }}
-                >
-                  <option value="ALL">全部岗位 / All roles</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.id}>
-                      {role.nameZh} / {role.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>任务类型 / Type</span>
-                <select
-                  value={questionType}
-                  onChange={(event) => {
-                    setQuestionType(event.target.value);
-                    setQuestionPage(1);
-                  }}
-                >
-                  <option value="ALL">全部类型 / All types</option>
-                  {questionTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>学习层级 / Level</span>
-                <select
-                  value={questionLevel}
-                  onChange={(event) => {
-                    setQuestionLevel(event.target.value);
-                    setQuestionPage(1);
-                  }}
-                >
-                  <option value="ALL">全部层级 / All levels</option>
-                  {Array.from(
-                    new Set(questions.map((question) => question.level)),
-                  ).map((level) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>难度 / Difficulty</span>
-                <select
-                  value={questionDifficulty}
-                  onChange={(event) => {
-                    setQuestionDifficulty(event.target.value);
-                    setQuestionPage(1);
-                  }}
-                >
-                  <option value="ALL">全部难度 / All difficulties</option>
-                  {Array.from(
-                    new Set(questions.map((question) => question.difficulty)),
-                  ).map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>
-                      {difficulty}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button
-                type="button"
-                className="filter-reset"
-                onClick={resetQuestionFilters}
-                disabled={activeQuestionFilterCount === 0}
-              >
-                重置筛选 / Reset
-                {activeQuestionFilterCount
-                  ? ` (${activeQuestionFilterCount})`
-                  : ""}
-              </button>
-            </div>
-
-            <div ref={questionResultsRef} className="question-results-anchor">
-              {visibleQuestions.length ? (
-                <div className="question-grid">
-                  {visibleQuestions.map((question) => (
-                    <article
-                      className={`question-card ${
-                        question.type.toLowerCase().includes("boss") ? "boss" : ""
-                      }`}
-                      key={question.id}
-                    >
-                      <div className="question-card-top">
-                        <span>{question.type}</span>
-                        <span>
-                          {question.estimatedMinutes} MIN · {question.status}
-                        </span>
-                      </div>
-                      <h3>
-                        <BilingualCopy
-                          zh={question.titleZh}
-                          en={question.title}
-                          mode={questionLanguageMode}
-                          className="question-card-title"
-                        />
-                      </h3>
-                      <div className="question-card-prompt">
-                        <BilingualCopy
-                          zh={question.promptPreviewZh}
-                          en={question.promptPreview}
-                          mode={questionLanguageMode}
-                          className="compact-bilingual"
-                        />
-                      </div>
-                      <div className="question-skills">
-                        {question.skills.slice(0, 4).map((skill) => (
-                          <span key={skill}>
-                            {skillName(skillById.get(skill) || { id: skill })}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="question-card-bottom">
-                        <span>
-                          {question.difficulty} · {question.level}
-                        </span>
+                      {[24, 48, 96].map((size) => (
+                        <option value={size} key={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <fieldset className="language-switcher">
+                    <legend>阅读顺序 / Reading mode</legend>
+                    <div className="segmented">
+                      {languageModeOptions.map((option) => (
                         <button
-                          onClick={() => openQuestion(question)}
-                          aria-label={`${
-                            completedQuestions.has(question.id)
-                              ? "再次训练"
-                              : "开始任务"
-                          }：${question.titleZh || question.title} / ${
-                            question.title
-                          }`}
+                          type="button"
+                          key={option.id}
+                          className={
+                            questionLanguageMode === option.id ? "active" : ""
+                          }
+                          aria-pressed={questionLanguageMode === option.id}
+                          title={option.description}
+                          onClick={() => setQuestionLanguageMode(option.id)}
                         >
-                          {completedQuestions.has(question.id)
-                            ? "再次训练 / Retry"
-                            : "开始任务 / Start"}{" "}
-                          →
+                          {option.label}
                         </button>
-                      </div>
-                    </article>
-                  ))}
+                      ))}
+                    </div>
+                  </fieldset>
                 </div>
-              ) : (
-                <div className="empty-state question-empty">
-                  <span>00</span>
-                  <h3>没有匹配题目 / No matching tasks</h3>
-                  <p>
-                    放宽关键词或筛选条件，即可返回完整双语题库。
-                    <br />
-                    Clear or broaden the filters to return to the full bilingual
-                    library.
-                  </p>
-                  <button className="secondary-button" onClick={resetQuestionFilters}>
-                    重置筛选 / Reset filters
+
+                <div className="filter-bar dojo-filters">
+                  <label className="search-field">
+                    <span>搜索 / Search</span>
+                    <input
+                      value={search}
+                      onChange={(event) => {
+                        setSearch(event.target.value);
+                        setQuestionPage(1);
+                      }}
+                      placeholder="题目、技能、故障类型 / title, skill, failure…"
+                    />
+                  </label>
+                  <label>
+                    <span>岗位 / Role</span>
+                    <select
+                      value={roleFilter}
+                      onChange={(event) => {
+                        setRoleFilter(event.target.value);
+                        setQuestionPage(1);
+                      }}
+                    >
+                      <option value="ALL">全部岗位 / All roles</option>
+                      {roles.map((role) => {
+                        const primaryTitle =
+                          rolePresentationFor(role).typicalTitleAtoms[0];
+                        return (
+                          <option key={role.id} value={role.id}>
+                            {primaryTitle.zh} / {primaryTitle.en}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
+                  <label>
+                    <span>任务类型 / Type</span>
+                    <select
+                      value={questionType}
+                      onChange={(event) => {
+                        setQuestionType(event.target.value);
+                        setQuestionPage(1);
+                      }}
+                    >
+                      <option value="ALL">全部类型 / All types</option>
+                      {questionTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {bilingualLabel(type, questionTypeLabels)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>学习层级 / Level</span>
+                    <select
+                      value={questionLevel}
+                      onChange={(event) => {
+                        setQuestionLevel(event.target.value);
+                        setQuestionPage(1);
+                      }}
+                    >
+                      <option value="ALL">全部层级 / All levels</option>
+                      {Array.from(
+                        new Set(questions.map((question) => question.level)),
+                      ).map((level) => (
+                        <option key={level} value={level}>
+                          {bilingualLabel(level, learningLevelLabels)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>难度 / Difficulty</span>
+                    <select
+                      value={questionDifficulty}
+                      onChange={(event) => {
+                        setQuestionDifficulty(event.target.value);
+                        setQuestionPage(1);
+                      }}
+                    >
+                      <option value="ALL">全部难度 / All difficulties</option>
+                      {Array.from(
+                        new Set(
+                          questions.map((question) => question.difficulty),
+                        ),
+                      ).map((difficulty) => (
+                        <option key={difficulty} value={difficulty}>
+                          {bilingualLabel(difficulty, difficultyLabels)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className="filter-reset"
+                    onClick={resetQuestionFilters}
+                    disabled={activeQuestionFilterCount === 0}
+                  >
+                    重置筛选 / Reset
+                    {activeQuestionFilterCount
+                      ? ` (${activeQuestionFilterCount})`
+                      : ""}
                   </button>
                 </div>
-              )}
-            </div>
 
-            {filteredQuestions.length > questionPageSize ? (
-              <nav
-                className="question-pagination"
-                aria-label="题库分页 / Question library pagination"
-              >
-                <button
-                  type="button"
-                  onClick={() => goToQuestionPage(1)}
-                  disabled={safeQuestionPage === 1}
-                  aria-label="第一页 / First page"
+                <div
+                  ref={questionResultsRef}
+                  className="question-results-anchor"
                 >
-                  «
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToQuestionPage(safeQuestionPage - 1)}
-                  disabled={safeQuestionPage === 1}
-                >
-                  上一页 / Prev
-                </button>
-                <div className="pagination-pages">
-                  {visibleQuestionPages.map((page) => (
+                  {visibleQuestions.length ? (
+                    <div className="question-grid">
+                      {visibleQuestions.map((question) => (
+                        <article
+                          className={`question-card ${
+                            question.type.toLowerCase().includes("boss")
+                              ? "boss"
+                              : ""
+                          }`}
+                          key={question.id}
+                        >
+                          <div className="question-card-top">
+                            <span>
+                              {bilingualLabel(
+                                question.type,
+                                questionTypeLabels,
+                              )}
+                            </span>
+                            <span>
+                              {question.estimatedMinutes} MIN ·{" "}
+                              {bilingualLabel(
+                                question.status,
+                                questionStatusLabels,
+                              )}
+                            </span>
+                          </div>
+                          <h3>
+                            <BilingualCopy
+                              zh={question.titleZh}
+                              en={question.title}
+                              mode={questionLanguageMode}
+                              className="question-card-title"
+                            />
+                          </h3>
+                          <div className="question-card-prompt">
+                            <BilingualCopy
+                              zh={question.promptPreviewZh}
+                              en={question.promptPreview}
+                              mode={questionLanguageMode}
+                              className="compact-bilingual"
+                            />
+                          </div>
+                          <div className="question-skills">
+                            {question.skills
+                              .slice(0, 4)
+                              .flatMap((skill) =>
+                                skillTerms(
+                                  skillById.get(skill) || { id: skill },
+                                ).map((term) => ({ skill, term })),
+                              )
+                              .map(({ skill, term }) => (
+                                <span key={`${skill}:${term.id}`}>
+                                  <BilingualTermLabel term={term} />
+                                </span>
+                              ))}
+                          </div>
+                          <div className="question-card-bottom">
+                            <span>
+                              {bilingualLabel(
+                                question.difficulty,
+                                difficultyLabels,
+                              )}{" "}
+                              ·{" "}
+                              {bilingualLabel(
+                                question.level,
+                                learningLevelLabels,
+                              )}
+                            </span>
+                            <button
+                              onClick={() => openQuestion(question)}
+                              aria-label={`${
+                                completedQuestions.has(question.id)
+                                  ? "再次训练 / Retry"
+                                  : "开始任务 / Start"
+                              }：${question.titleZh || question.title} / ${
+                                question.title
+                              }`}
+                            >
+                              {completedQuestions.has(question.id)
+                                ? "再次训练 / Retry"
+                                : "开始任务 / Start"}{" "}
+                              →
+                            </button>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state question-empty">
+                      <span>00</span>
+                      <h3>没有匹配题目 / No matching tasks</h3>
+                      <p>
+                        放宽关键词或筛选条件，即可返回完整双语题库。
+                        <br />
+                        Clear or broaden the filters to return to the full
+                        bilingual library.
+                      </p>
+                      <button
+                        className="secondary-button"
+                        onClick={resetQuestionFilters}
+                      >
+                        重置筛选 / Reset filters
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {filteredQuestions.length > questionPageSize ? (
+                  <nav
+                    className="question-pagination"
+                    aria-label="题库分页 / Question library pagination"
+                  >
                     <button
                       type="button"
-                      key={page}
-                      className={page === safeQuestionPage ? "active" : ""}
-                      aria-current={page === safeQuestionPage ? "page" : undefined}
-                      aria-label={`第 ${page} 页 / Page ${page}`}
-                      onClick={() => goToQuestionPage(page)}
+                      onClick={() => goToQuestionPage(1)}
+                      disabled={safeQuestionPage === 1}
+                      aria-label="第一页 / First page"
                     >
-                      {page}
+                      «
                     </button>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => goToQuestionPage(safeQuestionPage + 1)}
-                  disabled={safeQuestionPage === questionPageCount}
-                >
-                  下一页 / Next
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goToQuestionPage(questionPageCount)}
-                  disabled={safeQuestionPage === questionPageCount}
-                  aria-label="最后一页 / Last page"
-                >
-                  »
-                </button>
-              </nav>
-            ) : null}
+                    <button
+                      type="button"
+                      onClick={() => goToQuestionPage(safeQuestionPage - 1)}
+                      disabled={safeQuestionPage === 1}
+                    >
+                      上一页 / Prev
+                    </button>
+                    <div className="pagination-pages">
+                      {visibleQuestionPages.map((page) => (
+                        <button
+                          type="button"
+                          key={page}
+                          className={page === safeQuestionPage ? "active" : ""}
+                          aria-current={
+                            page === safeQuestionPage ? "page" : undefined
+                          }
+                          aria-label={`第 ${page} 页 / Page ${page}`}
+                          onClick={() => goToQuestionPage(page)}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => goToQuestionPage(safeQuestionPage + 1)}
+                      disabled={safeQuestionPage === questionPageCount}
+                    >
+                      下一页 / Next
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => goToQuestionPage(questionPageCount)}
+                      disabled={safeQuestionPage === questionPageCount}
+                      aria-label="最后一页 / Last page"
+                    >
+                      »
+                    </button>
+                  </nav>
+                ) : null}
               </>
             )}
           </section>
@@ -2765,15 +3657,29 @@ export function CareerDojoApp({
           <section className="view">
             <div className="results-heading">
               <div>
-                <span className="section-kicker">APPLICATION WAR ROOM</span>
-                <h2>让每次投递产生信息，而不只是数量。</h2>
+                <span className="section-kicker">
+                  投递作战室 / APPLICATION WAR ROOM
+                </span>
+                <h2>
+                  让每次投递产生信息，而不只是数量。 / Make every application
+                  produce evidence.
+                </h2>
               </div>
               <div className="results-actions">
                 <p>
-                  当前版本先保存 JD、材料版本与阶段观察；样本充分前不自动推断拒绝原因或改写能力权重。
+                  当前版本先保存
+                  JD、材料版本与阶段观察；样本充分前不自动推断拒绝原因或改写能力权重。
+                  <span lang="en">
+                    This version records JDs, material versions, and stage
+                    observations. It does not infer rejection causes or rewrite
+                    skill weights before enough evidence exists.
+                  </span>
                 </p>
-                <button className="secondary-button" onClick={exportPrivateState}>
-                  导出私有数据
+                <button
+                  className="secondary-button"
+                  onClick={exportPrivateState}
+                >
+                  导出私有数据 / Export private data
                 </button>
               </div>
             </div>
@@ -2781,13 +3687,19 @@ export function CareerDojoApp({
             {persisted.applications.length === 0 ? (
               <article className="empty-state">
                 <span>00</span>
-                <h3>投递管线仍为空</h3>
-                <p>从公司宇宙中打开目标档案，加入作战室并逐步补齐具体岗位。</p>
+                <h3>投递管线仍为空 / The pipeline is empty</h3>
+                <p>
+                  从组织宇宙中打开目标档案，加入作战室并逐步补齐具体岗位。
+                  <span lang="en">
+                    Open a target profile from the atlas, add it to the war
+                    room, and complete the exact requisition over time.
+                  </span>
+                </p>
                 <button
                   className="primary-button"
                   onClick={() => setView("atlas")}
                 >
-                  选择第一个目标
+                  选择第一个目标 / Choose the first target
                 </button>
               </article>
             ) : (
@@ -2803,19 +3715,24 @@ export function CareerDojoApp({
                         <span>{records.length}</span>
                       </div>
                       {records.map((application) => (
-                        <article className="application-card" key={application.id}>
+                        <article
+                          className="application-card"
+                          key={application.id}
+                        >
                           <div>
                             <span
                               className={`priority priority-${application.priority}`}
                             >
-                              {application.priority}
+                              {priorityLabel(application.priority)}
                             </span>
-                            <small>{application.region}</small>
+                            <small>{regionLabel(application.region)}</small>
                           </div>
                           <h3>
                             {companyById.has(application.company_id) ? (
                               <CompanyName
-                                company={companyById.get(application.company_id)!}
+                                company={companyById.get(
+                                  application.company_id,
+                                )!}
                               />
                             ) : (
                               application.company_name
@@ -2823,20 +3740,29 @@ export function CareerDojoApp({
                           </h3>
                           <p>{application.role_title}</p>
                           <div className="application-signals">
-                            <span>{application.employment_type}</span>
-                            <span>匹配 {application.match_score || 0}</span>
-                            <span>身份 {application.sponsorship_signal}</span>
-                            <span>出口 {application.export_signal}</span>
+                            <span>
+                              {employmentTypeLabel(application.employment_type)}
+                            </span>
+                            <span>
+                              匹配 / Match {application.match_score || 0}
+                            </span>
+                            <span>
+                              工作授权 / Authorization{" "}
+                              {signalLabel(application.sponsorship_signal)}
+                            </span>
+                            <span>
+                              出口管制 / Export{" "}
+                              {signalLabel(application.export_signal)}
+                            </span>
                           </div>
                           <label>
-                            <span>推进阶段</span>
+                            <span>推进阶段 / Stage</span>
                             <select
                               value={application.status}
                               onChange={(event) =>
-                                updateApplication(
-                                  application,
-                                  { status: event.target.value },
-                                )
+                                updateApplication(application, {
+                                  status: event.target.value,
+                                })
                               }
                             >
                               {applicationStages.map(([value, stageLabel]) => (
@@ -2847,13 +3773,16 @@ export function CareerDojoApp({
                             </select>
                           </label>
                           <details className="application-details">
-                            <summary>编辑具体岗位</summary>
+                            <summary>编辑具体岗位 / Edit requisition</summary>
                             <label>
-                              <span>岗位名称</span>
+                              <span>岗位名称 / Role title</span>
                               <input
                                 defaultValue={application.role_title}
                                 onBlur={(event) => {
-                                  if (event.target.value !== application.role_title) {
+                                  if (
+                                    event.target.value !==
+                                    application.role_title
+                                  ) {
                                     updateApplication(application, {
                                       roleTitle: event.target.value,
                                     });
@@ -2862,7 +3791,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>截止日期</span>
+                              <span>截止日期 / Deadline</span>
                               <input
                                 type="date"
                                 defaultValue={application.deadline}
@@ -2874,7 +3803,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>优先级</span>
+                              <span>优先级 / Priority</span>
                               <select
                                 value={application.priority}
                                 onChange={(event) =>
@@ -2883,13 +3812,15 @@ export function CareerDojoApp({
                                   })
                                 }
                               >
-                                <option value="high">high</option>
-                                <option value="medium">medium</option>
-                                <option value="low">low</option>
+                                <option value="high">高 / High</option>
+                                <option value="medium">中 / Medium</option>
+                                <option value="low">低 / Low</option>
                               </select>
                             </label>
                             <label>
-                              <span>身份 / 赞助信号</span>
+                              <span>
+                                工作授权信号 / Work authorization signal
+                              </span>
                               <select
                                 value={application.sponsorship_signal}
                                 onChange={(event) =>
@@ -2898,17 +3829,17 @@ export function CareerDojoApp({
                                   })
                                 }
                               >
-                                {["green", "yellow", "orange", "red", "unknown"].map(
-                                  (signal) => (
-                                    <option value={signal} key={signal}>
-                                      {signal}
+                                {screeningSignalOptions.map(
+                                  ([value, label]) => (
+                                    <option value={value} key={value}>
+                                      {label}
                                     </option>
                                   ),
                                 )}
                               </select>
                             </label>
                             <label>
-                              <span>出口管制信号</span>
+                              <span>出口管制信号 / Export-control signal</span>
                               <select
                                 value={application.export_signal}
                                 onChange={(event) =>
@@ -2917,17 +3848,17 @@ export function CareerDojoApp({
                                   })
                                 }
                               >
-                                {["green", "yellow", "orange", "red", "unknown"].map(
-                                  (signal) => (
-                                    <option value={signal} key={signal}>
-                                      {signal}
+                                {screeningSignalOptions.map(
+                                  ([value, label]) => (
+                                    <option value={value} key={value}>
+                                      {label}
                                     </option>
                                   ),
                                 )}
                               </select>
                             </label>
                             <label>
-                              <span>联系人 / 内推</span>
+                              <span>联系人 / Contact</span>
                               <input
                                 defaultValue={application.contact}
                                 onBlur={(event) =>
@@ -2938,7 +3869,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>简历版本</span>
+                              <span>简历版本 / Resume version</span>
                               <input
                                 defaultValue={application.resume_version}
                                 onBlur={(event) =>
@@ -2949,7 +3880,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>JD 关键词</span>
+                              <span>岗位关键词 / JD keywords</span>
                               <textarea
                                 defaultValue={application.jd_keywords}
                                 onBlur={(event) =>
@@ -2960,7 +3891,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>岗位链接</span>
+                              <span>岗位链接 / Requisition URL</span>
                               <input
                                 type="url"
                                 defaultValue={application.job_url}
@@ -2972,7 +3903,7 @@ export function CareerDojoApp({
                               />
                             </label>
                             <label>
-                              <span>复盘备注</span>
+                              <span>复盘备注 / Reflection notes</span>
                               <textarea
                                 defaultValue={application.notes}
                                 onBlur={(event) =>
@@ -2986,7 +3917,7 @@ export function CareerDojoApp({
                               className="delete-button"
                               onClick={() => deleteApplication(application)}
                             >
-                              删除这条岗位记录
+                              删除这条岗位记录 / Delete requisition
                             </button>
                           </details>
                           {application.job_url ? (
@@ -2995,7 +3926,7 @@ export function CareerDojoApp({
                               target="_blank"
                               rel="noreferrer"
                             >
-                              官方招聘入口 ↗
+                              官方招聘入口 / Official careers ↗
                             </a>
                           ) : null}
                         </article>
@@ -3010,8 +3941,8 @@ export function CareerDojoApp({
               <article className="panel shortlist-panel">
                 <div className="panel-heading">
                   <div>
-                    <span className="section-kicker">SHORTLIST</span>
-                    <h3>已收藏但尚未进入管线</h3>
+                    <span className="section-kicker">候选清单 / SHORTLIST</span>
+                    <h3>已收藏但尚未进入管线 / Bookmarked, not in pipeline</h3>
                   </div>
                 </div>
                 <div className="shortlist-row">
@@ -3029,8 +3960,10 @@ export function CareerDojoApp({
                         key={company.id}
                         onClick={() => setSelectedCompany(company)}
                       >
-                        <strong><CompanyName company={company} /></strong>
-                        <small>{company.fitTier}</small>
+                        <strong>
+                          <CompanyName company={company} />
+                        </strong>
+                        <small>{fitTierLabel(company.fitTier)}</small>
                       </button>
                     ))}
                 </div>
@@ -3042,25 +3975,32 @@ export function CareerDojoApp({
         {view === "evidence" ? (
           <section className="view evidence-view">
             <div className="evidence-hero">
-              <span className="section-kicker">TRUSTED RESEARCH SYSTEM</span>
-              <h2>“全量”必须可以审计。</h2>
+              <span className="section-kicker">
+                可信研究系统 / TRUSTED RESEARCH SYSTEM
+              </span>
+              <h2>“全量”必须可以审计。 / Coverage must be auditable.</h2>
               <p>
                 数量不是终点。每个节点都要说明从哪里来、何时观察、可信到什么程度，以及还有什么未知。
+                <span className="inline-translation" lang="en">
+                  Count is not the endpoint. Every node must state its source,
+                  observation date, confidence, and remaining unknowns.
+                </span>
               </p>
               <p className="evidence-bank-lineage">
                 <strong>
-                  题库口径：210 个基础场景 + 每场 9 个递进训练 = 2,100
-                  个任务。
+                  题库口径：210 个基础场景 + 每场 9 个递进训练 = 2,100 个任务。
                 </strong>
                 <span lang="en">
-                  210 anchor scenarios + 1,890 progressive drills = 2,100
-                  tasks.
+                  210 anchor scenarios + 1,890 progressive drills = 2,100 tasks.
                 </span>
               </p>
             </div>
 
             <div className="metric-grid evidence-metrics">
-              <Metric value={companies.length} label="规范化实体" />
+              <Metric
+                value={organizationBank.organizationCount}
+                label="规范化实体 / Canonical entities"
+              />
               <Metric
                 value={
                   companies.filter((item) =>
@@ -3069,7 +4009,7 @@ export function CareerDojoApp({
                     ),
                   ).length
                 }
-                label="观察日具体岗位"
+                label="观察日具体岗位 / Current postings"
               />
               <Metric
                 value={
@@ -3077,7 +4017,7 @@ export function CareerDojoApp({
                     (item) => signalKey(item.visaSignal) === "unknown",
                   ).length
                 }
-                label="身份信号待核"
+                label="身份信号待核 / Eligibility unknown"
               />
               <Metric
                 value={
@@ -3085,21 +4025,26 @@ export function CareerDojoApp({
                     (item) => signalKey(item.visaSignal) === "red",
                   ).length
                 }
-                label="硬门槛节点"
+                label="硬门槛节点 / Restricted nodes"
               />
               <Metric
                 value={questionBank.questionCount}
-                label="合规训练任务"
+                label="合规训练任务 / Compliant tasks"
               />
-              <Metric value={skills.length} label="能力覆盖节点" />
+              <Metric
+                value={skills.length}
+                label="能力覆盖节点 / Skill nodes"
+              />
             </div>
 
             <div className="evidence-grid">
               <article className="panel private-profile-panel">
                 <div className="private-profile-heading">
                   <div>
-                    <span className="section-kicker">PRIVATE PROFILE SYNC</span>
-                    <h3>私有画像同步</h3>
+                    <span className="section-kicker">
+                      私有画像同步 / PRIVATE PROFILE SYNC
+                    </span>
+                    <h3>私有画像同步 / Private profile sync</h3>
                   </div>
                   <span
                     className={
@@ -3109,19 +4054,25 @@ export function CareerDojoApp({
                     }
                   >
                     {persisted.preferences.candidateProfile
-                      ? "私有画像已启用"
-                      : "当前为匿名模板"}
+                      ? "私有画像已启用 / Private profile active"
+                      : "当前为匿名模板 / Anonymous template"}
                   </span>
                 </div>
                 <p>
-                  在这里粘贴本机私有画像 JSON。通过格式校验后，它只写入当前登录用户的
-                  D1 空间，不会进入公开仓库，也不会与其他账号共享。
+                  在这里粘贴本机私有画像
+                  JSON。通过格式校验后，它只写入当前登录用户的 D1
+                  空间，不会进入公开仓库，也不会与其他账号共享。
+                  <span className="inline-translation" lang="en">
+                    Paste a local private-profile JSON here. After validation it
+                    is written only to the signed-in user&apos;s private data
+                    space, never to the public repository or another account.
+                  </span>
                 </p>
                 <label>
-                  <span>候选人画像 JSON</span>
+                  <span>候选人画像 JSON / Candidate profile JSON</span>
                   <textarea
                     data-testid="private-profile-import"
-                    aria-label="候选人画像 JSON"
+                    aria-label="候选人画像 JSON / Candidate profile JSON"
                     value={privateProfileDraft}
                     onChange={(event) =>
                       setPrivateProfileDraft(event.target.value)
@@ -3137,14 +4088,14 @@ export function CareerDojoApp({
                     onClick={importPrivateProfile}
                     disabled={!privateProfileDraft.trim()}
                   >
-                    校验并保存
+                    校验并保存 / Validate and save
                   </button>
                   {persisted.preferences.candidateProfile ? (
                     <button
                       className="secondary-button"
                       onClick={clearPrivateProfile}
                     >
-                      恢复匿名模板
+                      恢复匿名模板 / Restore anonymous template
                     </button>
                   ) : null}
                   <span role="status" aria-live="polite">
@@ -3153,30 +4104,61 @@ export function CareerDojoApp({
                 </div>
               </article>
               <article className="panel">
-                <span className="section-kicker">COVERAGE CONTRACT</span>
-                <h3>公司宇宙覆盖原则</h3>
+                <span className="section-kicker">
+                  覆盖合同 / COVERAGE CONTRACT
+                </span>
+                <h3>组织宇宙覆盖原则 / Atlas coverage contract</h3>
                 <ul className="method-list">
-                  <li>官方产业目录、协会成员和会议生态建立种子集合</li>
-                  <li>按法人、母公司、品牌与收购关系进行规范化去重</li>
-                  <li>只把有官方入口的实体标记为已验证</li>
-                  <li>身份、赞助与出口限制落到具体岗位，不一刀切公司</li>
-                  <li>保留 residual report，公开尚未核验与已过期节点</li>
+                  <li>
+                    官方产业目录建立种子集合 / Seed from official industry
+                    directories
+                  </li>
+                  <li>
+                    按独立招聘身份规范化去重 / Deduplicate by independent
+                    recruiting identity
+                  </li>
+                  <li>
+                    只有官方入口可标记为已验证 / Require an official source for
+                    verified status
+                  </li>
+                  <li>
+                    资格限制落到具体岗位 / Resolve eligibility at requisition
+                    level
+                  </li>
+                  <li>
+                    公开 residual report / Publish the residual coverage report
+                  </li>
                 </ul>
               </article>
               <article className="panel">
-                <span className="section-kicker">QUESTION SUPPLY CHAIN</span>
-                <h3>题目质量合同</h3>
+                <span className="section-kicker">
+                  题目供应链 / QUESTION SUPPLY CHAIN
+                </span>
+                <h3>题目质量合同 / Question quality contract</h3>
                 <ul className="method-list">
-                  <li>公开规范、官方文档、开源项目和原创同构任务</li>
-                  <li>禁止复制付费题库、NDA 题目和泄露面经原文</li>
-                  <li>每题包含交付物、评分规则、失败模式和追问</li>
-                  <li>语义去重并记录适用岗位、技能和证据日期</li>
-                  <li>AI 评分显示证据与不确定度，并接受真人校准</li>
+                  <li>
+                    公开规范与原创同构任务 / Public specifications and original
+                    analogous tasks
+                  </li>
+                  <li>
+                    禁止付费题库与 NDA 泄题 / No paid-bank copying or NDA leaks
+                  </li>
+                  <li>
+                    每题有完整评分闭环 / Every task has a complete evaluation
+                    loop
+                  </li>
+                  <li>
+                    记录岗位、技能与证据日期 / Track roles, skills, and evidence
+                    dates
+                  </li>
+                  <li>
+                    AI 评分接受真人校准 / AI scoring remains human-calibrated
+                  </li>
                 </ul>
               </article>
               <article className="panel evidence-source-panel">
-                <span className="section-kicker">SOURCE SAMPLE</span>
-                <h3>最近验证的一手入口</h3>
+                <span className="section-kicker">来源样本 / SOURCE SAMPLE</span>
+                <h3>最近验证的一手入口 / Recently verified primary sources</h3>
                 <div className="source-list">
                   {companies
                     .flatMap((company) =>
@@ -3195,9 +4177,12 @@ export function CareerDojoApp({
                         key={`${evidence.url}-${index}`}
                       >
                         <span>{evidence.company}</span>
-                        <strong>{evidence.title || "官方证据"}</strong>
+                        <strong>
+                          {evidence.title || "官方证据 / Official evidence"}
+                        </strong>
                         <small>
-                          {evidence.observedAt || effectiveProfile.evidenceDate} ↗
+                          {evidence.observedAt || effectiveProfile.evidenceDate}{" "}
+                          ↗
                         </small>
                       </a>
                     ))}
@@ -3208,7 +4193,7 @@ export function CareerDojoApp({
         ) : null}
       </main>
 
-      <nav className="mobile-nav" aria-label="移动端导航">
+      <nav className="mobile-nav" aria-label="移动端导航 / Mobile navigation">
         {views.map((item) => (
           <button
             key={item.id}
@@ -3234,16 +4219,19 @@ export function CareerDojoApp({
             aria-labelledby="company-dialog-title"
             tabIndex={-1}
           >
-            <button
-              className="modal-close"
-              onClick={() => {
-                setApplicationBuilderVisible(false);
-                setSelectedCompany(null);
-              }}
-              aria-label="关闭公司档案"
-            >
-              ×
-            </button>
+            <div className="company-modal-toolbar">
+              <span>组织情报档案 / Organization intelligence profile</span>
+              <button
+                className="modal-close"
+                onClick={() => {
+                  setApplicationBuilderVisible(false);
+                  setSelectedCompany(null);
+                }}
+                aria-label="关闭组织档案 / Close organization profile"
+              >
+                ×
+              </button>
+            </div>
             <div className="modal-header">
               <span className="company-avatar large">
                 {selectedCompany.nameEn.slice(0, 2).toUpperCase()}
@@ -3251,76 +4239,322 @@ export function CareerDojoApp({
               <div>
                 <span className="section-kicker">
                   {regionLabel(regionOf(selectedCompany))} ·{" "}
-                  {companyTypeLabel(selectedCompany.companyType)}
+                  {organizationClassLabel(selectedCompany)}
                 </span>
                 <h2 id="company-dialog-title">
                   <CompanyName company={selectedCompany} />
                 </h2>
                 <div className="modal-status-row">
                   <span className="tier-badge">
-                    FIT {selectedCompany.fitTier || "TBD"}
+                    匹配 / Fit · {fitTierLabel(selectedCompany.fitTier)}
                   </span>
                   <StatusDot signal={selectedCompany.visaSignal} />
+                  <span>
+                    {organizationDifficultyLabel(selectedCompany.difficulty)}
+                  </span>
                   <span>{confidenceLabel(selectedCompany.confidence)}</span>
                 </div>
               </div>
             </div>
 
             <div className="scope-notice">
-              <strong>组织档案，不是当前 JD</strong>
-              <span>
-                方向、要求、缺口与难度是分析标签；只有标为
-                official-current-job 的证据才证明观察日存在具体岗位。
-              </span>
+              <strong>
+                组织档案，不是当前 JD / Organization profile, not a current JD
+              </strong>
+              <BilingualParagraph
+                zh="方向、要求与补强目标是结构化分析；只有“当前岗位”证据才证明观察日存在具体职位。"
+                en="Domains, requirements, and preparation targets are structured analysis. Only Current Job Posting evidence proves that an exact role existed on the observation date."
+              />
             </div>
-            <p className="modal-summary">{selectedCompany.whyRelevant}</p>
-            <div className="tag-row canonical-role-row">
-              {selectedCompany.roleFamilyIds.map((roleId) => (
-                <span key={roleId}>
-                  {(() => {
-                    const role = roles.find((item) => item.id === roleId);
-                    return role ? `${role.nameZh} / ${role.name}` : roleId;
-                  })()}
-                </span>
-              ))}
+
+            <div className="organization-narrative-grid">
+              <article className="organization-overview">
+                <h3>
+                  <BilingualHeading zh="机构简介" en="Organization overview" />
+                </h3>
+                <BilingualParagraph
+                  zh={selectedCompany.descriptionZh}
+                  en={selectedCompany.descriptionEn}
+                />
+              </article>
+              <article className="organization-relevance">
+                <h3>
+                  <BilingualHeading zh="与你的匹配" en="Why it matches" />
+                </h3>
+                <BilingualParagraph
+                  zh={selectedCompany.relevanceZh}
+                  en={selectedCompany.relevanceEn}
+                />
+              </article>
             </div>
-            <div className="modal-columns">
-              <div>
-                <h3>重点方向</h3>
-                <div className="tag-row">
-                  {selectedCompany.focusAreas.map((item) => (
-                    <span key={item}>{item}</span>
+
+            {selectedCompany.ownership ? (
+              <section className="organization-ownership">
+                <div className="organization-ownership-heading">
+                  <div>
+                    <span className="section-kicker">
+                      中国企业所有制 / CHINA OWNERSHIP
+                    </span>
+                    <h3>
+                      <BilingualHeading
+                        zh={selectedCompany.ownership.labelZh}
+                        en={selectedCompany.ownership.labelEn}
+                      />
+                    </h3>
+                  </div>
+                  <div className="ownership-status">
+                    <span>
+                      {confidenceLabel(selectedCompany.ownership.confidence)}
+                    </span>
+                    <span>
+                      {ownershipReviewStatusLabel(
+                        selectedCompany.ownership.reviewStatus,
+                      )}
+                    </span>
+                    <span>
+                      {ownershipClassificationBasisLabel(
+                        selectedCompany.ownership.classificationBasis,
+                      )}
+                    </span>
+                    <span>
+                      审计 {selectedCompany.ownership.reviewedAt} / Reviewed{" "}
+                      {selectedCompany.ownership.reviewedAt}
+                    </span>
+                  </div>
+                </div>
+                <BilingualParagraph
+                  zh={selectedCompany.ownership.summaryZh}
+                  en={selectedCompany.ownership.summaryEn}
+                />
+                {selectedCompany.ownership.sourceOwnershipTag ? (
+                  <div className="ownership-source-tag">
+                    <strong>
+                      源记录所有制标签 / Source-record ownership tag
+                    </strong>
+                    <span>{selectedCompany.ownership.sourceOwnershipTag}</span>
+                  </div>
+                ) : null}
+                <div className="ownership-definition">
+                  <strong>分类定义 / Class definition</strong>
+                  <BilingualParagraph
+                    zh={selectedCompany.ownership.definitionZh}
+                    en={selectedCompany.ownership.definitionEn}
+                  />
+                </div>
+                <details>
+                  <summary>
+                    所有制证据与复核入口 / Ownership evidence and review sources
+                    · {selectedCompany.ownership.evidence.length}
+                  </summary>
+                  <div className="ownership-evidence-list">
+                    {selectedCompany.ownership.evidence.map(
+                      (evidence, index) => (
+                        <a
+                          href={evidence.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          key={`${evidence.url}:${index}`}
+                        >
+                          <BilingualParagraph
+                            zh={evidence.titleZh}
+                            en={evidence.titleEn}
+                          />
+                          <span className="ownership-evidence-scope">
+                            {ownershipEvidenceScopeLabel(
+                              evidence.evidenceScope,
+                            )}
+                          </span>
+                          <BilingualParagraph
+                            zh={evidence.noteZh}
+                            en={evidence.noteEn}
+                            className="ownership-evidence-note"
+                          />
+                          <small>
+                            观察 {evidence.observedAt} / Observed{" "}
+                            {evidence.observedAt} ↗
+                          </small>
+                        </a>
+                      ),
+                    )}
+                  </div>
+                </details>
+              </section>
+            ) : null}
+
+            {selectedCompanyRelations.length ? (
+              <section className="organization-relations">
+                <div className="organization-relations-heading">
+                  <div>
+                    <span className="section-kicker">
+                      组织关系 / ORGANIZATION RELATIONS
+                    </span>
+                    <h3>
+                      <BilingualHeading
+                        zh="企业家族与交易状态"
+                        en="Corporate family and transaction status"
+                      />
+                    </h3>
+                  </div>
+                  <span>
+                    {selectedCompanyRelations.length} 条关系 / relations
+                  </span>
+                </div>
+                <div className="organization-relation-list">
+                  {selectedCompanyRelations.map((relation) => {
+                    const peerId =
+                      relation.fromOrganizationId === selectedCompany.id
+                        ? relation.toOrganizationId
+                        : relation.fromOrganizationId;
+                    const peer = companyById.get(peerId);
+                    return (
+                      <article
+                        className={`organization-relation relation-${relation.status}`}
+                        key={relation.id}
+                      >
+                        <div className="organization-relation-top">
+                          <div className="organization-relation-tags">
+                            <span>
+                              {bilingualLabel(
+                                relation.relationType,
+                                relationTypeLabels,
+                              )}
+                            </span>
+                            <span>
+                              {bilingualLabel(
+                                relation.status,
+                                relationStatusLabels,
+                              )}
+                            </span>
+                          </div>
+                          <small>
+                            {relation.announcedAt
+                              ? `公告 ${relation.announcedAt} / Announced ${relation.announcedAt}`
+                              : `核验 ${relation.lastVerified} / Verified ${relation.lastVerified}`}
+                          </small>
+                        </div>
+                        {peer ? (
+                          <button
+                            type="button"
+                            className="organization-relation-peer"
+                            onClick={() => setSelectedCompany(peer)}
+                          >
+                            <CompanyName company={peer} /> →
+                          </button>
+                        ) : (
+                          <strong>{peerId}</strong>
+                        )}
+                        <BilingualParagraph
+                          zh={relation.summaryZh}
+                          en={relation.summaryEn}
+                        />
+                        <details>
+                          <summary>
+                            一手关系证据 / Primary relation evidence ·{" "}
+                            {relation.officialEvidence.length}
+                          </summary>
+                          <div>
+                            {relation.officialEvidence.map((evidence) => (
+                              <a
+                                href={evidence.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                key={evidence.url}
+                              >
+                                <BilingualHeading
+                                  zh={evidence.titleZh}
+                                  en={evidence.titleEn}
+                                />
+                                <small>
+                                  {evidence.publisher} ·{" "}
+                                  {evidence.publishedAt ||
+                                    evidence.lastVerified}{" "}
+                                  ↗
+                                </small>
+                              </a>
+                            ))}
+                          </div>
+                        </details>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ) : null}
+
+            <section className="organization-role-profile">
+              <h3>
+                <BilingualHeading zh="目标岗位" en="Target roles" />
+              </h3>
+              <div className="tag-row atomic-tag-row canonical-role-row">
+                {selectedCompany.roleAtoms.map((term) => (
+                  <span key={term.id}>
+                    <BilingualTermLabel term={term} />
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <div className="modal-columns organization-analysis-grid">
+              <article>
+                <h3>
+                  <BilingualHeading zh="业务方向" en="Business domains" />
+                </h3>
+                <div className="tag-row atomic-tag-row">
+                  {selectedCompany.focusAtoms.map((term) => (
+                    <span key={term.id}>
+                      <BilingualTermLabel term={term} />
+                    </span>
                   ))}
                 </div>
-              </div>
-              <div>
-                <h3>机会形态</h3>
-                <div className="tag-row">
-                  {selectedCompany.opportunityTypes.map((item) => (
-                    <span key={item}>{item}</span>
+              </article>
+              <article>
+                <h3>
+                  <BilingualHeading zh="机会形态" en="Opportunity formats" />
+                </h3>
+                <div className="tag-row atomic-tag-row">
+                  {selectedCompany.opportunityAtoms.map((term) => (
+                    <span key={term.id}>
+                      <BilingualTermLabel term={term} />
+                    </span>
                   ))}
                 </div>
-              </div>
-              <div>
-                <h3>常见要求</h3>
-                <ul>
-                  {selectedCompany.requirements.slice(0, 8).map((item) => (
-                    <li key={item}>{item}</li>
+              </article>
+              <article>
+                <h3>
+                  <BilingualHeading zh="需求能力" en="Required capabilities" />
+                </h3>
+                <ul className="atomic-content-list">
+                  {selectedCompany.requirementAtoms.map((term) => (
+                    <li key={term.id}>
+                      <BilingualTermLabel term={term} />
+                    </li>
                   ))}
                 </ul>
-              </div>
-              <div>
-                <h3>你的补强点</h3>
-                <ul>
-                  {selectedCompany.gaps.slice(0, 8).map((item) => (
-                    <li key={item}>{item}</li>
+              </article>
+              <article>
+                <h3>
+                  <BilingualHeading
+                    zh="你的补强目标"
+                    en="Your preparation targets"
+                  />
+                </h3>
+                <ul className="atomic-content-list">
+                  {selectedCompany.preparationAtoms.map((term) => (
+                    <li key={term.id}>
+                      <BilingualTermLabel term={term} />
+                    </li>
                   ))}
                 </ul>
-              </div>
+              </article>
             </div>
 
             <div className="modal-evidence">
-              <h3>证据与官方入口</h3>
+              <h3>
+                <BilingualHeading
+                  zh="证据与官方入口"
+                  en="Evidence and official entry points"
+                />
+              </h3>
               {selectedCompany.evidence.slice(0, 6).map((evidence, index) => (
                 <a
                   href={evidence.url}
@@ -3328,9 +4562,19 @@ export function CareerDojoApp({
                   rel="noreferrer"
                   key={`${evidence.url}-${index}`}
                 >
-                  <span>{evidence.type || "official"}</span>
-                  <strong>{evidence.title}</strong>
-                  <small>{evidence.observedAt || selectedCompany.lastVerified} ↗</small>
+                  <span>
+                    {(() => {
+                      const label = evidenceTypeLabel(evidence.type);
+                      return `${label.zh} / ${label.en}`;
+                    })()}
+                  </span>
+                  <strong>
+                    <small>原始标题 / Original title</small>
+                    {evidence.title}
+                  </strong>
+                  <small>
+                    {evidence.observedAt || selectedCompany.lastVerified} ↗
+                  </small>
                 </a>
               ))}
             </div>
@@ -3338,16 +4582,25 @@ export function CareerDojoApp({
             {applicationBuilderVisible ? (
               <div className="application-builder">
                 <div>
-                  <span className="section-kicker">REQUISITION RECORD</span>
-                  <h3>把组织线索落到具体岗位</h3>
+                  <span className="section-kicker">
+                    具体岗位记录 / REQUISITION RECORD
+                  </span>
+                  <h3>
+                    把组织线索落到具体岗位 / Convert the lead into a requisition
+                  </h3>
                   <p>
-                    如果岗位尚未开放，可先保存通用招聘页；开放后再补 JD、截止日、
-                    身份条款、联系人和简历版本。
+                    如果岗位尚未开放，可先保存通用招聘页；开放后再补
+                    JD、截止日、 身份条款、联系人和简历版本。
+                    <span lang="en">
+                      If no exact role is open, save the general careers page
+                      first; add the JD, deadline, eligibility terms, contact,
+                      and resume version when a requisition appears.
+                    </span>
                   </p>
                 </div>
                 <div className="application-builder-grid">
                   <label>
-                    <span>岗位名称 *</span>
+                    <span>岗位名称 / Role title *</span>
                     <input
                       value={applicationDraft.roleTitle}
                       onChange={(event) =>
@@ -3359,7 +4612,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label>
-                    <span>机会类型</span>
+                    <span>机会类型 / Opportunity type</span>
                     <select
                       value={applicationDraft.employmentType}
                       onChange={(event) =>
@@ -3369,23 +4622,15 @@ export function CareerDojoApp({
                         }))
                       }
                     >
-                      {[
-                        "internship",
-                        "co-op",
-                        "research",
-                        "part-time",
-                        "new-grad",
-                        "unpaid",
-                        "open-source",
-                      ].map((type) => (
-                        <option key={type} value={type}>
-                          {type}
+                      {employmentTypeOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
                         </option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    <span>具体岗位 / 招聘页 URL</span>
+                    <span>岗位链接 / Requisition URL</span>
                     <input
                       type="url"
                       value={applicationDraft.jobUrl}
@@ -3398,7 +4643,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label>
-                    <span>截止日期</span>
+                    <span>截止日期 / Deadline</span>
                     <input
                       type="date"
                       value={applicationDraft.deadline}
@@ -3411,7 +4656,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label>
-                    <span>身份 / 赞助信号</span>
+                    <span>工作授权信号 / Work authorization signal</span>
                     <select
                       value={applicationDraft.sponsorshipSignal}
                       onChange={(event) =>
@@ -3421,17 +4666,15 @@ export function CareerDojoApp({
                         }))
                       }
                     >
-                      {["green", "yellow", "orange", "red", "unknown"].map(
-                        (signal) => (
-                          <option key={signal} value={signal}>
-                            {signal}
-                          </option>
-                        ),
-                      )}
+                      {screeningSignalOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
                     </select>
                   </label>
                   <label>
-                    <span>出口管制信号</span>
+                    <span>出口管制信号 / Export-control signal</span>
                     <select
                       value={applicationDraft.exportSignal}
                       onChange={(event) =>
@@ -3441,17 +4684,15 @@ export function CareerDojoApp({
                         }))
                       }
                     >
-                      {["green", "yellow", "orange", "red", "unknown"].map(
-                        (signal) => (
-                          <option key={signal} value={signal}>
-                            {signal}
-                          </option>
-                        ),
-                      )}
+                      {screeningSignalOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
                     </select>
                   </label>
                   <label>
-                    <span>联系人 / 内推</span>
+                    <span>联系人 / Contact</span>
                     <input
                       value={applicationDraft.contact}
                       onChange={(event) =>
@@ -3463,7 +4704,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label>
-                    <span>简历版本</span>
+                    <span>简历版本 / Resume version</span>
                     <input
                       value={applicationDraft.resumeVersion}
                       onChange={(event) =>
@@ -3475,7 +4716,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label className="wide-field">
-                    <span>JD 关键词 / 技术栈</span>
+                    <span>岗位关键词 / JD keywords</span>
                     <textarea
                       value={applicationDraft.jdKeywords}
                       onChange={(event) =>
@@ -3487,7 +4728,7 @@ export function CareerDojoApp({
                     />
                   </label>
                   <label className="wide-field">
-                    <span>匹配依据与备注</span>
+                    <span>匹配备注 / Match notes</span>
                     <textarea
                       value={applicationDraft.notes}
                       onChange={(event) =>
@@ -3504,14 +4745,14 @@ export function CareerDojoApp({
                     className="secondary-button"
                     onClick={() => setApplicationBuilderVisible(false)}
                   >
-                    取消
+                    取消 / Cancel
                   </button>
                   <button
                     className="primary-button"
                     disabled={!applicationDraft.roleTitle.trim()}
                     onClick={() => saveApplication(selectedCompany)}
                   >
-                    保存具体岗位
+                    保存具体岗位 / Save requisition
                   </button>
                 </div>
               </div>
@@ -3522,13 +4763,17 @@ export function CareerDojoApp({
                 className="secondary-button"
                 onClick={() => toggleBookmark(selectedCompany)}
               >
-                {bookmarks.has(selectedCompany.id) ? "取消收藏" : "收藏目标"}
+                {bookmarks.has(selectedCompany.id)
+                  ? "取消收藏 / Remove bookmark"
+                  : "收藏目标 / Bookmark target"}
               </button>
               <button
                 className="primary-button"
                 onClick={() => beginApplication(selectedCompany)}
               >
-                {applicationBuilderVisible ? "正在配置岗位" : "建立具体岗位记录"}
+                {applicationBuilderVisible
+                  ? "正在配置岗位 / Editing requisition"
+                  : "建立具体岗位记录 / Create requisition"}
               </button>
               {selectedCompany.careerUrl ? (
                 <a
@@ -3537,7 +4782,7 @@ export function CareerDojoApp({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  官方招聘页 ↗
+                  官方招聘页 / Official careers ↗
                 </a>
               ) : null}
             </div>
@@ -3565,8 +4810,13 @@ export function CareerDojoApp({
             <div className="question-modal-heading">
               <div>
                 <span className="section-kicker">
-                  {selectedQuestion.type} · {selectedQuestion.estimatedMinutes} MIN ·{" "}
-                  {selectedQuestion.status} · V{selectedQuestion.contentVersion}
+                  {bilingualLabel(selectedQuestion.type, questionTypeLabels)} ·{" "}
+                  {selectedQuestion.estimatedMinutes} 分钟 / MIN ·{" "}
+                  {bilingualLabel(
+                    selectedQuestion.status,
+                    questionStatusLabels,
+                  )}{" "}
+                  · V{selectedQuestion.contentVersion}
                 </span>
                 <h2 id="question-dialog-title">
                   <BilingualCopy
@@ -3584,7 +4834,7 @@ export function CareerDojoApp({
                 ) : null}
               </div>
               <span className="difficulty-badge">
-                {selectedQuestion.difficulty}
+                {bilingualLabel(selectedQuestion.difficulty, difficultyLabels)}
               </span>
             </div>
 
@@ -3597,9 +4847,7 @@ export function CareerDojoApp({
                 <button
                   type="button"
                   key={option.id}
-                  className={
-                    questionLanguageMode === option.id ? "active" : ""
-                  }
+                  className={questionLanguageMode === option.id ? "active" : ""}
                   aria-pressed={questionLanguageMode === option.id}
                   onClick={() => setQuestionLanguageMode(option.id)}
                 >
@@ -3609,7 +4857,11 @@ export function CareerDojoApp({
             </div>
 
             {questionDetailState === "loading" ? (
-              <div className="question-detail-state" role="status" aria-live="polite">
+              <div
+                className="question-detail-state"
+                role="status"
+                aria-live="polite"
+              >
                 <span className="question-detail-loader" aria-hidden="true" />
                 <div>
                   <strong>正在加载完整双语任务 / Loading full task</strong>
@@ -3633,7 +4885,7 @@ export function CareerDojoApp({
                   <strong>题目详情暂时无法加载 / Detail unavailable</strong>
                   <p>
                     {questionDetailError ||
-                      "请检查连接后重试；已加载的题目不会受影响。"}
+                      "请检查连接后重试；已加载的题目不会受影响。 / Check your connection and retry; already loaded tasks remain available."}
                   </p>
                   <button
                     type="button"
@@ -3658,9 +4910,9 @@ export function CareerDojoApp({
                     <strong>待校准 / Calibration pending</strong>
                     <span>
                       已通过结构与来源检查；尚未完成领域专家与真实练习者 pilot，
-                      分数只用于自我比较，不写入岗位准备度。 Structure and source
-                      checks are complete; expert and learner pilots are still
-                      pending.
+                      分数只用于自我比较，不写入岗位准备度。 Structure and
+                      source checks are complete; expert and learner pilots are
+                      still pending.
                     </span>
                   </div>
                 ) : null}
@@ -3796,7 +5048,7 @@ export function CareerDojoApp({
                           href={url}
                           target="_blank"
                           rel="noreferrer"
-                          aria-label={`${title}，打开公开依据`}
+                          aria-label={`${title}，打开公开依据 / Open public source`}
                           key={`${url}-${index}`}
                         >
                           <span>{String(index + 1).padStart(2, "0")}</span>

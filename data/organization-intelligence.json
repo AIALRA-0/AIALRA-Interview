@@ -1,0 +1,799 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": {
+    "zh": "组织档案只展示经过规范化的双语原子标签。斜杠、and、与、及等复合标签不得直接进入界面；正式组织名称和不可拆分的标准缩写除外。",
+    "en": "Organization profiles display normalized bilingual atomic labels only. Compound labels joined by slashes, “and”, “与”, or “及” must not reach the UI; official organization names and indivisible standard acronyms are exempt."
+  },
+  "roleAtoms": {
+    "rf-eda-rd": [
+      { "id": "eda-research", "zh": "EDA 研发", "en": "EDA Research" },
+      { "id": "eda-algorithms", "zh": "EDA 算法", "en": "EDA Algorithms" }
+    ],
+    "rf-ai-eda": [
+      { "id": "ai-for-eda", "zh": "AI 辅助 EDA", "en": "AI for EDA" }
+    ],
+    "rf-cad-flow": [
+      { "id": "cad-engineering", "zh": "CAD 工程", "en": "CAD Engineering" },
+      {
+        "id": "design-flow",
+        "zh": "设计流程工程",
+        "en": "Design Flow Engineering"
+      }
+    ],
+    "rf-rtl": [{ "id": "rtl-design", "zh": "RTL 设计", "en": "RTL Design" }],
+    "rf-dv": [
+      {
+        "id": "design-verification",
+        "zh": "设计验证",
+        "en": "Design Verification"
+      },
+      { "id": "uvm", "zh": "UVM", "en": "UVM" },
+      {
+        "id": "formal-verification",
+        "zh": "形式验证",
+        "en": "Formal Verification"
+      }
+    ],
+    "rf-fpga": [
+      { "id": "fpga-engineering", "zh": "FPGA 工程", "en": "FPGA Engineering" }
+    ],
+    "rf-architecture": [
+      {
+        "id": "computer-architecture",
+        "zh": "计算机体系结构",
+        "en": "Computer Architecture"
+      },
+      {
+        "id": "performance-analysis",
+        "zh": "性能分析",
+        "en": "Performance Analysis"
+      },
+      { "id": "memory-systems", "zh": "存储系统", "en": "Memory Systems" }
+    ],
+    "rf-physical-design": [
+      { "id": "physical-design", "zh": "物理设计", "en": "Physical Design" },
+      {
+        "id": "static-timing-analysis",
+        "zh": "静态时序分析",
+        "en": "Static Timing Analysis"
+      }
+    ],
+    "rf-dft": [
+      {
+        "id": "design-for-test",
+        "zh": "可测试性设计",
+        "en": "Design for Test"
+      },
+      { "id": "production-test", "zh": "量产测试", "en": "Production Test" }
+    ],
+    "rf-analog-custom": [
+      { "id": "analog-design", "zh": "模拟设计", "en": "Analog Design" },
+      {
+        "id": "custom-ic-design",
+        "zh": "定制 IC 设计",
+        "en": "Custom IC Design"
+      }
+    ],
+    "rf-embedded": [
+      {
+        "id": "embedded-systems",
+        "zh": "嵌入式系统",
+        "en": "Embedded Systems"
+      },
+      { "id": "firmware", "zh": "固件", "en": "Firmware" }
+    ],
+    "rf-manufacturing-automation": [
+      {
+        "id": "semiconductor-manufacturing",
+        "zh": "半导体制造",
+        "en": "Semiconductor Manufacturing"
+      },
+      {
+        "id": "equipment-automation",
+        "zh": "设备自动化",
+        "en": "Equipment Automation"
+      }
+    ],
+    "rf-behavioral": [
+      {
+        "id": "behavioral-interview",
+        "zh": "行为面试",
+        "en": "Behavioral Interview"
+      }
+    ],
+    "rf-project-deep-dive": [
+      { "id": "project-deep-dive", "zh": "项目深挖", "en": "Project Deep Dive" }
+    ],
+    "rf-english-communication": [
+      { "id": "technical-english", "zh": "技术英语", "en": "Technical English" }
+    ]
+  },
+  "roleRequirements": {
+    "rf-eda-rd": [
+      { "id": "cpp", "zh": "C++", "en": "C++" },
+      { "id": "algorithms", "zh": "算法", "en": "Algorithms" },
+      { "id": "data-structures", "zh": "数据结构", "en": "Data Structures" }
+    ],
+    "rf-ai-eda": [
+      { "id": "python", "zh": "Python", "en": "Python" },
+      { "id": "machine-learning", "zh": "机器学习", "en": "Machine Learning" },
+      { "id": "evaluation-design", "zh": "评估设计", "en": "Evaluation Design" }
+    ],
+    "rf-cad-flow": [
+      { "id": "linux", "zh": "Linux", "en": "Linux" },
+      { "id": "tcl", "zh": "Tcl", "en": "Tcl" },
+      { "id": "flow-debugging", "zh": "流程调试", "en": "Flow Debugging" }
+    ],
+    "rf-rtl": [
+      { "id": "systemverilog", "zh": "SystemVerilog", "en": "SystemVerilog" },
+      { "id": "microarchitecture", "zh": "微架构", "en": "Microarchitecture" },
+      { "id": "synthesis", "zh": "逻辑综合", "en": "Logic Synthesis" }
+    ],
+    "rf-dv": [
+      { "id": "systemverilog", "zh": "SystemVerilog", "en": "SystemVerilog" },
+      { "id": "uvm", "zh": "UVM", "en": "UVM" },
+      { "id": "coverage", "zh": "覆盖率闭环", "en": "Coverage Closure" }
+    ],
+    "rf-fpga": [
+      { "id": "rtl", "zh": "RTL", "en": "RTL" },
+      { "id": "fpga-toolchains", "zh": "FPGA 工具链", "en": "FPGA Toolchains" },
+      { "id": "hardware-debug", "zh": "硬件调试", "en": "Hardware Debugging" }
+    ],
+    "rf-architecture": [
+      {
+        "id": "computer-architecture",
+        "zh": "计算机体系结构",
+        "en": "Computer Architecture"
+      },
+      {
+        "id": "performance-modeling",
+        "zh": "性能建模",
+        "en": "Performance Modeling"
+      },
+      {
+        "id": "systems-programming",
+        "zh": "系统编程",
+        "en": "Systems Programming"
+      }
+    ],
+    "rf-physical-design": [
+      {
+        "id": "physical-implementation",
+        "zh": "物理实现",
+        "en": "Physical Implementation"
+      },
+      {
+        "id": "timing-constraints",
+        "zh": "时序约束",
+        "en": "Timing Constraints"
+      },
+      { "id": "signoff-debug", "zh": "签核调试", "en": "Signoff Debugging" }
+    ],
+    "rf-dft": [
+      { "id": "scan", "zh": "扫描测试", "en": "Scan Test" },
+      { "id": "atpg", "zh": "ATPG", "en": "ATPG" },
+      { "id": "fault-modeling", "zh": "故障建模", "en": "Fault Modeling" }
+    ],
+    "rf-analog-custom": [
+      { "id": "circuit-analysis", "zh": "电路分析", "en": "Circuit Analysis" },
+      { "id": "spice", "zh": "SPICE", "en": "SPICE" },
+      { "id": "layout-awareness", "zh": "版图意识", "en": "Layout Awareness" }
+    ],
+    "rf-embedded": [
+      { "id": "embedded-c", "zh": "嵌入式 C", "en": "Embedded C" },
+      { "id": "device-drivers", "zh": "设备驱动", "en": "Device Drivers" },
+      {
+        "id": "hardware-interfaces",
+        "zh": "硬件接口",
+        "en": "Hardware Interfaces"
+      }
+    ],
+    "rf-manufacturing-automation": [
+      { "id": "python", "zh": "Python", "en": "Python" },
+      { "id": "process-control", "zh": "过程控制", "en": "Process Control" },
+      { "id": "equipment-data", "zh": "设备数据", "en": "Equipment Data" }
+    ],
+    "rf-behavioral": [
+      {
+        "id": "evidence-based-story",
+        "zh": "证据化叙事",
+        "en": "Evidence-based Storytelling"
+      }
+    ],
+    "rf-project-deep-dive": [
+      {
+        "id": "technical-tradeoffs",
+        "zh": "技术取舍",
+        "en": "Technical Tradeoffs"
+      },
+      {
+        "id": "root-cause-analysis",
+        "zh": "根因分析",
+        "en": "Root-cause Analysis"
+      }
+    ],
+    "rf-english-communication": [
+      {
+        "id": "technical-english",
+        "zh": "技术英语",
+        "en": "Technical English"
+      },
+      { "id": "clarification", "zh": "澄清能力", "en": "Clarification" }
+    ]
+  },
+  "rolePreparation": {
+    "rf-eda-rd": [
+      {
+        "id": "eda-portfolio",
+        "zh": "补充可复现 EDA 项目",
+        "en": "Add a Reproducible EDA Project"
+      },
+      {
+        "id": "cpp-evidence",
+        "zh": "补充工程级 C++ 证据",
+        "en": "Add Production-grade C++ Evidence"
+      }
+    ],
+    "rf-ai-eda": [
+      {
+        "id": "ml-baseline",
+        "zh": "补充可比较模型基线",
+        "en": "Add Comparable Model Baselines"
+      },
+      { "id": "ablation", "zh": "补充消融实验", "en": "Add Ablation Evidence" }
+    ],
+    "rf-cad-flow": [
+      {
+        "id": "flow-case-study",
+        "zh": "补充端到端流程案例",
+        "en": "Add an End-to-end Flow Case Study"
+      },
+      {
+        "id": "debug-log",
+        "zh": "补充系统化调试记录",
+        "en": "Add a Structured Debug Log"
+      }
+    ],
+    "rf-rtl": [
+      {
+        "id": "rtl-portfolio",
+        "zh": "补充可综合 RTL 作品",
+        "en": "Add a Synthesizable RTL Portfolio"
+      },
+      {
+        "id": "practional-ppa",
+        "zh": "补充 PPA 取舍证据",
+        "en": "Add PPA Tradeoff Evidence"
+      }
+    ],
+    "rf-dv": [
+      {
+        "id": "verification-plan",
+        "zh": "补充验证计划",
+        "en": "Add a Verification Plan"
+      },
+      {
+        "id": "coverage-evidence",
+        "zh": "补充覆盖率闭环证据",
+        "en": "Add Coverage-closure Evidence"
+      }
+    ],
+    "rf-fpga": [
+      {
+        "id": "board-demo",
+        "zh": "补充板级演示",
+        "en": "Add a Board-level Demonstration"
+      },
+      {
+        "id": "timing-report",
+        "zh": "补充时序报告解读",
+        "en": "Add Timing-report Analysis"
+      }
+    ],
+    "rf-architecture": [
+      {
+        "id": "performance-model",
+        "zh": "补充性能模型",
+        "en": "Add a Performance Model"
+      },
+      {
+        "id": "trace-analysis",
+        "zh": "补充执行轨迹分析",
+        "en": "Add Trace Analysis"
+      }
+    ],
+    "rf-physical-design": [
+      {
+        "id": "physical-implementation-project",
+        "zh": "补充物理实现项目",
+        "en": "Add a Physical Implementation Project"
+      },
+      {
+        "id": "timing-closure",
+        "zh": "补充时序收敛案例",
+        "en": "Add a Timing-closure Case Study"
+      }
+    ],
+    "rf-dft": [
+      {
+        "id": "atpg-demo",
+        "zh": "补充 ATPG 演示",
+        "en": "Add an ATPG Demonstration"
+      },
+      {
+        "id": "yield-diagnosis",
+        "zh": "补充良率诊断案例",
+        "en": "Add a Yield-diagnosis Case Study"
+      }
+    ],
+    "rf-analog-custom": [
+      {
+        "id": "schematic-layout",
+        "zh": "补充原理图到版图案例",
+        "en": "Add a Schematic-to-layout Case Study"
+      },
+      {
+        "id": "corner-analysis",
+        "zh": "补充角点分析",
+        "en": "Add Corner Analysis"
+      }
+    ],
+    "rf-embedded": [
+      {
+        "id": "driver-project",
+        "zh": "补充驱动开发项目",
+        "en": "Add a Device-driver Project"
+      },
+      {
+        "id": "hardware-debug",
+        "zh": "补充硬件调试记录",
+        "en": "Add a Hardware Debug Log"
+      }
+    ],
+    "rf-manufacturing-automation": [
+      {
+        "id": "equipment-data-project",
+        "zh": "补充设备数据项目",
+        "en": "Add an Equipment-data Project"
+      },
+      {
+        "id": "safety-case",
+        "zh": "补充安全联锁案例",
+        "en": "Add a Safety-interlock Case Study"
+      }
+    ],
+    "rf-behavioral": [
+      {
+        "id": "star-evidence",
+        "zh": "补充量化 STAR 证据",
+        "en": "Add Quantified STAR Evidence"
+      }
+    ],
+    "rf-project-deep-dive": [
+      {
+        "id": "decision-log",
+        "zh": "补充技术决策记录",
+        "en": "Add a Technical Decision Log"
+      }
+    ],
+    "rf-english-communication": [
+      {
+        "id": "spoken-rehearsal",
+        "zh": "补充英文口述演练",
+        "en": "Add Spoken-English Rehearsal"
+      }
+    ]
+  },
+  "categoryAtomOverrides": {
+    "CDC-RDC": [
+      {
+        "id": "clock-domain-crossing",
+        "zh": "时钟域跨越",
+        "en": "Clock-domain Crossing"
+      },
+      {
+        "id": "reset-domain-crossing",
+        "zh": "复位域跨越",
+        "en": "Reset-domain Crossing"
+      }
+    ],
+    "CHIPS-RD": [
+      {
+        "id": "chips-rd-program",
+        "zh": "CHIPS 研发项目",
+        "en": "CHIPS R&D Program"
+      }
+    ],
+    "OSAT": [
+      {
+        "id": "semiconductor-assembly",
+        "zh": "半导体封装组装",
+        "en": "Semiconductor Assembly"
+      },
+      {
+        "id": "semiconductor-test",
+        "zh": "半导体测试",
+        "en": "Semiconductor Testing"
+      }
+    ],
+    "power": [
+      {
+        "id": "power-supplies",
+        "zh": "电源技术",
+        "en": "Power-supply Technology"
+      },
+      {
+        "id": "electric-power",
+        "zh": "电力技术",
+        "en": "Power Technology"
+      }
+    ],
+    "SerDes": [
+      { "id": "serializer", "zh": "串行器", "en": "Serializer" },
+      { "id": "deserializer", "zh": "解串器", "en": "Deserializer" }
+    ],
+    "TCAD": [{ "id": "tcad", "zh": "TCAD", "en": "TCAD" }],
+    "test-and-measurement": [
+      { "id": "electronic-test", "zh": "电子测试", "en": "Electronic Test" },
+      {
+        "id": "electronic-measurement",
+        "zh": "电子测量",
+        "en": "Electronic Measurement"
+      }
+    ],
+    "封装测试": [
+      {
+        "id": "semiconductor-packaging",
+        "zh": "半导体封装",
+        "en": "Semiconductor Packaging"
+      },
+      {
+        "id": "semiconductor-test",
+        "zh": "半导体测试",
+        "en": "Semiconductor Testing"
+      }
+    ],
+    "影像与AI": [
+      { "id": "imaging", "zh": "影像技术", "en": "Imaging" },
+      {
+        "id": "artificial-intelligence",
+        "zh": "人工智能",
+        "en": "Artificial Intelligence"
+      }
+    ],
+    "微纳器件": [
+      { "id": "microdevices", "zh": "微器件", "en": "Microdevices" },
+      { "id": "nanodevices", "zh": "纳米器件", "en": "Nanodevices" }
+    ],
+    "机器人与制造": [
+      { "id": "robotics", "zh": "机器人", "en": "Robotics" },
+      { "id": "manufacturing", "zh": "制造", "en": "Manufacturing" }
+    ],
+    "标准与产业研究": [
+      { "id": "standards", "zh": "标准", "en": "Standards" },
+      { "id": "industry-research", "zh": "产业研究", "en": "Industry Research" }
+    ],
+    "标准与测试": [
+      { "id": "standards", "zh": "标准", "en": "Standards" },
+      { "id": "testing", "zh": "测试", "en": "Testing" }
+    ],
+    "语音与大模型": [
+      {
+        "id": "speech-technology",
+        "zh": "语音技术",
+        "en": "Speech Technology"
+      },
+      { "id": "large-models", "zh": "大模型", "en": "Large Models" }
+    ],
+    "量检测": [
+      { "id": "metrology", "zh": "量测", "en": "Metrology" },
+      { "id": "inspection", "zh": "检测", "en": "Inspection" }
+    ],
+    "雷达与电子系统": [
+      { "id": "radar", "zh": "雷达", "en": "Radar" },
+      {
+        "id": "electronic-systems",
+        "zh": "电子系统",
+        "en": "Electronic Systems"
+      }
+    ]
+  },
+  "opportunityAtoms": [
+    {
+      "id": "internship",
+      "zh": "实习",
+      "en": "Internship",
+      "patterns": ["intern", "实习"]
+    },
+    {
+      "id": "co-op",
+      "zh": "合作教育",
+      "en": "Co-op",
+      "patterns": ["co-op", "coop"]
+    },
+    {
+      "id": "new-grad",
+      "zh": "应届岗位",
+      "en": "New Graduate",
+      "patterns": ["new-grad", "new grad", "校园招聘", "校招"]
+    },
+    {
+      "id": "employment",
+      "zh": "正式岗位",
+      "en": "Employment",
+      "patterns": ["employment", "社会招聘", "社招", "岗位"]
+    },
+    {
+      "id": "research",
+      "zh": "科研机会",
+      "en": "Research",
+      "patterns": ["research", "科研", "研究助理"]
+    },
+    {
+      "id": "postdoc",
+      "zh": "博士后",
+      "en": "Postdoctoral",
+      "patterns": ["postdoc", "博士后"]
+    },
+    {
+      "id": "graduate-study",
+      "zh": "研究生培养",
+      "en": "Graduate Study",
+      "patterns": ["研究生", "硕博", "博士招生"]
+    },
+    {
+      "id": "student-program",
+      "zh": "学生项目",
+      "en": "Student Program",
+      "patterns": ["student", "学生", "夏令营"]
+    },
+    {
+      "id": "rotational",
+      "zh": "轮岗项目",
+      "en": "Rotational Program",
+      "patterns": ["rotational", "rotation"]
+    },
+    {
+      "id": "part-time",
+      "zh": "兼职",
+      "en": "Part-time",
+      "patterns": ["part-time", "兼职"]
+    },
+    {
+      "id": "unpaid",
+      "zh": "无薪机会",
+      "en": "Unpaid Opportunity",
+      "patterns": ["unpaid", "无薪"]
+    },
+    {
+      "id": "open-source",
+      "zh": "开源贡献",
+      "en": "Open-source Contribution",
+      "patterns": ["open-source", "open source", "开源"]
+    },
+    {
+      "id": "competition",
+      "zh": "竞赛",
+      "en": "Competition",
+      "patterns": ["competition", "竞赛"]
+    },
+    {
+      "id": "training",
+      "zh": "培训项目",
+      "en": "Training Program",
+      "patterns": ["training", "培训", "课程"]
+    },
+    {
+      "id": "visiting",
+      "zh": "联合培养",
+      "en": "Visiting Program",
+      "patterns": ["visiting", "联合培养"]
+    },
+    {
+      "id": "fellowship",
+      "zh": "奖学金项目",
+      "en": "Fellowship",
+      "patterns": ["fellowship", "奖学金"]
+    }
+  ],
+  "evidenceTypes": {
+    "government-source": { "zh": "政府资料", "en": "Government Source" },
+    "industry-association": {
+      "zh": "行业协会资料",
+      "en": "Industry Association Source"
+    },
+    "official-acquisition-evidence": {
+      "zh": "官方并购资料",
+      "en": "Official Acquisition Evidence"
+    },
+    "official-acquisition-status": {
+      "zh": "官方并购状态",
+      "en": "Official Acquisition Status"
+    },
+    "official-association": {
+      "zh": "官方协会资料",
+      "en": "Official Association Source"
+    },
+    "official-ats": { "zh": "官方招聘系统", "en": "Official Applicant System" },
+    "official-current-job": { "zh": "当前岗位", "en": "Current Job Posting" },
+    "official-current-expansion": {
+      "zh": "官方当前扩张信息",
+      "en": "Official Current Expansion"
+    },
+    "official-careers": { "zh": "官方招聘", "en": "Official Careers" },
+    "official-careers-search": {
+      "zh": "官方岗位搜索",
+      "en": "Official Job Search"
+    },
+    "official-clearance-guidance": {
+      "zh": "官方许可要求",
+      "en": "Official Clearance Guidance"
+    },
+    "official-early-careers": {
+      "zh": "官方早期职业项目",
+      "en": "Official Early Careers"
+    },
+    "official-home": { "zh": "官方网站", "en": "Official Website" },
+    "official-company": {
+      "zh": "官方机构资料",
+      "en": "Official Organization Profile"
+    },
+    "official-company-news": {
+      "zh": "官方机构新闻",
+      "en": "Official Organization News"
+    },
+    "official-company-profile": {
+      "zh": "官方机构简介",
+      "en": "Official Organization Profile"
+    },
+    "official-export-guidance": {
+      "zh": "官方出口管制说明",
+      "en": "Official Export-control Guidance"
+    },
+    "official-institute": {
+      "zh": "官方研究机构资料",
+      "en": "Official Institute Profile"
+    },
+    "official-job": { "zh": "官方岗位", "en": "Official Job Posting" },
+    "official-microelectronics-program": {
+      "zh": "官方微电子项目",
+      "en": "Official Microelectronics Program"
+    },
+    "official-news": { "zh": "官方新闻", "en": "Official News" },
+    "official-open-source-program": {
+      "zh": "官方开源项目",
+      "en": "Official Open-source Program"
+    },
+    "official-organization": {
+      "zh": "官方组织资料",
+      "en": "Official Organization Source"
+    },
+    "official-parent": {
+      "zh": "官方母机构资料",
+      "en": "Official Parent-organization Source"
+    },
+    "official-platform": {
+      "zh": "官方平台资料",
+      "en": "Official Platform Source"
+    },
+    "official-product": {
+      "zh": "官方产品资料",
+      "en": "Official Product Source"
+    },
+    "official-program": { "zh": "官方项目", "en": "Official Program" },
+    "official-project": { "zh": "官方工程项目", "en": "Official Project" },
+    "official-research": { "zh": "官方研究资料", "en": "Official Research" },
+    "official-lab": {
+      "zh": "官方实验室资料",
+      "en": "Official Laboratory Profile"
+    },
+    "official-research-center": {
+      "zh": "官方研究中心资料",
+      "en": "Official Research-center Profile"
+    },
+    "official-research-facility": {
+      "zh": "官方科研设施资料",
+      "en": "Official Research-facility Profile"
+    },
+    "official-research-institute": {
+      "zh": "官方研究院资料",
+      "en": "Official Research-institute Profile"
+    },
+    "official-research-program": {
+      "zh": "官方研究项目",
+      "en": "Official Research Program"
+    },
+    "official-registry": { "zh": "官方名录", "en": "Official Registry" },
+    "official-restriction": {
+      "zh": "官方资格限制",
+      "en": "Official Eligibility Restriction"
+    },
+    "official-semiconductor-research": {
+      "zh": "官方半导体研究资料",
+      "en": "Official Semiconductor Research"
+    },
+    "official-student-program": {
+      "zh": "官方学生项目",
+      "en": "Official Student Program"
+    },
+    "official-technology": {
+      "zh": "官方技术资料",
+      "en": "Official Technology Source"
+    },
+    "official-university": {
+      "zh": "官方高校资料",
+      "en": "Official University Profile"
+    },
+    "official-us-rd-entity": {
+      "zh": "美国研发实体资料",
+      "en": "Official U.S. R&D Entity Source"
+    },
+    "official-work-authorization-guidance": {
+      "zh": "官方工作授权说明",
+      "en": "Official Work-authorization Guidance"
+    },
+    "official-government": {
+      "zh": "政府官方资料",
+      "en": "Official Government Source"
+    },
+    "official-ecosystem": {
+      "zh": "官方生态资料",
+      "en": "Official Ecosystem Source"
+    },
+    "official-ecosystem-directory": {
+      "zh": "官方生态目录",
+      "en": "Official Ecosystem Directory"
+    },
+    "official-ecosystem-source": {
+      "zh": "官方生态资料",
+      "en": "Official Ecosystem Source"
+    },
+    "official-government-directory": {
+      "zh": "政府官方目录",
+      "en": "Official Government Directory"
+    },
+    "official-industry-directory": {
+      "zh": "官方产业目录",
+      "en": "Official Industry Directory"
+    },
+    "official-us-site": { "zh": "美国官方网站", "en": "Official U.S. Website" }
+  },
+  "fallbackEvidenceType": {
+    "zh": "官方一手资料",
+    "en": "Official Primary Source"
+  },
+  "fallbackOpportunity": {
+    "id": "posting-review",
+    "zh": "具体机会待核",
+    "en": "Posting-specific Review"
+  },
+  "fallbackRequirement": [
+    {
+      "id": "posting-requirements",
+      "zh": "具体岗位要求核验",
+      "en": "Posting-specific Requirements Review"
+    },
+    {
+      "id": "public-portfolio",
+      "zh": "可验证公开作品",
+      "en": "Verifiable Public Portfolio"
+    },
+    {
+      "id": "technical-communication",
+      "zh": "技术沟通",
+      "en": "Technical Communication"
+    }
+  ],
+  "fallbackPreparation": [
+    {
+      "id": "jd-gap-review",
+      "zh": "按具体岗位复核缺口",
+      "en": "Review Gaps Against the Exact Posting"
+    },
+    {
+      "id": "evidence-pack",
+      "zh": "补充可复现证据包",
+      "en": "Add a Reproducible Evidence Pack"
+    }
+  ]
+}

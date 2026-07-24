@@ -34,8 +34,12 @@
         "developer tools",
         "software infrastructure",
         "workflow",
+        "platform engineering",
+        "software engineering",
         "open-source engineering",
         "开源工程",
+        "平台工程",
+        "软件工程",
         "applications engineering",
         "应用工程",
         "工具链"
@@ -101,6 +105,7 @@
         "server",
         "ai infra",
         "compiler",
+        "quantum computing",
         "distributed systems",
         "algorithm research",
         "大模型",
@@ -108,6 +113,8 @@
         "计算机视觉",
         "语音",
         "计算架构",
+        "编译器",
+        "量子计算",
         "处理器",
         "存储",
         "算力",
@@ -190,6 +197,10 @@
         "control systems",
         "mobile systems",
         "system software",
+        "real-time software",
+        "controls engineering",
+        "electronics engineering",
+        "instrumentation engineering",
         "影像",
         "系统软件",
         "通信",
@@ -223,7 +234,8 @@
         "制造",
         "产线",
         "半导体生态",
-        "semiconductor research"
+        "semiconductor research",
+        "semiconductor-research"
       ]
     }
   ],

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 const title = "AIALRA Career Dojo";
 const description =
-  "从中美公司与岗位证据图谱，到能力缺口、定向面试训练和投递管理的个人求职作战系统。";
+  "从中美公司与岗位证据图谱，到能力缺口、定向面试训练和投递管理的个人求职作战系统。Evidence-driven U.S. and China organization research, skill-gap analysis, interview training, and application management.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -26,11 +26,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = /^[a-z0-9.-]+(?::\d+)?$/i.test(candidateHost)
     ? candidateHost
     : "localhost:3000";
-  const isLocal =
-    host.startsWith("localhost") || host.startsWith("127.0.0.1");
+  const isLocal = host.startsWith("localhost") || host.startsWith("127.0.0.1");
   const forwardedProtocol = requestHeaders.get("x-forwarded-proto");
-  const protocol =
-    isLocal && forwardedProtocol !== "https" ? "http" : "https";
+  const protocol = isLocal && forwardedProtocol !== "https" ? "http" : "https";
   const origin = `${protocol}://${host}`;
   const socialImage = `${origin}/og.png`;
 
@@ -58,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: socialImage,
           width: 1200,
           height: 630,
-          alt: "AIALRA Career Dojo — Evidence to Mastery",
+          alt: "AIALRA 求职道场 / Career Dojo — 从证据到掌握 / Evidence to Mastery",
         },
       ],
     },

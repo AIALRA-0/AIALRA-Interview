@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetVersion": "2026-07-24.1",
+  "sourceSha256": "76a38f8e6938387e870bbbb9fa215c8eb84d47e37a26a23da7c7ae76475e0961",
+  "evidenceDate": "2026-07-23",
+  "organizationCount": 799,
+  "regionCounts": {
+    "US": 360,
+    "CN": 439,
+    "Global": 0
+  },
+  "asset": {
+    "url": "/organization-universe.json",
+    "sha256": "c5b8a684191ebdbcee9843377db1b7352b82aa6dd8d4d416a0eb4a958e4b4c12",
+    "bytes": 3731340
+  }
+}

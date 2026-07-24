@@ -2,37 +2,75 @@
   "id": "public-template",
   "evidenceDate": "2026-07-23",
   "targetWindow": "下一实习周期",
+  "targetWindowEn": "Next internship cycle",
   "education": {
     "program": "工程硕士",
+    "programEn": "Master of Engineering student",
     "start": "即将入学",
+    "startEn": "Incoming student",
     "status": "incoming",
-    "workAuthorization": "身份条件待配置"
+    "workAuthorization": "身份条件待配置",
+    "workAuthorizationEn": "Work authorization not yet configured"
   },
-  "positioning": "EDA/CAD 与验证基础设施工程师；具备 RTL/FPGA 实现经验；构建可复现、可诊断的芯片工程流程。",
+  "positioning": "以 CAD/EDA 流程与验证基础设施为第一入口，发挥 RTL、FPGA 和自动化工具优势，逐步形成可复现、可诊断的芯片工程能力。",
+  "positioningEn": "Target CAD and EDA-flow infrastructure as the first entry point, using RTL, FPGA, and automation strengths to build reproducible, diagnosable silicon-engineering capability.",
   "strengths": [
     "晶体管级设计与定制电路基础",
     "RTL 与 FPGA 从模型到硬件验证",
     "SystemVerilog、时序分析与调试",
     "体系结构、内存与可靠性分析",
-    "C++、Python、Tcl 与 CAD 自动化",
-    "可复现的工程文档与实验流程"
+    "C++、Python、Tcl 与芯片工程自动化能力",
+    "时序、资源、功耗、测试结果与失败原因的证据化表达"
+  ],
+  "strengthsEn": [
+    "Transistor-level design and custom-circuit foundations",
+    "RTL and FPGA work from models through hardware validation",
+    "SystemVerilog, timing analysis, and debugging",
+    "Computer architecture, memory, and reliability analysis",
+    "C++, Python, Tcl, and silicon-engineering automation",
+    "Evidence-based communication of timing, resources, power, tests, and failure causes"
   ],
   "priorityRoleFamilies": [
-    "rf-eda-rd",
-    "rf-ai-eda",
     "rf-cad-flow",
-    "rf-dv",
-    "rf-rtl",
     "rf-fpga",
+    "rf-rtl",
+    "rf-dv",
+    "rf-eda-rd",
     "rf-architecture",
-    "rf-physical-design"
+    "rf-physical-design",
+    "rf-ai-eda"
   ],
   "criticalGaps": [
-    "实验室、实习或开源上游证据",
-    "UVM、SVA、formal、coverage、CDC/RDC 生产证据",
-    "物理设计流程与 PPA closure",
-    "C++ EDA 算法 benchmark",
-    "面试与技术英语基线",
-    "聚焦且可复现的公开项目叙事"
-  ]
+    "实验室、芯片实习或开源上游贡献中的至少一项",
+    "UVM、SVA、形式验证、覆盖率、CDC 与 RDC 的生产级证据",
+    "从综合到布局布线、STA、签核与 PPA 收敛的完整流程",
+    "可复现且有基准对比的 C++ EDA 算法项目",
+    "RTL、验证、系统设计面试与技术英语基线",
+    "收敛公开作品集并用少量旗舰项目建立统一叙事"
+  ],
+  "criticalGapsEn": [
+    "At least one laboratory role, silicon internship, or upstream open-source contribution",
+    "Production-grade evidence in UVM, SVA, formal verification, coverage, CDC, and RDC",
+    "A complete flow from synthesis through place and route, STA, signoff, and PPA closure",
+    "A reproducible C++ EDA algorithm project with benchmark comparisons",
+    "A calibrated RTL, verification, system-design, and technical-English interview baseline",
+    "A focused public portfolio with one coherent story across a small set of flagship projects"
+  ],
+  "readinessByRole": {
+    "rf-cad-flow": 72,
+    "rf-fpga": 68,
+    "rf-rtl": 68,
+    "rf-dv": 61,
+    "rf-eda-rd": 58,
+    "rf-architecture": 55,
+    "rf-embedded": 50,
+    "rf-physical-design": 48,
+    "rf-project-deep-dive": 48,
+    "rf-behavioral": 45,
+    "rf-english-communication": 45,
+    "rf-ai-eda": 43,
+    "rf-dft": 42,
+    "rf-manufacturing-automation": 35,
+    "rf-analog-custom": 30
+  }
 }

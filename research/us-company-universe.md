@@ -35,7 +35,7 @@
 - [RISC-V 技术社区成员](https://tech.riscv.org/members/)
 - [CHIPS Alliance 成员](https://www.chipsalliance.org/about/members/)
 
-随后补充官方会议赞助商/参展商、企业官网业务页面、官方 early-career 页面，以及与 USC 地理和校招渠道相关的组织。目录只负责发现候选，最终记录必须回到组织官网、官方项目页或政府规则页作证据。
+随后补充官方会议赞助商/参展商、企业官网业务页面、官方 early-career 页面，以及与高校地理和校招渠道相关的组织。目录只负责发现候选，最终记录必须回到组织官网、官方项目页或政府规则页作证据。
 
 ### 2.2 纳入条件
 
@@ -94,7 +94,7 @@
 
 `visaSignal`：
 
-- `friendly`：存在对当前身份相对可行的非传统入口，例如 USC 校内工作或不构成雇佣的开源贡献；仍需遵守对应规则；
+- `friendly`：存在规则上相对可行的非传统入口，例如高校校内工作或不构成雇佣的开源贡献；仍需按个人条件遵守对应规则；
 - `mixed`：公司、项目或岗位之间差异明显，必须逐条核实；
 - `restricted`：官方规则或工作性质显示公民身份、安保许可或出口管制构成显著障碍；
 - `unverified`：没有足够官方证据确认赞助或资格政策。**这是默认值，不代表拒绝，也不代表支持。**
@@ -169,7 +169,7 @@
 
 高比例 `unverified` 是有意的保守设计。公司是否办理 H-1B、某个团队是否能接收 F-1/CPT、某个项目是否涉及出口许可，通常无法从总公司招聘页可靠推断。
 
-### 4.4 USC 国际学生实际可达性锚点
+### 4.4 公开国际学生历史可达性锚点
 
 [USC Viterbi Summer Internships 2025 官方统计](https://viterbigradadmission.usc.edu/summerintern2025/)显示，截至 2025-05-27，共有 **416 名硕士生和 144 名博士生，即 560 名国际研究生，在 100+ 家公司进行 CPT 实习**。该页发布于 2025-06-12，并于 2025-07-01 更新。它不是公司自报的“愿意赞助”口径，而是 USC 国际研究生已经取得 CPT 实习的历史结果，因此可用作公司宇宙的可达性校验集。
 
@@ -178,7 +178,7 @@
 - 国际学生在芯片、EDA、设备、系统硬件、汽车和机器人方向获得 CPT 并非理论可能；
 - “公司级历史可达”仍不等于 2027 年同一团队、同一岗位或同一国籍条件下可达；
 - 应优先把名单中与目标方向重合的公司升级为校友检索、内推和岗位提醒对象；
-- USC 全表是跨学科雇主集合，包含大量金融、医药、建筑、纯软件和小型咨询公司，不能不加筛选地全部并入硬件公司树。
+- 该公开全表是跨学科雇主集合，包含大量金融、医药、建筑、纯软件和小型咨询公司，不能不加筛选地全部并入硬件公司树。
 
 二次审计已经把 TetraMem、Futurewei、Calix、Dolby、HARMAN、Honda Research Institute USA、Mercedes-Benz Research & Development North America、Intrinsic、Intuitive Surgical、Nokia、TE Connectivity 与 Viasat 纳入正式节点，并回到各自官网或官方职业入口。`XMotors.ai` 只发现无当前空缺的官方 ATS，且与小鹏的主体归一化关系仍需进一步核验，因此保留在 residual queue，不为凑数建节点。历史 CPT 结果也没有被转换成 `friendly` 标签；任何 2027 申请仍须回到具体职位核验。
 
@@ -196,13 +196,13 @@
 - **RED—HARD STOP**：岗位明确要求美国公民、现有 clearance，或明确仅限 US person 且没有许可路径；
 - **ORANGE—LICENSE/TEAM REVIEW**：职位涉及出口管制，但文本说明可能通过许可证或团队评估处理；
 - **YELLOW—SPONSORSHIP UNKNOWN**：没有硬性限制，但公司对 CPT/未来赞助没有可信公开说明；
-- **GREEN—AUTHORIZATION PATH EXISTS**：当前授权路径在规则上可行；仍须获得 USC 批准并让雇主接受。
+- **GREEN—AUTHORIZATION PATH EXISTS**：当前授权路径在规则上可行；仍须获得就读学校批准并让雇主接受。
 
-### 5.1 USC 规则边界
+### 5.1 学校授权规则边界
 
-[USC OIS 的 CPT 指南](https://ois.usc.edu/employment/employment-f1/cpt/)说明，CPT 与课程/培养目标相关，由学校授权，并且有资格与时间要求；无薪实习也不能因为“没有工资”就绕过工作授权判断。[USC OIS 校内工作指南](https://ois.usc.edu/employment/employment-f1/f1oncampusemployment/)则使校内科研、学生岗位和实验室工作成为第一学期更现实的桥梁。
+[USC OIS 的 CPT 指南](https://ois.usc.edu/employment/employment-f1/cpt/)可作为公开规则样例：CPT 与课程/培养目标相关，由学校授权，并且有资格与时间要求；无薪实习也不能因为“没有工资”就绕过工作授权判断。[USC OIS 校内工作指南](https://ois.usc.edu/employment/employment-f1/f1oncampusemployment/)说明校内科研、学生岗位和实验室工作可能构成另一类合法路径，但仍须按就读学校规则和具体岗位核验。
 
-具体到任何 offer，应以当时 USC OIS 书面意见为准。本清单不是移民法律意见。
+具体到任何 offer，应以申请人就读学校的国际学生办公室及相关主管机构的当时书面意见为准。本清单不是移民法律意见。
 
 ### 5.2 无薪实习不是捷径
 
@@ -228,8 +228,8 @@
 - [AMD Student Programs](https://www.amd.com/en/corporate/careers/student-programs/regional-programs.html)给出美国学生项目的一般申请周期，应从 2026 年夏末开始监控；
 - [NVIDIA University Recruiting](https://www.nvidia.com/en-us/about-nvidia/careers/university-recruiting/)适合全年建立职位提醒，而不是只等一个统一批次；
 - [Cerebras Intern Program](https://www.cerebras.ai/interns)展示了分学期/季度的实习入口；
-- USC Viterbi 的 [2026 秋季招聘日历](https://viterbicareers.usc.edu/wp-content/uploads/2026/05/263-Fall-Recruiting-Calendar.pdf)显示 9 月已有集中招聘活动，简历、项目证据和目标公司短名单应在开学前完成。
-- [USC Viterbi 2025 CPT 结果](https://viterbigradadmission.usc.edu/summerintern2025/)可用于反向检索已雇佣过 USC 国际研究生的公司和校友，但它不保证下一年度重复招聘。
+- USC Viterbi 的 [2026 秋季招聘日历](https://viterbicareers.usc.edu/wp-content/uploads/2026/05/263-Fall-Recruiting-Calendar.pdf)可作为高等教育机构的一般招聘节奏样例；求职者应按自己学校的日历倒排简历、项目证据和目标公司短名单。
+- [USC Viterbi 2025 CPT 结果](https://viterbigradadmission.usc.edu/summerintern2025/)可作为历史雇主发现入口，但不保证下一年度、另一学校或另一申请人能重复同样结果。
 
 上述页面证明的是观察日可见的官方窗口或长期节奏。除 TSMC 这条直接 requisition 外，不应把它们写成“2027 当前职位”。
 
@@ -267,7 +267,7 @@ v2 的边界如下：
 
 下一轮不应继续无边界堆公司，而应做滚动验证：
 
-1. 每周监控 P0/P1 官方职业页和 USC 校招渠道；
+1. 每周监控 P0/P1 官方职业页和就读学校的校招渠道；
 2. 新增具体岗位时保存原始 JD、开放日期和岗位 ID；
 3. 每月复核并购、美国地点、学生项目和失效链接；
 4. 每次真实申请/面试后更新技能缺口与难度；
@@ -336,7 +336,7 @@ v2 的边界如下：
 | `los-alamos-national-laboratory` | Los Alamos National Laboratory | [official](https://cint.lanl.gov/research/index.shtml) | official-microelectronics-program | high |
 | `oak-ridge-national-laboratory` | Oak Ridge National Laboratory | [official](https://www.ornl.gov/content/microelectronics-ornl) | official-microelectronics-program | high |
 | `pacific-northwest-national-laboratory` | Pacific Northwest National Laboratory | [official](https://www.pnnl.gov/news-media/microelectronics-science-research-centers-lead-charge-next-generation-designs-and) | official-microelectronics-program | high |
-| `national-renewable-energy-laboratory` | National Renewable Energy Laboratory | [official](https://www.nrel.gov/grid/news/features/2025/nrel-researchers-construct-worlds-fastest-low-cost-ultraefficient-silicon-carbide-power-module) | official-semiconductor-research | medium |
+| `national-renewable-energy-laboratory` | National Laboratory of the Rockies (NLR, formerly NREL) | [official](https://www.energy.gov/cmei/articles/energy-department-renames-nrel-national-lab-rockies) | official-government | high |
 | `nist-chips-rd` | National Institute of Standards and Technology — CHIPS R&D | [official](https://www.nist.gov/chips/research-development-programs) | official-microelectronics-program | high |
 
 ### 9.1 合并、排除与残余队列

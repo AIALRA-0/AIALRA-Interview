@@ -12,10 +12,22 @@ function recordsOf(value, key) {
   return Array.isArray(value) ? value : value[key] || [];
 }
 
-const [usRaw, cnRaw, questionsRaw] = await Promise.all([
+const [
+  usRaw,
+  usExpansionRaw,
+  cnRaw,
+  cnExpansionRaw,
+  questionsRaw,
+  organizationRelations,
+  chinaCompanyOwnership,
+] = await Promise.all([
   readJson("data/companies.us.json"),
+  readJson("data/expansion-us-candidates.json"),
   readJson("data/companies.cn.json"),
+  readJson("data/expansion-cn-candidates.json"),
   readJson("data/questions.seed.json"),
+  readJson("data/organization-relations.json"),
+  readJson("data/china-company-ownership.json"),
 ]);
 
 const urls = new Map();
@@ -27,7 +39,9 @@ function register(url, owner) {
 
 for (const company of [
   ...recordsOf(usRaw, "companies"),
+  ...recordsOf(usExpansionRaw, "companies"),
   ...recordsOf(cnRaw, "companies"),
+  ...recordsOf(cnExpansionRaw, "companies"),
 ]) {
   register(company.careerUrl, `company:${company.id}:career`);
   for (const evidence of company.evidence || []) {
@@ -41,6 +55,18 @@ for (const question of recordsOf(questionsRaw, "questions")) {
       typeof source === "string" ? source : source.url,
       `question:${question.id}`,
     );
+  }
+}
+
+for (const relation of organizationRelations) {
+  for (const evidence of relation.officialEvidence || []) {
+    register(evidence.url, `relation:${relation.id}:evidence`);
+  }
+}
+
+for (const record of chinaCompanyOwnership.records) {
+  for (const evidence of record.evidence || []) {
+    register(evidence.url, `ownership:${record.organizationId}:evidence`);
   }
 }
 
@@ -60,7 +86,8 @@ async function inspect([url, owners]) {
       redirect: "follow",
       signal: controller.signal,
       headers: {
-        accept: "text/html,application/xhtml+xml,application/pdf;q=0.8,*/*;q=0.5",
+        accept:
+          "text/html,application/xhtml+xml,application/pdf;q=0.8,*/*;q=0.5",
         "user-agent": "AIALRA-Evidence-Audit/1.0 (+link-integrity-check)",
       },
     });
@@ -102,10 +129,7 @@ async function worker() {
 }
 
 await Promise.all(
-  Array.from(
-    { length: Math.min(concurrency, entries.length) },
-    () => worker(),
-  ),
+  Array.from({ length: Math.min(concurrency, entries.length) }, () => worker()),
 );
 
 const summary = Object.fromEntries(
@@ -133,9 +157,7 @@ console.log(
       // response describes the remote server (and is common for bot-sensitive
       // career sites), so keep it in manual review instead of presenting it as
       // a broken-link fact.
-      actionRequired: results.filter(
-        (result) => result.category === "missing",
-      ),
+      actionRequired: results.filter((result) => result.category === "missing"),
       manualReview: results.filter((result) =>
         [
           "access-controlled",

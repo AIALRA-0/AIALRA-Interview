@@ -19,12 +19,39 @@ local integrated-circuit platforms, open-source communities, foundries,
 equipment/material suppliers, design services, system companies, automotive,
 and robotics.
 
-The v2 evidence freeze retains 529 canonical organization nodes: 256 in the
-US/global-first universe and 273 in the China-first universe. This is an
+The v4 evidence freeze retains 799 organization-market nodes: 360 in the
+U.S.-first universe and 439 in the China-first universe. This is an
 auditable coverage snapshot, not a mathematical claim that every legal entity,
 lab, team, or future startup in both markets has been enumerated. A new node is
 retained only when it has an independent identity, a plausible path to one of
 the target role families, and first-party or authoritative evidence.
+
+The U.S. expansion explicitly covers public and private companies, national
+laboratories, federally funded research and development centers, federal
+research agencies, university laboratories, nonprofit research organizations,
+open-source ecosystems, and industry consortia. The China expansion explicitly
+covers central and local state-owned groups, private companies, research
+institutes, Chinese Academy of Sciences units, university laboratories,
+innovation platforms, semiconductor supply-chain organizations, aerospace,
+defense-adjacent engineering, energy, automotive, robotics, industrial
+software, and quantum technology. Regional operating entities may remain
+separate only when the opportunity market or legal employer is meaningfully
+different.
+
+Cross-market views and announced corporate transactions require explicit,
+bilingual relationship edges. A shared corporate family does not merge
+applications across legal or recruiting markets. A signed acquisition or
+combination remains `pending` until a first-party closing announcement exists;
+the target and acquirer retain independent organization IDs, evidence, roles,
+bookmarks, and application records. Technology licenses must not be mislabeled
+as acquisitions.
+
+All 799 nodes require a distinct bilingual overview and a distinct bilingual
+candidate-relevance statement. All visible organization types, categories,
+role signals, requirements, preparation actions, and opportunity forms pass
+through bilingual atomic presentation catalogs. An English-only organization
+name is permitted when no reviewed Chinese name is available; duplicating an
+English name into the Chinese field is not permitted.
 
 ## Evidence states
 
@@ -72,7 +99,7 @@ copying every reported prompt. Every published task requires provenance policy,
 learning objective, prerequisites, deliverables, rubric, common failure modes,
 follow-ups, version, and review status.
 
-The v2 release baseline is at least 2,100 tasks: at least 140 for each of the 15
+The v4 release baseline is at least 2,100 tasks: at least 140 for each of the 15
 canonical role families. Every counted task must provide semantically parallel
 English and Chinese titles, prompts, deliverables, rubric items, failure modes,
 follow-ups, reference outlines, and observable or executable oracles. Bilingual

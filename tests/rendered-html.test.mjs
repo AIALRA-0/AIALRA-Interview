@@ -51,10 +51,15 @@ function publishedQuestionFor(question) {
 }
 
 function preview(value, maxLength) {
-  const normalized = String(value || "").replace(/\s+/g, " ").trim();
+  const normalized = String(value || "")
+    .replace(/\s+/g, " ")
+    .trim();
   const characters = Array.from(normalized);
   if (characters.length <= maxLength) return normalized;
-  return `${characters.slice(0, maxLength - 1).join("").trimEnd()}…`;
+  return `${characters
+    .slice(0, maxLength - 1)
+    .join("")
+    .trimEnd()}…`;
 }
 
 class MockStatement {
@@ -106,7 +111,10 @@ class MockD1 {
 
 async function worker() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${Math.random()}`);
+  workerUrl.searchParams.set(
+    "test",
+    `${process.pid}-${Date.now()}-${Math.random()}`,
+  );
   return (await import(workerUrl.href)).default;
 }
 
@@ -132,21 +140,41 @@ async function dispatch(app, request, environment = runtimeEnv()) {
 test("server-renders the complete Career Dojo product", async () => {
   const [
     usCompanies,
+    usExpansion,
     cnCompanies,
+    cnExpansion,
+    organizationAssetText,
+    organizationManifest,
     questionSource,
     questionIndexText,
     questionManifest,
-  ] =
-    await Promise.all([
-      readFile(new URL("data/companies.us.json", root), "utf8").then(JSON.parse),
-      readFile(new URL("data/companies.cn.json", root), "utf8").then(JSON.parse),
-      readFile(new URL("data/questions.seed.json", root), "utf8").then(JSON.parse),
-      readFile(new URL("public/question-bank/index.json", root), "utf8"),
-      readFile(new URL("public/question-bank/manifest.json", root), "utf8").then(
-        JSON.parse,
-      ),
-    ]);
-  const expectedCompanyCount = usCompanies.length + cnCompanies.length;
+  ] = await Promise.all([
+    readFile(new URL("data/companies.us.json", root), "utf8").then(JSON.parse),
+    readFile(new URL("data/expansion-us-candidates.json", root), "utf8").then(
+      JSON.parse,
+    ),
+    readFile(new URL("data/companies.cn.json", root), "utf8").then(JSON.parse),
+    readFile(new URL("data/expansion-cn-candidates.json", root), "utf8").then(
+      JSON.parse,
+    ),
+    readFile(new URL("public/organization-universe.json", root), "utf8"),
+    readFile(
+      new URL("public/organization-universe.manifest.json", root),
+      "utf8",
+    ).then(JSON.parse),
+    readFile(new URL("data/questions.seed.json", root), "utf8").then(
+      JSON.parse,
+    ),
+    readFile(new URL("public/question-bank/index.json", root), "utf8"),
+    readFile(new URL("public/question-bank/manifest.json", root), "utf8").then(
+      JSON.parse,
+    ),
+  ]);
+  const expectedCompanyCount =
+    usCompanies.length +
+    usExpansion.length +
+    cnCompanies.length +
+    cnExpansion.length;
   const app = await worker();
   const response = await dispatch(
     app,
@@ -160,10 +188,11 @@ test("server-renders the complete Career Dojo product", async () => {
   const html = await response.text();
   assert.match(html, /<title>AIALRA Career Dojo<\/title>/i);
   assert.match(html, /不是盲投，也不是盲刷/);
-  assert.match(html, /公司宇宙/);
+  assert.match(html, /组织宇宙/);
   assert.match(html, /Interview Dojo/);
   assert.match(html, /投递作战室/);
   assert.match(html, new RegExp(`<strong>${expectedCompanyCount}</strong>`));
+  assert.match(html, new RegExp(organizationManifest.asset.sha256));
   assert.match(html, /下一实习周期/);
   assert.match(html, /lang="zh-CN"/);
   assert.doesNotMatch(
@@ -174,6 +203,22 @@ test("server-renders the complete Career Dojo product", async () => {
         "\\$&",
       ),
     ),
+  );
+  const organizationAsset = JSON.parse(organizationAssetText);
+  assert.equal(
+    sha256(organizationAssetText),
+    organizationManifest.asset.sha256,
+    "organization asset digest must match its bootstrap manifest",
+  );
+  assert.equal(organizationAsset.organizations.length, expectedCompanyCount);
+  assert.doesNotMatch(
+    html,
+    new RegExp(
+      organizationAsset.organizations
+        .at(-1)
+        .id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+    ),
+    "the full organization universe must not be serialized into initial HTML",
   );
   assert.doesNotMatch(
     html,
@@ -201,6 +246,41 @@ test("server-renders the complete Career Dojo product", async () => {
   assert.doesNotMatch(html, /codex-preview/);
   assert.doesNotMatch(html, /react-loading-skeleton/);
   assert.doesNotMatch(html, /USC MSECE|Fall 2026/);
+});
+
+test("organization universe is digest-verified outside the initial HTML", async () => {
+  const [component, page, manifestText, assetText, releaseManifest] =
+    await Promise.all([
+      readFile(new URL("app/CareerDojoApp.tsx", root), "utf8"),
+      readFile(new URL("app/page.tsx", root), "utf8"),
+      readFile(
+        new URL("public/organization-universe.manifest.json", root),
+        "utf8",
+      ),
+      readFile(new URL("public/organization-universe.json", root), "utf8"),
+      JSON.parse(
+        await readFile(new URL("data/release-manifest.json", root), "utf8"),
+      ),
+    ]);
+  const manifest = JSON.parse(manifestText);
+  const asset = JSON.parse(assetText);
+
+  assert.equal(manifest.organizationCount, releaseManifest.organizations.total);
+  assert.deepEqual(
+    manifest.regionCounts,
+    releaseManifest.organizations.regionCounts,
+  );
+  assert.equal(asset.organizationCount, manifest.organizationCount);
+  assert.equal(asset.organizations.length, manifest.organizationCount);
+  assert.equal(sha256(assetText), manifest.asset.sha256);
+  assert.match(page, /initialCompanies=\{companies\.slice\(0, 12\)\}/);
+  assert.match(page, /organizationBank=\{organizationBank\}/);
+  assert.doesNotMatch(page, /\bcompanies=\{companies\}/);
+  assert.match(component, /function validateOrganizationUniverse\(/);
+  assert.match(component, /organizationBank\.assetSha256/);
+  assert.match(component, /fetch\(assetUrl,[\s\S]*cache: "no-store"/);
+  assert.match(component, /setCompanies\(universe\.organizations\)/);
+  assert.match(component, /organizationIndexState !== "ready"/);
 });
 
 test("production state API rejects unauthenticated access", async () => {
@@ -326,8 +406,9 @@ test("public source keeps the private candidate profile out of git", async () =>
     (name) => /^0000_.+\.sql$/.test(name),
   );
   assert.equal(migrationNames.length, 1);
-  const [profile, gitignore, page, migration] = await Promise.all([
+  const [profile, strategy, gitignore, page, migration] = await Promise.all([
     readFile(new URL("data/profile.json", root), "utf8"),
+    readFile(new URL("research/strategy-framework.md", root), "utf8"),
     readFile(new URL(".gitignore", root), "utf8"),
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL(`drizzle/${migrationNames[0]}`, root), "utf8"),
@@ -335,7 +416,11 @@ test("public source keeps the private candidate profile out of git", async () =>
 
   assert.doesNotMatch(
     profile,
-    /USC MSECE|Fall 2026|Summer 2027|TinyTapeout|Ramulator2|ZU4EV/,
+    /USC MSECE|Fall 2026|Summer 2027|Rensselaer|\bRPI\b|3\.67|ZU4EV|TinyTapeout|five-stage RISC-V|五级流水|FIR flow|Viterbi flow/i,
+  );
+  assert.doesNotMatch(
+    strategy,
+    /ZU4EV|TinyTapeout|five-stage RISC-V|五级流水|FIR 与 Viterbi|四个旗舰项目/i,
   );
   assert.match(gitignore, /^\/private\/$/m);
   assert.doesNotMatch(page, /private\/profile/);
@@ -368,31 +453,22 @@ test("Dojo keeps every assessment field bilingual and renders a bounded page", a
     assert.match(component, new RegExp(`selectedQuestionDetail\\.${field}`));
   }
 
-  assert.match(
-    component,
-    /useState<QuestionLanguageMode>\("bilingual"\)/,
-  );
+  assert.match(component, /useState<QuestionLanguageMode>\("bilingual"\)/);
   assert.match(component, /id: "zh-first"/);
   assert.match(component, /id: "en-first"/);
   assert.match(component, /\[24, 48, 96\]\.map/);
   assert.match(component, /visibleQuestions\.map/);
-  assert.match(
-    component,
-    /filteredQuestions\.slice\([\s\S]*questionPageSize/,
-  );
+  assert.match(component, /filteredQuestions\.slice\([\s\S]*questionPageSize/);
   assert.doesNotMatch(
     component,
     /className="question-grid">\s*\{filteredQuestions\.map/,
   );
   assert.match(component, /重置筛选 \/ Reset/);
-  assert.match(component, /aria-current=\{page === safeQuestionPage/);
+  assert.match(component, /aria-current=\{\s*page === safeQuestionPage/);
   assert.match(component, /questionDetailState === "loading"/);
   assert.match(component, /questionDetailState === "error"/);
   assert.match(component, /重试 \/ Retry/);
-  assert.match(
-    component,
-    /useState<InterviewQuestionSummary\[\]>\(\[\]\)/,
-  );
+  assert.match(component, /useState<InterviewQuestionSummary\[\]>\(\[\]\)/);
   assert.match(component, /validateQuestionBankIndex\(value, questionBank\)/);
   assert.match(component, /fetch\(indexUrl,[\s\S]*cache: "no-store"/);
   assert.match(
@@ -411,10 +487,7 @@ test("Dojo keeps every assessment field bilingual and renders a bounded page", a
   );
   assert.match(component, /questionIndexState !== "ready"/);
   assert.match(component, /重试题库加载 \/ Retry question index/);
-  assert.match(
-    component,
-    /210 个基础场景 \+ 每场 9 个递进训练 = 2,100/,
-  );
+  assert.match(component, /210 个基础场景 \+ 每场 9 个递进训练 = 2,100/);
   assert.match(
     component,
     /210 anchor scenarios \+ 1,890 progressive drills = 2,100/,
@@ -454,7 +527,9 @@ test("navigation, filters, sources, and focus rings expose accessible state", as
   const [component, styles, questionSource] = await Promise.all([
     readFile(new URL("app/CareerDojoApp.tsx", root), "utf8"),
     readFile(new URL("app/globals.css", root), "utf8"),
-    readFile(new URL("data/questions.seed.json", root), "utf8").then(JSON.parse),
+    readFile(new URL("data/questions.seed.json", root), "utf8").then(
+      JSON.parse,
+    ),
   ]);
 
   assert.equal(
@@ -516,12 +591,27 @@ test("navigation, filters, sources, and focus rings expose accessible state", as
     "[tabindex]",
   ]) {
     assert.ok(
-      styles.slice(styles.lastIndexOf(":is("), finalFocusRule).includes(control),
+      styles
+        .slice(styles.lastIndexOf(":is("), finalFocusRule)
+        .includes(control),
       `the shared focus ring should cover ${control}`,
     );
   }
   assert.match(focusRule, /outline: 3px solid var\(--blue\)/);
   assert.match(focusRule, /outline-offset: 2px/);
+  assert.match(
+    styles,
+    /\.company-tree > section:only-child\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;/,
+    "a single selected market must fill the organization-tree width",
+  );
+  const mobileLayoutRules = styles.slice(
+    styles.lastIndexOf("@media (max-width: 900px)"),
+  );
+  assert.match(
+    mobileLayoutRules,
+    /\.filter-bar:not\(\.dojo-filters\)\s*\{[^}]*grid-template-columns:\s*1fr;/,
+    "mobile organization filters must use one readable column",
+  );
 });
 
 test("question index and deterministic detail shards stay synchronized", async () => {
@@ -586,9 +676,9 @@ test("question index and deterministic detail shards stay synchronized", async (
     indexedIds.add(summary.id);
   }
 
-  const actualShardNames = (await readdir(
-    new URL("public/question-bank/shards/", root),
-  ))
+  const actualShardNames = (
+    await readdir(new URL("public/question-bank/shards/", root))
+  )
     .filter((name) => name.endsWith(".json"))
     .sort();
   assert.deepEqual(
@@ -620,7 +710,10 @@ test("question index and deterministic detail shards stay synchronized", async (
       assert.ok(sourceQuestion.generationSpec);
       assert.deepEqual(question, publishedQuestionFor(sourceQuestion));
       assert.equal(question.blueprintId, sourceQuestion.blueprintId);
-      assert.ok(!detailedIds.has(question.id), `duplicate detail ${question.id}`);
+      assert.ok(
+        !detailedIds.has(question.id),
+        `duplicate detail ${question.id}`,
+      );
       detailedIds.add(question.id);
     }
   }

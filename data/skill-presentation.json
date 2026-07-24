@@ -1,0 +1,1221 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-24",
+  "source": "data/skill-graph.json",
+  "policy": {
+    "displayTerms": "Every user-visible term is bilingual and represents one atomic skill concept.",
+    "joiners": "A display term must not join distinct concepts with English conjunctions, ampersands, slashes, Chinese conjunctions, or enumeration punctuation.",
+    "compoundExemptions": "Reserved for indivisible formal names only; this revision requires no exemption."
+  },
+  "skills": {
+    "sk-binary-representation": {
+      "displayTerms": [
+        {
+          "id": "binary-representation",
+          "zh": "二进制表示",
+          "en": "Binary Representation"
+        }
+      ]
+    },
+    "sk-boolean-logic": {
+      "displayTerms": [
+        { "id": "boolean-logic", "zh": "布尔逻辑", "en": "Boolean Logic" }
+      ]
+    },
+    "sk-complexity-analysis": {
+      "displayTerms": [
+        {
+          "id": "complexity-analysis",
+          "zh": "复杂度分析",
+          "en": "Complexity Analysis"
+        }
+      ]
+    },
+    "sk-data-structures": {
+      "displayTerms": [
+        {
+          "id": "data-structures",
+          "zh": "核心数据结构",
+          "en": "Core Data Structures"
+        }
+      ]
+    },
+    "sk-graph-algorithms": {
+      "displayTerms": [
+        { "id": "graph-algorithms", "zh": "图算法", "en": "Graph Algorithms" }
+      ]
+    },
+    "sk-probability-basics": {
+      "displayTerms": [
+        {
+          "id": "probability-basics",
+          "zh": "概率基础",
+          "en": "Probability Basics"
+        }
+      ]
+    },
+    "sk-linear-algebra": {
+      "displayTerms": [
+        {
+          "id": "linear-algebra",
+          "zh": "应用线性代数",
+          "en": "Applied Linear Algebra"
+        }
+      ]
+    },
+    "sk-statistical-inference": {
+      "displayTerms": [
+        {
+          "id": "statistical-inference",
+          "zh": "统计推断",
+          "en": "Statistical Inference"
+        }
+      ]
+    },
+    "sk-python-scripting": {
+      "displayTerms": [
+        {
+          "id": "python-scripting",
+          "zh": "Python 工程脚本",
+          "en": "Python Engineering Scripting"
+        }
+      ]
+    },
+    "sk-cpp-resource-safety": {
+      "displayTerms": [
+        {
+          "id": "cpp-resource-safety",
+          "zh": "C++ 资源安全",
+          "en": "C++ Resource Safety"
+        }
+      ]
+    },
+    "sk-linux-shell": {
+      "displayTerms": [
+        {
+          "id": "linux-fundamentals",
+          "zh": "Linux 基础",
+          "en": "Linux Fundamentals"
+        },
+        {
+          "id": "shell-fundamentals",
+          "zh": "Shell 基础",
+          "en": "Shell Fundamentals"
+        }
+      ]
+    },
+    "sk-git-workflows": {
+      "displayTerms": [
+        {
+          "id": "git-workflows",
+          "zh": "Git 变更管理",
+          "en": "Git Change Management"
+        }
+      ]
+    },
+    "sk-debug-hypothesis": {
+      "displayTerms": [
+        {
+          "id": "debug-hypothesis",
+          "zh": "假设驱动调试",
+          "en": "Hypothesis-Driven Debugging"
+        }
+      ]
+    },
+    "sk-test-design": {
+      "displayTerms": [
+        { "id": "test-design", "zh": "测试设计", "en": "Test Design" },
+        { "id": "oracle-design", "zh": "判定器设计", "en": "Oracle Design" }
+      ]
+    },
+    "sk-requirement-clarification": {
+      "displayTerms": [
+        {
+          "id": "requirement-clarification",
+          "zh": "需求澄清",
+          "en": "Requirement Clarification"
+        }
+      ]
+    },
+    "sk-tradeoff-communication": {
+      "displayTerms": [
+        {
+          "id": "tradeoff-communication",
+          "zh": "权衡表达",
+          "en": "Trade-off Communication"
+        }
+      ]
+    },
+    "sk-eda-netlist-ir": {
+      "displayTerms": [
+        {
+          "id": "eda-netlist-ir",
+          "zh": "网表中间表示",
+          "en": "Netlist Intermediate Representation"
+        }
+      ]
+    },
+    "sk-eda-hdl-elaboration": {
+      "displayTerms": [
+        { "id": "hdl-parsing", "zh": "HDL 解析", "en": "HDL Parsing" },
+        { "id": "hdl-elaboration", "zh": "HDL 展开", "en": "HDL Elaboration" }
+      ]
+    },
+    "sk-eda-timing-graph": {
+      "displayTerms": [
+        {
+          "id": "eda-timing-graph",
+          "zh": "时序图建模",
+          "en": "Timing Graph Modeling"
+        }
+      ]
+    },
+    "sk-eda-event-simulation": {
+      "displayTerms": [
+        {
+          "id": "eda-event-simulation",
+          "zh": "事件驱动仿真",
+          "en": "Event-Driven Simulation"
+        }
+      ]
+    },
+    "sk-eda-sat-bdd": {
+      "displayTerms": [
+        { "id": "sat-reasoning", "zh": "SAT 推理", "en": "SAT Reasoning" },
+        { "id": "bdd-reasoning", "zh": "BDD 推理", "en": "BDD Reasoning" }
+      ]
+    },
+    "sk-eda-optimization-objectives": {
+      "displayTerms": [
+        {
+          "id": "eda-optimization-objectives",
+          "zh": "EDA 优化目标",
+          "en": "EDA Optimization Objectives"
+        }
+      ]
+    },
+    "sk-eda-placement-routing-models": {
+      "displayTerms": [
+        {
+          "id": "placement-cost-models",
+          "zh": "布局代价模型",
+          "en": "Placement Cost Models"
+        },
+        {
+          "id": "routing-cost-models",
+          "zh": "布线代价模型",
+          "en": "Routing Cost Models"
+        }
+      ]
+    },
+    "sk-eda-tool-correctness": {
+      "displayTerms": [
+        {
+          "id": "eda-tool-correctness",
+          "zh": "EDA 工具正确性策略",
+          "en": "EDA Tool Correctness Strategy"
+        }
+      ]
+    },
+    "sk-ml-supervised-basics": {
+      "displayTerms": [
+        {
+          "id": "ml-supervised-basics",
+          "zh": "监督学习基础",
+          "en": "Supervised Learning Foundations"
+        }
+      ]
+    },
+    "sk-ml-feature-engineering": {
+      "displayTerms": [
+        {
+          "id": "ml-feature-engineering",
+          "zh": "EDA 特征工程",
+          "en": "EDA Feature Engineering"
+        }
+      ]
+    },
+    "sk-ml-imbalanced-evaluation": {
+      "displayTerms": [
+        {
+          "id": "ml-imbalanced-evaluation",
+          "zh": "不平衡模型评估",
+          "en": "Imbalanced Model Evaluation"
+        }
+      ]
+    },
+    "sk-ml-gnn-netlists": {
+      "displayTerms": [
+        {
+          "id": "ml-gnn-netlists",
+          "zh": "网表图学习",
+          "en": "Graph Learning for Netlists"
+        }
+      ]
+    },
+    "sk-ml-ppa-surrogate": {
+      "displayTerms": [
+        {
+          "id": "ml-ppa-surrogate",
+          "zh": "PPA 代理模型",
+          "en": "PPA Surrogate Modeling"
+        }
+      ]
+    },
+    "sk-ml-uncertainty-calibration": {
+      "displayTerms": [
+        {
+          "id": "uncertainty-modeling",
+          "zh": "不确定性建模",
+          "en": "Uncertainty Modeling"
+        },
+        {
+          "id": "model-calibration",
+          "zh": "模型校准",
+          "en": "Model Calibration"
+        }
+      ]
+    },
+    "sk-ml-domain-shift": {
+      "displayTerms": [
+        {
+          "id": "design-domain-shift",
+          "zh": "设计域迁移",
+          "en": "Design Domain Shift"
+        },
+        {
+          "id": "technology-domain-shift",
+          "zh": "工艺域迁移",
+          "en": "Technology Domain Shift"
+        }
+      ]
+    },
+    "sk-ml-experiment-reproducibility": {
+      "displayTerms": [
+        {
+          "id": "ml-experiment-reproducibility",
+          "zh": "ML 实验可复现性",
+          "en": "ML Experiment Reproducibility"
+        }
+      ]
+    },
+    "sk-cad-tcl": {
+      "displayTerms": [
+        {
+          "id": "cad-tcl",
+          "zh": "EDA Tcl 自动化",
+          "en": "Tcl for EDA Automation"
+        }
+      ]
+    },
+    "sk-cad-flow-dag": {
+      "displayTerms": [
+        {
+          "id": "cad-flow-dag",
+          "zh": "流程依赖图",
+          "en": "Flow Dependency Graphs"
+        }
+      ]
+    },
+    "sk-cad-reproducibility": {
+      "displayTerms": [
+        {
+          "id": "cad-reproducibility",
+          "zh": "可复现 EDA 运行",
+          "en": "Reproducible EDA Runs"
+        }
+      ]
+    },
+    "sk-cad-compute-scheduler": {
+      "displayTerms": [
+        {
+          "id": "cad-compute-scheduler",
+          "zh": "计算集群调度",
+          "en": "Compute Farm Scheduling"
+        }
+      ]
+    },
+    "sk-cad-license-scheduling": {
+      "displayTerms": [
+        {
+          "id": "cad-license-scheduling",
+          "zh": "许可证感知调度",
+          "en": "License-Aware Scheduling"
+        }
+      ]
+    },
+    "sk-cad-log-taxonomy": {
+      "displayTerms": [
+        { "id": "log-parsing", "zh": "日志解析", "en": "Log Parsing" },
+        { "id": "failure-taxonomy", "zh": "失败分类", "en": "Failure Taxonomy" }
+      ]
+    },
+    "sk-cad-artifact-provenance": {
+      "displayTerms": [
+        {
+          "id": "cad-artifact-provenance",
+          "zh": "产物溯源",
+          "en": "Artifact Provenance"
+        }
+      ]
+    },
+    "sk-cad-observability": {
+      "displayTerms": [
+        {
+          "id": "flow-observability",
+          "zh": "流程可观测性",
+          "en": "Flow Observability"
+        },
+        {
+          "id": "service-level-objectives",
+          "zh": "服务等级目标",
+          "en": "Service-Level Objectives"
+        }
+      ]
+    },
+    "sk-rtl-synthesizable-sv": {
+      "displayTerms": [
+        {
+          "id": "rtl-synthesizable-sv",
+          "zh": "可综合 SystemVerilog",
+          "en": "Synthesizable SystemVerilog"
+        }
+      ]
+    },
+    "sk-rtl-sequential-logic": {
+      "displayTerms": [
+        {
+          "id": "rtl-sequential-logic",
+          "zh": "时序逻辑语义",
+          "en": "Sequential Logic Semantics"
+        }
+      ]
+    },
+    "sk-rtl-reset-design": {
+      "displayTerms": [
+        {
+          "id": "rtl-reset-design",
+          "zh": "复位架构",
+          "en": "Reset Architecture"
+        }
+      ]
+    },
+    "sk-rtl-cdc": {
+      "displayTerms": [
+        { "id": "rtl-cdc", "zh": "跨时钟域", "en": "Clock Domain Crossing" }
+      ]
+    },
+    "sk-rtl-ready-valid": {
+      "displayTerms": [
+        {
+          "id": "ready-signal-semantics",
+          "zh": "就绪信号语义",
+          "en": "Ready Signal Semantics"
+        },
+        {
+          "id": "valid-signal-semantics",
+          "zh": "有效信号语义",
+          "en": "Valid Signal Semantics"
+        }
+      ]
+    },
+    "sk-rtl-pipelining": {
+      "displayTerms": [
+        { "id": "rtl-pipelining", "zh": "RTL 流水线", "en": "RTL Pipelining" }
+      ]
+    },
+    "sk-rtl-width-signedness": {
+      "displayTerms": [
+        {
+          "id": "bit-width-discipline",
+          "zh": "位宽规则",
+          "en": "Bit-Width Discipline"
+        },
+        {
+          "id": "signedness-discipline",
+          "zh": "有符号规则",
+          "en": "Signedness Discipline"
+        }
+      ]
+    },
+    "sk-rtl-memory-inference": {
+      "displayTerms": [
+        {
+          "id": "memory-inference",
+          "zh": "存储器推断",
+          "en": "Memory Inference"
+        },
+        {
+          "id": "memory-port-semantics",
+          "zh": "存储器端口语义",
+          "en": "Memory Port Semantics"
+        }
+      ]
+    },
+    "sk-dv-sv-regions": {
+      "displayTerms": [
+        {
+          "id": "dv-sv-regions",
+          "zh": "SystemVerilog 仿真调度区",
+          "en": "SystemVerilog Simulation Regions"
+        }
+      ]
+    },
+    "sk-dv-uvm-architecture": {
+      "displayTerms": [
+        {
+          "id": "dv-uvm-architecture",
+          "zh": "UVM 测试平台架构",
+          "en": "UVM Testbench Architecture"
+        }
+      ]
+    },
+    "sk-dv-uvm-sequences": {
+      "displayTerms": [
+        {
+          "id": "uvm-sequence-design",
+          "zh": "UVM 序列设计",
+          "en": "UVM Sequence Design"
+        },
+        { "id": "uvm-arbitration", "zh": "UVM 仲裁", "en": "UVM Arbitration" }
+      ]
+    },
+    "sk-dv-scoreboard": {
+      "displayTerms": [
+        {
+          "id": "reference-model-design",
+          "zh": "参考模型设计",
+          "en": "Reference Model Design"
+        },
+        {
+          "id": "scoreboard-design",
+          "zh": "记分板设计",
+          "en": "Scoreboard Design"
+        }
+      ]
+    },
+    "sk-dv-constrained-random": {
+      "displayTerms": [
+        {
+          "id": "dv-constrained-random",
+          "zh": "约束随机激励",
+          "en": "Constrained Random Stimulus"
+        }
+      ]
+    },
+    "sk-dv-functional-coverage": {
+      "displayTerms": [
+        {
+          "id": "dv-functional-coverage",
+          "zh": "功能覆盖率收敛",
+          "en": "Functional Coverage Closure"
+        }
+      ]
+    },
+    "sk-dv-sva": {
+      "displayTerms": [
+        {
+          "id": "dv-sva",
+          "zh": "SystemVerilog 断言",
+          "en": "SystemVerilog Assertions"
+        }
+      ]
+    },
+    "sk-dv-formal-strategy": {
+      "displayTerms": [
+        {
+          "id": "dv-formal-strategy",
+          "zh": "形式验证证明策略",
+          "en": "Formal Proof Strategy"
+        }
+      ]
+    },
+    "sk-fpga-fabric": {
+      "displayTerms": [
+        {
+          "id": "fpga-fabric",
+          "zh": "FPGA 逻辑资源架构",
+          "en": "FPGA Fabric Architecture"
+        }
+      ]
+    },
+    "sk-fpga-constraints": {
+      "displayTerms": [
+        {
+          "id": "fpga-constraints",
+          "zh": "FPGA 时序约束",
+          "en": "FPGA Timing Constraints"
+        }
+      ]
+    },
+    "sk-fpga-timing-closure": {
+      "displayTerms": [
+        {
+          "id": "fpga-timing-closure",
+          "zh": "FPGA 时序收敛",
+          "en": "FPGA Timing Closure"
+        }
+      ]
+    },
+    "sk-fpga-async-fifo": {
+      "displayTerms": [
+        {
+          "id": "fpga-async-fifo",
+          "zh": "异步 FIFO 实现",
+          "en": "Asynchronous FIFO Implementation"
+        }
+      ]
+    },
+    "sk-fpga-axi-stream": {
+      "displayTerms": [
+        {
+          "id": "fpga-axi-stream",
+          "zh": "AXI-Stream 集成",
+          "en": "AXI-Stream Integration"
+        }
+      ]
+    },
+    "sk-fpga-transceivers": {
+      "displayTerms": [
+        {
+          "id": "fpga-transceivers",
+          "zh": "高速收发器调试",
+          "en": "High-Speed Transceiver Bring-up"
+        }
+      ]
+    },
+    "sk-fpga-floorplanning": {
+      "displayTerms": [
+        {
+          "id": "fpga-floorplanning",
+          "zh": "FPGA 布局规划",
+          "en": "FPGA Floorplanning"
+        }
+      ]
+    },
+    "sk-fpga-onchip-debug": {
+      "displayTerms": [
+        {
+          "id": "fpga-onchip-debug",
+          "zh": "FPGA 片上调试",
+          "en": "FPGA On-Chip Debug"
+        }
+      ]
+    },
+    "sk-arch-isa-contract": {
+      "displayTerms": [
+        { "id": "isa-contract", "zh": "ISA 契约", "en": "ISA Contract" },
+        {
+          "id": "microarchitecture-contract",
+          "zh": "微架构契约",
+          "en": "Microarchitecture Contract"
+        }
+      ]
+    },
+    "sk-arch-pipeline-hazards": {
+      "displayTerms": [
+        {
+          "id": "pipeline-hazard-handling",
+          "zh": "流水线冒险处理",
+          "en": "Pipeline Hazard Handling"
+        },
+        {
+          "id": "pipeline-recovery",
+          "zh": "流水线恢复",
+          "en": "Pipeline Recovery"
+        }
+      ]
+    },
+    "sk-arch-cache-mapping": {
+      "displayTerms": [
+        { "id": "cache-mapping", "zh": "缓存映射", "en": "Cache Mapping" },
+        {
+          "id": "cache-replacement",
+          "zh": "缓存替换",
+          "en": "Cache Replacement"
+        }
+      ]
+    },
+    "sk-arch-cache-coherence": {
+      "displayTerms": [
+        {
+          "id": "arch-cache-coherence",
+          "zh": "缓存一致性",
+          "en": "Cache Coherence"
+        }
+      ]
+    },
+    "sk-arch-virtual-memory": {
+      "displayTerms": [
+        { "id": "virtual-memory", "zh": "虚拟内存", "en": "Virtual Memory" },
+        { "id": "tlb-operation", "zh": "TLB 工作原理", "en": "TLB Operation" }
+      ]
+    },
+    "sk-arch-dram": {
+      "displayTerms": [
+        {
+          "id": "dram-organization",
+          "zh": "DRAM 组织",
+          "en": "DRAM Organization"
+        },
+        { "id": "dram-scheduling", "zh": "DRAM 调度", "en": "DRAM Scheduling" }
+      ]
+    },
+    "sk-arch-noc": {
+      "displayTerms": [
+        { "id": "noc-routing", "zh": "片上网络路由", "en": "NoC Routing" },
+        {
+          "id": "noc-flow-control",
+          "zh": "片上网络流控",
+          "en": "NoC Flow Control"
+        }
+      ]
+    },
+    "sk-arch-performance-model": {
+      "displayTerms": [
+        {
+          "id": "arch-performance-model",
+          "zh": "性能建模",
+          "en": "Performance Modeling"
+        }
+      ]
+    },
+    "sk-pd-floorplanning": {
+      "displayTerms": [
+        {
+          "id": "chip-floorplanning",
+          "zh": "芯片规划",
+          "en": "Chip Floorplanning"
+        },
+        {
+          "id": "block-floorplanning",
+          "zh": "模块规划",
+          "en": "Block Floorplanning"
+        }
+      ]
+    },
+    "sk-pd-placement-congestion": {
+      "displayTerms": [
+        {
+          "id": "placement-density",
+          "zh": "布局密度",
+          "en": "Placement Density"
+        },
+        {
+          "id": "congestion-analysis",
+          "zh": "拥塞分析",
+          "en": "Congestion Analysis"
+        }
+      ]
+    },
+    "sk-pd-cts": {
+      "displayTerms": [
+        { "id": "pd-cts", "zh": "时钟树综合", "en": "Clock Tree Synthesis" }
+      ]
+    },
+    "sk-pd-routing-extraction": {
+      "displayTerms": [
+        {
+          "id": "physical-routing",
+          "zh": "物理布线",
+          "en": "Physical Routing"
+        },
+        {
+          "id": "parasitic-extraction",
+          "zh": "寄生提取",
+          "en": "Parasitic Extraction"
+        }
+      ]
+    },
+    "sk-sta-setup-hold": {
+      "displayTerms": [
+        {
+          "id": "setup-analysis",
+          "zh": "建立时间分析",
+          "en": "Setup Analysis"
+        },
+        { "id": "hold-analysis", "zh": "保持时间分析", "en": "Hold Analysis" }
+      ]
+    },
+    "sk-sta-sdc": {
+      "displayTerms": [
+        {
+          "id": "sta-sdc",
+          "zh": "SDC 约束建模",
+          "en": "SDC Constraint Modeling"
+        }
+      ]
+    },
+    "sk-sta-mmmc-ocv": {
+      "displayTerms": [
+        { "id": "mmmc-analysis", "zh": "MMMC 分析", "en": "MMMC Analysis" },
+        {
+          "id": "on-chip-variation",
+          "zh": "片上变化",
+          "en": "On-Chip Variation"
+        }
+      ]
+    },
+    "sk-pd-eco-closure": {
+      "displayTerms": [
+        {
+          "id": "pd-eco-closure",
+          "zh": "时序 ECO 收敛",
+          "en": "Timing ECO Closure"
+        }
+      ]
+    },
+    "sk-dft-fault-models": {
+      "displayTerms": [
+        {
+          "id": "dft-fault-models",
+          "zh": "数字故障模型",
+          "en": "Digital Fault Models"
+        }
+      ]
+    },
+    "sk-dft-scan": {
+      "displayTerms": [
+        { "id": "dft-scan", "zh": "扫描架构", "en": "Scan Architecture" }
+      ]
+    },
+    "sk-dft-atpg": {
+      "displayTerms": [
+        { "id": "dft-atpg", "zh": "ATPG 推理", "en": "ATPG Reasoning" }
+      ]
+    },
+    "sk-dft-compression": {
+      "displayTerms": [
+        { "id": "dft-compression", "zh": "测试压缩", "en": "Test Compression" }
+      ]
+    },
+    "sk-dft-mbist": {
+      "displayTerms": [
+        { "id": "memory-bist", "zh": "存储器 BIST", "en": "Memory BIST" },
+        { "id": "memory-repair", "zh": "存储器修复", "en": "Memory Repair" }
+      ]
+    },
+    "sk-dft-jtag": {
+      "displayTerms": [
+        { "id": "jtag", "zh": "JTAG", "en": "JTAG" },
+        { "id": "boundary-scan", "zh": "边界扫描", "en": "Boundary Scan" }
+      ]
+    },
+    "sk-dft-at-speed": {
+      "displayTerms": [
+        { "id": "dft-at-speed", "zh": "高速测试", "en": "At-Speed Test" }
+      ]
+    },
+    "sk-dft-diagnosis-yield": {
+      "displayTerms": [
+        {
+          "id": "failure-diagnosis",
+          "zh": "失效诊断",
+          "en": "Failure Diagnosis"
+        },
+        { "id": "yield-learning", "zh": "良率学习", "en": "Yield Learning" }
+      ]
+    },
+    "sk-analog-mos-small-signal": {
+      "displayTerms": [
+        { "id": "mos-biasing", "zh": "MOS 偏置", "en": "MOS Biasing" },
+        {
+          "id": "small-signal-models",
+          "zh": "小信号模型",
+          "en": "Small-Signal Models"
+        }
+      ]
+    },
+    "sk-analog-opamp": {
+      "displayTerms": [
+        {
+          "id": "analog-opamp",
+          "zh": "运放拓扑分析",
+          "en": "Op-Amp Topology Analysis"
+        }
+      ]
+    },
+    "sk-analog-stability": {
+      "displayTerms": [
+        {
+          "id": "feedback-analysis",
+          "zh": "反馈分析",
+          "en": "Feedback Analysis"
+        },
+        {
+          "id": "stability-analysis",
+          "zh": "稳定性分析",
+          "en": "Stability Analysis"
+        }
+      ]
+    },
+    "sk-analog-noise": {
+      "displayTerms": [
+        {
+          "id": "analog-noise",
+          "zh": "模拟噪声分析",
+          "en": "Analog Noise Analysis"
+        }
+      ]
+    },
+    "sk-analog-mismatch-montecarlo": {
+      "displayTerms": [
+        { "id": "device-mismatch", "zh": "器件失配", "en": "Device Mismatch" },
+        {
+          "id": "monte-carlo-analysis",
+          "zh": "蒙特卡洛分析",
+          "en": "Monte Carlo Analysis"
+        }
+      ]
+    },
+    "sk-analog-layout-matching": {
+      "displayTerms": [
+        {
+          "id": "analog-layout-matching",
+          "zh": "模拟版图匹配",
+          "en": "Analog Layout Matching"
+        }
+      ]
+    },
+    "sk-analog-drc-lvs": {
+      "displayTerms": [
+        { "id": "drc-debugging", "zh": "DRC 调试", "en": "DRC Debugging" },
+        { "id": "lvs-debugging", "zh": "LVS 调试", "en": "LVS Debugging" }
+      ]
+    },
+    "sk-analog-parasitics": {
+      "displayTerms": [
+        {
+          "id": "analog-parasitics",
+          "zh": "版图后寄生分析",
+          "en": "Post-Layout Parasitic Analysis"
+        }
+      ]
+    },
+    "sk-emb-c-volatile": {
+      "displayTerms": [
+        {
+          "id": "emb-c-volatile",
+          "zh": "嵌入式 C 内存语义",
+          "en": "Embedded C Memory Semantics"
+        }
+      ]
+    },
+    "sk-emb-interrupts": {
+      "displayTerms": [
+        {
+          "id": "emb-interrupts",
+          "zh": "中断并发",
+          "en": "Interrupt Concurrency"
+        }
+      ]
+    },
+    "sk-emb-rtos": {
+      "displayTerms": [
+        { "id": "rtos-scheduling", "zh": "RTOS 调度", "en": "RTOS Scheduling" },
+        {
+          "id": "rtos-synchronization",
+          "zh": "RTOS 同步",
+          "en": "RTOS Synchronization"
+        }
+      ]
+    },
+    "sk-emb-mmio-driver": {
+      "displayTerms": [
+        {
+          "id": "memory-mapped-peripheral-access",
+          "zh": "内存映射外设访问",
+          "en": "Memory-Mapped Peripheral Access"
+        },
+        { "id": "device-drivers", "zh": "设备驱动", "en": "Device Drivers" }
+      ]
+    },
+    "sk-emb-dma-coherency": {
+      "displayTerms": [
+        { "id": "dma-operation", "zh": "DMA 工作原理", "en": "DMA Operation" },
+        { "id": "cache-coherency", "zh": "缓存一致性", "en": "Cache Coherency" }
+      ]
+    },
+    "sk-emb-boot-linker": {
+      "displayTerms": [
+        { "id": "boot-control", "zh": "启动控制", "en": "Boot Control" },
+        { "id": "linker-control", "zh": "链接控制", "en": "Linker Control" }
+      ]
+    },
+    "sk-emb-serial-protocols": {
+      "displayTerms": [
+        {
+          "id": "emb-serial-protocols",
+          "zh": "嵌入式串行协议",
+          "en": "Embedded Serial Protocols"
+        }
+      ]
+    },
+    "sk-emb-secure-update": {
+      "displayTerms": [
+        {
+          "id": "emb-secure-update",
+          "zh": "安全固件更新",
+          "en": "Secure Firmware Update"
+        }
+      ]
+    },
+    "sk-mfg-secs-gem": {
+      "displayTerms": [
+        { "id": "secs-messaging", "zh": "SECS 通信", "en": "SECS Messaging" },
+        {
+          "id": "gem-equipment-communication",
+          "zh": "GEM 设备通信",
+          "en": "GEM Equipment Communication"
+        }
+      ]
+    },
+    "sk-mfg-gem300": {
+      "displayTerms": [
+        {
+          "id": "gem300-carrier-handling",
+          "zh": "GEM300 载具处理",
+          "en": "GEM300 Carrier Handling"
+        },
+        {
+          "id": "gem300-material-flow",
+          "zh": "GEM300 物料流",
+          "en": "GEM300 Material Flow"
+        }
+      ]
+    },
+    "sk-mfg-plc-state": {
+      "displayTerms": [
+        {
+          "id": "mfg-plc-state",
+          "zh": "PLC 状态机设计",
+          "en": "PLC State Machine Design"
+        }
+      ]
+    },
+    "sk-mfg-opcua-mes": {
+      "displayTerms": [
+        {
+          "id": "opc-ua-integration",
+          "zh": "OPC UA 集成",
+          "en": "OPC UA Integration"
+        },
+        { "id": "mes-integration", "zh": "MES 集成", "en": "MES Integration" }
+      ]
+    },
+    "sk-mfg-recipe-control": {
+      "displayTerms": [
+        {
+          "id": "mfg-recipe-control",
+          "zh": "工艺配方治理",
+          "en": "Recipe Governance"
+        }
+      ]
+    },
+    "sk-mfg-spc-fdc": {
+      "displayTerms": [
+        {
+          "id": "statistical-process-control",
+          "zh": "统计过程控制",
+          "en": "Statistical Process Control"
+        },
+        { "id": "fault-detection", "zh": "故障检测", "en": "Fault Detection" }
+      ]
+    },
+    "sk-mfg-oee-downtime": {
+      "displayTerms": [
+        { "id": "oee-modeling", "zh": "OEE 建模", "en": "OEE Modeling" },
+        {
+          "id": "downtime-modeling",
+          "zh": "停机建模",
+          "en": "Downtime Modeling"
+        }
+      ]
+    },
+    "sk-mfg-safety-interlocks": {
+      "displayTerms": [
+        {
+          "id": "safety-interlocks",
+          "zh": "安全联锁",
+          "en": "Safety Interlocks"
+        },
+        {
+          "id": "recovery-planning",
+          "zh": "恢复规划",
+          "en": "Recovery Planning"
+        }
+      ]
+    },
+    "sk-beh-star-evidence": {
+      "displayTerms": [
+        {
+          "id": "beh-star-evidence",
+          "zh": "证据化 STAR 故事",
+          "en": "Evidence-Based STAR Stories"
+        }
+      ]
+    },
+    "sk-beh-ownership": {
+      "displayTerms": [
+        {
+          "id": "beh-ownership",
+          "zh": "主人翁意识叙事",
+          "en": "Ownership Narrative"
+        }
+      ]
+    },
+    "sk-beh-conflict": {
+      "displayTerms": [
+        {
+          "id": "beh-conflict",
+          "zh": "技术冲突解决",
+          "en": "Technical Conflict Resolution"
+        }
+      ]
+    },
+    "sk-beh-ambiguity": {
+      "displayTerms": [
+        {
+          "id": "beh-ambiguity",
+          "zh": "模糊环境下推进",
+          "en": "Operating Under Ambiguity"
+        }
+      ]
+    },
+    "sk-beh-prioritization": {
+      "displayTerms": [
+        {
+          "id": "priority-decisions",
+          "zh": "优先级决策",
+          "en": "Priority Decisions"
+        },
+        { "id": "scope-decisions", "zh": "范围决策", "en": "Scope Decisions" }
+      ]
+    },
+    "sk-beh-feedback-ethics": {
+      "displayTerms": [
+        {
+          "id": "feedback-practice",
+          "zh": "反馈实践",
+          "en": "Feedback Practice"
+        },
+        { "id": "integrity", "zh": "诚信", "en": "Integrity" },
+        {
+          "id": "learning-practice",
+          "zh": "学习实践",
+          "en": "Learning Practice"
+        }
+      ]
+    },
+    "sk-proj-one-liner": {
+      "displayTerms": [
+        {
+          "id": "proj-one-liner",
+          "zh": "项目一句话定位",
+          "en": "Project One-Line Framing"
+        }
+      ]
+    },
+    "sk-proj-architecture": {
+      "displayTerms": [
+        {
+          "id": "proj-architecture",
+          "zh": "项目架构叙事",
+          "en": "Project Architecture Narrative"
+        }
+      ]
+    },
+    "sk-proj-metrics": {
+      "displayTerms": [
+        {
+          "id": "project-evidence",
+          "zh": "项目证据",
+          "en": "Project Evidence"
+        },
+        { "id": "project-metrics", "zh": "项目指标", "en": "Project Metrics" }
+      ]
+    },
+    "sk-proj-tradeoff": {
+      "displayTerms": [
+        {
+          "id": "proj-tradeoff",
+          "zh": "项目决策复盘",
+          "en": "Project Decision Reconstruction"
+        }
+      ]
+    },
+    "sk-proj-root-cause": {
+      "displayTerms": [
+        {
+          "id": "proj-root-cause",
+          "zh": "项目根因深挖",
+          "en": "Project Root-Cause Deep Dive"
+        }
+      ]
+    },
+    "sk-proj-lessons": {
+      "displayTerms": [
+        {
+          "id": "proj-lessons",
+          "zh": "可迁移项目经验",
+          "en": "Transferable Project Lessons"
+        }
+      ]
+    },
+    "sk-eng-elevator": {
+      "displayTerms": [
+        {
+          "id": "eng-elevator",
+          "zh": "英文技术自我介绍",
+          "en": "English Technical Introduction"
+        }
+      ]
+    },
+    "sk-eng-clarifying": {
+      "displayTerms": [
+        {
+          "id": "eng-clarifying",
+          "zh": "英文澄清问题",
+          "en": "English Clarifying Questions"
+        }
+      ]
+    },
+    "sk-eng-think-aloud": {
+      "displayTerms": [
+        {
+          "id": "eng-think-aloud",
+          "zh": "英文口述推理",
+          "en": "English Think-Aloud Reasoning"
+        }
+      ]
+    },
+    "sk-eng-tradeoffs": {
+      "displayTerms": [
+        {
+          "id": "eng-tradeoffs",
+          "zh": "英文权衡表达",
+          "en": "English Trade-off Language"
+        }
+      ]
+    },
+    "sk-eng-repair": {
+      "displayTerms": [
+        {
+          "id": "eng-repair",
+          "zh": "英文沟通修复",
+          "en": "English Communication Repair"
+        }
+      ]
+    },
+    "sk-eng-summary-qna": {
+      "displayTerms": [
+        { "id": "english-summary", "zh": "英文总结", "en": "English Summary" },
+        {
+          "id": "english-question-response",
+          "zh": "英文问答",
+          "en": "English Question Response"
+        }
+      ]
+    }
+  }
+}

@@ -311,7 +311,7 @@
     },
     "human-interface": {
       "en": "Human Interfaces",
-      "zh": "人机交互"
+      "zh": "人机界面"
     },
     "humanoid-robotics": {
       "en": "Humanoid Robotics",
@@ -579,7 +579,7 @@
     },
     "semiconductor-IP": {
       "en": "Semiconductor Intellectual Property (Semiconductor IP)",
-      "zh": "半导体知识产权核（半导体 IP）"
+      "zh": "半导体知识产权（半导体 IP）"
     },
     "semiconductor-materials": {
       "en": "Semiconductor Materials",
@@ -674,7 +674,7 @@
       "zh": "设备子系统"
     },
     "system-analysis": {
-      "en": "System Analysis",
+      "en": "Systems Analysis",
       "zh": "系统分析"
     },
     "systems": {

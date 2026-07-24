@@ -1,0 +1,655 @@
+{
+  "schemaVersion": "1.0.0",
+  "roles": {
+    "rf-eda-rd": {
+      "descriptionZh": "面向芯片设计自动化工具，研发可落地的算法、数据模型与工程软件，覆盖综合、仿真、时序、布局、布线和验证等核心流程。",
+      "descriptionEn": "Develop production-grade algorithms, data models, and software for chip-design automation, spanning synthesis, simulation, timing, placement, routing, and verification workflows across production environments.",
+      "typicalTitleAtoms": [
+        {
+          "id": "eda-research-engineer",
+          "zh": "EDA 研发工程师",
+          "en": "EDA Research Engineer"
+        },
+        {
+          "id": "eda-software-engineer",
+          "zh": "EDA 软件工程师",
+          "en": "EDA Software Engineer"
+        },
+        {
+          "id": "cad-algorithm-engineer",
+          "zh": "CAD 算法工程师",
+          "en": "CAD Algorithm Engineer"
+        },
+        {
+          "id": "eda-technical-staff",
+          "zh": "EDA 技术专家",
+          "en": "EDA Member of Technical Staff"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "coding-assessment",
+          "zh": "编程考核",
+          "en": "Coding Assessment"
+        },
+        {
+          "id": "algorithm-assessment",
+          "zh": "算法考核",
+          "en": "Algorithm Assessment"
+        },
+        {
+          "id": "eda-fundamentals",
+          "zh": "EDA 基础",
+          "en": "EDA Fundamentals"
+        },
+        { "id": "domain-design", "zh": "领域设计", "en": "Domain Design" },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-ai-eda": {
+      "descriptionZh": "将机器学习、图学习、优化方法与不确定性建模应用于芯片设计任务，强调可靠评估、工程可复现性和真实 EDA 价值。",
+      "descriptionEn": "Apply machine learning, graph learning, optimization, and uncertainty modeling to chip-design problems, with rigorous evaluation, reproducible engineering, and measurable EDA impact.",
+      "typicalTitleAtoms": [
+        {
+          "id": "eda-ml-engineer",
+          "zh": "EDA 机器学习工程师",
+          "en": "EDA Machine Learning Engineer"
+        },
+        {
+          "id": "eda-ai-research-engineer",
+          "zh": "EDA AI 研究工程师",
+          "en": "EDA AI Research Engineer"
+        },
+        {
+          "id": "chip-design-ml-scientist",
+          "zh": "芯片设计机器学习科学家",
+          "en": "Chip Design ML Scientist"
+        },
+        {
+          "id": "eda-applied-scientist",
+          "zh": "EDA 应用科学家",
+          "en": "EDA Applied Scientist"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "coding-assessment",
+          "zh": "编程考核",
+          "en": "Coding Assessment"
+        },
+        {
+          "id": "machine-learning",
+          "zh": "机器学习",
+          "en": "Machine Learning"
+        },
+        {
+          "id": "eda-domain",
+          "zh": "EDA 领域知识",
+          "en": "EDA Domain Knowledge"
+        },
+        {
+          "id": "experiment-design",
+          "zh": "实验设计",
+          "en": "Experiment Design"
+        },
+        {
+          "id": "ml-system-design",
+          "zh": "机器学习系统设计",
+          "en": "ML System Design"
+        },
+        {
+          "id": "research-deep-dive",
+          "zh": "研究深挖",
+          "en": "Research Deep Dive"
+        }
+      ]
+    },
+    "rf-cad-flow": {
+      "descriptionZh": "构建可靠、可复现且可观测的芯片设计流程，整合 EDA 工具、计算资源、许可证、设计数据和自动化诊断能力。",
+      "descriptionEn": "Build reliable, reproducible, and observable chip-design flows that integrate EDA tools, compute infrastructure, licenses, design data, and automated diagnostics for production teams.",
+      "typicalTitleAtoms": [
+        { "id": "cad-engineer", "zh": "CAD 工程师", "en": "CAD Engineer" },
+        {
+          "id": "design-methodology-engineer",
+          "zh": "设计方法学工程师",
+          "en": "Design Methodology Engineer"
+        },
+        {
+          "id": "eda-flow-engineer",
+          "zh": "EDA 流程工程师",
+          "en": "EDA Flow Engineer"
+        },
+        {
+          "id": "silicon-infrastructure-engineer",
+          "zh": "芯片基础设施工程师",
+          "en": "Silicon Infrastructure Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "scripting", "zh": "脚本编程", "en": "Scripting" },
+        { "id": "linux-systems", "zh": "Linux 系统", "en": "Linux Systems" },
+        { "id": "flow-debugging", "zh": "流程调试", "en": "Flow Debugging" },
+        {
+          "id": "automation-design",
+          "zh": "自动化设计",
+          "en": "Automation Design"
+        },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-rtl": {
+      "descriptionZh": "使用 Verilog 或 SystemVerilog 设计可综合数字硬件，兼顾微架构、时序、复位、功耗、接口协议和可验证性。",
+      "descriptionEn": "Design synthesizable digital hardware in Verilog or SystemVerilog while reasoning about microarchitecture, timing, reset behavior, power, interfaces, and verifiability in production contexts.",
+      "typicalTitleAtoms": [
+        {
+          "id": "rtl-design-engineer",
+          "zh": "RTL 设计工程师",
+          "en": "RTL Design Engineer"
+        },
+        {
+          "id": "digital-design-engineer",
+          "zh": "数字设计工程师",
+          "en": "Digital Design Engineer"
+        },
+        {
+          "id": "soc-design-engineer",
+          "zh": "SoC 设计工程师",
+          "en": "SoC Design Engineer"
+        },
+        {
+          "id": "logic-design-engineer",
+          "zh": "逻辑设计工程师",
+          "en": "Logic Design Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "digital-fundamentals",
+          "zh": "数字电路基础",
+          "en": "Digital Fundamentals"
+        },
+        { "id": "rtl-coding", "zh": "RTL 编码", "en": "RTL Coding" },
+        {
+          "id": "waveform-debugging",
+          "zh": "波形调试",
+          "en": "Waveform Debugging"
+        },
+        {
+          "id": "microarchitecture-design",
+          "zh": "微架构设计",
+          "en": "Microarchitecture Design"
+        },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-dv": {
+      "descriptionZh": "通过仿真、约束随机测试、覆盖率、断言、形式证明和系统化调试，验证 RTL、IP 与 SoC 的功能和边界行为。",
+      "descriptionEn": "Verify RTL, IP, and SoC behavior through simulation, constrained-random testing, coverage, assertions, formal proofs, and systematic debugging across complex integration boundaries.",
+      "typicalTitleAtoms": [
+        {
+          "id": "design-verification-engineer",
+          "zh": "设计验证工程师",
+          "en": "Design Verification Engineer"
+        },
+        {
+          "id": "uvm-verification-engineer",
+          "zh": "UVM 验证工程师",
+          "en": "UVM Verification Engineer"
+        },
+        {
+          "id": "formal-verification-engineer",
+          "zh": "形式验证工程师",
+          "en": "Formal Verification Engineer"
+        },
+        {
+          "id": "soc-verification-engineer",
+          "zh": "SoC 验证工程师",
+          "en": "SoC Verification Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "systemverilog", "zh": "SystemVerilog", "en": "SystemVerilog" },
+        { "id": "uvm", "zh": "UVM", "en": "UVM" },
+        { "id": "assertions", "zh": "断言", "en": "Assertions" },
+        {
+          "id": "formal-verification",
+          "zh": "形式验证",
+          "en": "Formal Verification"
+        },
+        { "id": "debugging", "zh": "调试", "en": "Debugging" },
+        {
+          "id": "testbench-design",
+          "zh": "测试平台设计",
+          "en": "Testbench Design"
+        },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-fpga": {
+      "descriptionZh": "在 FPGA 器件和开发板上实现数字系统，完成 RTL 集成、约束、时序收敛、接口联调、实验室验证与现场调试。",
+      "descriptionEn": "Implement digital systems on FPGA devices and boards, covering RTL integration, constraints, timing closure, interface bring-up, laboratory validation, and field debugging.",
+      "typicalTitleAtoms": [
+        { "id": "fpga-engineer", "zh": "FPGA 工程师", "en": "FPGA Engineer" },
+        {
+          "id": "fpga-design-engineer",
+          "zh": "FPGA 设计工程师",
+          "en": "FPGA Design Engineer"
+        },
+        {
+          "id": "prototyping-engineer",
+          "zh": "原型验证工程师",
+          "en": "Prototyping Engineer"
+        },
+        {
+          "id": "hardware-acceleration-engineer",
+          "zh": "硬件加速工程师",
+          "en": "Hardware Acceleration Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "rtl-coding", "zh": "RTL 编码", "en": "RTL Coding" },
+        {
+          "id": "fpga-architecture",
+          "zh": "FPGA 架构",
+          "en": "FPGA Architecture"
+        },
+        { "id": "timing-closure", "zh": "时序收敛", "en": "Timing Closure" },
+        {
+          "id": "interface-design",
+          "zh": "接口设计",
+          "en": "Interface Design"
+        },
+        { "id": "board-debugging", "zh": "板级调试", "en": "Board Debugging" },
+        { "id": "lab-validation", "zh": "实验室验证", "en": "Lab Validation" }
+      ]
+    },
+    "rf-architecture": {
+      "descriptionZh": "分析处理器、加速器、存储层次和片上互连，在真实工作负载下建立性能模型，并解释吞吐、延迟、功耗与面积取舍。",
+      "descriptionEn": "Analyze processors, accelerators, memory hierarchies, and interconnects, build workload-grounded performance models, and explain throughput, latency, power, and area tradeoffs across design alternatives.",
+      "typicalTitleAtoms": [
+        { "id": "cpu-architect", "zh": "CPU 架构师", "en": "CPU Architect" },
+        { "id": "gpu-architect", "zh": "GPU 架构师", "en": "GPU Architect" },
+        {
+          "id": "performance-engineer",
+          "zh": "性能工程师",
+          "en": "Performance Engineer"
+        },
+        {
+          "id": "memory-systems-engineer",
+          "zh": "存储系统工程师",
+          "en": "Memory Systems Engineer"
+        },
+        {
+          "id": "architecture-modeling-engineer",
+          "zh": "架构建模工程师",
+          "en": "Architecture Modeling Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "architecture-fundamentals",
+          "zh": "体系结构基础",
+          "en": "Architecture Fundamentals"
+        },
+        {
+          "id": "performance-analysis",
+          "zh": "性能分析",
+          "en": "Performance Analysis"
+        },
+        {
+          "id": "architecture-modeling",
+          "zh": "架构建模",
+          "en": "Architecture Modeling"
+        },
+        {
+          "id": "coding-assessment",
+          "zh": "编程考核",
+          "en": "Coding Assessment"
+        },
+        {
+          "id": "design-tradeoffs",
+          "zh": "设计取舍",
+          "en": "Design Tradeoffs"
+        },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-physical-design": {
+      "descriptionZh": "将门级网表推进至签核，覆盖规划、布局、时钟树、布线、寄生提取、静态时序、功耗完整性和 ECO 收敛。",
+      "descriptionEn": "Take gate-level netlists through signoff using floorplanning, placement, clock-tree synthesis, routing, extraction, static timing analysis, power integrity, and ECO closure.",
+      "typicalTitleAtoms": [
+        {
+          "id": "physical-design-engineer",
+          "zh": "物理设计工程师",
+          "en": "Physical Design Engineer"
+        },
+        { "id": "sta-engineer", "zh": "STA 工程师", "en": "STA Engineer" },
+        {
+          "id": "place-route-engineer",
+          "zh": "布局布线工程师",
+          "en": "Place Route Engineer"
+        },
+        {
+          "id": "physical-implementation-engineer",
+          "zh": "物理实现工程师",
+          "en": "Physical Implementation Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "implementation-flow",
+          "zh": "实现流程",
+          "en": "Implementation Flow"
+        },
+        { "id": "timing-analysis", "zh": "时序分析", "en": "Timing Analysis" },
+        {
+          "id": "constraint-debugging",
+          "zh": "约束调试",
+          "en": "Constraint Debugging"
+        },
+        {
+          "id": "physical-closure",
+          "zh": "物理收敛",
+          "en": "Physical Closure"
+        },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        }
+      ]
+    },
+    "rf-dft": {
+      "descriptionZh": "规划和验证扫描链、ATPG、测试压缩、存储器自测、边界扫描及硅后诊断方案，提升缺陷覆盖率与量产可测性。",
+      "descriptionEn": "Architect and verify scan, ATPG, test compression, memory self-test, boundary scan, and silicon diagnosis solutions to improve defect coverage and production testability.",
+      "typicalTitleAtoms": [
+        { "id": "dft-engineer", "zh": "DFT 工程师", "en": "DFT Engineer" },
+        { "id": "atpg-engineer", "zh": "ATPG 工程师", "en": "ATPG Engineer" },
+        {
+          "id": "silicon-test-engineer",
+          "zh": "硅测试工程师",
+          "en": "Silicon Test Engineer"
+        },
+        {
+          "id": "dft-methodology-engineer",
+          "zh": "DFT 方法学工程师",
+          "en": "DFT Methodology Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "fault-models", "zh": "故障模型", "en": "Fault Models" },
+        { "id": "scan-test", "zh": "扫描测试", "en": "Scan Test" },
+        { "id": "atpg", "zh": "ATPG", "en": "ATPG" },
+        { "id": "mbist", "zh": "MBIST", "en": "MBIST" },
+        { "id": "jtag", "zh": "JTAG", "en": "JTAG" },
+        {
+          "id": "coverage-diagnosis",
+          "zh": "覆盖率诊断",
+          "en": "Coverage Diagnosis"
+        },
+        { "id": "flow-design", "zh": "流程设计", "en": "Flow Design" }
+      ]
+    },
+    "rf-analog-custom": {
+      "descriptionZh": "在晶体管级设计、仿真、布局和验证模拟电路、混合信号电路及定制单元，平衡性能、功耗、面积和可靠性。",
+      "descriptionEn": "Design, simulate, lay out, and verify transistor-level analog circuits, mixed-signal circuits, and custom cells while balancing performance, power, area, and reliability.",
+      "typicalTitleAtoms": [
+        {
+          "id": "analog-design-engineer",
+          "zh": "模拟设计工程师",
+          "en": "Analog Design Engineer"
+        },
+        {
+          "id": "custom-circuit-designer",
+          "zh": "定制电路设计师",
+          "en": "Custom Circuit Designer"
+        },
+        {
+          "id": "analog-layout-engineer",
+          "zh": "模拟版图工程师",
+          "en": "Analog Layout Engineer"
+        },
+        {
+          "id": "mixed-signal-verification-engineer",
+          "zh": "混合信号验证工程师",
+          "en": "Mixed-Signal Verification Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "device-fundamentals",
+          "zh": "器件基础",
+          "en": "Device Fundamentals"
+        },
+        {
+          "id": "circuit-analysis",
+          "zh": "电路分析",
+          "en": "Circuit Analysis"
+        },
+        {
+          "id": "stability-analysis",
+          "zh": "稳定性分析",
+          "en": "Stability Analysis"
+        },
+        { "id": "noise-analysis", "zh": "噪声分析", "en": "Noise Analysis" },
+        { "id": "layout-review", "zh": "版图评审", "en": "Layout Review" },
+        {
+          "id": "simulation-debugging",
+          "zh": "仿真调试",
+          "en": "Simulation Debugging"
+        }
+      ]
+    },
+    "rf-embedded": {
+      "descriptionZh": "为 SoC、微控制器、开发板和外设开发可靠的底层软件，覆盖启动、驱动、RTOS、并发控制、通信接口与安全升级。",
+      "descriptionEn": "Develop reliable low-level software for SoCs, microcontrollers, boards, and peripherals, covering boot, drivers, RTOS behavior, concurrency, communication interfaces, and secure updates.",
+      "typicalTitleAtoms": [
+        {
+          "id": "embedded-software-engineer",
+          "zh": "嵌入式软件工程师",
+          "en": "Embedded Software Engineer"
+        },
+        {
+          "id": "firmware-engineer",
+          "zh": "固件工程师",
+          "en": "Firmware Engineer"
+        },
+        { "id": "bsp-engineer", "zh": "BSP 工程师", "en": "BSP Engineer" },
+        {
+          "id": "device-driver-engineer",
+          "zh": "设备驱动工程师",
+          "en": "Device Driver Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "c-programming", "zh": "C 编程", "en": "C Programming" },
+        {
+          "id": "systems-fundamentals",
+          "zh": "系统基础",
+          "en": "Systems Fundamentals"
+        },
+        { "id": "firmware-coding", "zh": "固件编码", "en": "Firmware Coding" },
+        { "id": "concurrency", "zh": "并发控制", "en": "Concurrency" },
+        {
+          "id": "hardware-interfaces",
+          "zh": "硬件接口",
+          "en": "Hardware Interfaces"
+        },
+        {
+          "id": "system-debugging",
+          "zh": "系统调试",
+          "en": "System Debugging"
+        },
+        { "id": "system-design", "zh": "系统设计", "en": "System Design" }
+      ]
+    },
+    "rf-manufacturing-automation": {
+      "descriptionZh": "集成半导体设备、工厂系统、控制逻辑、遥测数据和工艺配方，保障制造流程安全、稳定、可追溯并可持续优化。",
+      "descriptionEn": "Integrate semiconductor equipment, factory systems, control logic, telemetry, and process recipes to make manufacturing safe, repeatable, traceable, and continuously improvable.",
+      "typicalTitleAtoms": [
+        {
+          "id": "equipment-automation-engineer",
+          "zh": "设备自动化工程师",
+          "en": "Equipment Automation Engineer"
+        },
+        {
+          "id": "factory-automation-engineer",
+          "zh": "工厂自动化工程师",
+          "en": "Factory Automation Engineer"
+        },
+        {
+          "id": "manufacturing-systems-engineer",
+          "zh": "制造系统工程师",
+          "en": "Manufacturing Systems Engineer"
+        },
+        {
+          "id": "semiconductor-controls-engineer",
+          "zh": "半导体控制工程师",
+          "en": "Semiconductor Controls Engineer"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "industrial-protocols",
+          "zh": "工业协议",
+          "en": "Industrial Protocols"
+        },
+        { "id": "control-systems", "zh": "控制系统", "en": "Control Systems" },
+        {
+          "id": "functional-safety",
+          "zh": "功能安全",
+          "en": "Functional Safety"
+        },
+        { "id": "factory-data", "zh": "工厂数据", "en": "Factory Data" },
+        { "id": "spc", "zh": "SPC", "en": "SPC" },
+        {
+          "id": "automation-design",
+          "zh": "自动化设计",
+          "en": "Automation Design"
+        },
+        {
+          "id": "incident-deep-dive",
+          "zh": "事故深挖",
+          "en": "Incident Deep Dive"
+        }
+      ]
+    },
+    "rf-behavioral": {
+      "descriptionZh": "用真实且可核验的经历展示主人翁意识、协作方式、判断质量、学习能力、冲突处理和可量化影响。",
+      "descriptionEn": "Use truthful, verifiable experiences to demonstrate ownership, collaboration, judgment, learning ability, conflict resolution, and measurable impact across technical work and team interactions.",
+      "typicalTitleAtoms": [
+        {
+          "id": "behavioral-interview-training",
+          "zh": "行为面试训练",
+          "en": "Behavioral Interview Training"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "recruiter-screen",
+          "zh": "招聘初筛",
+          "en": "Recruiter Screen"
+        },
+        {
+          "id": "behavioral-interview",
+          "zh": "行为面试",
+          "en": "Behavioral Interview"
+        },
+        {
+          "id": "leadership-principles",
+          "zh": "领导力原则",
+          "en": "Leadership Principles"
+        },
+        {
+          "id": "hiring-manager-interview",
+          "zh": "招聘经理面试",
+          "en": "Hiring Manager Interview"
+        },
+        { "id": "team-match", "zh": "团队匹配", "en": "Team Match" }
+      ]
+    },
+    "rf-project-deep-dive": {
+      "descriptionZh": "围绕真实项目清楚说明架构、个人贡献、关键证据、技术取舍、调试过程和复盘结论，让面试官判断工程深度。",
+      "descriptionEn": "Explain a real project with architectural clarity, individual ownership, concrete evidence, technical tradeoffs, debugging depth, and lessons that reveal engineering maturity.",
+      "typicalTitleAtoms": [
+        {
+          "id": "project-deep-dive-training",
+          "zh": "项目深挖训练",
+          "en": "Project Deep-Dive Training"
+        }
+      ],
+      "interviewStageAtoms": [
+        { "id": "resume-screen", "zh": "简历筛选", "en": "Resume Screen" },
+        {
+          "id": "project-deep-dive",
+          "zh": "项目深挖",
+          "en": "Project Deep Dive"
+        },
+        {
+          "id": "technical-leadership",
+          "zh": "技术领导力",
+          "en": "Technical Leadership"
+        },
+        {
+          "id": "hiring-manager-interview",
+          "zh": "招聘经理面试",
+          "en": "Hiring Manager Interview"
+        }
+      ]
+    },
+    "rf-english-communication": {
+      "descriptionZh": "在英文技术面试中准确澄清需求、组织推理、解释取舍、表达不确定性并总结结果，使专业能力不被语言阻隔。",
+      "descriptionEn": "Communicate requirements, reasoning, tradeoffs, uncertainty, and results clearly in English technical interviews so language does not obscure engineering ability during every interview stage.",
+      "typicalTitleAtoms": [
+        {
+          "id": "english-interview-candidate",
+          "zh": "英文面试候选人",
+          "en": "English Interview Candidate"
+        }
+      ],
+      "interviewStageAtoms": [
+        {
+          "id": "recruiter-screen",
+          "zh": "招聘初筛",
+          "en": "Recruiter Screen"
+        },
+        {
+          "id": "technical-interview",
+          "zh": "技术面试",
+          "en": "Technical Interview"
+        },
+        {
+          "id": "behavioral-interview",
+          "zh": "行为面试",
+          "en": "Behavioral Interview"
+        },
+        {
+          "id": "technical-presentation",
+          "zh": "技术演示",
+          "en": "Technical Presentation"
+        },
+        { "id": "team-match", "zh": "团队匹配", "en": "Team Match" }
+      ]
+    }
+  }
+}

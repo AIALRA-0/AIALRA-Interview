@@ -16,22 +16,31 @@ infer rejection causes or automatically reweight skills from sparse outcomes.
 
 Evidence date: **2026-07-23**
 
-- **529** company, institute, university-lab, national-lab, foundry, equipment,
-  IP, startup, and open-source ecosystem nodes: 256 US/global-first and 273
-  China-first
+- **799** organization-market nodes: **360** in the U.S.-first universe and
+  **439** in the China-first universe, spanning companies, state-owned groups,
+  research institutes, university laboratories, national laboratories,
+  foundries, equipment and materials suppliers, startups, public agencies,
+  standards bodies, and open-source ecosystems
 - Audited bilingual organization taxonomy: 3 opportunity-market roots, 20
-  organization types, and all 333 source industry-category labels, merged into
-  303 unambiguous filter concepts across the two markets. Of the 529
-  organization names, 429 have reviewed Chinese/English display pairs and 100
-  are explicitly English-only rather than machine-translated
-- **15** normalized role families with auditable company-to-role edges
-- **130** atomic skills with prerequisite relationships
+  organization types, and 595 live category keys normalized into 528
+  cross-market groups, then decomposed into 531 bilingual atomic filters. Of
+  the 799 organization names, 643 have reviewed
+  Chinese/English display pairs and 156 are explicitly English-only when no
+  reviewed Chinese name is available
+- **302 / 302** China `company` nodes have a separate bilingual ownership
+  record and evidence entry. **88** are provisionally classified from an
+  explicit source tag; **214** remain honestly marked mixed or unknown until a
+  direct control source is added. The UI distinguishes **27** direct
+  ownership-registry entries from **313** organization-context review sources
+- **15** normalized role families with **2,217** audited company-to-role edges
+- **130** atomic skills with prerequisite relationships and **177** bilingual
+  atomic display terms
 - **2,100** fully bilingual training tasks: 210 independently authored,
   field-aligned anchor scenarios plus 1,890 progressively harder drills
   (nine per anchor), yielding 140 tasks per role family without pretending
   that every drill is an unrelated interview prompt
 - Question-bank content version **2026-07-23.5**; deterministic SHA-256
-  `a93d82520aca72c50eed147126aacf1b059451ac5156dac865bc74cc3bc25590`
+  `0ab07ee28bb1c4221939f017ee8df755bcbf6ac1a3dd1df7473912def1b1eedf`
 - Persistent applications, bookmarks, skill progress, attempts, aggregate
   mastery statistics, and private candidate preferences
 
@@ -50,6 +59,8 @@ specific official job posting before applying.
   follow-ups, reference outlines, and observable completion oracles
 - Compact question index with on-demand static shards so the full bank does not
   inflate the first page
+- Digest-verified, on-demand organization universe so all 799 profiles remain
+  available without serializing the full atlas into the initial HTML
 - Role-specific readiness estimates based on evidence, not fabricated
   acceptance probabilities
 - Editable requisition tracker for JD URL, deadline, eligibility signals,
@@ -67,8 +78,10 @@ specific official job posting before applying.
 - [Bilingual question-bank v2 design and audit](research/bilingual-question-bank-v2.md)
 - [Pre-fix independent quality audit](research/question-bank-quality-audit-v2.md)
 - [Post-fix independent quality audit](research/question-bank-quality-audit-v3.md)
-- [v3 release verification](research/release-verification-v3.md)
+- [v4 release verification](research/release-verification-v4.md)
 - [Organization-tree bilingual audit](research/organization-tree-bilingual-audit.md)
+- [China company ownership audit](research/china-company-ownership-audit.md)
+- [Organization relations audit](research/organization-relations-audit.md)
 
 ## Evidence and content policy
 
@@ -109,8 +122,9 @@ npm run validate
 ```
 
 The gate audits cross-file IDs, graph cycles, role mapping, evidence fields,
-all 529 organization-name decisions, the complete 20-type and 333-category
-bilingual taxonomy, question quality and coverage, all 1,512 technical
+all 799 organization-name decisions, the complete 20-type and 595-category
+bilingual taxonomy, all 177 atomic skill display terms, question quality and
+coverage, all 1,512 technical
 source-scenario payloads, all 168 minimal-invalid-fixture exercises, all 168
 contract-only exercises, the complete TAP fixture lineage, privacy boundaries,
 TypeScript, lint, production build output, server rendering, API

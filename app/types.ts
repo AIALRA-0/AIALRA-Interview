@@ -5,6 +5,74 @@ export type Evidence = {
   observedAt?: string;
 };
 
+export type OrganizationRelationEvidence = {
+  titleZh: string;
+  titleEn: string;
+  url: string;
+  publisher: string;
+  publishedAt: string | null;
+  lastVerified: string;
+};
+
+export type OrganizationRelation = {
+  id: string;
+  fromOrganizationId: string;
+  toOrganizationId: string;
+  relationType:
+    "corporate-family" | "acquisition" | "combination" | "technology-license";
+  status: "active" | "pending" | "completed" | "terminated";
+  announcedAt: string | null;
+  lastVerified: string;
+  summaryZh: string;
+  summaryEn: string;
+  officialEvidence: OrganizationRelationEvidence[];
+};
+
+export type BilingualTerm = {
+  id: string;
+  zh: string;
+  en: string;
+};
+
+export type ChinaCompanyOwnershipClass =
+  | "central-state-owned"
+  | "central-state-controlled"
+  | "central-state-subsidiary"
+  | "local-state-owned"
+  | "state-controlled"
+  | "state-invested"
+  | "state-joint-venture"
+  | "private"
+  | "foreign-controlled"
+  | "mixed-or-unknown";
+
+export type ChinaCompanyOwnership = {
+  ownershipClass: ChinaCompanyOwnershipClass;
+  labelZh: string;
+  labelEn: string;
+  definitionZh: string;
+  definitionEn: string;
+  summaryZh: string;
+  summaryEn: string;
+  confidence: "high" | "medium" | "low";
+  classificationBasis:
+    | "existing-explicit-ownership-category"
+    | "insufficient-direct-control-evidence";
+  sourceOwnershipTag: string | null;
+  reviewStatus: "provisionally-audited" | "needs-direct-control-source";
+  reviewedAt: string;
+  evidence: Array<{
+    titleZh: string;
+    titleEn: string;
+    url: string;
+    sourceType: string;
+    observedAt: string;
+    evidenceScope: string;
+    noteZh: string;
+    noteEn: string;
+  }>;
+};
+
 export type Company = {
   id: string;
   name: string;
@@ -31,6 +99,40 @@ export type Company = {
   evidence: Evidence[];
   lastVerified: string;
   confidence: string;
+  descriptionZh: string;
+  descriptionEn: string;
+  relevanceZh: string;
+  relevanceEn: string;
+  focusAtoms: BilingualTerm[];
+  roleAtoms: BilingualTerm[];
+  opportunityAtoms: BilingualTerm[];
+  requirementAtoms: BilingualTerm[];
+  preparationAtoms: BilingualTerm[];
+  ownership?: ChinaCompanyOwnership;
+};
+
+export type OrganizationUniverseAsset = {
+  schemaVersion: string;
+  assetVersion: string;
+  sourceSha256: string;
+  evidenceDate: string;
+  organizationCount: number;
+  organizations: Company[];
+};
+
+export type OrganizationBankBootstrap = {
+  schemaVersion: string;
+  assetVersion: string;
+  sourceSha256: string;
+  evidenceDate: string;
+  organizationCount: number;
+  regionCounts: {
+    US: number;
+    CN: number;
+    Global: number;
+  };
+  assetUrl: string;
+  assetSha256: string;
 };
 
 export type RoleFamily = {
@@ -70,7 +172,7 @@ export type QuestionOracle =
 export type InterviewQuestion = {
   id: string;
   title: string;
-  titleZh?: string;
+  titleZh: string;
   roleFamilies: string[];
   skills: string[];
   prerequisiteSkills?: string[];
@@ -78,25 +180,25 @@ export type InterviewQuestion = {
   difficulty: string;
   type: string;
   prompt: string;
-  promptZh?: string;
+  promptZh: string;
   deliverables: string[];
-  deliverablesZh?: string[];
+  deliverablesZh: string[];
   rubric: string[];
-  rubricZh?: string[];
+  rubricZh: string[];
   commonFailures: string[];
-  commonFailuresZh?: string[];
+  commonFailuresZh: string[];
   followUps: string[];
-  followUpsZh?: string[];
+  followUpsZh: string[];
   sourcePolicy: string;
   sourceRefs: Evidence[] | string[];
   estimatedMinutes: number;
   evidenceDate: string;
   status: string;
-  referenceOutline?: string[];
-  referenceOutlineZh?: string[];
-  oracle?: QuestionOracle | null;
-  oracleZh?: QuestionOracle | null;
-  blueprintId?: string;
+  referenceOutline: string[];
+  referenceOutlineZh: string[];
+  oracle: QuestionOracle;
+  oracleZh: QuestionOracle;
+  blueprintId: string;
   contentVersion: string;
 };
 
@@ -152,16 +254,23 @@ export type Profile = {
   id: string;
   evidenceDate: string;
   targetWindow: string;
+  targetWindowEn?: string;
   education: {
     program: string;
+    programEn?: string;
     start: string;
+    startEn?: string;
     status: string;
     workAuthorization: string;
+    workAuthorizationEn?: string;
   };
   positioning: string;
+  positioningEn?: string;
   strengths: string[];
+  strengthsEn?: string[];
   priorityRoleFamilies: string[];
   criticalGaps: string[];
+  criticalGapsEn?: string[];
   readinessByRole?: Record<string, number>;
 };
 

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "releaseId": "v4",
+  "evidenceDate": "2026-07-23",
+  "organizations": {
+    "total": 799,
+    "regionCounts": {
+      "US": 360,
+      "CN": 439,
+      "Global": 0
+    },
+    "canonicalCategoryGroups": 528,
+    "categoryAliasGroups": 64,
+    "atomicCategoryFilters": 531,
+    "atomicCategoryAliasGroups": 70,
+    "bilingualNames": 643,
+    "englishOnlyNames": 156,
+    "canonicalRoleEdges": 2217,
+    "chinaCompanyOwnershipRecords": 302,
+    "provisionallyAuditedOwnershipRecords": 88,
+    "ownershipNeedsDirectSource": 214
+  },
+  "roleFamilies": 15,
+  "organizationRelations": 6,
+  "skills": {
+    "nodes": 130,
+    "displayTerms": 177
+  },
+  "questions": {
+    "total": 2100,
+    "anchors": 210,
+    "drillsPerAnchor": 9,
+    "perRoleFamily": 140
+  }
+}

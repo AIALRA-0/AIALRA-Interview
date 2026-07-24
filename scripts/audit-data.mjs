@@ -1,10 +1,60 @@
 import assert from "node:assert/strict";
 import { readdir, readFile, stat } from "node:fs/promises";
+import { mappedRoleFamilyIds } from "../shared/role-matching.js";
 
 const root = new URL("../", import.meta.url);
 
 async function readJson(path) {
   return JSON.parse(await readFile(new URL(path, root), "utf8"));
+}
+
+async function readTextCorpus(
+  relativeDirectory,
+  include,
+  { optional = false } = {},
+) {
+  const directory = new URL(relativeDirectory, root);
+  const corpus = {};
+
+  async function visit(currentDirectory, prefix = "") {
+    const entries = await readdir(currentDirectory, { withFileTypes: true });
+    for (const entry of entries.sort((left, right) =>
+      left.name.localeCompare(right.name),
+    )) {
+      const relativePath = `${prefix}${entry.name}`;
+      const entryUrl = new URL(entry.name, currentDirectory);
+      if (entry.isDirectory()) {
+        await visit(
+          new URL(`${entry.name}/`, currentDirectory),
+          `${relativePath}/`,
+        );
+      } else if (entry.isFile() && include(relativePath)) {
+        corpus[relativePath] = await readFile(entryUrl, "utf8");
+      }
+    }
+  }
+
+  try {
+    await visit(directory);
+  } catch (error) {
+    if (
+      optional &&
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return corpus;
+    }
+    throw error;
+  }
+  return corpus;
+}
+
+async function readPublicResearchCorpus() {
+  return readTextCorpus("research/", (relativePath) =>
+    relativePath.endsWith(".md"),
+  );
 }
 
 async function readSkillTranslationCatalog() {
@@ -49,9 +99,7 @@ async function readQuestionTranslationCatalog() {
       await readFile(new URL(filename, directory), "utf8"),
     );
     assert.ok(
-      fragment &&
-        typeof fragment === "object" &&
-        !Array.isArray(fragment),
+      fragment && typeof fragment === "object" && !Array.isArray(fragment),
       `question translation fragment ${filename} must be an object`,
     );
     for (const [questionId, translation] of Object.entries(fragment)) {
@@ -276,8 +324,10 @@ function jaccard(left, right) {
 
 const [
   profile,
-  usRaw,
-  cnRaw,
+  usBaseRaw,
+  usExpansionRaw,
+  cnBaseRaw,
+  cnExpansionRaw,
   rolesRaw,
   roleMapping,
   skillsRaw,
@@ -285,30 +335,216 @@ const [
   organizationLabels,
   categoryLabelsEn,
   categoryLabelsZh,
+  expansionUsCategoryLabels,
+  expansionCnCategoryLabels,
+  expansionCnCompanyTypeLabels,
+  chinaCompanyOwnership,
+  organizationProfileContent,
+  organizationIntelligence,
+  rolePresentation,
+  skillPresentation,
+  organizationRelations,
+  releaseManifest,
+  organizationUniverseAsset,
+  publicResearchCorpus,
+  publicDataSourceCorpus,
+  publicAppSourceCorpus,
+  publicReadme,
+  publicQuestionAssetCorpus,
 ] = await Promise.all([
-    readJson("data/profile.json"),
-    readJson("data/companies.us.json"),
-    readJson("data/companies.cn.json"),
-    readJson("data/role-families.json"),
-    readJson("data/role-mapping.json"),
-    readJson("data/skill-graph.json"),
-    readJson("data/questions.seed.json"),
-    readJson("data/organization-labels.json"),
-    readJson("data/organization-category-labels.en.json"),
-    readJson("data/organization-category-labels.zh.json"),
-  ]);
+  readJson("data/profile.json"),
+  readJson("data/companies.us.json"),
+  readJson("data/expansion-us-candidates.json"),
+  readJson("data/companies.cn.json"),
+  readJson("data/expansion-cn-candidates.json"),
+  readJson("data/role-families.json"),
+  readJson("data/role-mapping.json"),
+  readJson("data/skill-graph.json"),
+  readJson("data/questions.seed.json"),
+  readJson("data/organization-labels.json"),
+  readJson("data/organization-category-labels.en.json"),
+  readJson("data/organization-category-labels.zh.json"),
+  readJson("data/expansion-us-category-labels.json"),
+  readJson("data/expansion-cn-category-labels.json"),
+  readJson("data/expansion-cn-company-type-labels.json"),
+  readJson("data/china-company-ownership.json"),
+  readJson("data/organization-profile-content.json"),
+  readJson("data/organization-intelligence.json"),
+  readJson("data/role-presentation.json"),
+  readJson("data/skill-presentation.json"),
+  readJson("data/organization-relations.json"),
+  readJson("data/release-manifest.json"),
+  readJson("public/organization-universe.json"),
+  readPublicResearchCorpus(),
+  readTextCorpus("data/", (relativePath) => relativePath.endsWith(".json")),
+  readTextCorpus("app/", (relativePath) =>
+    /\.(?:css|ts|tsx)$/.test(relativePath),
+  ),
+  readFile(new URL("README.md", root), "utf8"),
+  readTextCorpus(
+    "public/question-bank/",
+    (relativePath) => relativePath.endsWith(".json"),
+    { optional: true },
+  ),
+]);
 
 assert.ok(profile.id);
 assert.ok(nonEmptyArray(profile.priorityRoleFamilies));
 assert.ok(nonEmptyArray(profile.criticalGaps));
-assert.doesNotMatch(
-  JSON.stringify(profile),
-  /USC MSECE|Fall 2026|Summer 2027|United States internship|TinyTapeout|Ramulator2|ZU4EV/i,
-  "public profile contains private candidate facts",
-);
+const privateCandidateFingerprintPattern =
+  /USC MSECE|Rensselaer|\bRPI\b|3\.67|ZU4EV|TinyTapeout|five-stage RISC-V|五级流水|FIR flow|Viterbi flow|Ramulator(?:2)?/i;
+const privateStructuredTimelinePattern =
+  /"(?:targetWindow|targetWindowEn|start|startEn)"\s*:\s*"(?:Fall 2026|Summer 2027)"/i;
+const candidateAuthorizationPattern = /\b(?:F-1|CPT)\b/i;
+const firstSemesterAuthorizationPattern =
+  /(?:first semester|第一学期)[\s\S]{0,160}(?:F-1|CPT)|(?:F-1|CPT)[\s\S]{0,160}(?:first semester|第一学期)/i;
+const publicOrganizationSources = {
+  "data/profile.json": profile,
+  "data/companies.us.json": usBaseRaw,
+  "data/expansion-us-candidates.json": usExpansionRaw,
+  "data/companies.cn.json": cnBaseRaw,
+  "data/expansion-cn-candidates.json": cnExpansionRaw,
+  "data/organization-labels.json": organizationLabels,
+  "data/organization-category-labels.en.json": categoryLabelsEn,
+  "data/organization-category-labels.zh.json": categoryLabelsZh,
+  "data/expansion-us-category-labels.json": expansionUsCategoryLabels,
+  "data/expansion-cn-category-labels.json": expansionCnCategoryLabels,
+  "data/expansion-cn-company-type-labels.json": expansionCnCompanyTypeLabels,
+  "data/china-company-ownership.json": chinaCompanyOwnership,
+  "data/organization-profile-content.json": organizationProfileContent,
+  "data/organization-intelligence.json": organizationIntelligence,
+  "data/organization-relations.json": organizationRelations,
+  "data/role-mapping.json": roleMapping,
+  "data/release-manifest.json": releaseManifest,
+  "public/organization-universe.json": organizationUniverseAsset,
+};
 
-const usCompanies = recordsOf(usRaw, "companies", "data/companies.us.json");
-const cnCompanies = recordsOf(cnRaw, "companies", "data/companies.cn.json");
+for (const [path, value] of Object.entries(publicOrganizationSources)) {
+  const serialized = JSON.stringify(value);
+  assert.doesNotMatch(
+    serialized,
+    privateCandidateFingerprintPattern,
+    `${path} contains a private candidate fingerprint`,
+  );
+  assert.doesNotMatch(
+    serialized,
+    privateStructuredTimelinePattern,
+    `${path} contains a private candidate timeline`,
+  );
+  assert.doesNotMatch(
+    serialized,
+    firstSemesterAuthorizationPattern,
+    `${path} combines a private enrollment timeline with work authorization`,
+  );
+}
+
+for (const [filename, content] of Object.entries(publicResearchCorpus)) {
+  assert.doesNotMatch(
+    content,
+    privateCandidateFingerprintPattern,
+    `research/${filename} contains a private candidate fingerprint`,
+  );
+  assert.doesNotMatch(
+    content,
+    firstSemesterAuthorizationPattern,
+    `research/${filename} combines a private enrollment timeline with work authorization`,
+  );
+}
+
+for (const [filename, content] of Object.entries(publicDataSourceCorpus)) {
+  assert.doesNotMatch(
+    content,
+    privateCandidateFingerprintPattern,
+    `data/${filename} contains a private candidate fingerprint`,
+  );
+  assert.doesNotMatch(
+    content,
+    privateStructuredTimelinePattern,
+    `data/${filename} contains a private candidate timeline`,
+  );
+  assert.doesNotMatch(
+    content,
+    firstSemesterAuthorizationPattern,
+    `data/${filename} combines a private enrollment timeline with work authorization`,
+  );
+}
+
+for (const [filename, content] of Object.entries({
+  "README.md": publicReadme,
+  ...Object.fromEntries(
+    Object.entries(publicAppSourceCorpus).map(([path, value]) => [
+      `app/${path}`,
+      value,
+    ]),
+  ),
+})) {
+  assert.doesNotMatch(
+    content,
+    privateCandidateFingerprintPattern,
+    `${filename} contains a private candidate fingerprint`,
+  );
+  assert.doesNotMatch(
+    content,
+    privateStructuredTimelinePattern,
+    `${filename} contains a private candidate timeline`,
+  );
+  assert.doesNotMatch(
+    content,
+    firstSemesterAuthorizationPattern,
+    `${filename} combines a private enrollment timeline with work authorization`,
+  );
+}
+
+for (const [filename, content] of Object.entries(publicQuestionAssetCorpus)) {
+  assert.doesNotMatch(
+    content,
+    privateCandidateFingerprintPattern,
+    `public/question-bank/${filename} contains a private candidate fingerprint`,
+  );
+  assert.doesNotMatch(
+    content,
+    firstSemesterAuthorizationPattern,
+    `public/question-bank/${filename} combines a private enrollment timeline with work authorization`,
+  );
+}
+
+for (const [path, value] of Object.entries({
+  "data/companies.us.json": usBaseRaw,
+  "data/expansion-us-candidates.json": usExpansionRaw,
+  "data/companies.cn.json": cnBaseRaw,
+  "data/expansion-cn-candidates.json": cnExpansionRaw,
+  "data/organization-profile-content.json": organizationProfileContent,
+  "public/organization-universe.json": organizationUniverseAsset,
+})) {
+  assert.doesNotMatch(
+    JSON.stringify(value),
+    candidateAuthorizationPattern,
+    `${path} contains candidate-specific work-authorization prose`,
+  );
+}
+
+const usBaseCompanies = recordsOf(
+  usBaseRaw,
+  "companies",
+  "data/companies.us.json",
+);
+const usExpansionCompanies = recordsOf(
+  usExpansionRaw,
+  "companies",
+  "data/expansion-us-candidates.json",
+);
+const cnBaseCompanies = recordsOf(
+  cnBaseRaw,
+  "companies",
+  "data/companies.cn.json",
+);
+const cnExpansionCompanies = recordsOf(
+  cnExpansionRaw,
+  "companies",
+  "data/expansion-cn-candidates.json",
+);
+const usCompanies = [...usBaseCompanies, ...usExpansionCompanies];
+const cnCompanies = [...cnBaseCompanies, ...cnExpansionCompanies];
 const roles = recordsOf(rolesRaw, "roleFamilies", "data/role-families.json");
 const skills = recordsOf(skillsRaw, "skills", "data/skill-graph.json");
 const questions = recordsOf(
@@ -344,11 +580,23 @@ const skillFocusOverrideRecords = recordsOf(
 );
 
 const minimums = [
-  [usCompanies, 256, "US company and institution nodes"],
-  [cnCompanies, 273, "China company and institution nodes"],
-  [roles, 15, "role families"],
-  [skills, 120, "atomic skills"],
-  [questions, 2100, "bilingual interview training tasks"],
+  [
+    usCompanies,
+    releaseManifest.organizations.regionCounts.US,
+    "US company and institution nodes",
+  ],
+  [
+    cnCompanies,
+    releaseManifest.organizations.regionCounts.CN,
+    "China company and institution nodes",
+  ],
+  [roles, releaseManifest.roleFamilies, "role families"],
+  [skills, releaseManifest.skills.nodes, "atomic skills"],
+  [
+    questions,
+    releaseManifest.questions.total,
+    "bilingual interview training tasks",
+  ],
 ];
 
 for (const [records, minimum, label] of minimums) {
@@ -359,8 +607,10 @@ for (const [records, minimum, label] of minimums) {
 }
 
 for (const [records, path] of [
-  [usCompanies, "data/companies.us.json"],
-  [cnCompanies, "data/companies.cn.json"],
+  [usBaseCompanies, "data/companies.us.json"],
+  [usExpansionCompanies, "data/expansion-us-candidates.json"],
+  [cnBaseCompanies, "data/companies.cn.json"],
+  [cnExpansionCompanies, "data/expansion-cn-candidates.json"],
   [roles, "data/role-families.json"],
   [skills, "data/skill-graph.json"],
   [questions, "data/questions.seed.json"],
@@ -369,11 +619,202 @@ for (const [records, path] of [
 }
 
 const companies = [...usCompanies, ...cnCompanies];
+const companyIdSet = new Set(companies.map((company) => company.id));
 assert.equal(
-  new Set(companies.map((company) => company.id)).size,
+  companyIdSet.size,
   companies.length,
   "company ids must also be unique across regions",
 );
+const canonicalRoleEdgeCount = companies.reduce(
+  (total, company) =>
+    total + mappedRoleFamilyIds(company, roleMapping.rules).length,
+  0,
+);
+assert.equal(
+  canonicalRoleEdgeCount,
+  releaseManifest.organizations.canonicalRoleEdges,
+  "canonical organization-to-role edge count changed",
+);
+assert.equal(
+  chinaCompanyOwnership.schemaVersion,
+  "1.0.0",
+  "China company ownership schemaVersion changed without an audit update",
+);
+assert.ok(
+  chinaCompanyOwnership.scope?.policyZh &&
+    chinaCompanyOwnership.scope?.policyEn,
+  "China company ownership policy must remain bilingual",
+);
+const chinaCompanyIds = cnCompanies
+  .filter((company) => company.companyType === "company")
+  .map((company) => company.id)
+  .sort();
+const ownershipRecords = chinaCompanyOwnership.records;
+const ownershipRecordIds = ownershipRecords
+  .map((record) => record.organizationId)
+  .sort();
+assert.equal(
+  new Set(ownershipRecordIds).size,
+  ownershipRecordIds.length,
+  "China ownership organization IDs must be unique",
+);
+assert.deepEqual(
+  ownershipRecordIds,
+  chinaCompanyIds,
+  "China ownership records must exactly cover every CN company node",
+);
+assert.equal(
+  ownershipRecords.length,
+  releaseManifest.organizations.chinaCompanyOwnershipRecords,
+  "China ownership record count changed",
+);
+const ownershipClassIds = new Set(
+  chinaCompanyOwnership.recordSchema.properties.ownershipClass.enum,
+);
+assert.deepEqual(
+  Object.keys(chinaCompanyOwnership.ownershipClasses).sort(),
+  [...ownershipClassIds].sort(),
+  "ownership class definitions must exactly match the record schema",
+);
+for (const [classId, definition] of Object.entries(
+  chinaCompanyOwnership.ownershipClasses,
+)) {
+  assert.ok(
+    hasChinese(definition.zh) &&
+      hasChinese(definition.definitionZh) &&
+      /[A-Za-z]/.test(definition.en) &&
+      /[A-Za-z]/.test(definition.definitionEn),
+    `ownership class ${classId} needs bilingual labels and definitions`,
+  );
+}
+for (const record of ownershipRecords) {
+  assert.ok(
+    ownershipClassIds.has(record.ownershipClass),
+    `ownership record ${record.organizationId} has an unknown class`,
+  );
+  assert.ok(
+    typeof record.nameZh === "string" &&
+      record.nameZh.trim() &&
+      /[A-Za-z]/.test(record.nameEn) &&
+      hasChinese(record.summaryZh) &&
+      /[A-Za-z]/.test(record.summaryEn),
+    `ownership record ${record.organizationId} needs bilingual identity and summary fields`,
+  );
+  assert.ok(
+    ["high", "medium", "low"].includes(record.confidence),
+    `ownership record ${record.organizationId} has invalid confidence`,
+  );
+  assert.ok(
+    nonEmptyArray(record.evidence) &&
+      record.evidence.every(
+        (evidence) =>
+          /^https?:\/\//.test(evidence.url) &&
+          hasChinese(evidence.titleZh) &&
+          /[A-Za-z]/.test(evidence.titleEn) &&
+          hasChinese(evidence.noteZh) &&
+          /[A-Za-z]/.test(evidence.noteEn),
+      ),
+    `ownership record ${record.organizationId} needs bilingual, traceable evidence`,
+  );
+  if (record.sourceOwnershipTag === null) {
+    assert.equal(
+      record.ownershipClass,
+      "mixed-or-unknown",
+      `ownership record ${record.organizationId} infers ownership without an explicit tag`,
+    );
+    assert.equal(record.confidence, "low");
+    assert.equal(
+      record.classificationBasis,
+      "insufficient-direct-control-evidence",
+    );
+    assert.equal(record.reviewStatus, "needs-direct-control-source");
+  }
+}
+const ownershipClassCounts = Object.fromEntries(
+  [...ownershipClassIds].map((classId) => [
+    classId,
+    ownershipRecords.filter((record) => record.ownershipClass === classId)
+      .length,
+  ]),
+);
+const ownershipReviewStatusCounts = Object.fromEntries(
+  ["provisionally-audited", "needs-direct-control-source"].map((status) => [
+    status,
+    ownershipRecords.filter((record) => record.reviewStatus === status).length,
+  ]),
+);
+const ownershipEvidenceScopeCounts = Object.fromEntries(
+  ["direct-ownership-registry", "organization-record-context"].map(
+    (evidenceScope) => [
+      evidenceScope,
+      ownershipRecords.reduce(
+        (count, record) =>
+          count +
+          record.evidence.filter(
+            (evidence) => evidence.evidenceScope === evidenceScope,
+          ).length,
+        0,
+      ),
+    ],
+  ),
+);
+assert.deepEqual(
+  ownershipClassCounts,
+  chinaCompanyOwnership.statistics.ownershipClassCounts,
+  "China ownership class statistics are stale",
+);
+assert.deepEqual(
+  ownershipReviewStatusCounts,
+  chinaCompanyOwnership.statistics.reviewStatusCounts,
+  "China ownership review-status statistics are stale",
+);
+assert.deepEqual(
+  ownershipEvidenceScopeCounts,
+  chinaCompanyOwnership.statistics.evidenceScopeCounts,
+  "China ownership evidence-scope statistics are stale",
+);
+assert.equal(
+  Object.values(ownershipEvidenceScopeCounts).reduce(
+    (sum, count) => sum + count,
+    0,
+  ),
+  chinaCompanyOwnership.statistics.evidenceEntries,
+  "China ownership evidence-scope counts do not cover every evidence entry",
+);
+assert.equal(
+  ownershipReviewStatusCounts["provisionally-audited"],
+  releaseManifest.organizations.provisionallyAuditedOwnershipRecords,
+);
+assert.equal(
+  ownershipReviewStatusCounts["needs-direct-control-source"],
+  releaseManifest.organizations.ownershipNeedsDirectSource,
+);
+assert.equal(
+  organizationRelations.length,
+  releaseManifest.organizationRelations,
+  "organization-relation count changed",
+);
+assertUniqueIds(organizationRelations, "data/organization-relations.json");
+for (const relation of organizationRelations) {
+  assert.ok(
+    companyIdSet.has(relation.fromOrganizationId) &&
+      companyIdSet.has(relation.toOrganizationId),
+    `organization relation ${relation.id} references an unknown node`,
+  );
+  assert.notEqual(
+    relation.fromOrganizationId,
+    relation.toOrganizationId,
+    `organization relation ${relation.id} is self-referential`,
+  );
+  assert.ok(
+    hasChinese(relation.summaryZh) && /[A-Za-z]/.test(relation.summaryEn),
+    `organization relation ${relation.id} needs bilingual summaries`,
+  );
+  assert.ok(
+    nonEmptyArray(relation.officialEvidence),
+    `organization relation ${relation.id} needs first-party evidence`,
+  );
+}
 
 assert.equal(
   organizationLabels.schemaVersion,
@@ -389,9 +830,7 @@ assert.deepEqual(
   ["CN", "Global", "US"],
   "opportunity-market roots need exact bilingual labels",
 );
-for (const [market, label] of Object.entries(
-  organizationLabels.regionGroups,
-)) {
+for (const [market, label] of Object.entries(organizationLabels.regionGroups)) {
   assert.ok(
     hasChinese(label.zh) && /[A-Za-z]/.test(label.en),
     `opportunity-market label ${market} is not bilingual`,
@@ -401,16 +840,18 @@ for (const [market, label] of Object.entries(
 const companyTypeIds = [
   ...new Set(companies.map((company) => company.companyType)),
 ].sort();
+const combinedCompanyTypeLabels = {
+  ...organizationLabels.companyTypes,
+  ...expansionCnCompanyTypeLabels,
+};
 const hanPattern = /[\u3400-\u9fff]/;
 const latinPattern = /[A-Za-z]/;
 assert.deepEqual(
-  Object.keys(organizationLabels.companyTypes).sort(),
+  Object.keys(combinedCompanyTypeLabels).sort(),
   companyTypeIds,
   "organization-type labels must cover the exact live taxonomy",
 );
-for (const [companyType, label] of Object.entries(
-  organizationLabels.companyTypes,
-)) {
+for (const [companyType, label] of Object.entries(combinedCompanyTypeLabels)) {
   assert.ok(
     hasChinese(label.zh) && /[A-Za-z]/.test(label.en),
     `organization-type label ${companyType} is not bilingual`,
@@ -429,16 +870,31 @@ assert.equal(
 );
 const categoryLabelKeysEn = Object.keys(categoryLabelsEn.labels);
 const categoryLabelKeysZh = Object.keys(categoryLabelsZh.labels);
+const categoryLabelKeysUsExpansion = Object.keys(expansionUsCategoryLabels);
+const categoryLabelKeysCnExpansion = Object.keys(expansionCnCategoryLabels);
 assert.equal(
-  new Set([...categoryLabelKeysEn, ...categoryLabelKeysZh]).size,
-  categoryLabelKeysEn.length + categoryLabelKeysZh.length,
+  new Set([
+    ...categoryLabelKeysEn,
+    ...categoryLabelKeysZh,
+    ...categoryLabelKeysUsExpansion,
+    ...categoryLabelKeysCnExpansion,
+  ]).size,
+  categoryLabelKeysEn.length +
+    categoryLabelKeysZh.length +
+    categoryLabelKeysUsExpansion.length +
+    categoryLabelKeysCnExpansion.length,
   "organization-category label catalogs overlap",
 );
 const liveCategoryIds = [
   ...new Set(companies.flatMap((company) => company.categories)),
 ].sort();
 assert.deepEqual(
-  [...categoryLabelKeysEn, ...categoryLabelKeysZh].sort(),
+  [
+    ...categoryLabelKeysEn,
+    ...categoryLabelKeysZh,
+    ...categoryLabelKeysUsExpansion,
+    ...categoryLabelKeysCnExpansion,
+  ].sort(),
   liveCategoryIds,
   "bilingual organization-category labels must cover the exact live taxonomy",
 );
@@ -455,6 +911,8 @@ assert.equal(
 for (const [category, label] of Object.entries({
   ...categoryLabelsEn.labels,
   ...categoryLabelsZh.labels,
+  ...expansionUsCategoryLabels,
+  ...expansionCnCategoryLabels,
 })) {
   assert.ok(
     typeof label.en === "string" &&
@@ -470,8 +928,11 @@ for (const [category, label] of Object.entries({
 const combinedCategoryLabels = {
   ...categoryLabelsEn.labels,
   ...categoryLabelsZh.labels,
+  ...expansionUsCategoryLabels,
+  ...expansionCnCategoryLabels,
 };
 const canonicalCategoryGroups = new Map();
+const categoryEnglishByChinese = new Map();
 for (const category of liveCategoryIds) {
   const canonicalId = combinedCategoryLabels[category].en
     .normalize("NFKC")
@@ -480,19 +941,61 @@ for (const category of liveCategoryIds) {
   const group = canonicalCategoryGroups.get(canonicalId) || [];
   group.push(category);
   canonicalCategoryGroups.set(canonicalId, group);
+  const englishLabels =
+    categoryEnglishByChinese.get(combinedCategoryLabels[category].zh) || [];
+  englishLabels.push(combinedCategoryLabels[category].en);
+  categoryEnglishByChinese.set(
+    combinedCategoryLabels[category].zh,
+    englishLabels,
+  );
 }
 const mergedCategoryAliasGroups = [...canonicalCategoryGroups.values()].filter(
   (group) => group.length > 1,
 );
+const atomicCategoryGroups = new Map();
+for (const category of liveCategoryIds) {
+  const terms = organizationIntelligence.categoryAtomOverrides[category] || [
+    combinedCategoryLabels[category],
+  ];
+  for (const term of terms) {
+    const canonicalId = term.en
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/[\s\-–—_/（）()，,：:·.]/g, "");
+    const group = atomicCategoryGroups.get(canonicalId) || new Set();
+    group.add(category);
+    atomicCategoryGroups.set(canonicalId, group);
+  }
+}
+const mergedAtomicCategoryAliasGroups = [
+  ...atomicCategoryGroups.values(),
+].filter((group) => group.size > 1);
 assert.equal(
   canonicalCategoryGroups.size,
-  303,
+  releaseManifest.organizations.canonicalCategoryGroups,
   "reviewed canonical industry-category count changed",
 );
 assert.equal(
   mergedCategoryAliasGroups.length,
-  30,
+  releaseManifest.organizations.categoryAliasGroups,
   "reviewed cross-market category-alias groups changed",
+);
+assert.equal(
+  atomicCategoryGroups.size,
+  releaseManifest.organizations.atomicCategoryFilters,
+  "reviewed atomic industry-filter count changed",
+);
+assert.equal(
+  mergedAtomicCategoryAliasGroups.length,
+  releaseManifest.organizations.atomicCategoryAliasGroups,
+  "reviewed atomic cross-market category-alias groups changed",
+);
+assert.deepEqual(
+  [...categoryEnglishByChinese.entries()]
+    .filter(([, labels]) => new Set(labels).size > 1)
+    .map(([label]) => label),
+  [],
+  "one Chinese category label must not silently represent different English concepts",
 );
 assert.deepEqual(
   canonicalCategoryGroups.get("advancedpackaging")?.sort(),
@@ -500,7 +1003,7 @@ assert.deepEqual(
   "advanced packaging aliases must share one filter option",
 );
 
-const usCompanyIds = usCompanies.map((company) => company.id).sort();
+const usCompanyIds = usBaseCompanies.map((company) => company.id).sort();
 assert.deepEqual(
   Object.keys(organizationLabels.companyNameZh).sort(),
   usCompanyIds,
@@ -508,7 +1011,10 @@ assert.deepEqual(
 );
 const companyIds = new Set(companies.map((company) => company.id));
 for (const id of Object.keys(organizationLabels.companyNameEn)) {
-  assert.ok(companyIds.has(id), `unknown English organization-name override ${id}`);
+  assert.ok(
+    companyIds.has(id),
+    `unknown English organization-name override ${id}`,
+  );
 }
 
 let bilingualOrganizationCount = 0;
@@ -519,12 +1025,16 @@ for (const company of companies) {
   const sourceNameIsChinese = hanPattern.test(company.name);
   const aliasEn = company.aliases.find((alias) => latinPattern.test(alias));
   const aliasZh = company.aliases.find((alias) => hanPattern.test(alias));
-  const nameEn = sourceNameIsChinese
-    ? organizationLabels.companyNameEn[company.id] || aliasEn
-    : organizationLabels.companyNameEn[company.id] || company.name;
-  const nameZh = sourceNameIsChinese
-    ? company.name
-    : organizationLabels.companyNameZh[company.id] || aliasZh;
+  const nameEn =
+    company.nameEn ||
+    (sourceNameIsChinese
+      ? organizationLabels.companyNameEn[company.id] || aliasEn
+      : organizationLabels.companyNameEn[company.id] || company.name);
+  const nameZh =
+    company.nameZh ||
+    (sourceNameIsChinese
+      ? company.name
+      : organizationLabels.companyNameZh[company.id] || aliasZh);
   assert.ok(
     typeof nameEn === "string" &&
       nameEn.trim() &&
@@ -533,7 +1043,7 @@ for (const company of companies) {
     `company ${company.id} needs an explicit English organization name`,
   );
   resolvedOrganizationNamesEn.push(nameEn.trim().toLowerCase());
-  if (nameZh) {
+  if (nameZh && nameZh !== nameEn) {
     assert.ok(
       hanPattern.test(nameZh),
       `company ${company.id} has an unusable Chinese organization name`,
@@ -555,12 +1065,12 @@ for (const company of companies) {
 }
 assert.equal(
   bilingualOrganizationCount,
-  429,
+  releaseManifest.organizations.bilingualNames,
   "reviewed bilingual organization-name coverage changed",
 );
 assert.equal(
   englishOnlyOrganizationCount,
-  100,
+  releaseManifest.organizations.englishOnlyNames,
   "reviewed English-only organization-name decisions changed",
 );
 assert.equal(
@@ -572,6 +1082,174 @@ assert.equal(
   new Set(resolvedOrganizationNamesZh).size,
   resolvedOrganizationNamesZh.length,
   "canonical Chinese organization names must be unique",
+);
+
+assert.equal(
+  organizationProfileContent.schemaVersion,
+  "1.0.0",
+  "organization profile-content schemaVersion changed without an audit update",
+);
+assert.ok(
+  organizationProfileContent.policy?.zh &&
+    organizationProfileContent.policy?.en,
+  "organization profile-content policy must be bilingual",
+);
+const baseCompanyIds = [...usBaseCompanies, ...cnBaseCompanies]
+  .map((company) => company.id)
+  .sort();
+assert.deepEqual(
+  Object.keys(organizationProfileContent.profiles).sort(),
+  baseCompanyIds,
+  "reviewed organization profiles must cover every base organization exactly",
+);
+for (const [companyId, content] of Object.entries(
+  organizationProfileContent.profiles,
+)) {
+  for (const field of [
+    "descriptionZh",
+    "descriptionEn",
+    "relevanceZh",
+    "relevanceEn",
+  ]) {
+    assert.ok(
+      typeof content[field] === "string" && content[field].trim(),
+      `organization profile ${companyId}.${field} is empty`,
+    );
+  }
+  assert.ok(
+    hasChinese(content.descriptionZh) && hasChinese(content.relevanceZh),
+    `organization profile ${companyId} needs usable Chinese content`,
+  );
+  assert.ok(
+    latinPattern.test(content.descriptionEn) &&
+      latinPattern.test(content.relevanceEn),
+    `organization profile ${companyId} needs usable English content`,
+  );
+}
+for (const company of [...usExpansionCompanies, ...cnExpansionCompanies]) {
+  for (const field of [
+    "descriptionZh",
+    "descriptionEn",
+    "relevanceZh",
+    "relevanceEn",
+  ]) {
+    assert.ok(
+      typeof company[field] === "string" && company[field].trim(),
+      `expanded organization ${company.id}.${field} is empty`,
+    );
+  }
+  assert.ok(
+    hasChinese(company.descriptionZh) && hasChinese(company.relevanceZh),
+    `expanded organization ${company.id} needs usable Chinese content`,
+  );
+  assert.ok(
+    latinPattern.test(company.descriptionEn) &&
+      latinPattern.test(company.relevanceEn),
+    `expanded organization ${company.id} needs usable English content`,
+  );
+}
+
+assert.equal(
+  rolePresentation.schemaVersion,
+  "1.0.0",
+  "role-presentation schemaVersion changed without an audit update",
+);
+const rolePresentationIds = Object.keys(rolePresentation.roles).sort();
+const reviewedRoleIds = roles.map((role) => role.id).sort();
+assert.deepEqual(
+  rolePresentationIds,
+  reviewedRoleIds,
+  "role presentation must cover every role family exactly",
+);
+const englishVisibleCompoundPattern = /\s+(?:and|&)\s+|[/／]/i;
+const chineseVisibleCompoundPattern = /[、与及和/／]/;
+for (const [roleId, presentation] of Object.entries(rolePresentation.roles)) {
+  assert.ok(
+    hasChinese(presentation.descriptionZh) &&
+      latinPattern.test(presentation.descriptionEn),
+    `role presentation ${roleId} needs bilingual descriptions`,
+  );
+  for (const [field, terms] of [
+    ["typicalTitleAtoms", presentation.typicalTitleAtoms],
+    ["interviewStageAtoms", presentation.interviewStageAtoms],
+  ]) {
+    assert.ok(
+      nonEmptyArray(terms),
+      `role presentation ${roleId}.${field} is empty`,
+    );
+    for (const [index, term] of terms.entries()) {
+      assert.ok(
+        term.id &&
+          typeof term.zh === "string" &&
+          term.zh.trim() &&
+          latinPattern.test(term.en),
+        `role presentation ${roleId}.${field}[${index}] is not bilingual`,
+      );
+      if (!hasChinese(term.zh, 1)) {
+        assert.match(
+          term.zh,
+          /^(?:SystemVerilog|UVM|ATPG|MBIST|JTAG|SPC)$/,
+          `role presentation ${roleId}.${field}[${index}].zh needs Chinese or an approved international technical name`,
+        );
+      }
+      assert.doesNotMatch(
+        term.en,
+        englishVisibleCompoundPattern,
+        `role presentation ${roleId}.${field}[${index}].en is compound`,
+      );
+      assert.doesNotMatch(
+        term.zh,
+        chineseVisibleCompoundPattern,
+        `role presentation ${roleId}.${field}[${index}].zh is compound`,
+      );
+    }
+  }
+}
+
+assert.equal(
+  skillPresentation.schemaVersion,
+  "1.0.0",
+  "skill-presentation schemaVersion changed without an audit update",
+);
+assert.deepEqual(
+  Object.keys(skillPresentation.skills).sort(),
+  skills.map((skill) => skill.id).sort(),
+  "skill presentation must cover every skill node exactly",
+);
+let atomicSkillDisplayTermCount = 0;
+for (const [skillId, presentation] of Object.entries(
+  skillPresentation.skills,
+)) {
+  assert.ok(
+    nonEmptyArray(presentation.displayTerms),
+    `skill presentation ${skillId}.displayTerms is empty`,
+  );
+  atomicSkillDisplayTermCount += presentation.displayTerms.length;
+  for (const [index, term] of presentation.displayTerms.entries()) {
+    assert.ok(
+      term.id &&
+        typeof term.zh === "string" &&
+        term.zh.trim() &&
+        typeof term.en === "string" &&
+        latinPattern.test(term.en),
+      `skill presentation ${skillId}.displayTerms[${index}] is not bilingual`,
+    );
+    assert.doesNotMatch(
+      term.en,
+      englishVisibleCompoundPattern,
+      `skill presentation ${skillId}.displayTerms[${index}].en is compound`,
+    );
+    assert.doesNotMatch(
+      term.zh,
+      chineseVisibleCompoundPattern,
+      `skill presentation ${skillId}.displayTerms[${index}].zh is compound`,
+    );
+  }
+}
+assert.equal(
+  atomicSkillDisplayTermCount,
+  releaseManifest.skills.displayTerms,
+  "reviewed atomic skill display-term count changed",
 );
 
 for (const company of companies) {
@@ -647,7 +1325,10 @@ for (const override of skillFocusOverrideRecords) {
   );
   assert.ok(!skillFocusOverrideByKey.has(key), `duplicate skill focus ${key}`);
   assert.ok(roleIds.has(override.roleId), `${key} references a missing role`);
-  assert.ok(skillIds.has(override.skillId), `${key} references a missing skill`);
+  assert.ok(
+    skillIds.has(override.skillId),
+    `${key} references a missing skill`,
+  );
   assert.ok(
     typeof override.focusEn === "string" && override.focusEn.length >= 30,
     `${key}.focusEn is too shallow`,
@@ -752,7 +1433,9 @@ for (const [questionId, translation] of Object.entries(
       `translation ${questionId}.referenceOutlineZh[${index}] is not usable Chinese`,
     );
     if (
-      legacyGenericOutlinePatternsZh.some((pattern) => pattern.test(item.trim()))
+      legacyGenericOutlinePatternsZh.some((pattern) =>
+        pattern.test(item.trim()),
+      )
     ) {
       legacyGenericOutlineViolations.push(
         `${questionId}.referenceOutlineZh[${index}]`,
@@ -770,9 +1453,7 @@ assert.equal(
   0,
   [
     "reviewed referenceOutlineZh entries must not use the legacy generic fallback template",
-    ...legacyGenericOutlineViolations
-      .slice(0, 30)
-      .map((path) => `  - ${path}`),
+    ...legacyGenericOutlineViolations.slice(0, 30).map((path) => `  - ${path}`),
     legacyGenericOutlineViolations.length > 30
       ? `  - ... ${legacyGenericOutlineViolations.length - 30} additional fallback items`
       : null,
@@ -840,7 +1521,10 @@ for (const [questionId, legacyOracleZh] of Object.entries(
 }
 for (const [key, override] of skillFocusOverrideByKey) {
   const baseAnchor = curatedAnchorById.get(override.baseQuestionId);
-  assert.ok(baseAnchor, `skill-focus override ${key} references a missing base`);
+  assert.ok(
+    baseAnchor,
+    `skill-focus override ${key} references a missing base`,
+  );
   assert.ok(
     baseAnchor.roleFamilies.includes(override.roleId),
     `skill-focus override ${key} does not match its base anchor role`,
@@ -1063,27 +1747,9 @@ for (const rule of roleMapping.rules) {
   );
 }
 
-function mappedRoleIds(company) {
-  const searchable = [
-    company.companyType,
-    ...company.categories,
-    ...company.focusAreas,
-    ...company.roleFamilies,
-  ]
-    .join(" ")
-    .toLowerCase();
-  return roleMapping.rules
-    .filter((rule) =>
-      rule.keywords.some((keyword) =>
-        searchable.includes(String(keyword).toLowerCase()),
-      ),
-    )
-    .map((rule) => rule.roleFamilyId);
-}
-
 for (const company of companies) {
   assert.ok(
-    mappedRoleIds(company).length > 0,
+    mappedRoleFamilyIds(company, roleMapping.rules).length > 0,
     `company ${company.id} has no canonical role-family edge`,
   );
 }
@@ -1396,9 +2062,7 @@ for (const question of questions) {
     }
     if (question.generationSpec.archetype === "contract") {
       assert.ok(
-        question.prompt.includes(
-          `“${targetSkill.title || targetSkill.name}”`,
-        ),
+        question.prompt.includes(`“${targetSkill.title || targetSkill.name}”`),
         `${context} English contract prompt omits the target-skill lens`,
       );
       assert.ok(
@@ -2345,8 +3009,7 @@ for (const roleId of roleIds) {
   assert.ok(count >= 140, `role ${roleId} has only ${count} questions`);
   const easyCount = questions.filter(
     (question) =>
-      question.roleFamilies.includes(roleId) &&
-      question.difficulty === "easy",
+      question.roleFamilies.includes(roleId) && question.difficulty === "easy",
   ).length;
   assert.ok(easyCount >= 1, `role ${roleId} has no easy exercise`);
 }
@@ -2454,23 +3117,32 @@ console.log(
       status: "passed",
       snapshot: profile.evidenceDate,
       coverage: {
+        organizations: companies.length,
         usCompanies: usCompanies.length,
         chinaCompanies: cnCompanies.length,
+        organizationRelations: organizationRelations.length,
         organizationTypes: companyTypes.size,
         bilingualOrganizationTypeLabels: companyTypeIds.length,
         industryCategories: categories.size,
         bilingualIndustryCategoryLabels: liveCategoryIds.length,
         canonicalIndustryCategoryFilters: canonicalCategoryGroups.size,
         mergedIndustryCategoryAliasGroups: mergedCategoryAliasGroups.length,
+        atomicIndustryCategoryFilters: atomicCategoryGroups.size,
+        mergedAtomicIndustryCategoryAliasGroups:
+          mergedAtomicCategoryAliasGroups.length,
         bilingualOrganizationNames: bilingualOrganizationCount,
         reviewedEnglishOnlyOrganizationNames: englishOnlyOrganizationCount,
-        canonicalRoleEdges: companies.reduce(
-          (total, company) => total + mappedRoleIds(company).length,
-          0,
-        ),
+        chinaCompanyOwnershipRecords: ownershipRecords.length,
+        provisionallyAuditedOwnershipRecords:
+          ownershipReviewStatusCounts["provisionally-audited"],
+        ownershipNeedsDirectSource:
+          ownershipReviewStatusCounts["needs-direct-control-source"],
+        chinaOwnershipClassCounts: ownershipClassCounts,
+        canonicalRoleEdges: canonicalRoleEdgeCount,
         currentJobEvidence: currentJobCount,
         roleFamilies: roles.length,
         atomicSkills: skills.length,
+        atomicSkillDisplayTerms: atomicSkillDisplayTermCount,
         declaredRoleSkillEdges: declaredRoleSkillEdges.length,
         missingRoleSkillEdges: missingRoleSkillEdges.length,
         interviewTasks: questions.length,
@@ -2524,8 +3196,7 @@ console.log(
         reviewedEditorialOverrides: Object.keys(editorialOverrides).length,
         appliedEditorialOverrides: appliedEditorialOverrideCount,
         bilingualSoftPolicyAnchors: softPolicyAnchorIds.size,
-        mandatoryEnglishResponseAnchors:
-          mandatoryEnglishResponseAnchorIds.size,
+        mandatoryEnglishResponseAnchors: mandatoryEnglishResponseAnchorIds.size,
         exactTapFixtureApplied: true,
         exactTapFixtureLineageMembers: tapTraceLineage.length,
         selfContainedTechnicalPrompts: selfContainedTechnicalPromptCount,

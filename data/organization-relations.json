@@ -1,0 +1,192 @@
+[
+  {
+    "id": "lightelligence-corporate-family",
+    "fromOrganizationId": "cn-lightelligence",
+    "toOrganizationId": "lightelligence",
+    "relationType": "corporate-family",
+    "status": "active",
+    "announcedAt": null,
+    "lastVerified": "2026-07-23",
+    "summaryZh": "上海曦智科技股份有限公司节点与 Lightelligence 节点属于同一曦智科技企业家族的不同机会市场视图。cn-lightelligence 作为中国市场及香港上市实体视图（01879.HK）；lightelligence 作为美国市场存在视图，官网列有波士顿与圣何塞办公室。该关系用于规范归组，不推断未经官方材料明确披露的精确母子公司法律链条，也不应删除任一市场节点。",
+    "summaryEn": "The Shanghai Lightelligence record and the Lightelligence record are market-specific views of the same Lightelligence corporate family. cn-lightelligence represents the China market and Hong Kong-listed entity view (01879.HK), while lightelligence represents the U.S. market presence, for which the official site lists Boston and San Jose offices. This relation is for canonical grouping; it does not infer a precise legal parent-subsidiary chain not expressly disclosed in the cited official materials, and neither market node should be deleted.",
+    "officialEvidence": [
+      {
+        "titleZh": "曦智科技公司简介及发展历程",
+        "titleEn": "Lightelligence Company Profile and History",
+        "url": "https://www.xztech.ai/about-us/company-profile",
+        "publisher": "曦智科技 / Lightelligence",
+        "publishedAt": null,
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "曦智科技香港交易所上市公告",
+        "titleEn": "Lightelligence Hong Kong Stock Exchange Listing Announcement",
+        "url": "https://www.xztech.ai/about-us/news/dynamic/80",
+        "publisher": "曦智科技 / Lightelligence",
+        "publishedAt": "2026-04-28",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "Lightelligence 美国办公室联系方式",
+        "titleEn": "Lightelligence U.S. Office Contact Information",
+        "url": "https://www.lightelligence.ai/about-us/contact-us",
+        "publisher": "Lightelligence",
+        "publishedAt": null,
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "texas-instruments-silicon-labs-acquisition",
+    "fromOrganizationId": "texas-instruments",
+    "toOrganizationId": "silicon-labs",
+    "relationType": "acquisition",
+    "status": "pending",
+    "announcedAt": "2026-02-04",
+    "lastVerified": "2026-07-23",
+    "summaryZh": "Texas Instruments 已签署收购 Silicon Labs 的最终协议，官方预计在 2027 年上半年完成；最初公告将股东批准、监管批准及其他惯常交割条件列为完成前提。在一手完成公告出现前，本关系保持待完成状态，两家公司继续作为独立组织节点展示和申请。",
+    "summaryEn": "Texas Instruments has signed a definitive agreement to acquire Silicon Labs. The official announcement anticipates closing in the first half of 2027 and identifies stockholder approval, regulatory approvals, and other customary closing conditions as prerequisites. Until a first-party closing announcement is published, this relation remains pending and the companies remain separate organization and application targets.",
+    "officialEvidence": [
+      {
+        "titleZh": "Texas Instruments 宣布拟收购 Silicon Labs",
+        "titleEn": "Texas Instruments to Acquire Silicon Labs",
+        "url": "https://investor.ti.com/news-releases/news-release-details/texas-instruments-acquire-silicon-labs",
+        "publisher": "Texas Instruments",
+        "publishedAt": "2026-02-04",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "Silicon Labs 发布 Texas Instruments 拟收购公告",
+        "titleEn": "Texas Instruments to Acquire Silicon Labs",
+        "url": "https://news.silabs.com/2026-02-04-Texas-Instruments-to-acquire-Silicon-Labs",
+        "publisher": "Silicon Labs",
+        "publishedAt": "2026-02-04",
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "onsemi-synaptics-acquisition",
+    "fromOrganizationId": "onsemi",
+    "toOrganizationId": "synaptics",
+    "relationType": "acquisition",
+    "status": "pending",
+    "announcedAt": "2026-06-25",
+    "lastVerified": "2026-07-23",
+    "summaryZh": "onsemi 与 Synaptics 已签署全股票收购的最终协议，官方预计在 2027 年年中完成；最初公告将 Synaptics 股东批准、监管批准及其他惯常条件列为完成前提。交割前不得把 Synaptics 提前并入 onsemi，也不得隐藏其独立岗位与招聘入口。",
+    "summaryEn": "onsemi and Synaptics have entered into a definitive all-stock acquisition agreement. The official release anticipates closing in mid-2027 and identifies Synaptics stockholder approval, regulatory approvals, and other customary conditions as prerequisites. Synaptics must not be merged into onsemi or have its independent roles and recruiting entry points hidden before closing.",
+    "officialEvidence": [
+      {
+        "titleZh": "onsemi 宣布拟收购 Synaptics",
+        "titleEn": "onsemi to Acquire Synaptics",
+        "url": "https://investor.onsemi.com/news-releases/news-release-details/onsemi-acquire-synaptics-enable-next-generation-intelligent",
+        "publisher": "onsemi",
+        "publishedAt": "2026-06-25",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "Synaptics 发布 onsemi 拟收购公告",
+        "titleEn": "onsemi to Acquire Synaptics",
+        "url": "https://www.synaptics.com/company/news/onsemi-to-acquire-synaptics-to-enable-the-next-generation-of-intelligent-systems-for-physical-ai",
+        "publisher": "Synaptics",
+        "publishedAt": "2026-06-25",
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "skyworks-qorvo-combination",
+    "fromOrganizationId": "skyworks-solutions",
+    "toOrganizationId": "qorvo",
+    "relationType": "combination",
+    "status": "pending",
+    "announcedAt": "2025-10-28",
+    "lastVerified": "2026-07-23",
+    "summaryZh": "Skyworks 与 Qorvo 已签署现金加股票的合并协议，官方预计在 2027 年初完成；最初公告列明监管批准、双方股东批准及其他惯常交割条件，2026 年 6 月 11 日的官方更新仍把交割作为未来条件。双方在交割前继续独立运营，组织树、岗位、证据和申请记录不得提前合并。",
+    "summaryEn": "Skyworks and Qorvo have signed a definitive cash-and-stock combination agreement. The original announcement anticipates closing in early calendar 2027 and identifies regulatory approvals, approval by both companies' shareholders, and other customary closing conditions; the June 11, 2026 first-party update still treats closing as a future condition. The companies continue to operate independently before closing, so their organization records, roles, evidence, and applications must not be merged early.",
+    "officialEvidence": [
+      {
+        "titleZh": "Skyworks 与 Qorvo 宣布拟合并",
+        "titleEn": "Skyworks and Qorvo to Combine",
+        "url": "https://investors.skyworksinc.com/news-releases/news-release-details/skyworks-and-qorvo-combine-create-22-billion-us-based-leader",
+        "publisher": "Skyworks Solutions",
+        "publishedAt": "2025-10-28",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "Qorvo 发布与 Skyworks 拟合并公告",
+        "titleEn": "Skyworks and Qorvo to Combine",
+        "url": "https://ir.qorvo.com/node/25121",
+        "publisher": "Qorvo",
+        "publishedAt": "2025-10-28",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "Skyworks 公布 Qorvo 票据交换要约早期参与结果",
+        "titleEn": "Skyworks Announces Early Participation Results for Qorvo Note Exchange Offers",
+        "url": "https://investors.skyworksinc.com/news-releases/news-release-details/skyworks-announces-results-early-participation-exchange-offers",
+        "publisher": "Skyworks Solutions",
+        "publishedAt": "2026-06-11",
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "ionq-skywater-acquisition",
+    "fromOrganizationId": "ionq",
+    "toOrganizationId": "skywater-technology",
+    "relationType": "acquisition",
+    "status": "pending",
+    "announcedAt": "2026-01-26",
+    "lastVerified": "2026-07-23",
+    "summaryZh": "IonQ 已签署收购 SkyWater Technology 的最终协议。SkyWater 股东已于 2026 年 5 月 8 日批准合并协议，但官方同日明确交易仍取决于所需监管批准及其他惯常交割条件；这不是完成公告。SkyWater 在正式交割前必须保留独立组织、岗位与申请身份。",
+    "summaryEn": "IonQ has signed a definitive agreement to acquire SkyWater Technology. SkyWater stockholders approved the merger agreement on May 8, 2026, but the official release on that date states that required regulatory approvals and other customary closing conditions remained outstanding; it is not a closing announcement. SkyWater must retain its independent organization, role, and application identity until formal closing.",
+    "officialEvidence": [
+      {
+        "titleZh": "IonQ 宣布拟收购 SkyWater Technology",
+        "titleEn": "IonQ to Acquire SkyWater Technology",
+        "url": "https://investors.ionq.com/news/news-details/2026/IonQ-to-Acquire-SkyWater-Technology-Creating-the-Only-Vertically-Integrated-Full-Stack-Quantum-Platform-Company/",
+        "publisher": "IonQ",
+        "publishedAt": "2026-01-26",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "SkyWater 股东批准与 IonQ 的合并协议",
+        "titleEn": "SkyWater Technology Stockholders Approve Merger Agreement with IonQ",
+        "url": "https://ir.skywatertechnology.com/news/news-details/2026/SkyWater-Technology-Stockholders-Approve-Merger-Agreement-with-IonQ/default.aspx",
+        "publisher": "SkyWater Technology",
+        "publishedAt": "2026-05-08",
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "groq-nvidia-technology-license",
+    "fromOrganizationId": "groq",
+    "toOrganizationId": "nvidia",
+    "relationType": "technology-license",
+    "status": "active",
+    "announcedAt": "2025-12-24",
+    "lastVerified": "2026-07-23",
+    "summaryZh": "Groq 向 NVIDIA 授予其推理技术的非独家许可。Groq 官方公告明确表示 Groq 将继续作为独立公司运营，GroqCloud 继续运行；该关系不是收购，也不得在组织树或申请系统中把 Groq 合并到 NVIDIA。",
+    "summaryEn": "Groq granted NVIDIA a non-exclusive license to its inference technology. Groq's official announcement expressly states that Groq will continue to operate as an independent company and that GroqCloud will continue operating. This relationship is not an acquisition, and Groq must not be merged into NVIDIA in the organization tree or application system.",
+    "officialEvidence": [
+      {
+        "titleZh": "Groq 与 NVIDIA 签订非独家推理技术许可协议",
+        "titleEn": "Groq and NVIDIA Enter Non-Exclusive Inference Technology Licensing Agreement",
+        "url": "https://groq.com/newsroom/groq-and-nvidia-enter-non-exclusive-inference-technology-licensing-agreement-to-accelerate-ai-inference-at-global-scale",
+        "publisher": "Groq",
+        "publishedAt": "2025-12-24",
+        "lastVerified": "2026-07-23"
+      },
+      {
+        "titleZh": "NVIDIA 2026 财年第四季度业绩公告确认 Groq 非独家许可",
+        "titleEn": "NVIDIA Fiscal 2026 Fourth-Quarter Results Confirm the Non-Exclusive Groq License",
+        "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+        "publisher": "NVIDIA",
+        "publishedAt": "2026-02-25",
+        "lastVerified": "2026-07-23"
+      }
+    ]
+  }
+]
