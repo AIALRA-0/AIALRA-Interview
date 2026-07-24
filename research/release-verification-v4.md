@@ -224,13 +224,13 @@ offline with the same gzip/Brotli settings used above. The RSC request clock
 changes a few response bytes, so this report uses medians and ranges rather than
 treating the dynamic response digest as a release hash.
 
-测量时间 / Measured at: `2026-07-24T17:27:37.795Z`
+测量时间 / Measured at: `2026-07-24T18:47:12.813Z`
 
 | 首页 SSR / Home-page SSR | 中位数 / Median |      范围 / Range |
 | ------------------------ | --------------: | ----------------: |
-| 原始 / Raw               |       179,363 B | 179,356–179,363 B |
-| gzip                     |        47,032 B |   47,021–47,032 B |
-| Brotli                   |        36,725 B |   36,722–36,747 B |
+| 原始 / Raw               |       179,669 B | 179,662–179,671 B |
+| gzip                     |        47,062 B |   47,058–47,065 B |
+| Brotli                   |        36,741 B |   36,735–36,768 B |
 
 - SSR 只引导 12 个初始组织；完整 799 个组织在浏览器端按需获取、校验
   SHA-256 后装载。  
@@ -256,24 +256,31 @@ treating the dynamic response digest as a release hash.
 
 | 门禁 / Gate                                                               | 结果 / Result                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run validate`                                                        | **PASS**：数据审计、资产构建/同步检查、TypeScript、ESLint、生产构建和 21/21 Node 测试通过 / Data audit, asset build/synchronization checks, TypeScript, ESLint, production build, and 21/21 Node tests passed |
+| `npm run validate`                                                        | **PASS**：数据审计、资产构建/同步检查、TypeScript、ESLint、生产构建和 26/26 Node 测试通过 / Data audit, asset build/synchronization checks, TypeScript, ESLint, production build, and 26/26 Node tests passed |
 | `npm run questions:check`                                                 | **PASS**：2,100 摘要、256 分片与源数据同步 / 2,100 summaries and 256 shards synchronized with source                                                                                                          |
 | `npm run organizations:check`                                             | **PASS**：799 个组织，最终资产哈希一致 / 799 organizations with matching final asset digest                                                                                                                   |
 | 本轮手写文件 scoped Prettier / Scoped Prettier for hand-authored v4 files | **PASS**                                                                                                                                                                                                      |
 | `git diff --check`                                                        | **PASS**                                                                                                                                                                                                      |
 
-21 项测试包括中国所有制精确覆盖、公开所有制展示、799 份唯一双语简介/相关性说明、
+26 项测试包括中国所有制精确覆盖、公开所有制展示、799 份唯一双语简介/相关性说明、
 15 个双语岗位族、130 个双语技能、短缩写 token 边界、NIST 不误映射 STA、组织关系、
-SSR 边界、组织资产摘要校验、鉴权/用户隔离/输入校验、公开隐私边界、双语题目、
-无障碍状态以及题目索引/分片同步。
+SSR 边界、组织资产摘要校验、鉴权/用户隔离/输入校验、公开隐私边界、旧版单语私有
+档案的语言安全呈现（不伪造翻译、不显示占位语、不按数组长度猜测配对、不丢弃私有
+字段；显式双语对保持双语，空数组保持为空；显式空字符串不回退公开文案，UI 透明
+显示“未配置 / Not configured”）、双语题目、无障碍状态以及题目索引/分片同步。
 
-The 21 tests cover exact China ownership coverage, safe public ownership display,
+The 26 tests cover exact China ownership coverage, safe public ownership display,
 799 unique bilingual descriptions/relevance statements, 15 bilingual role
 families, 130 bilingual skills, token boundaries for short abbreviations, the
 NIST-to-STA false-positive guard, organization relations, SSR boundaries,
 organization-asset digest verification, authentication/user isolation/input
-validation, the public privacy boundary, bilingual questions, accessibility state,
-and question index/shard synchronization.
+validation, the public privacy boundary, legacy single-language private-profile
+language-safe rendering without fabricated translations, public-profile
+placeholder copy, positional array-pair guessing, or private-field loss (explicit
+bilingual pairs remain bilingual, empty arrays remain empty, and explicit empty
+strings do not fall back to public copy but render the transparent bilingual state
+“未配置 / Not configured”), bilingual questions, accessibility state, and question
+index/shard synchronization.
 
 作为额外诊断，`npx prettier --check .` 返回 31 个文件警告。它不是
 `package.json` 定义的发布门禁，且把有意采用紧凑确定性序列化的数据与公开生成资产

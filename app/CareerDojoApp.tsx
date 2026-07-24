@@ -10,6 +10,7 @@ import organizationLabelsRaw from "../data/organization-labels.json";
 import organizationIntelligenceRaw from "../data/organization-intelligence.json";
 import rolePresentationRaw from "../data/role-presentation.json";
 import skillPresentationRaw from "../data/skill-presentation.json";
+import { buildCandidateProfileDisplay } from "../shared/profile-display";
 import { evidenceTypeLabel } from "./organization-intelligence";
 import type {
   ApplicationRecord,
@@ -38,6 +39,18 @@ type QuestionLanguageMode = "bilingual" | "zh-first" | "en-first";
 type QuestionIndexState = "loading" | "ready" | "error";
 type QuestionDetailState = "idle" | "loading" | "ready" | "error";
 type OrganizationIndexState = "loading" | "ready" | "error";
+type ProfileDisplayValue = {
+  lines: Array<{ lang: "zh-CN" | "en" | "und"; text: string }>;
+};
+type CandidateProfileDisplay = {
+  targetWindow: ProfileDisplayValue;
+  program: ProfileDisplayValue;
+  start: ProfileDisplayValue;
+  workAuthorization: ProfileDisplayValue;
+  positioning: ProfileDisplayValue;
+  strengths: ProfileDisplayValue[];
+  criticalGaps: ProfileDisplayValue[];
+};
 
 type AppProps = {
   initialCompanies: Company[];
@@ -450,6 +463,46 @@ function BilingualParagraph({
     <span className={`bilingual-paragraph ${className}`.trim()}>
       <span lang="zh-CN">{zh}</span>
       <span lang="en">{en}</span>
+    </span>
+  );
+}
+
+function ProfileDisplayText({
+  value,
+  variant = "paragraph",
+}: {
+  value: ProfileDisplayValue;
+  variant?: "inline" | "heading" | "paragraph";
+}) {
+  const lines = value.lines.length
+    ? value.lines
+    : [
+        { lang: "zh-CN" as const, text: "未配置" },
+        { lang: "en" as const, text: "Not configured" },
+      ];
+  if (variant === "inline") {
+    return (
+      <span className="profile-display-inline">
+        {lines.map((line, index) => (
+          <span lang={line.lang} key={`${line.lang}-${line.text}`}>
+            {index > 0 ? " / " : null}
+            {line.text}
+          </span>
+        ))}
+      </span>
+    );
+  }
+  return (
+    <span
+      className={
+        variant === "heading" ? "bilingual-heading" : "bilingual-paragraph"
+      }
+    >
+      {lines.map((line) => (
+        <span lang={line.lang} key={`${line.lang}-${line.text}`}>
+          {line.text}
+        </span>
+      ))}
     </span>
   );
 }
@@ -1368,6 +1421,14 @@ export function CareerDojoApp({
     }
     return profile;
   }, [persisted.preferences.candidateProfile, profile]);
+  const profileDisplay = useMemo(
+    () =>
+      buildCandidateProfileDisplay(
+        effectiveProfile,
+        profile,
+      ) as CandidateProfileDisplay,
+    [effectiveProfile, profile],
+  );
 
   useEffect(() => {
     let active = true;
@@ -2419,17 +2480,26 @@ export function CareerDojoApp({
         <header className="topbar">
           <div>
             <span className="eyebrow topbar-context-full">
-              {effectiveProfile.targetWindow} /{" "}
-              {effectiveProfile.targetWindowEn || "Target window"} ·{" "}
-              {effectiveProfile.education.program} /{" "}
-              {effectiveProfile.education.programEn || "Education"} ·{" "}
-              {effectiveProfile.education.workAuthorization} /{" "}
-              {effectiveProfile.education.workAuthorizationEn ||
-                "Work authorization not configured"}
+              <ProfileDisplayText
+                value={profileDisplay.targetWindow}
+                variant="inline"
+              />{" "}
+              ·{" "}
+              <ProfileDisplayText
+                value={profileDisplay.program}
+                variant="inline"
+              />{" "}
+              ·{" "}
+              <ProfileDisplayText
+                value={profileDisplay.workAuthorization}
+                variant="inline"
+              />
             </span>
             <span className="eyebrow topbar-context-mobile">
-              {effectiveProfile.targetWindow} /{" "}
-              {effectiveProfile.targetWindowEn || "Target window"}
+              <ProfileDisplayText
+                value={profileDisplay.targetWindow}
+                variant="inline"
+              />
             </span>
             <h1>{views.find((item) => item.id === view)?.label}</h1>
           </div>
@@ -2490,13 +2560,7 @@ export function CareerDojoApp({
                 <div className="positioning">
                   <small>你的主叙事 / Your positioning</small>
                   <p>
-                    <BilingualParagraph
-                      zh={effectiveProfile.positioning}
-                      en={
-                        effectiveProfile.positioningEn ||
-                        "English positioning statement not configured."
-                      }
-                    />
+                    <ProfileDisplayText value={profileDisplay.positioning} />
                   </p>
                 </div>
                 <div className="hero-actions">
@@ -2521,9 +2585,9 @@ export function CareerDojoApp({
                 </span>
                 <strong>现在开始 / Start now</strong>
                 <h3>
-                  <BilingualHeading
-                    zh={effectiveProfile.targetWindow}
-                    en={effectiveProfile.targetWindowEn || "Target window"}
+                  <ProfileDisplayText
+                    value={profileDisplay.targetWindow}
+                    variant="heading"
                   />
                 </h3>
                 <ol>
@@ -2639,18 +2703,16 @@ export function CareerDojoApp({
                   </div>
                 </div>
                 <ul className="gap-list">
-                  {effectiveProfile.criticalGaps.map((gap, index) => (
-                    <li key={gap}>
+                  {profileDisplay.criticalGaps.map((gap, index) => (
+                    <li
+                      key={`${index}-${gap.lines
+                        .map((line) => line.text)
+                        .join("-")}`}
+                    >
                       <span>{String(index + 1).padStart(2, "0")}</span>
                       <div>
                         <strong>
-                          <BilingualParagraph
-                            zh={gap}
-                            en={
-                              effectiveProfile.criticalGapsEn?.[index] ||
-                              "English translation not configured."
-                            }
-                          />
+                          <ProfileDisplayText value={gap} />
                         </strong>
                         <small>
                           {index < 2
@@ -2660,6 +2722,17 @@ export function CareerDojoApp({
                       </div>
                     </li>
                   ))}
+                  {profileDisplay.criticalGaps.length === 0 ? (
+                    <li>
+                      <span>—</span>
+                      <div>
+                        <strong>
+                          私有档案尚未配置缺口项 / No private gap items
+                          configured
+                        </strong>
+                      </div>
+                    </li>
+                  ) : null}
                 </ul>
               </article>
             </div>

@@ -349,6 +349,8 @@ const [
   publicResearchCorpus,
   publicDataSourceCorpus,
   publicAppSourceCorpus,
+  publicSharedSourceCorpus,
+  publicTestSourceCorpus,
   publicReadme,
   publicQuestionAssetCorpus,
 ] = await Promise.all([
@@ -379,6 +381,12 @@ const [
   readTextCorpus("data/", (relativePath) => relativePath.endsWith(".json")),
   readTextCorpus("app/", (relativePath) =>
     /\.(?:css|ts|tsx)$/.test(relativePath),
+  ),
+  readTextCorpus("shared/", (relativePath) =>
+    /\.(?:js|mjs|ts)$/.test(relativePath),
+  ),
+  readTextCorpus("tests/", (relativePath) =>
+    /\.(?:js|mjs|ts|tsx)$/.test(relativePath),
   ),
   readFile(new URL("README.md", root), "utf8"),
   readTextCorpus(
@@ -477,19 +485,34 @@ for (const [filename, content] of Object.entries({
       value,
     ]),
   ),
+  ...Object.fromEntries(
+    Object.entries(publicSharedSourceCorpus).map(([path, value]) => [
+      `shared/${path}`,
+      value,
+    ]),
+  ),
+  ...Object.fromEntries(
+    Object.entries(publicTestSourceCorpus).map(([path, value]) => [
+      `tests/${path}`,
+      value,
+    ]),
+  ),
 })) {
+  const privacyScannableContent = filename.startsWith("tests/")
+    ? content.replace(/\/(?:\\.|[^/\n])+\/[dgimsuvy]*/g, "")
+    : content;
   assert.doesNotMatch(
-    content,
+    privacyScannableContent,
     privateCandidateFingerprintPattern,
     `${filename} contains a private candidate fingerprint`,
   );
   assert.doesNotMatch(
-    content,
+    privacyScannableContent,
     privateStructuredTimelinePattern,
     `${filename} contains a private candidate timeline`,
   );
   assert.doesNotMatch(
-    content,
+    privacyScannableContent,
     firstSemesterAuthorizationPattern,
     `${filename} combines a private enrollment timeline with work authorization`,
   );
