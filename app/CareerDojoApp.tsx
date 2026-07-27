@@ -1496,7 +1496,10 @@ function StructuredQuestionPrompt({
                   /^([^:：]{1,20}[:：])\s*([\s\S]*)$/,
                 );
                 return (
-                  <div className="prompt-section" key={`${copy.id}-${index}`}>
+                  <div
+                    className={`prompt-section${match ? "" : " prompt-section-plain"}`}
+                    key={`${copy.id}-${index}`}
+                  >
                     {match ? <strong>{match[1]}</strong> : null}
                     <p>
                       <InlineTechnicalText
