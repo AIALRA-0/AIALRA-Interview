@@ -30,6 +30,7 @@ test("origin proxy keeps Sites and Authentik credentials server-side", async () 
   assert.match(nginx, /proxy_set_header Cookie "";/);
   assert.match(nginx, /proxy_set_header X-Aialra-Proxy-Secret "";/);
   assert.match(nginx, /proxy_pass http:\/\/127\.0\.0\.1:13110;/);
+  assert.equal((nginx.match(/server_tokens off;/g) || []).length, 2);
   assert.doesNotMatch(nginx, /SITES_BYPASS_BEARER|AIALRA_PROXY_SHARED_SECRET=/);
 
   assert.match(
