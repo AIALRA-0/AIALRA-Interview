@@ -29,9 +29,9 @@
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
-    "next": "16.2.11",
-    "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.46.0",
@@ -44,8 +44,9 @@
     "@vitejs/plugin-rsc": "0.5.26",
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.11",
-    "react-server-dom-webpack": "19.2.6",
+    "eslint-config-next": "16.2.12",
+    "minimatch": "file:vendor/minimatch3-safe",
+    "react-server-dom-webpack": "19.2.8",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "0.0.50",
@@ -59,12 +60,6 @@
     },
     "fast-uri": "3.1.4",
     "js-yaml": "4.3.0",
-    "minimatch@3.1.5": {
-      "brace-expansion": "1.1.16"
-    },
-    "minimatch@10.2.5": {
-      "brace-expansion": "5.0.8"
-    },
     "postcss": "8.5.22",
     "sharp": "0.35.3"
   },

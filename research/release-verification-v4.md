@@ -256,20 +256,24 @@ treating the dynamic response digest as a release hash.
 
 | 门禁 / Gate                                                               | 结果 / Result                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run validate`                                                        | **PASS**：数据审计、资产构建/同步检查、TypeScript、ESLint、生产构建和 26/26 Node 测试通过 / Data audit, asset build/synchronization checks, TypeScript, ESLint, production build, and 26/26 Node tests passed |
+| `npm run validate`                                                        | **PASS**：数据审计、资产构建/同步检查、TypeScript、ESLint、生产构建和 41/41 Node 测试通过 / Data audit, asset build/synchronization checks, TypeScript, ESLint, production build, and 41/41 Node tests passed |
+| `npm audit --audit-level=low`                                             | **PASS**：0 个已知漏洞；全新 `npm ci` 后依赖树完整 / 0 known vulnerabilities with a clean dependency tree after a fresh `npm ci`                                                                              |
 | `npm run questions:check`                                                 | **PASS**：2,100 摘要、256 分片与源数据同步 / 2,100 summaries and 256 shards synchronized with source                                                                                                          |
 | `npm run organizations:check`                                             | **PASS**：799 个组织，最终资产哈希一致 / 799 organizations with matching final asset digest                                                                                                                   |
 | 本轮手写文件 scoped Prettier / Scoped Prettier for hand-authored v4 files | **PASS**                                                                                                                                                                                                      |
 | `git diff --check`                                                        | **PASS**                                                                                                                                                                                                      |
 
-26 项测试包括中国所有制精确覆盖、公开所有制展示、799 份唯一双语简介/相关性说明、
+41 项测试包括中国所有制精确覆盖、公开所有制展示、799 份唯一双语简介/相关性说明、
 15 个双语岗位族、130 个双语技能、短缩写 token 边界、NIST 不误映射 STA、组织关系、
 SSR 边界、组织资产摘要校验、鉴权/用户隔离/输入校验、公开隐私边界、旧版单语私有
 档案的语言安全呈现（不伪造翻译、不显示占位语、不按数组长度猜测配对、不丢弃私有
 字段；显式双语对保持双语，空数组保持为空；显式空字符串不回退公开文案，UI 透明
 显示“未配置 / Not configured”）、双语题目、无障碍状态以及题目索引/分片同步。
+它们也锁定薪资证据边界、完整岗位档案写入、Authentik 回源身份、部署密钥隔离、
+纯中性色界面、精确布局，以及 React/Next 安全版本和旧版 ESLint 通配符 API 的
+安全兼容链。
 
-The 26 tests cover exact China ownership coverage, safe public ownership display,
+The 41 tests cover exact China ownership coverage, safe public ownership display,
 799 unique bilingual descriptions/relevance statements, 15 bilingual role
 families, 130 bilingual skills, token boundaries for short abbreviations, the
 NIST-to-STA false-positive guard, organization relations, SSR boundaries,
@@ -280,7 +284,10 @@ placeholder copy, positional array-pair guessing, or private-field loss (explici
 bilingual pairs remain bilingual, empty arrays remain empty, and explicit empty
 strings do not fall back to public copy but render the transparent bilingual state
 “未配置 / Not configured”), bilingual questions, accessibility state, and question
-index/shard synchronization.
+index/shard synchronization. They also lock compensation-evidence boundaries,
+full requisition persistence, Authentik origin identity, deployment-secret
+isolation, the neutral-only interface, precise layouts, patched React/Next
+versions, and the safe compatibility bridge for the legacy ESLint minimatch API.
 
 作为额外诊断，`npx prettier --check .` 返回 31 个文件警告。它不是
 `package.json` 定义的发布门禁，且把有意采用紧凑确定性序列化的数据与公开生成资产
