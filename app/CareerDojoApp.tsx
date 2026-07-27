@@ -407,7 +407,7 @@ const questionTypeLabels: Record<string, { zh: string; en: string }> = {
   "log-analysis": { zh: "日志分析", en: "Log Analysis" },
   "waveform-analysis": { zh: "波形分析", en: "Waveform Analysis" },
   "system-task": { zh: "系统任务", en: "System Task" },
-  "boss-fight": { zh: "综合挑战", en: "Boss Challenge" },
+  "boss-fight": { zh: "综合任务", en: "Integrated Task" },
   behavioral: { zh: "行为面试", en: "Behavioral Interview" },
   "project-deep-dive": { zh: "项目深挖", en: "Project Deep Dive" },
   "english-communication": {
@@ -428,11 +428,6 @@ const difficultyLabels: Record<string, { zh: string; en: string }> = {
   easy: { zh: "容易", en: "Easy" },
   medium: { zh: "中等", en: "Medium" },
   hard: { zh: "困难", en: "Hard" },
-};
-
-const questionStatusLabels: Record<string, { zh: string; en: string }> = {
-  active: { zh: "已发布", en: "Active" },
-  "review-ready": { zh: "可供审阅", en: "Review Ready" },
 };
 
 const relationTypeLabels: Record<string, { zh: string; en: string }> = {
@@ -1456,6 +1451,68 @@ function BilingualCopy({
   );
 }
 
+function InlineTechnicalText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(`[^`]+`)/g).map((part, index) =>
+        /^`[^`]+`$/.test(part) ? (
+          <code className="inline-technical-token" key={`${part}-${index}`}>
+            {part.slice(1, -1)}
+          </code>
+        ) : (
+          <span key={`${part}-${index}`}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function StructuredQuestionPrompt({
+  zh,
+  en,
+  mode,
+}: {
+  zh: string;
+  en: string;
+  mode: QuestionLanguageMode;
+}) {
+  const copies = [
+    { id: "zh", label: "中文", language: "zh-CN", text: zh },
+    { id: "en", label: "EN", language: "en", text: en },
+  ];
+  if (mode === "en-first") copies.reverse();
+
+  return (
+    <div className={`structured-question-prompt mode-${mode}`}>
+      {copies.map((copy) => (
+        <article className="prompt-language-panel" lang={copy.language} key={copy.id}>
+          <span className="prompt-language-label">{copy.label}</span>
+          <div className="prompt-section-list">
+            {copy.text
+              .split(/\n{2,}/)
+              .filter(Boolean)
+              .map((paragraph, index) => {
+                const match = paragraph.match(
+                  /^([^:：]{1,20}[:：])\s*([\s\S]*)$/,
+                );
+                return (
+                  <div className="prompt-section" key={`${copy.id}-${index}`}>
+                    {match ? <strong>{match[1]}</strong> : null}
+                    <p>
+                      <InlineTechnicalText
+                        text={(match ? match[2] : paragraph).trim()}
+                      />
+                    </p>
+                  </div>
+                );
+              })}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function BilingualList({
   zh,
   en,
@@ -1946,6 +2003,39 @@ export function CareerDojoApp({
   const [questionIndexRetryKey, setQuestionIndexRetryKey] = useState(0);
   const [questionPage, setQuestionPage] = useState(1);
   const [questionPageSize, setQuestionPageSize] = useState(24);
+  const skipInitialHashWrite = useRef(true);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const candidate = window.location.hash.slice(1);
+      if (
+        [
+          "mission",
+          "atlas",
+          "roles",
+          "dojo",
+          "applications",
+          "evidence",
+        ].includes(candidate)
+      ) {
+        setView(candidate as ViewId);
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
+  useEffect(() => {
+    if (skipInitialHashWrite.current) {
+      skipInitialHashWrite.current = false;
+      return;
+    }
+    const nextHash = `#${view}`;
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(null, "", nextHash);
+    }
+  }, [view]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedQuestion, setSelectedQuestion] =
     useState<InterviewQuestionSummary | null>(null);
@@ -4425,13 +4515,7 @@ export function CareerDojoApp({
                                 questionTypeLabels,
                               )}
                             </span>
-                            <span>
-                              {question.estimatedMinutes} MIN ·{" "}
-                              {bilingualLabel(
-                                question.status,
-                                questionStatusLabels,
-                              )}
-                            </span>
+                            <span>{question.estimatedMinutes} MIN</span>
                           </div>
                           <h3>
                             <BilingualCopy
@@ -4451,12 +4535,13 @@ export function CareerDojoApp({
                           </div>
                           <div className="question-skills">
                             {question.skills
-                              .slice(0, 4)
-                              .flatMap((skill) =>
-                                skillTerms(
+                              .slice(0, 3)
+                              .flatMap((skill) => {
+                                const term = skillTerms(
                                   skillById.get(skill) || { id: skill },
-                                ).map((term) => ({ skill, term })),
-                              )
+                                )[0];
+                                return term ? [{ skill, term }] : [];
+                              })
                               .map(({ skill, term }) => (
                                 <span key={`${skill}:${term.id}`}>
                                   <BilingualTermLabel term={term} />
@@ -6695,12 +6780,7 @@ export function CareerDojoApp({
               <div>
                 <span className="section-kicker">
                   {bilingualLabel(selectedQuestion.type, questionTypeLabels)} ·{" "}
-                  {selectedQuestion.estimatedMinutes} 分钟 / MIN ·{" "}
-                  {bilingualLabel(
-                    selectedQuestion.status,
-                    questionStatusLabels,
-                  )}{" "}
-                  · V{selectedQuestion.contentVersion}
+                  {selectedQuestion.estimatedMinutes} 分钟 / MIN
                 </span>
                 <h2 id="question-dialog-title">
                   <BilingualCopy
@@ -6710,12 +6790,6 @@ export function CareerDojoApp({
                     className="question-dialog-title"
                   />
                 </h2>
-                {selectedQuestion.blueprintId ? (
-                  <small className="question-lineage">
-                    课程谱系 / Curriculum lineage ·{" "}
-                    <code>{selectedQuestion.blueprintId}</code>
-                  </small>
-                ) : null}
               </div>
               <span className="difficulty-badge">
                 {bilingualLabel(selectedQuestion.difficulty, difficultyLabels)}
@@ -6782,24 +6856,14 @@ export function CareerDojoApp({
               </div>
             ) : selectedQuestionDetail ? (
               <>
+                <h3 className="question-primary-label">题目 / Question</h3>
                 <div className="prompt-box">
-                  <BilingualCopy
+                  <StructuredQuestionPrompt
                     zh={selectedQuestionDetail.promptZh}
                     en={selectedQuestionDetail.prompt}
                     mode={questionLanguageMode}
                   />
                 </div>
-                {selectedQuestion.status === "review-ready" ? (
-                  <div className="scope-notice">
-                    <strong>待校准 / Calibration pending</strong>
-                    <span>
-                      已通过结构与来源检查；尚未完成领域专家与真实练习者 pilot，
-                      分数只用于自我比较，不写入岗位准备度。 Structure and
-                      source checks are complete; expert and learner pilots are
-                      still pending.
-                    </span>
-                  </div>
-                ) : null}
                 <div className="question-modal-grid">
                   <div>
                     <h3>你需要交付 / Deliverables</h3>

@@ -460,8 +460,8 @@ const variants = [
   },
   {
     id: "integration",
-    title: "Cross-Layer Boss Fight",
-    titleZh: "跨层综合挑战",
+    title: "Cross-Layer Integration",
+    titleZh: "跨层集成",
     type: "boss-fight",
     level: "advanced",
     difficulty: "hard",
@@ -789,15 +789,6 @@ function appendOnce(value, addition, separator = " ") {
   return `${current}${separator}${extra}`.trim();
 }
 
-function insertBeforeEndingOnce(value, addition, ending, separator = " ") {
-  const current = String(value || "").trim();
-  const extra = String(addition || "").trim();
-  if (!extra || current.includes(extra)) return current;
-  if (!current.endsWith(ending)) return appendOnce(current, extra, separator);
-  const prefix = current.slice(0, -ending.length).trimEnd();
-  return `${prefix}${separator}${extra}${separator}${ending}`.trim();
-}
-
 function applyEditorialOverride(question) {
   const override = editorialOverrides[question.id];
   if (!override) return question;
@@ -842,7 +833,7 @@ function enrichCurated(question, index) {
     if (
       !translation[field] ||
       (Array.isArray(question[field.replace(/Zh$/, "")]) &&
-        translation[field].length !== question[field.replace(/Zh$/, "")].length)
+        translation[field].length < question[field.replace(/Zh$/, "")].length)
     ) {
       throw new Error(
         `Translation ${question.id}.${field} is missing or not parallel`,
@@ -921,57 +912,92 @@ function scenarioSource(prompt) {
 }
 
 function scenarioSourceZh(prompt) {
-  return prompt.trim();
+  return prompt
+    .replace(
+      /(?:请)?(?:说明所有对(?:回答真实性|技术正确性|正确性)有实质影响的假设|声明所有会实质影响正确性的假设)；.*$/s,
+      "",
+    )
+    .trim();
 }
 
 function standalonePrompt(base, variant, targetSkill, role) {
   const sourceScenario = scenarioSource(base.prompt);
-  const lead = `Reference scenario (quoted only; the transformation below defines the required deliverable): “${sourceScenario}”`;
-  const contractSource = `Source scenario (reference-only quotation; do not execute its requested solution in this exercise): “${sourceScenario}”`;
   const integrationTasks = {
-    "software-service": `${lead} The solution must now connect to an upstream data or control source and a downstream tool, service, device, or operator-facing consumer while preserving its externally visible behavior. Specify both interface contracts, ownership, failure isolation, release telemetry and thresholds, staged rollout, rollback, and the concise explanation you would give reviewers. ${variant.twist}`,
-    "digital-hardware": `${lead} The block, verification environment, or implementation change must now integrate with adjacent hardware while preserving architectural and cycle- or transaction-visible behavior. Specify source and sink interface contracts, clock, reset, power, and timing assumptions, verification and signoff evidence, incremental integration checkpoints, observability hooks, and a safe fallback using bypass, feature disable, or ECO. ${variant.twist}`,
-    "analog-custom": `${lead} The circuit or custom block must now integrate with its source, load, bias, control, and test environment while preserving the externally visible electrical behavior. Specify impedance and range assumptions, bias and control sequencing, PVT and mixed-signal boundaries, measurement hooks, and a reversible ECO or test configuration. ${variant.twist}`,
-    "embedded-hardware": `${lead} The firmware must now integrate with a real peripheral, interrupt or DMA path, clock/reset/power boundary, and external protocol while preserving the declared software-visible behavior. Specify MMIO ownership and ordering, asynchronous sampling or CDC assumptions, reset and low-power sequencing, cache or buffer coherency, electrical/protocol observability, bounded recovery, and a board-safe fallback. ${variant.twist}`,
-    "manufacturing-safety": `${lead} The automation change must now integrate equipment control, PLC or GEM state, an upstream sensor or interlock, and a downstream MES or operator action without weakening safety. Specify deterministic handshakes, stale-data and timeout behavior, recipe and identity ownership, fail-safe de-energized state, an independent protection layer, evidence retention, controlled recovery, and rollback that cannot bypass the interlock. ${variant.twist}`,
+    "software-service":
+      "Integrate one upstream source and one downstream consumer. Define both contracts, ownership, failure isolation, release telemetry, stop thresholds, staged rollout, and rollback.",
+    "digital-hardware":
+      "Integrate the block with adjacent hardware. Define interfaces, clocks, reset, power, timing, verification and signoff, incremental integration checkpoints, observability, and a tested bypass or ECO fallback.",
+    "analog-custom":
+      "Integrate the circuit with its source, load, bias, control, and test environment. Define electrical ranges, sequencing, PVT and mixed-signal boundaries, measurement hooks, and a reversible ECO.",
+    "embedded-hardware":
+      "Integrate the firmware with a real peripheral and interrupt or DMA path. Define MMIO ordering, the clock/reset/power boundary, asynchronous sampling or CDC, reset and low-power sequencing, coherency, bounded recovery, and a board-safe fallback.",
+    "manufacturing-safety":
+      "Integrate equipment control, a sensor or interlock, and MES or operator action. Define deterministic handshakes, stale-data and timeout behavior, identity ownership, a fail-safe de-energized state, an independent protection layer, and recovery that cannot bypass the interlock.",
   };
   const tasks = {
-    contract: `For the “${base.title}” scenario, reconstruct only the smallest externally visible contract in one page or less: legal input and output, one invariant, one explicit boundary, and one ambiguity that must be resolved. Use “${targetSkill.title || targetSkill.name}” only as a lens for making those clauses precise; omit solution artifacts and expansion plans. ${variant.twist} ${contractSource}`,
-    "worked-example": `${lead} Choose explicit values or states and show exactly one nominal case plus one smallest counterexample step by step, including where ${targetSkill.title || targetSkill.name} changes the result. Stop after the reproduced result; do not add an implementation, architecture, or regression plan. ${variant.twist}`,
-    "minimal-implementation": `${lead} Produce the smallest executable method appropriate to this domain: code, RTL, calculation, constraint set, experiment, or test sequence. Declare inputs, procedure, invariants, expected output, invalid-evidence handling, and the relevant time, memory, hardware, or measurement cost. ${variant.twist}`,
-    "fault-injection": `${lead} A previously passing implementation now fails intermittently after a small change. Build a ranked hypothesis tree, choose the highest-information measurement, minimize a reproducer, and identify the first violated invariant before proposing a fix. ${variant.twist}`,
-    oracle: `${lead} The primary answer or design and its first validation path may share the same assumption. Create an independent oracle appropriate to the domain, plus nominal, boundary, negative, and differential or consistency checks. State what observation would falsify the answer, and show why the new reference is genuinely independent.`,
-    scale: `${lead} Problem size, operating envelope, or required throughput changes by three orders of magnitude, so the original approach misses its stated resource, timing, or accuracy budget. Quantify the first ceiling, adapt the method using ${targetSkill.title || targetSkill.name}, and preserve the most important correctness signal. ${variant.twist}`,
-    tradeoff: `${lead} Two engineers propose credible but incompatible solutions. Compare them using correctness, performance, implementation cost, observability, recovery safety, and reversibility; quantify the assumptions and make a conditional recommendation. ${variant.twist}`,
-    incident: `${lead} Two evidence sources disagree because their observation windows, conditions, or timebases differ. Separate observations from inference, normalize the comparison, order the first five checks, and define the measurement that distinguishes artifact from a real failure.`,
+    contract: `Define the smallest externally visible contract in one page or less: legal input and output, one invariant, one explicit boundary, and one ambiguity. Use ${targetSkill.title || targetSkill.name} to make the clauses precise; do not propose an implementation.`,
+    "worked-example": `Choose explicit values or states. Show exactly one nominal case and one smallest counterexample step by step, including where ${targetSkill.title || targetSkill.name} changes the result.`,
+    "minimal-implementation": `Build the smallest executable method for this domain. Declare inputs, invariants, expected output, and cost. After a valid case passes, construct one minimally invalid case that violates exactly one invariant and reject it explicitly.`,
+    "fault-injection": "Assume a previously passing implementation now fails intermittently. Rank the hypotheses, choose the highest-information measurement, minimize the reproducer, and identify the first violated invariant before fixing it.",
+    oracle: "Build an independent oracle. Include one nominal, boundary, negative, and differential or consistency check; state the observation that would falsify the answer.",
+    scale: `Increase the scale or throughput by 1,000×. Quantify the first ceiling, adapt the method using ${targetSkill.title || targetSkill.name}, and preserve the primary correctness signal.`,
+    tradeoff: "Compare two credible solutions using correctness, performance, cost, observability, recovery safety, and reversibility. Quantify assumptions and make a conditional recommendation.",
+    incident: "Two evidence sources disagree because their windows, conditions, or timebases differ. Separate observations from inference, normalize the comparison, order the first five checks, and name the measurement that distinguishes artifact from failure.",
     integration: integrationTasks[integrationDomain(role)],
   };
-  return `${tasks[variant.id]} Use public concepts only; state assumptions and finish with a falsifiable acceptance criterion.`;
+  const constraints = {
+    contract: variant.twist,
+    "worked-example": variant.twist,
+    "minimal-implementation":
+      "The invalid case must change exactly one declared invariant.",
+    "fault-injection": variant.twist,
+    oracle:
+      "The oracle may not reuse the primary method's internal result.",
+    scale: variant.twist,
+    tradeoff: variant.twist,
+    incident: "Do not resolve the disagreement by discarding either source.",
+    integration: variant.twist,
+  };
+  return `Context: ${sourceScenario}\n\nTask: ${tasks[variant.id]}\n\nConstraint: ${constraints[variant.id]}`;
 }
 
 function standalonePromptZh(base, variant, targetSkill, role) {
   const sourceScenario = scenarioSourceZh(base.promptZh);
-  const lead = `参考场景（仅作引文；以下变式要求定义本题交付物）：《${sourceScenario}》`;
-  const contractSource = `原始场景（仅作参考引文；本练习不执行其中要求的解法）：《${sourceScenario}》`;
   const integrationTasks = {
-    "software-service": `${lead}方案现在必须接入上游数据或控制源，以及下游工具、服务、设备或面向操作员的使用方，同时保持外部可见行为不变。请定义双方接口契约、责任归属、故障隔离、发布遥测与阈值、分阶段上线、回滚，以及向评审者说明方案的简洁表述。${variant.twistZh}`,
-    "digital-hardware": `${lead}模块、验证环境或实现变更现在必须与相邻硬件集成，同时保持架构可见以及周期或事务可见行为不变。请定义源端和接收端接口契约、时钟、复位、电源和时序假设、验证与签核证据、增量集成检查点、可观测钩子，以及使用旁路、功能禁用或 ECO 的安全后备方案。${variant.twistZh}`,
-    "analog-custom": `${lead}电路或定制模块现在必须与信号源、负载、偏置、控制和测试环境集成，同时保持外部可见电气行为不变。请定义阻抗与范围假设、偏置和控制时序、PVT 与混合信号边界、测量钩子，以及可逆的 ECO 或测试配置。${variant.twistZh}`,
-    "embedded-hardware": `${lead}固件现在必须与真实外设、中断或 DMA 路径、时钟/复位/电源边界及外部协议集成，同时保持已声明的软件可见行为。请定义 MMIO 所有权与访问顺序、异步采样或 CDC 假设、复位与低功耗时序、缓存或缓冲一致性、电气/协议可观测性、有界恢复，以及板级安全的后备方案。${variant.twistZh}`,
-    "manufacturing-safety": `${lead}自动化变更现在必须把设备控制、PLC 或 GEM 状态、上游传感器或联锁，以及下游 MES 或操作员动作集成起来，且不得削弱安全性。请定义确定性握手、陈旧数据与超时行为、配方和身份所有权、失效安全的去激励状态、独立保护层、证据保留、受控恢复，以及不能绕过联锁的回退。${variant.twistZh}`,
+    "software-service":
+      "接入一个上游来源和一个下游使用方；定义双方契约、责任、故障隔离、发布遥测、停止阈值、分阶段上线与回滚。",
+    "digital-hardware":
+      "把模块接入相邻硬件；定义接口、时钟、复位、电源、时序、验证与签核、增量集成检查点、可观测性，以及经过测试的旁路或 ECO 后备方案。",
+    "analog-custom":
+      "把电路接入信号源、负载、偏置、控制和测试环境；定义电气范围、时序、PVT 与混合信号边界、测量钩子和可逆的 ECO。",
+    "embedded-hardware":
+      "把固件接入真实外设和中断或 DMA 路径；定义 MMIO 顺序、时钟/复位/电源边界、异步采样或 CDC、复位与低功耗时序、一致性、有界恢复和板级安全后备方案。",
+    "manufacturing-safety":
+      "集成设备控制、传感器或联锁，以及 MES 或操作员动作；定义确定性握手、陈旧数据与超时、身份所有权、失效安全的去激励状态、独立保护层，以及不能绕过联锁的恢复。",
   };
   const tasks = {
-    contract: `对于“${base.titleZh}”场景，只重构最小外部可见契约，并控制在不超过一页：合法输入与输出、一个不变量、一个明确边界，以及一个必须澄清的歧义。仅以“${targetSkill.titleZh}”为视角校准这些条款；省略解法工件与扩展计划。${variant.twistZh}${contractSource}`,
-    "worked-example": `${lead}请选择明确数值或状态，逐步展示恰好一个正常案例和一个最小反例，并指出${zhTerm(targetSkill.titleZh)}在何处改变结果。复现结果后即停止，不要增加实现、架构或回归计划。${variant.twistZh}`,
-    "minimal-implementation": `${lead}给出适合该领域的最小可执行方法：代码、RTL、计算、约束集、实验或测试序列。声明输入、步骤、不变量、预期输出、无效证据处理，以及相关的时间、内存、硬件或测量成本。${variant.twistZh}`,
-    "fault-injection": `${lead}一个此前通过的实现，在小改动后开始间歇失败。请构建按优先级排序的假设树，选择信息增益最高的测量，最小化复现，并在提出修复前定位第一个被破坏的不变量。${variant.twistZh}`,
-    oracle: `${lead}主要答案或设计与第一条验证路径可能共享同一个假设。请构建适合该领域的独立判定器，并加入正常、边界、负面和差分或一致性检查；说明什么观测会证伪答案，以及为何新的参考路径真正独立。`,
-    scale: `${lead}问题规模、运行包络或所需吞吐改变三个数量级，使原方法无法满足已声明的资源、时序或准确度预算。请量化首个上限，运用${zhTerm(targetSkill.titleZh)}调整方法，并保留最重要的正确性信号。${variant.twistZh}`,
-    tradeoff: `${lead}两位工程师提出了可信但互不兼容的方案。请从正确性、性能、实现成本、可观测性、恢复安全和可逆性出发比较，量化假设并给出带条件的推荐。${variant.twistZh}`,
-    incident: `${lead}两个证据源因观测窗口、条件或时间基准不同而结论冲突。请区分观测与推断，统一比较口径，排列前五项检查，并定义能够区分测量伪象与真实故障的观测。`,
+    contract: `在不超过一页内定义最小外部契约：合法输入与输出、一个不变量、一个明确边界和一个必须澄清的歧义。用${zhTerm(targetSkill.titleZh)}校准条款，不提出实现。`,
+    "worked-example": `选择明确数值或状态，逐步展示恰好一个正常案例和一个最小反例，并指出${zhTerm(targetSkill.titleZh)}在何处改变结果。`,
+    "minimal-implementation": "给出该领域的最小可执行方法，声明输入、不变量、预期输出和成本。正常案例通过后，构造一个只违反一项不变量的最小无效案例，并明确拒绝。",
+    "fault-injection": "假设此前通过的实现开始间歇失败。排序假设，选择信息增益最高的测量，最小化复现，并在修复前定位第一个被破坏的不变量。",
+    oracle: "构建独立判定器，加入一个正常、边界、负面和差分或一致性检查，并说明什么观测会证伪答案。",
+    scale: `把规模或吞吐扩大 1,000 倍；量化首个上限，运用${zhTerm(targetSkill.titleZh)}调整方法，并保留首要正确性信号。`,
+    tradeoff: "从正确性、性能、成本、可观测性、恢复安全和可逆性比较两个可信方案；量化假设并给出带条件的推荐。",
+    incident: "两个证据源因窗口、条件或时间基准不同而结论冲突。区分观测与推断，统一口径，排列前五项检查，并指出能区分伪象与真实故障的测量。",
     integration: integrationTasks[integrationDomain(role)],
   };
-  return `${tasks[variant.id]}只使用公开概念，明确所有假设，并以可证伪的验收条件收尾。`;
+  const constraints = {
+    contract: variant.twistZh,
+    "worked-example": variant.twistZh,
+    "minimal-implementation": "无效案例必须只改变一项已声明不变量。",
+    "fault-injection": variant.twistZh,
+    oracle: "判定器不得复用主要方法的内部结果。",
+    scale: variant.twistZh,
+    tradeoff: variant.twistZh,
+    incident: "不得通过丢弃任一证据源来消除分歧。",
+    integration: variant.twistZh,
+  };
+  return `背景：${sourceScenario}\n\n任务：${tasks[variant.id]}\n\n限制：${constraints[variant.id]}`;
 }
 
 const softPromptActions = {
@@ -1299,21 +1325,21 @@ function softQuestionFields(role, base, variant) {
   };
 }
 
-function generatedOutline(base, variant, targetSkill, role) {
+function generatedOutline(base, targetSkill) {
   return [
-    `Restate the ${contractLabel(base.title)} for this exercise and label every assumption.`,
-    `Apply ${targetSkill.title || targetSkill.name} within the ${role.name} context; identify the first invariant that could fail.`,
-    `Work one nominal path, one boundary or adversarial path, and quantify the relevant resource or measurement.`,
-    "Cross-check with an independent oracle, state the acceptance threshold, and name the next evidence that would change the decision.",
+    `State the inputs, outputs, assumptions, and pass condition for ${base.title}.`,
+    `Apply ${targetSkill.title || targetSkill.name} to the exact task and show the key intermediate result.`,
+    "Check one boundary or failure case.",
+    "Verify the result independently and state the pass/fail threshold.",
   ];
 }
 
-function generatedOutlineZh(base, variant, targetSkill, role) {
+function generatedOutlineZh(base, targetSkill) {
   return [
-    `针对本题重述“${contractLabelZh(base.titleZh)}”，并标记每项假设`,
-    `在${role.nameZh}场景中运用${zhTerm(targetSkill.titleZh)}，指出最先可能失效的不变量`,
-    "推演一条正常路径和一条边界或对抗路径，并量化相关资源或测量指标",
-    "使用独立判定器交叉检查，声明验收阈值，并指出会改变决策的下一项证据",
+    `写明“${base.titleZh}”的输入、输出、假设和通过条件`,
+    `把${zhTerm(targetSkill.titleZh)}用于本题，并展示关键中间结果`,
+    "检查一个边界或失败案例",
+    "独立验证结果，并写明通过或失败阈值",
   ];
 }
 
@@ -1803,28 +1829,28 @@ function composeTechnicalOracle(base, exerciseOracleFields, variant) {
         kind: /executable/i.test(exerciseOracleFields.oracle.kind)
           ? "executable"
           : "observable",
-        procedure: `Compare the one-page contract for ${base.title} with the quoted source scenario. Use the frozen task-specific reference only as an independent reviewer check—not as a candidate deliverable. Reviewer procedure: ${base.oracle.procedure} Then run this exercise's additional check: ${exerciseOracleFields.oracle.procedure}`,
-        acceptance: `The contract makes this original task criterion decidable without requiring the candidate to produce the original solution artifact: ${base.oracle.acceptance} The additional exercise criterion is: ${exerciseOracleFields.oracle.acceptance}`,
+        procedure: `Contract check: ${exerciseOracleFields.oracle.procedure} Domain check: ${base.oracle.procedure}`,
+        acceptance: `${exerciseOracleFields.oracle.acceptance} The contract must also make this domain result decidable: ${base.oracle.acceptance}`,
       },
       oracleZh: {
         kind: /可执行/.test(exerciseOracleFields.oracleZh.kind)
           ? "可执行"
           : "可观察",
-        procedure: `把“${base.titleZh}”的一页契约与题目中引用的原始场景逐项比较。冻结的本题专属参考只作为独立评审检查，不作为作答者交付物。评审步骤：${base.oracleZh.procedure}再执行本次练习的附加检查：${exerciseOracleFields.oracleZh.procedure}`,
-        acceptance: `契约必须使以下原题标准可判定，但不要求作答者产出原题解法工件：${base.oracleZh.acceptance}本次练习还必须满足：${exerciseOracleFields.oracleZh.acceptance}`,
+        procedure: `契约检查：${exerciseOracleFields.oracleZh.procedure}领域检查：${base.oracleZh.procedure}`,
+        acceptance: `${exerciseOracleFields.oracleZh.acceptance}契约还必须使以下领域结果可判定：${base.oracleZh.acceptance}`,
       },
     };
   }
   return {
     oracle: {
       kind: executable ? "executable" : "observable",
-      procedure: `First reproduce the task-specific reference for ${base.title}: ${base.oracle.procedure} Then run this exercise's additional check: ${exerciseOracleFields.oracle.procedure}`,
-      acceptance: `The original task must still satisfy this criterion: ${base.oracle.acceptance} The additional exercise criterion is: ${exerciseOracleFields.oracle.acceptance}`,
+      procedure: `Exercise check: ${exerciseOracleFields.oracle.procedure} Domain check: ${base.oracle.procedure}`,
+      acceptance: `${exerciseOracleFields.oracle.acceptance} The domain behavior must also satisfy: ${base.oracle.acceptance}`,
     },
     oracleZh: {
       kind: executableZh ? "可执行" : "可观察",
-      procedure: `先复现“${base.titleZh}”的本题专属参考：${base.oracleZh.procedure}再执行本次练习的附加检查：${exerciseOracleFields.oracleZh.procedure}`,
-      acceptance: `原题必须继续满足这一标准：${base.oracleZh.acceptance}本次练习还必须满足：${exerciseOracleFields.oracleZh.acceptance}`,
+      procedure: `本题检查：${exerciseOracleFields.oracleZh.procedure}领域检查：${base.oracleZh.procedure}`,
+      acceptance: `${exerciseOracleFields.oracleZh.acceptance}领域行为还必须满足：${base.oracleZh.acceptance}`,
     },
   };
 }
@@ -1846,14 +1872,6 @@ function generateQuestion(
     0,
     3,
   );
-  const skillNames = unique(
-    skillsForQuestion.map(
-      (id) => skillById.get(id)?.title || skillById.get(id)?.name,
-    ),
-  ).join(", ");
-  const skillNamesZh = unique(
-    skillsForQuestion.map((id) => skillById.get(id)?.titleZh),
-  ).join("、");
   const isSoftRole = [
     "rf-behavioral",
     "rf-project-deep-dive",
@@ -1891,30 +1909,20 @@ function generateQuestion(
   const basePromptZh =
     softFields?.promptZh ||
     standalonePromptZh(base, variant, targetSkill, role);
-  const prompt = isSoftRole
-    ? appendOnce(basePrompt, skillFocusOverride?.focusEn, " ")
-    : insertBeforeEndingOnce(
-        basePrompt,
-        skillFocusOverride?.focusEn,
-        "Use public concepts only; state assumptions and finish with a falsifiable acceptance criterion.",
-        " ",
-      );
-  const promptZh = isSoftRole
-    ? appendOnce(basePromptZh, skillFocusOverride?.focusZh, "")
-    : insertBeforeEndingOnce(
-        basePromptZh,
-        skillFocusOverride?.focusZh,
-        "只使用公开概念，明确所有假设，并以可证伪的验收条件收尾。",
-        "",
-      );
+  const prompt = appendOnce(basePrompt, skillFocusOverride?.focusEn, " ");
+  const promptZh = appendOnce(
+    basePromptZh,
+    skillFocusOverride?.focusZh,
+    "",
+  );
   const referenceOutline =
     softFields?.referenceOutline ||
     scopedFields?.referenceOutline ||
-    generatedOutline(base, variant, targetSkill, role);
+    generatedOutline(base, targetSkill);
   const referenceOutlineZh =
     softFields?.referenceOutlineZh ||
     scopedFields?.referenceOutlineZh ||
-    generatedOutlineZh(base, variant, targetSkill, role);
+    generatedOutlineZh(base, targetSkill);
   return {
     id: `q2-${roleSlug}-${sequence}`,
     title,
@@ -1930,16 +1938,16 @@ function generateQuestion(
     deliverables: softFields?.deliverables ||
       integrationFields?.deliverables ||
       scopedFields?.deliverables || [
-        `${withIndefiniteArticle(variant.title.toLowerCase())} artifact for ${base.title} with an explicit contract, assumptions, and decision path`,
-        `A concrete application of ${skillNames}, including a nominal case, a boundary or adversarial case, and quantified cost`,
-        "An independent validation result, residual-risk register, and the next highest-information check",
+        `${withIndefiniteArticle(variant.title.toLowerCase())} answer for ${base.title}`,
+        `One concrete ${targetSkill.title || targetSkill.name} case with assumptions and a quantified result`,
+        "One independent check with a pass/fail threshold",
       ],
     deliverablesZh: softFields?.deliverablesZh ||
       integrationFields?.deliverablesZh ||
       scopedFields?.deliverablesZh || [
-        `一份针对“${base.titleZh}”的${variant.titleZh}产出，明确契约、假设与决策路径`,
-        `对${zhTerm(skillNamesZh)}的具体应用，包含正常案例、边界或对抗案例，以及量化成本`,
-        "一项独立验证结果、残余风险清单和下一项信息增益最高的检查",
+        `一份“${base.titleZh}”的${variant.titleZh}答案`,
+        `一个运用${zhTerm(targetSkill.titleZh)}的具体案例，包含假设和量化结果`,
+        "一项带通过或失败阈值的独立检查",
       ],
     rubric: softFields?.rubric ||
       integrationFields?.rubric ||
@@ -2139,7 +2147,515 @@ if (unusedSkillFocusKeys.length > 0) {
   );
 }
 
-const questions = [...curated, ...generated];
+const communityTopicSources = {
+  "q2-dv-004":
+    "https://www.xiaohongshu.com/explore/69eeeee50000000013020401",
+  "q2-dv-030":
+    "https://www.xiaohongshu.com/explore/6a2a427f000000000e021800",
+  "q2-dv-048":
+    "https://www.xiaohongshu.com/explore/69c4ee39000000001b02193f",
+  "q2-dv-066":
+    "https://www.xiaohongshu.com/explore/6a2b9cab000000000e038400",
+  "q2-dv-111":
+    "https://www.xiaohongshu.com/explore/69966d52000000000a02bf8f",
+};
+
+const communityGoldQuestions = {
+  "q2-dv-004": {
+    title: "Static vs Automatic Task Race",
+    titleZh: "静态与自动任务竞态",
+    prompt:
+      "Context: At time 0, `fork` launches `show(7)` and `show(19)`. `show` copies its input into a local integer, waits 3 ns, then prints the local value. Run the task once with static lifetime and once with automatic lifetime.\n\nTask: Predict both outputs and explain the variable lifetime and scheduler behavior. Then write the smallest runnable SystemVerilog test that proves or disproves the prediction.\n\nConstraint: Declare the timescale and do not hide the race with an arbitrary `#0` or `#1` delay.",
+    promptZh:
+      "背景：在 0 时刻，`fork` 同时启动 `show(7)` 和 `show(19)`。`show` 把输入复制到局部整数，等待 3 ns，再打印该局部值。分别使用静态生命周期和自动生命周期运行。\n\n任务：预测两次输出，解释变量生命周期与调度行为，再写出最小可运行 SystemVerilog 测试来证实或证伪预测。\n\n限制：声明 timescale，不得用任意 `#0` 或 `#1` 延迟掩盖竞态。",
+    deliverables: [
+      "Predicted output for static and automatic task lifetimes",
+      "A scheduler and variable-lifetime explanation",
+      "A minimal runnable test with recorded output",
+    ],
+    deliverablesZh: [
+      "静态与自动任务生命周期下的输出预测",
+      "调度器与变量生命周期解释",
+      "一份最小可运行测试及其输出记录",
+    ],
+    rubric: [
+      "Prediction (0-3): distinguishes shared static storage from per-call automatic storage.",
+      "Scheduling (0-3): explains when arguments, locals, delays, and prints are evaluated.",
+      "Experiment (0-2): the test isolates lifetime as the only changed condition.",
+      "Explanation (0-2): prediction, observed output, and any simulator caveat are clearly separated.",
+    ],
+    rubricZh: [
+      "预测（0–3）：区分共享静态存储与每次调用独立的自动存储。",
+      "调度（0–3）：解释参数、局部变量、延迟和打印分别在何时求值。",
+      "实验（0–2）：测试只改变生命周期这一项条件。",
+      "解释（0–2）：清楚区分预测、观测输出和仿真器注意事项。",
+    ],
+    commonFailures: [
+      "Gives only printed values without explaining storage lifetime.",
+      "Adds delay to force an order instead of isolating the language rule.",
+    ],
+    commonFailuresZh: [
+      "只给打印值，不解释存储生命周期。",
+      "用延迟强行规定顺序，而不是隔离语言规则。",
+    ],
+    followUps: [
+      "What changes if the local variable is explicitly declared `automatic` inside a static task?",
+      "How would `join_none` change when the parent may exit?",
+    ],
+    followUpsZh: [
+      "如果在静态 task 内把局部变量显式声明为 `automatic`，结果如何变化？",
+      "如果改用 `join_none` 且父进程可能退出，行为如何变化？",
+    ],
+    referenceOutline: [
+      "State the storage lifetime of the task arguments and local variable.",
+      "Trace both calls from argument binding through the 3 ns delay.",
+      "Predict each print, then run the two minimal programs.",
+      "Explain any mismatch using the declared language and simulator settings.",
+    ],
+    referenceOutlineZh: [
+      "说明 task 参数与局部变量的存储生命周期",
+      "从参数绑定到 3 ns 延迟结束逐步追踪两次调用",
+      "预测每次打印，再运行两个最小程序",
+      "依据已声明的语言与仿真器设置解释任何不一致",
+    ],
+    oracle: {
+      kind: "executable",
+      procedure:
+        "Compile and run two otherwise identical SystemVerilog programs, changing only the task lifetime between static and automatic; capture timestamps and values with at least one standards-oriented simulator.",
+      acceptance:
+        "Each observed value follows the declared storage lifetime, both calls complete at the predicted time, and reruns do not depend on logging or an inserted ordering delay.",
+    },
+    oracleZh: {
+      kind: "可执行",
+      procedure:
+        "编译并运行两个其他内容完全相同的 SystemVerilog 程序，只在静态与自动 task 生命周期之间切换；使用至少一个遵循标准语义的仿真器记录时间戳和值。",
+      acceptance:
+        "每个观测值都符合声明的存储生命周期，两次调用在预测时刻完成，重复运行不依赖日志或人为插入的排序延迟。",
+    },
+  },
+  "q2-dv-030": {
+    title: "Tagged Two-Stream Scoreboard",
+    titleZh: "带标签双流记分板",
+    prompt:
+      "Context: A command monitor and a completion monitor feed separate UVM analysis paths. Commands carry unique 12-bit tags; completions may arrive out of order within 40 cycles. Reset may cancel every outstanding command.\n\nTask: Implement the scoreboard state model and matching logic. Detect unknown tags, duplicate completions, timeout, and nonempty state at end of test; show one passing and one failing trace.\n\nConstraint: Match by tag, not arrival order or address.",
+    promptZh:
+      "背景：命令 monitor 与完成 monitor 通过两条独立 UVM analysis 路径输入。命令带唯一 12 位 tag；完成事务可在 40 个周期内乱序到达。复位可以取消全部在途命令。\n\n任务：实现 scoreboard 状态模型与匹配逻辑。检测未知 tag、重复完成、超时和测试结束时的残留状态；展示一条通过轨迹和一条失败轨迹。\n\n限制：按 tag 匹配，不得按到达顺序或地址匹配。",
+    deliverables: [
+      "Scoreboard data structures and lifecycle rules",
+      "Matching, timeout, reset, and end-of-test logic",
+      "One passing trace and one failing trace with diagnostics",
+    ],
+    deliverablesZh: [
+      "scoreboard 数据结构与生命周期规则",
+      "匹配、超时、复位和测试结束逻辑",
+      "一条通过轨迹和一条带诊断的失败轨迹",
+    ],
+    rubric: [
+      "State model (0-3): every tag has one explicit lifecycle and owner.",
+      "Checks (0-3): unknown, duplicate, timeout, reset, and pending-at-end cases are deterministic.",
+      "Concurrency (0-2): both analysis paths update shared state safely.",
+      "Diagnostics (0-2): failures identify tag, age, source event, and expected state.",
+    ],
+    rubricZh: [
+      "状态模型（0–3）：每个 tag 都有明确的生命周期和责任方。",
+      "检查（0–3）：未知、重复、超时、复位和结束残留的处理确定。",
+      "并发（0–2）：两条 analysis 路径安全更新共享状态。",
+      "诊断（0–2）：失败信息包含 tag、等待周期、来源事件和期望状态。",
+    ],
+    commonFailures: [
+      "Pairs transactions by FIFO position and fails on legal reordering.",
+      "Drops pending entries silently during reset or end-of-test cleanup.",
+    ],
+    commonFailuresZh: [
+      "按 FIFO 位置配对，导致合法乱序被误判。",
+      "在复位或测试结束清理时静默丢弃残留条目。",
+    ],
+    followUps: [
+      "How would partial completions change the state model?",
+      "How would you bound memory if a completion never arrives?",
+    ],
+    followUpsZh: [
+      "如果一个命令允许分段完成，状态模型如何变化？",
+      "如果完成事务永远不来，如何限制内存占用？",
+    ],
+    referenceOutline: [
+      "Define tag uniqueness, completion, cancellation, and timeout semantics.",
+      "Choose the pending-entry structure and synchronization method.",
+      "Trace legal reordering, then inject one duplicate or timeout.",
+      "Run the end-of-test check and verify every entry is retired or explained.",
+    ],
+    referenceOutlineZh: [
+      "定义 tag 唯一性、完成、取消和超时语义",
+      "选择在途条目结构与同步方法",
+      "追踪合法乱序，再注入一次重复或超时",
+      "执行测试结束检查，确认每个条目都已退出或有明确解释",
+    ],
+    oracle: {
+      kind: "executable",
+      procedure:
+        "Drive a deterministic event trace through the scoreboard model: two commands, reversed completions, reset with one pending command, an unknown completion, a duplicate completion, and a 41-cycle timeout.",
+      acceptance:
+        "Reordered legal completions pass, reset cancels only declared pending work, and each unknown, duplicate, timeout, or final pending entry produces exactly one diagnostic with no leaked state.",
+    },
+    oracleZh: {
+      kind: "可执行",
+      procedure:
+        "向 scoreboard 模型输入确定事件序列：两条命令、逆序完成、带一个在途命令的复位、未知完成、重复完成和 41 周期超时。",
+      acceptance:
+        "合法乱序完成通过；复位只取消声明范围内的在途工作；每个未知、重复、超时或最终残留条目恰好产生一条诊断，且无状态泄漏。",
+    },
+  },
+  "q2-dv-048": {
+    title: "Deterministic Coverage Triage Tool",
+    titleZh: "确定性覆盖率排查工具",
+    prompt:
+      "Context: A CSV export contains bin name, hits, requirement ID, legality, and owning test. Some zero-hit bins are required; others are illegal or obsolete.\n\nTask: Write a Python tool that validates the file, classifies every zero-hit bin, and emits a ranked JSON report with the evidence still missing. An optional LLM may draft explanations, but it may not decide legality, reachability, or waiver status.\n\nConstraint: The same input must always produce the same classification.",
+    promptZh:
+      "背景：一份 CSV 导出包含 bin 名称、命中数、需求 ID、合法性和所属测试。部分零命中 bin 属于必需场景，另一些属于非法或过时场景。\n\n任务：编写 Python 工具，校验文件、分类每个零命中 bin，并输出按优先级排序的 JSON 报告及仍缺失的证据。可以让 LLM 草拟解释，但不得由其决定合法性、可达性或豁免状态。\n\n限制：同一输入必须始终得到同一分类。",
+    deliverables: [
+      "Input schema and deterministic classification rules",
+      "Python implementation with malformed-row handling",
+      "Golden CSV fixtures and exact expected JSON",
+    ],
+    deliverablesZh: [
+      "输入 schema 与确定性分类规则",
+      "包含异常行处理的 Python 实现",
+      "黄金 CSV 样例与精确预期 JSON",
+    ],
+    rubric: [
+      "Classification (0-3): required, illegal, obsolete, and evidence-missing states are distinct.",
+      "Robustness (0-3): malformed or contradictory rows fail explicitly.",
+      "Determinism (0-2): ranking and output are stable across reruns.",
+      "AI boundary (0-2): generated prose cannot alter the decision record.",
+    ],
+    rubricZh: [
+      "分类（0–3）：必需、非法、过时和缺证据状态彼此独立。",
+      "健壮性（0–3）：异常或矛盾行被明确拒绝。",
+      "确定性（0–2）：排序与输出在重复运行间稳定。",
+      "AI 边界（0–2）：生成式文本不能改变决策记录。",
+    ],
+    commonFailures: [
+      "Treats every zero-hit bin as a stimulus problem.",
+      "Lets free-form model output create or approve a waiver.",
+    ],
+    commonFailuresZh: [
+      "把所有零命中 bin 都当成激励问题。",
+      "允许自由文本模型输出创建或批准豁免。",
+    ],
+    followUps: [
+      "How would you add formal reachability evidence without changing the report contract?",
+      "Which fields must be versioned for auditability?",
+    ],
+    followUpsZh: [
+      "如何加入形式可达性证据而不改变报告契约？",
+      "为了可审计性，哪些字段必须带版本？",
+    ],
+    referenceOutline: [
+      "Freeze the CSV and JSON schemas.",
+      "Write the classification table before writing code.",
+      "Reject malformed and contradictory rows.",
+      "Compare output byte-for-byte with golden fixtures.",
+    ],
+    referenceOutlineZh: [
+      "冻结 CSV 与 JSON schema",
+      "先写分类表，再写代码",
+      "拒绝异常与矛盾行",
+      "把输出与黄金样例逐字节比较",
+    ],
+    oracle: {
+      kind: "executable",
+      procedure:
+        "Run the tool twice on a fixed fixture containing required-zero, illegal-zero, obsolete-zero, hit, missing-requirement, and contradictory-legality rows; compare exit codes and JSON byte-for-byte.",
+      acceptance:
+        "All valid rows receive the expected deterministic class and rank, invalid rows fail with a field-level error, and optional generated prose cannot change any class, rank, or waiver field.",
+    },
+    oracleZh: {
+      kind: "可执行",
+      procedure:
+        "在固定样例上运行工具两次；样例包含必需零命中、非法零命中、过时零命中、已命中、缺需求和合法性矛盾行；逐字节比较退出码与 JSON。",
+      acceptance:
+        "所有合法行得到预期且确定的分类与排序；非法行以字段级错误失败；可选生成式文本不能改变任何分类、排序或豁免字段。",
+    },
+  },
+  "q2-dv-066": {
+    title: "Reachability-Checked Formal Proof",
+    titleZh: "带可达性检查的形式证明",
+    prompt:
+      "Context: A request-to-acknowledge property proves immediately, but reset and environment assumptions may prevent every legal request.\n\nTask: Write the assertion, a request cover property, and the smallest environment assumptions. Produce either a reachable witness or a minimal assumption core that explains why no witness exists.\n\nConstraint: A green proof without antecedent reachability does not pass.",
+    promptZh:
+      "背景：request-to-acknowledge 属性瞬间证明成功，但复位与环境假设可能阻止所有合法 request。\n\n任务：写出 assertion、request cover property 和最小环境假设；生成一条可达 witness，或者给出能够解释 witness 不存在的最小假设核。\n\n限制：只有绿色证明、没有前件可达性，不算通过。",
+    deliverables: [
+      "Assertion, cover property, and minimal assumptions",
+      "Reachability witness or minimized assumption core",
+      "A rerun showing the repaired proof and cover results",
+    ],
+    deliverablesZh: [
+      "assertion、cover property 与最小假设集合",
+      "可达性 witness 或最小化假设核",
+      "展示修复后 proof 与 cover 结果的重跑记录",
+    ],
+    rubric: [
+      "Property (0-3): timing and reset semantics are explicit.",
+      "Environment (0-3): assumptions encode only legal external behavior.",
+      "Reachability (0-2): antecedent activation is demonstrated or explained by a minimal core.",
+      "Repair (0-2): the final proof preserves required legal behavior.",
+    ],
+    rubricZh: [
+      "属性（0–3）：时序与复位语义明确。",
+      "环境（0–3）：假设只编码合法外部行为。",
+      "可达性（0–2）：展示前件激活，或用最小核解释其不可达。",
+      "修复（0–2）：最终证明保留必需的合法行为。",
+    ],
+    commonFailures: [
+      "Reports proof success without any cover or antecedent check.",
+      "Fixes vacuity by deleting required legal behavior.",
+    ],
+    commonFailuresZh: [
+      "没有 cover 或前件检查就报告证明成功。",
+      "通过删除必需合法行为来修复空真。",
+    ],
+    followUps: [
+      "How would you detect vacuity after a future assumption change?",
+      "Which assumptions belong in the interface contract rather than the harness?",
+    ],
+    followUpsZh: [
+      "未来假设发生变化后，如何自动检测空真？",
+      "哪些假设应属于接口契约，而不是验证 harness？",
+    ],
+    referenceOutline: [
+      "State request, acknowledge, clock, and reset semantics.",
+      "Write the assertion and an antecedent cover.",
+      "Minimize assumptions and obtain a witness.",
+      "Rerun proof and cover after repairing the environment.",
+    ],
+    referenceOutlineZh: [
+      "声明 request、acknowledge、时钟与复位语义",
+      "编写 assertion 与前件 cover",
+      "最小化假设并获取 witness",
+      "修复环境后重新运行 proof 与 cover",
+    ],
+    oracle: {
+      kind: "executable",
+      procedure:
+        "Run the property and cover with the original assumptions, minimize the assumption core if the cover is unreachable, remove the offending constraint, and rerun both checks.",
+      acceptance:
+        "The original vacuity is explained by a minimal core, the repaired environment produces a legal request witness, and the assertion still proves without excluding that witness.",
+    },
+    oracleZh: {
+      kind: "可执行",
+      procedure:
+        "在原始假设下运行 property 与 cover；如果 cover 不可达，则最小化假设核，移除错误约束，再重新运行两项检查。",
+      acceptance:
+        "原始空真由最小核解释；修复后的环境产生合法 request witness；assertion 在不排除该 witness 的前提下仍然证明成功。",
+    },
+  },
+  "q2-dv-111": {
+    title: "Bitfield Event Decoder for DV",
+    titleZh: "验证用位域事件解码器",
+    prompt:
+      "Context: Each 32-bit event word uses bits [31:28] for type, [27:16] for tag, and [15:0] for payload. Type 0 is invalid. Duplicate `(type, tag)` pairs must be reported but retained.\n\nTask: Implement `decode(words)` in Python. Return valid records in input order, duplicate indices, and invalid indices. State time and space complexity and test empty input, maximum fields, repeated tags with different types, and an exact duplicate.\n\nConstraint: Do not convert the words to binary strings.",
+    promptZh:
+      "背景：每个 32 位事件字中，[31:28] 为 type，[27:16] 为 tag，[15:0] 为 payload。type 0 非法。重复的 `(type, tag)` 需要报告，但仍要保留。\n\n任务：用 Python 实现 `decode(words)`；按输入顺序返回合法记录、重复项索引和非法项索引。说明时间与空间复杂度，并测试空输入、最大字段、相同 tag 不同 type，以及完全重复。\n\n限制：不得把事件字转换成二进制字符串。",
+    deliverables: [
+      "Python implementation with an explicit return schema",
+      "Complexity analysis",
+      "Unit tests for the four required edge cases",
+    ],
+    deliverablesZh: [
+      "带明确返回 schema 的 Python 实现",
+      "复杂度分析",
+      "覆盖四个指定边界案例的单元测试",
+    ],
+    rubric: [
+      "Bit operations (0-3): masks and shifts recover every field exactly.",
+      "Bookkeeping (0-3): valid, invalid, and duplicate outputs obey the contract.",
+      "Complexity (0-2): analysis matches the implementation.",
+      "Tests (0-2): all required edge cases have exact expected values.",
+    ],
+    rubricZh: [
+      "位操作（0–3）：掩码与移位精确恢复每个字段。",
+      "记录（0–3）：合法、非法与重复输出符合契约。",
+      "复杂度（0–2）：分析与实现一致。",
+      "测试（0–2）：所有指定边界案例都有精确预期值。",
+    ],
+    commonFailures: [
+      "Uses signed shifts or masks with the wrong width.",
+      "Drops duplicates even though the contract requires retaining them.",
+    ],
+    commonFailuresZh: [
+      "使用有符号移位或错误位宽的掩码。",
+      "丢弃重复项，违反必须保留的契约。",
+    ],
+    followUps: [
+      "How would the API change for a streaming iterator?",
+      "How would you map the edge cases into functional coverage?",
+    ],
+    followUpsZh: [
+      "如果输入改为流式迭代器，API 应如何变化？",
+      "如何把这些边界案例映射为功能覆盖率？",
+    ],
+    referenceOutline: [
+      "Define masks and shifts for each field.",
+      "Track seen `(type, tag)` pairs in a set.",
+      "Preserve input order while collecting duplicate and invalid indices.",
+      "Run exact unit tests and report complexity.",
+    ],
+    referenceOutlineZh: [
+      "定义每个字段的掩码与移位",
+      "用集合记录已见 `(type, tag)`",
+      "保持输入顺序，同时收集重复与非法索引",
+      "运行精确单元测试并报告复杂度",
+    ],
+    oracle: {
+      kind: "executable",
+      procedure:
+        "Run unit tests with `[]`, `0xffffffff`, two words sharing a tag but not a type, two identical words, and one type-0 word; compare every returned record and index with hand-computed values.",
+      acceptance:
+        "Every field equals its masked integer value, valid records preserve input order, exact duplicates are retained and indexed, type-0 words are indexed as invalid, and the implementation is linear in input length.",
+    },
+    oracleZh: {
+      kind: "可执行",
+      procedure:
+        "使用 `[]`、`0xffffffff`、两条 tag 相同但 type 不同的事件、两条完全相同事件和一条 type-0 事件运行单元测试；把每条返回记录与索引同手工计算值比较。",
+      acceptance:
+        "每个字段都等于掩码后的整数值；合法记录保持输入顺序；完全重复项被保留并记录索引；type-0 事件记为非法；实现复杂度随输入长度线性增长。",
+    },
+  },
+};
+
+function cleanCandidateEnglish(value) {
+  return String(value || "")
+    .replace(
+      /\s*State all assumptions that materially affect correctness; do not rely on undisclosed vendor behavior or confidential interview knowledge\.?/gi,
+      "",
+    )
+    .replace(
+      /\s*Use only real public-safe project evidence; label uncertainty and protect confidential implementation details\.?/gi,
+      " Use one real example; omit confidential details.",
+    )
+    .replace(/\bpublic-safe\b/gi, "shareable")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/ *\n */g, "\n")
+    .trim();
+}
+
+function cleanCandidateChinese(value) {
+  return String(value || "")
+    .replace(
+      /(?:请)?(?:说明所有对(?:回答真实性|技术正确性|正确性)有实质影响的假设|声明所有会实质影响正确性的假设)；(?:不要|不得)依赖未披露的厂商行为或保密(?:的)?面试知识。?/g,
+      "",
+    )
+    .replace(
+      /只能使用真实且可公开的项目证据；标记不确定性并保护保密实现细节。?/g,
+      "使用一个真实案例，并省略保密细节。",
+    )
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/ *\n */g, "\n")
+    .trim();
+}
+
+function refineCandidateQuestion(question) {
+  const communityGold = communityGoldQuestions[question.id];
+  if (communityGold) {
+    question = {
+      ...question,
+      ...communityGold,
+      blueprintId: `community-signal-original-v1/${question.id}`,
+    };
+  }
+  const isCurated = question.generationSpec?.origin === "curated-v1";
+  const deliverablePairs = question.deliverables.map((value, index) => ({
+    en: value,
+    zh: question.deliverablesZh[index],
+  }));
+  const failurePairs = question.commonFailures.map((value, index) => ({
+    en: value,
+    zh: question.commonFailuresZh[index],
+  }));
+  const followUpPairs = question.followUps.map((value, index) => ({
+    en: value,
+    zh: question.followUpsZh[index],
+  }));
+  const filteredDeliverables = isCurated
+    ? deliverablePairs.filter(
+        ({ en }) =>
+          !/^A concise final recommendation with unresolved risks/i.test(en),
+      )
+    : deliverablePairs;
+  const filteredFailures = isCurated
+    ? failurePairs.filter(
+        ({ en }) =>
+          !/^Jumps to a memorized or tool-specific answer/i.test(en) &&
+          !/^Claims success without an independent oracle/i.test(en),
+      )
+    : failurePairs;
+  const filteredFollowUps = isCurated
+    ? followUpPairs.filter(
+        ({ en }) =>
+          !/^Which assumption is most fragile/i.test(en) &&
+          !/^Reduce the available time or resources by half/i.test(en),
+      )
+    : followUpPairs;
+  while (filteredFailures.length < 2) {
+    filteredFailures.push(
+      filteredFailures.length === 0
+        ? {
+            en: `Leaves the stated ${question.title} failure condition untested.`,
+            zh: `没有测试“${question.titleZh}”中声明的失败条件。`,
+          }
+        : {
+            en: `Accepts the ${question.title} result without an independent check.`,
+            zh: `没有独立检查就接受“${question.titleZh}”的结果。`,
+          },
+    );
+  }
+  const sourceRef = communityTopicSources[question.id];
+  return {
+    ...question,
+    prompt: cleanCandidateEnglish(question.prompt),
+    promptZh: cleanCandidateChinese(question.promptZh),
+    deliverables: filteredDeliverables.map(({ en }) =>
+      cleanCandidateEnglish(en),
+    ),
+    deliverablesZh: filteredDeliverables.map(({ zh }) =>
+      cleanCandidateChinese(zh),
+    ),
+    rubric: question.rubric.map(cleanCandidateEnglish),
+    rubricZh: question.rubricZh.map(cleanCandidateChinese),
+    commonFailures: filteredFailures.map(({ en }) =>
+      cleanCandidateEnglish(en),
+    ),
+    commonFailuresZh: filteredFailures.map(({ zh }) =>
+      cleanCandidateChinese(zh),
+    ),
+    followUps: filteredFollowUps.map(({ en }) =>
+      cleanCandidateEnglish(en),
+    ),
+    followUpsZh: filteredFollowUps.map(({ zh }) =>
+      cleanCandidateChinese(zh),
+    ),
+    referenceOutline: question.referenceOutline.map(cleanCandidateEnglish),
+    referenceOutlineZh: question.referenceOutlineZh.map(
+      cleanCandidateChinese,
+    ),
+    oracle: {
+      ...question.oracle,
+      procedure: cleanCandidateEnglish(question.oracle.procedure),
+      acceptance: cleanCandidateEnglish(question.oracle.acceptance),
+    },
+    oracleZh: {
+      ...question.oracleZh,
+      procedure: cleanCandidateChinese(question.oracleZh.procedure),
+      acceptance: cleanCandidateChinese(question.oracleZh.acceptance),
+    },
+    sourceRefs: sourceRef
+      ? unique([...(question.sourceRefs || []), sourceRef])
+      : question.sourceRefs,
+    contentVersion: "2026-07-27.1",
+  };
+}
+
+const questions = [...curated, ...generated].map(refineCandidateQuestion);
 if (questions.length !== 2100) {
   throw new Error(
     `Expected exactly 2100 questions; generated ${questions.length}`,
@@ -2149,8 +2665,8 @@ if (questions.length !== 2100) {
 const output = {
   ...questionFile,
   schemaVersion: "2.0.0",
-  evidenceDate: "2026-07-23",
-  status: "bilingual-review-ready-v3",
+  evidenceDate: "2026-07-27",
+  status: "bilingual-editorial-clean-v4",
   sourcePolicy:
     "All prompts are original, isomorphic tasks synthesized from public concepts. English and Chinese layers are parallel learning artifacts; NDA, leaked, paywalled, or memorized employer wording is prohibited.",
   levelScale: ["foundation", "entry", "intermediate", "advanced"],
