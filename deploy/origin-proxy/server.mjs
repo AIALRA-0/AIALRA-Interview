@@ -231,8 +231,8 @@ function proxyRequest(request, response) {
   }
 
   const outgoingHeaders = {
-    authorization: `Bearer ${sitesBypassBearer}`,
     host: sitesOrigin.host,
+    "oai-sites-authorization": `Bearer ${sitesBypassBearer}`,
     origin: publicOrigin.origin,
     referer: `${publicOrigin.origin}/`,
     "x-aialra-authenticated": "1",

@@ -16,7 +16,11 @@ test("origin proxy keeps Sites and Authentik credentials server-side", async () 
   assert.match(proxy, /HOST = "127\.0\.0\.1"/);
   assert.match(proxy, /AIALRA_PROXY_SHARED_SECRET/);
   assert.match(proxy, /x-aialra-proxy-secret/);
-  assert.match(proxy, /authorization: `Bearer \$\{sitesBypassBearer\}`/);
+  assert.match(
+    proxy,
+    /"oai-sites-authorization": `Bearer \$\{sitesBypassBearer\}`/,
+  );
+  assert.doesNotMatch(proxy, /\bauthorization: `Bearer \$\{sitesBypassBearer\}`/);
   assert.match(proxy, /same_origin_required/);
   assert.match(proxy, /origin === publicOrigin\.origin/);
   assert.match(proxy, /"set-cookie"/);

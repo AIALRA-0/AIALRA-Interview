@@ -20,7 +20,8 @@ Nginx replaces all browser-supplied `X-Aialra-*` headers, consumes the
 Authentik Cookie for `auth_request`, and sends no browser Cookie or
 Authorization header to the origin proxy. The proxy builds a new allowlisted
 request, forwards the trusted identity, adds `X-Aialra-Proxy-Secret`, and uses
-the private Sites bypass bearer as its upstream Authorization value.
+the private Sites bypass bearer only in the dispatch-owned
+`OAI-Sites-Authorization` header.
 
 The application must compare `X-Aialra-Proxy-Secret` with the secret Sites
 environment variable using a timing-safe comparison before trusting any
