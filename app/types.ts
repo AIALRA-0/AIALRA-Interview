@@ -146,6 +146,143 @@ export type RoleFamily = {
   adjacentRoleFamilies: string[];
 };
 
+export type CompensationStatus = "disclosed" | "estimated" | "not-disclosed";
+
+export type CompensationPeriod =
+  "hour" | "day" | "week" | "month" | "year" | "one-time" | "project";
+
+export type CompensationBasis =
+  | "employer-posting"
+  | "government-statistic"
+  | "government-disclosure"
+  | "third-party-estimate";
+
+export type CompensationRange = {
+  status: CompensationStatus;
+  minimum: string | null;
+  maximum: string | null;
+  currency: string | null;
+  period: CompensationPeriod | null;
+  location: string;
+  sourceUrl: string;
+  sourceTitle: string;
+  basis: CompensationBasis | null;
+  observedAt: string;
+  notesZh: string;
+  notesEn: string;
+};
+
+export type RoleCompensationBenchmark = {
+  roleFamilyId: string;
+  roleNameZh: string;
+  roleNameEn: string;
+  compensationScope: "technical-role" | "cross-cutting-skill";
+  benchmarkStatus: "available-with-proxies" | "not-applicable";
+  us: MarketCompensationBenchmark | null;
+  china: MarketCompensationBenchmark[];
+  notesZh: string;
+  notesEn: string;
+};
+
+export type CompensationBenchmarkValues = {
+  p25?: number;
+  median?: number;
+  p75?: number;
+  mean?: number;
+  low?: number;
+  high?: number;
+  points?: Array<{
+    geographyZh: string;
+    geographyEn: string;
+    mean: number;
+  }>;
+};
+
+export type MarketCompensationBenchmark = {
+  id?: string;
+  occupationCode?: string | null;
+  occupationZh: string;
+  occupationEn: string;
+  matchQuality: "direct" | "adjacent" | "broad-context";
+  matchNoteZh?: string;
+  matchNoteEn?: string;
+  employmentType: string;
+  employmentLevel: string;
+  geographyZh: string;
+  geographyEn: string;
+  currency: string;
+  period: "month" | "year";
+  statistic: "p25-p50-p75" | "mean" | "regional-mean-envelope";
+  values: CompensationBenchmarkValues;
+  basis: string;
+  includedZh?: string;
+  includedEn?: string;
+  excludedZh?: string;
+  excludedEn?: string;
+  apiSeries?: Record<"p25" | "median" | "p75", string>;
+  sourceId: string;
+};
+
+export type CompensationBenchmarkSource = {
+  id: string;
+  publisherZh: string;
+  publisherEn: string;
+  titleZh: string;
+  titleEn: string;
+  url: string;
+  methodologyUrl: string;
+  referencePeriod: string;
+  publishedAt: string;
+  observedAt: string;
+  sourceKind: string;
+};
+
+export type ChinaContextCompensationBenchmark = MarketCompensationBenchmark & {
+  id: string;
+  occupationCode: string | null;
+  intendedRoleFamilyIds: string[];
+};
+
+export type CompensationBenchmarkAsset = {
+  schemaVersion: string;
+  evidenceDate: string;
+  assetPurposeZh: string;
+  assetPurposeEn: string;
+  sourceCatalog: CompensationBenchmarkSource[];
+  chinaContextBenchmarks: ChinaContextCompensationBenchmark[];
+  benchmarks: RoleCompensationBenchmark[];
+};
+
+export type CurrentJobObservation = {
+  id: string;
+  organizationId: string;
+  titleZh: string;
+  titleEn: string;
+  originalTitle: string;
+  requisitionId: string | null;
+  employmentType: string;
+  location: string;
+  workplaceMode: string;
+  postingStatus: "current-at-observation" | "closed" | "unknown";
+  postedAt: string | null;
+  observedAt: string;
+  roleFamilyIds: string[];
+  responsibilitiesZh: string[];
+  responsibilitiesEn: string[];
+  minimumQualificationsZh: string[];
+  minimumQualificationsEn: string[];
+  eligibilityZh: string[];
+  eligibilityEn: string[];
+  compensation: CompensationRange;
+  sourceUrl: string;
+};
+
+export type CurrentJobObservationAsset = {
+  schemaVersion: string;
+  evidenceDate: string;
+  jobs: CurrentJobObservation[];
+};
+
 export type SkillNode = {
   id: string;
   name?: string;
@@ -279,6 +416,15 @@ export type ApplicationRecord = {
   company_id: string;
   company_name: string;
   role_title: string;
+  requisition_id: string;
+  role_family_id: string;
+  team: string;
+  business_unit: string;
+  level: string;
+  target_location: string;
+  workplace_mode: string;
+  posted_at: string;
+  posting_status: string;
   employment_type: string;
   region: string;
   status: string;
@@ -290,7 +436,22 @@ export type ApplicationRecord = {
   contact: string;
   resume_version: string;
   jd_keywords: string;
+  responsibilities: string;
+  minimum_qualifications: string;
+  preferred_qualifications: string;
+  eligibility_notes: string;
   source_observed_at: string;
+  compensation_status: CompensationStatus;
+  salary_min: string;
+  salary_max: string;
+  salary_currency: string;
+  salary_period: string;
+  salary_location: string;
+  salary_source_url: string;
+  salary_source_title: string;
+  salary_basis: string;
+  salary_observed_at: string;
+  salary_notes: string;
   match_score: number;
   notes: string;
   created_at?: string;

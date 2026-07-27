@@ -14,6 +14,15 @@ export const applications = sqliteTable(
     companyId: text("company_id").notNull(),
     companyName: text("company_name").notNull(),
     roleTitle: text("role_title").notNull(),
+    requisitionId: text("requisition_id").notNull().default(""),
+    roleFamilyId: text("role_family_id").notNull().default(""),
+    team: text("team").notNull().default(""),
+    businessUnit: text("business_unit").notNull().default(""),
+    level: text("level").notNull().default(""),
+    targetLocation: text("target_location").notNull().default(""),
+    workplaceMode: text("workplace_mode").notNull().default("unknown"),
+    postedAt: text("posted_at").notNull().default(""),
+    postingStatus: text("posting_status").notNull().default("unknown"),
     employmentType: text("employment_type").notNull().default("internship"),
     region: text("region").notNull().default("US"),
     status: text("status").notNull().default("researching"),
@@ -25,11 +34,34 @@ export const applications = sqliteTable(
     contact: text("contact").notNull().default(""),
     resumeVersion: text("resume_version").notNull().default(""),
     jdKeywords: text("jd_keywords").notNull().default(""),
+    responsibilities: text("responsibilities").notNull().default(""),
+    minimumQualifications: text("minimum_qualifications").notNull().default(""),
+    preferredQualifications: text("preferred_qualifications")
+      .notNull()
+      .default(""),
+    eligibilityNotes: text("eligibility_notes").notNull().default(""),
     sourceObservedAt: text("source_observed_at").notNull().default(""),
+    compensationStatus: text("compensation_status")
+      .notNull()
+      .default("not-disclosed"),
+    salaryMin: text("salary_min").notNull().default(""),
+    salaryMax: text("salary_max").notNull().default(""),
+    salaryCurrency: text("salary_currency").notNull().default(""),
+    salaryPeriod: text("salary_period").notNull().default(""),
+    salaryLocation: text("salary_location").notNull().default(""),
+    salarySourceUrl: text("salary_source_url").notNull().default(""),
+    salarySourceTitle: text("salary_source_title").notNull().default(""),
+    salaryBasis: text("salary_basis").notNull().default(""),
+    salaryObservedAt: text("salary_observed_at").notNull().default(""),
+    salaryNotes: text("salary_notes").notNull().default(""),
     matchScore: integer("match_score").notNull().default(0),
     notes: text("notes").notNull().default(""),
-    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [primaryKey({ columns: [table.userId, table.id] })],
 );
@@ -39,7 +71,9 @@ export const bookmarks = sqliteTable(
   {
     userId: text("user_id").notNull(),
     companyId: text("company_id").notNull(),
-    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [primaryKey({ columns: [table.userId, table.companyId] })],
 );
@@ -51,7 +85,9 @@ export const skillProgress = sqliteTable(
     skillId: text("skill_id").notNull(),
     mastery: integer("mastery").notNull().default(0),
     attempts: integer("attempts").notNull().default(0),
-    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [primaryKey({ columns: [table.userId, table.skillId] })],
 );
@@ -66,7 +102,9 @@ export const questionAttempts = sqliteTable(
     score: integer("score").notNull().default(0),
     confidence: integer("confidence").notNull().default(0),
     notes: text("notes").notNull().default(""),
-    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [primaryKey({ columns: [table.userId, table.id] })],
 );
@@ -82,7 +120,9 @@ export const questionStats = sqliteTable(
     latestScore: integer("latest_score").notNull().default(0),
     totalScore: integer("total_score").notNull().default(0),
     latestConfidence: integer("latest_confidence").notNull().default(0),
-    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [
     primaryKey({
@@ -97,7 +137,9 @@ export const preferences = sqliteTable(
     userId: text("user_id").notNull(),
     key: text("key").notNull(),
     value: text("value").notNull(),
-    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [primaryKey({ columns: [table.userId, table.key] })],
 );

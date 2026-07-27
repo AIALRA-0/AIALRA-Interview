@@ -1,0 +1,1193 @@
+{
+  "schemaVersion": "2.0.0",
+  "evidenceDate": "2026-07-26",
+  "assetPurposeZh": "为十二个技术岗位族提供可审计的美国职业工资分位数与中国招聘薪酬代理；所有数字保持原始币种、期间、统计量和来源口径。",
+  "assetPurposeEn": "Provides auditable U.S. occupational wage percentiles and China recruitment-pay proxies for twelve technical role families while preserving each source's original currency, period, statistic, and basis.",
+  "sourceCatalog": [
+    {
+      "id": "bls-oews-2025-national",
+      "publisherZh": "美国劳工统计局",
+      "publisherEn": "U.S. Bureau of Labor Statistics",
+      "titleZh": "2025 年 5 月职业就业与工资统计：全国数据",
+      "titleEn": "May 2025 Occupational Employment and Wage Statistics: National Data",
+      "url": "https://www.bls.gov/oes/tables.htm",
+      "methodologyUrl": "https://www.bls.gov/oes/oes_ques.htm",
+      "referencePeriod": "2025-05",
+      "publishedAt": "2026-05-15",
+      "observedAt": "2026-07-26",
+      "sourceKind": "official-government-statistic"
+    },
+    {
+      "id": "mohrss-market-recruitment-2026-q1",
+      "publisherZh": "中国劳动和社会保障科学研究院市场招聘薪酬大数据研究课题组",
+      "publisherEn": "Market Recruitment Compensation Big Data Research Group, Chinese Academy of Labour and Social Security",
+      "titleZh": "基于市场招聘薪酬大数据的热门岗位和典型岗位薪酬数据（2026 年第一季度）",
+      "titleEn": "Market Recruitment Compensation for Popular and Typical Roles, 2026 Q1",
+      "url": "https://www.mohrss.gov.cn/SYrlzyhshbzb/laodongguanxi_/fwyd/202607/t20260708_579828.html",
+      "methodologyUrl": "https://www.mohrss.gov.cn/SYrlzyhshbzb/laodongguanxi_/fwyd/202607/t20260708_579828.html",
+      "referencePeriod": "2026-Q1",
+      "publishedAt": "2026-07-08",
+      "observedAt": "2026-07-26",
+      "sourceKind": "official-government-recruitment-statistic"
+    },
+    {
+      "id": "mohrss-enterprise-compensation-2025",
+      "publisherZh": "中华人民共和国人力资源和社会保障部",
+      "publisherEn": "Ministry of Human Resources and Social Security of the People's Republic of China",
+      "titleZh": "企业薪酬调查信息（2025 年）",
+      "titleEn": "Enterprise Compensation Survey Information, 2025",
+      "url": "https://www.mohrss.gov.cn/SYrlzyhshbzb/laodongguanxi_/fwyd/202607/t20260708_579822.html",
+      "methodologyUrl": "https://www.mohrss.gov.cn/SYrlzyhshbzb/laodongguanxi_/fwyd/202607/t20260708_579822.html",
+      "referencePeriod": "2025",
+      "publishedAt": "2026-07-08",
+      "observedAt": "2026-07-26",
+      "sourceKind": "official-government-enterprise-compensation-statistic"
+    }
+  ],
+  "chinaContextBenchmarks": [
+    {
+      "id": "cn-context-computer-software-engineering",
+      "occupationCode": "2021003",
+      "occupationZh": "计算机软件工程技术人员",
+      "occupationEn": "Computer Software Engineering Technical Personnel",
+      "intendedRoleFamilyIds": [
+        "rf-eda-rd",
+        "rf-ai-eda",
+        "rf-cad-flow",
+        "rf-embedded"
+      ],
+      "matchQuality": "broad-context",
+      "employmentType": "enterprise-employees",
+      "employmentLevel": "all-levels",
+      "geographyZh": "中国，全国调查总体",
+      "geographyEn": "China, national survey population",
+      "currency": "CNY",
+      "period": "year",
+      "statistic": "p25-p50-p75",
+      "values": {
+        "p25": 90000,
+        "median": 143300,
+        "p75": 220100
+      },
+      "basis": "enterprise-total-wage",
+      "includedZh": "基本工资、奖金、津贴补贴、加班加点工资和特殊情况下支付的工资",
+      "includedEn": "Base pay, bonuses, allowances, overtime pay, and pay under special circumstances",
+      "excludedZh": "来源未将本类别细分为 EDA、AI for EDA、CAD 流程或嵌入式岗位",
+      "excludedEn": "The source does not split this occupation into EDA, AI-for-EDA, CAD-flow, or embedded roles",
+      "sourceId": "mohrss-enterprise-compensation-2025"
+    },
+    {
+      "id": "cn-context-computer-software-testing",
+      "occupationCode": "4040502",
+      "occupationZh": "计算机软件测试员",
+      "occupationEn": "Computer Software Tester",
+      "intendedRoleFamilyIds": ["rf-dv"],
+      "matchQuality": "broad-context",
+      "employmentType": "enterprise-employees",
+      "employmentLevel": "all-levels",
+      "geographyZh": "中国，全国调查总体",
+      "geographyEn": "China, national survey population",
+      "currency": "CNY",
+      "period": "year",
+      "statistic": "p25-p50-p75",
+      "values": {
+        "p25": 73900,
+        "median": 98800,
+        "p75": 150500
+      },
+      "basis": "enterprise-total-wage",
+      "includedZh": "基本工资、奖金、津贴补贴、加班加点工资和特殊情况下支付的工资",
+      "includedEn": "Base pay, bonuses, allowances, overtime pay, and pay under special circumstances",
+      "excludedZh": "软件测试不是芯片设计验证、UVM 或形式验证的同义词，因此只能作为宽口径背景",
+      "excludedEn": "Software testing is not synonymous with chip design verification, UVM, or formal verification and is therefore context only",
+      "sourceId": "mohrss-enterprise-compensation-2025"
+    },
+    {
+      "id": "cn-context-engineering-technical-personnel",
+      "occupationCode": "202",
+      "occupationZh": "工程技术人员",
+      "occupationEn": "Engineering Technical Personnel",
+      "intendedRoleFamilyIds": [
+        "rf-rtl",
+        "rf-dv",
+        "rf-fpga",
+        "rf-architecture",
+        "rf-physical-design",
+        "rf-dft",
+        "rf-analog-custom",
+        "rf-manufacturing-automation"
+      ],
+      "matchQuality": "broad-context",
+      "employmentType": "enterprise-employees",
+      "employmentLevel": "all-levels",
+      "geographyZh": "中国，全国调查总体",
+      "geographyEn": "China, national survey population",
+      "currency": "CNY",
+      "period": "year",
+      "statistic": "p25-p50-p75",
+      "values": {
+        "p25": 55200,
+        "median": 79500,
+        "p75": 123700
+      },
+      "basis": "enterprise-total-wage",
+      "includedZh": "基本工资、奖金、津贴补贴、加班加点工资和特殊情况下支付的工资",
+      "includedEn": "Base pay, bonuses, allowances, overtime pay, and pay under special circumstances",
+      "excludedZh": "该职业中类覆盖面远大于半导体设计和制造岗位，不能作为岗位级报价",
+      "excludedEn": "This occupation group is much broader than semiconductor design and manufacturing and is not a role-level offer range",
+      "sourceId": "mohrss-enterprise-compensation-2025"
+    },
+    {
+      "id": "cn-context-digital-product-manufacturing",
+      "occupationCode": null,
+      "occupationZh": "数字产品制造业",
+      "occupationEn": "Digital Product Manufacturing",
+      "intendedRoleFamilyIds": [
+        "rf-rtl",
+        "rf-fpga",
+        "rf-architecture",
+        "rf-physical-design",
+        "rf-dft",
+        "rf-analog-custom",
+        "rf-manufacturing-automation"
+      ],
+      "matchQuality": "broad-context",
+      "employmentType": "enterprise-employees",
+      "employmentLevel": "all-levels-and-occupations",
+      "geographyZh": "中国，全国调查总体",
+      "geographyEn": "China, national survey population",
+      "currency": "CNY",
+      "period": "year",
+      "statistic": "p25-p50-p75",
+      "values": {
+        "p25": 67100,
+        "median": 96000,
+        "p75": 134100
+      },
+      "basis": "enterprise-total-wage",
+      "includedZh": "数字产品制造业样本企业内不同职业、不同岗位等级从业人员的工资",
+      "includedEn": "Wages across occupations and job levels within sampled digital-product manufacturing enterprises",
+      "excludedZh": "不是芯片岗位专属分布，也不代表应届或实习生",
+      "excludedEn": "Not a chip-role-specific distribution and not an early-career or internship benchmark",
+      "sourceId": "mohrss-enterprise-compensation-2025"
+    }
+  ],
+  "benchmarks": [
+    {
+      "roleFamilyId": "rf-eda-rd",
+      "roleNameZh": "EDA 研发与算法",
+      "roleNameEn": "EDA Research and Development",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "15-1252",
+        "occupationZh": "软件开发人员",
+        "occupationEn": "Software Developers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "OEWS 没有 EDA 研发专属职业；软件开发人员是算法和生产软件工作的最近官方代理。",
+        "matchNoteEn": "OEWS has no EDA-specific occupation; Software Developers is the nearest official proxy for algorithm and production-software work.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 105210,
+          "median": 135980,
+          "p75": 171980
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000015125212",
+          "median": "OEUN000000000000015125213",
+          "p75": "OEUN000000000000015125214"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-eda-cpp-jingjinji",
+          "occupationZh": "C/C++ 开发工程师",
+          "occupationEn": "C/C++ Development Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "用于表达 EDA 生产软件的语言和算法邻近市场，不代表 EDA 专属报价。",
+          "matchNoteEn": "Represents the adjacent C/C++ algorithm and production-software market, not an EDA-specific offer.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀",
+          "geographyEn": "Beijing-Tianjin-Hebei",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 20600
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "中国官方季度表没有 EDA 研发专属岗位分类。",
+      "notesEn": "The China quarterly official table has no EDA-specific role category."
+    },
+    {
+      "roleFamilyId": "rf-ai-eda",
+      "roleNameZh": "AI for EDA",
+      "roleNameEn": "AI for EDA",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "15-1221",
+        "occupationZh": "计算机与信息研究科学家",
+        "occupationEn": "Computer and Information Research Scientists",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "研究型 AI for EDA 的最近官方职业代理；应用工程岗位可能更接近软件开发人员或数据科学家。",
+        "matchNoteEn": "Nearest official proxy for research-oriented AI for EDA; applied engineering roles may align more closely with Software Developers or Data Scientists.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 103570,
+          "median": 140300,
+          "p75": 188700
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000015122112",
+          "median": "OEUN000000000000015122113",
+          "p75": "OEUN000000000000015122114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-ai-eda-algorithm-regional",
+          "occupationZh": "算法工程师",
+          "occupationEn": "Algorithm Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "算法工程师是 AI 工作的邻近岗位；来源未区分 EDA 领域。",
+          "matchNoteEn": "Algorithm Engineer is adjacent to AI work; the source does not isolate the EDA domain.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀与长三角",
+          "geographyEn": "Beijing-Tianjin-Hebei and Yangtze River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 21400,
+            "high": 21900,
+            "points": [
+              {
+                "geographyZh": "京津冀",
+                "geographyEn": "Beijing-Tianjin-Hebei",
+                "mean": 21400
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 21900
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "21,400–21,900 元是两个地区均值的包络，不是候选人的薪资带。",
+      "notesEn": "CNY 21,400–21,900 is an envelope of two regional means, not a candidate pay band."
+    },
+    {
+      "roleFamilyId": "rf-cad-flow",
+      "roleNameZh": "CAD 与设计流程",
+      "roleNameEn": "CAD and Design Flow Engineering",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "15-1252",
+        "occupationZh": "软件开发人员",
+        "occupationEn": "Software Developers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "CAD 流程工程横跨软件、自动化和基础设施；软件开发人员是统一的最近官方代理。",
+        "matchNoteEn": "CAD-flow engineering spans software, automation, and infrastructure; Software Developers is the nearest consistent official proxy.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 105210,
+          "median": 135980,
+          "p75": 171980
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000015125212",
+          "median": "OEUN000000000000015125213",
+          "p75": "OEUN000000000000015125214"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-cad-flow-cpp-jingjinji",
+          "occupationZh": "C/C++ 开发工程师",
+          "occupationEn": "C/C++ Development Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "覆盖流程工具常见的 C/C++ 软件侧，不代表 CAD 流程专属岗位。",
+          "matchNoteEn": "Covers the C/C++ software side common in flow tools, not a CAD-flow-specific role.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀",
+          "geographyEn": "Beijing-Tianjin-Hebei",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 20600
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-cad-flow-python-jingjinji",
+          "occupationZh": "Python 开发工程师",
+          "occupationEn": "Python Development Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "覆盖流程自动化常见的 Python 软件侧，不代表 CAD 流程专属岗位。",
+          "matchNoteEn": "Covers the Python automation side common in design flows, not a CAD-flow-specific role.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀",
+          "geographyEn": "Beijing-Tianjin-Hebei",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 16400
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-cad-flow-operations-regional",
+          "occupationZh": "运维工程师",
+          "occupationEn": "Operations Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "仅表达计算基础设施和可观测性邻近市场，不代表 EDA 设计流程整体。",
+          "matchNoteEn": "Represents only the adjacent compute-infrastructure and observability market, not the complete EDA design-flow role.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀、长三角与珠三角",
+          "geographyEn": "Beijing-Tianjin-Hebei, Yangtze River Delta, and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 9900,
+            "high": 11100,
+            "points": [
+              {
+                "geographyZh": "京津冀",
+                "geographyEn": "Beijing-Tianjin-Hebei",
+                "mean": 9900
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 10700
+              },
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 11100
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "三个中国代理必须独立展示，不能合并为一个薪资区间。",
+      "notesEn": "The three China proxies must remain separate and must not be merged into one salary range."
+    },
+    {
+      "roleFamilyId": "rf-rtl",
+      "roleNameZh": "RTL 设计",
+      "roleNameEn": "RTL Design",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "OEWS 没有 RTL 专属职业；计算机硬件工程师是芯片数字设计的最近官方代理。",
+        "matchNoteEn": "OEWS has no RTL-specific occupation; Computer Hardware Engineers is the nearest official proxy for digital chip design.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-rtl-hardware-regional",
+          "occupationZh": "硬件工程师",
+          "occupationEn": "Hardware Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "官方表未细分 RTL；通用硬件工程师只作为低精度邻近代理。",
+          "matchNoteEn": "The official table does not isolate RTL; general Hardware Engineer is a low-specificity adjacent proxy.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角与珠三角",
+          "geographyEn": "Yangtze River Delta and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 16300,
+            "high": 16900,
+            "points": [
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 16300
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 16900
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "中国代理不是 RTL 专属薪资。",
+      "notesEn": "The China proxy is not RTL-specific pay."
+    },
+    {
+      "roleFamilyId": "rf-dv",
+      "roleNameZh": "数字验证、UVM 与形式验证",
+      "roleNameEn": "Design Verification, UVM, and Formal",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "硬件设计验证属于计算机硬件工程邻近市场；软件 QA 职业不能替代本主基准。",
+        "matchNoteEn": "Hardware design verification is adjacent to computer hardware engineering; the Software QA occupation must not replace this primary proxy.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-dv-hardware-test-yangtze",
+          "occupationZh": "硬件测试工程师",
+          "occupationEn": "Hardware Test Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "硬件测试不是 UVM、形式验证或前硅设计验证，只能作为邻近代理。",
+          "matchNoteEn": "Hardware testing is not UVM, formal, or pre-silicon design verification and is only an adjacent proxy.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角",
+          "geographyEn": "Yangtze River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 11100
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-dv-hardware-test-iot-industry",
+          "occupationZh": "硬件测试工程师",
+          "occupationEn": "Hardware Test Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "这是互联网、物联网与电子商务行业切片中的均值，与地区切片必须分开。",
+          "matchNoteEn": "This is an industry-slice mean for Internet, IoT, and e-commerce and must remain separate from the regional slice.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "互联网、物联网与电子商务行业",
+          "geographyEn": "Internet, IoT, and e-commerce industry",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 12000
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "两个中国数字来自不同切片，不能写成 11,100–12,000 元的岗位区间。",
+      "notesEn": "The two China figures come from different slices and must not be written as a CNY 11,100–12,000 role range."
+    },
+    {
+      "roleFamilyId": "rf-fpga",
+      "roleNameZh": "FPGA 工程",
+      "roleNameEn": "FPGA Engineering",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "OEWS 没有 FPGA 专属职业；计算机硬件工程师是最近官方代理。",
+        "matchNoteEn": "OEWS has no FPGA-specific occupation; Computer Hardware Engineers is the nearest official proxy.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-fpga-hardware-regional",
+          "occupationZh": "硬件工程师",
+          "occupationEn": "Hardware Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "官方表没有 FPGA 分类；通用硬件工程师只作为邻近代理。",
+          "matchNoteEn": "The official table has no FPGA category; general Hardware Engineer is only an adjacent proxy.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角与珠三角",
+          "geographyEn": "Yangtze River Delta and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 16300,
+            "high": 16900,
+            "points": [
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 16300
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 16900
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "中国代理不区分 FPGA、板级开发或通用硬件。",
+      "notesEn": "The China proxy does not distinguish FPGA, board-level development, or general hardware."
+    },
+    {
+      "roleFamilyId": "rf-architecture",
+      "roleNameZh": "计算机体系结构、性能与存储",
+      "roleNameEn": "Computer Architecture, Performance, and Memory",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "计算机硬件工程师是 CPU、GPU、加速器与存储体系结构的最近统一官方代理。",
+        "matchNoteEn": "Computer Hardware Engineers is the nearest consistent official proxy for CPU, GPU, accelerator, and memory architecture.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-architecture-hardware-regional",
+          "occupationZh": "硬件工程师",
+          "occupationEn": "Hardware Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "通用硬件工程师是低精度代理；官方表中的“架构师”位于互联网与物联网行业，不能解释成芯片架构师。",
+          "matchNoteEn": "General Hardware Engineer is a low-specificity proxy; the table's Architect entry sits in the Internet and IoT industry and must not be interpreted as chip architect.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角与珠三角",
+          "geographyEn": "Yangtze River Delta and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 16300,
+            "high": 16900,
+            "points": [
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 16300
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 16900
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "明确排除语义不确定的“架构师 24,300 元/月”记录。",
+      "notesEn": "Explicitly excludes the semantically ambiguous CNY 24,300/month Architect record."
+    },
+    {
+      "roleFamilyId": "rf-physical-design",
+      "roleNameZh": "物理设计与 STA",
+      "roleNameEn": "Physical Design and Static Timing Analysis",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "OEWS 没有物理设计或 STA 专属职业；计算机硬件工程师是最近官方代理。",
+        "matchNoteEn": "OEWS has no physical-design or STA occupation; Computer Hardware Engineers is the nearest official proxy.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-physical-design-hardware-regional",
+          "occupationZh": "硬件工程师",
+          "occupationEn": "Hardware Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "官方季度表没有数字后端、物理设计或 STA 分类；此代理置信度较低。",
+          "matchNoteEn": "The official quarterly table has no digital-backend, physical-design, or STA category; this proxy has low mapping confidence.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角与珠三角",
+          "geographyEn": "Yangtze River Delta and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 16300,
+            "high": 16900,
+            "points": [
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 16300
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 16900
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "页面必须显示“低精度市场代理”，不能显示为物理设计官方薪资。",
+      "notesEn": "The UI must say low-specificity market proxy and must not present it as official physical-design pay."
+    },
+    {
+      "roleFamilyId": "rf-dft",
+      "roleNameZh": "DFT 与量产测试",
+      "roleNameEn": "Design for Test",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2061",
+        "occupationZh": "计算机硬件工程师",
+        "occupationEn": "Computer Hardware Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "OEWS 没有 DFT 专属职业；计算机硬件工程师是最近官方代理。",
+        "matchNoteEn": "OEWS has no DFT-specific occupation; Computer Hardware Engineers is the nearest official proxy.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 126090,
+          "median": 161740,
+          "p75": 202990
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017206112",
+          "median": "OEUN000000000000017206113",
+          "p75": "OEUN000000000000017206114"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-dft-hardware-test-yangtze",
+          "occupationZh": "硬件测试工程师",
+          "occupationEn": "Hardware Test Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "硬件测试不是 scan、ATPG、MBIST 或 DFT 方法学，仅作为低精度代理。",
+          "matchNoteEn": "Hardware testing is not scan, ATPG, MBIST, or DFT methodology and is only a low-specificity proxy.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "长三角",
+          "geographyEn": "Yangtze River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 11100
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-dft-hardware-test-iot-industry",
+          "occupationZh": "硬件测试工程师",
+          "occupationEn": "Hardware Test Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "这是行业切片均值，必须与地区切片独立展示。",
+          "matchNoteEn": "This is an industry-slice mean and must remain separate from the regional slice.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "互联网、物联网与电子商务行业",
+          "geographyEn": "Internet, IoT, and e-commerce industry",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 12000
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "两个中国均值不能合并成 DFT 薪资区间。",
+      "notesEn": "The two China means must not be merged into a DFT salary range."
+    },
+    {
+      "roleFamilyId": "rf-analog-custom",
+      "roleNameZh": "模拟与定制 IC",
+      "roleNameEn": "Analog and Custom IC Design",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2072",
+        "occupationZh": "电子工程师（不含计算机）",
+        "occupationEn": "Electronics Engineers, Except Computer",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "覆盖电子电路设计的官方职业，但仍未单独识别模拟 IC、版图或定制电路。",
+        "matchNoteEn": "Official occupation covering electronic-circuit design, but it does not isolate analog IC, layout, or custom-circuit work.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 101680,
+          "median": 130220,
+          "p75": 167670
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017207212",
+          "median": "OEUN000000000000017207213",
+          "p75": "OEUN000000000000017207214"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-analog-chip-design-semiconductor",
+          "occupationZh": "模拟芯片设计工程师",
+          "occupationEn": "Analog Chip Design Engineer",
+          "matchQuality": "direct",
+          "matchNoteZh": "与模拟 IC 设计方向直接匹配；不自动外推到模拟版图或混合信号验证。",
+          "matchNoteEn": "Direct match for analog IC design; it must not be automatically extended to analog layout or mixed-signal verification.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "电子技术、半导体与集成电路行业",
+          "geographyEn": "Electronics, semiconductor, and integrated-circuit industry",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 30700
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "30,700 元/月是行业岗位均值，不是 P25–P75 区间。",
+      "notesEn": "CNY 30,700/month is an industry-role mean, not a P25–P75 range."
+    },
+    {
+      "roleFamilyId": "rf-embedded",
+      "roleNameZh": "嵌入式系统与固件",
+      "roleNameEn": "Embedded Systems and Firmware",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "15-1252",
+        "occupationZh": "软件开发人员",
+        "occupationEn": "Software Developers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "软件开发人员是固件与嵌入式软件的主要官方代理；硬件密集岗位还需参考计算机硬件工程师。",
+        "matchNoteEn": "Software Developers is the primary official proxy for firmware and embedded software; hardware-intensive roles may also require the Computer Hardware Engineers benchmark.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 105210,
+          "median": 135980,
+          "p75": 171980
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000015125212",
+          "median": "OEUN000000000000015125213",
+          "p75": "OEUN000000000000015125214"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-embedded-software-regional",
+          "occupationZh": "嵌入式软件开发工程师",
+          "occupationEn": "Embedded Software Development Engineer",
+          "matchQuality": "direct",
+          "matchNoteZh": "直接匹配嵌入式软件与固件方向；不代表纯硬件或 FPGA 岗位。",
+          "matchNoteEn": "Direct match for embedded software and firmware; it does not represent hardware-only or FPGA roles.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀、长三角与珠三角",
+          "geographyEn": "Beijing-Tianjin-Hebei, Yangtze River Delta, and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 17200,
+            "high": 19500,
+            "points": [
+              {
+                "geographyZh": "京津冀",
+                "geographyEn": "Beijing-Tianjin-Hebei",
+                "mean": 17200
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 19500
+              },
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 19100
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "17,200–19,500 元是三个地区均值的包络，不是个人薪资区间。",
+      "notesEn": "CNY 17,200–19,500 is an envelope of three regional means, not an individual pay range."
+    },
+    {
+      "roleFamilyId": "rf-manufacturing-automation",
+      "roleNameZh": "半导体制造与设备自动化",
+      "roleNameEn": "Semiconductor Manufacturing and Equipment Automation",
+      "compensationScope": "technical-role",
+      "benchmarkStatus": "available-with-proxies",
+      "us": {
+        "occupationCode": "17-2112",
+        "occupationZh": "工业工程师",
+        "occupationEn": "Industrial Engineers",
+        "matchQuality": "adjacent",
+        "matchNoteZh": "工业工程师覆盖制造流程、效率和质量；控制、电气与软件密集岗位需要逐 JD 补充其他职业代理。",
+        "matchNoteEn": "Industrial Engineers covers manufacturing process, efficiency, and quality; controls-, electrical-, or software-heavy postings require additional occupation proxies.",
+        "employmentType": "wage-and-salary-employment",
+        "employmentLevel": "all-levels",
+        "geographyZh": "美国，全国",
+        "geographyEn": "United States, national",
+        "currency": "USD",
+        "period": "year",
+        "statistic": "p25-p50-p75",
+        "values": {
+          "p25": 83600,
+          "median": 102440,
+          "p75": 129250
+        },
+        "basis": "oews-straight-time-gross-wage",
+        "includedZh": "基本工资以及 OEWS 纳入的佣金、生活成本津贴、激励工资和生产奖金",
+        "includedEn": "Base pay and OEWS-included commissions, cost-of-living allowances, incentive pay, and production bonuses",
+        "excludedZh": "股票、福利、加班费、轮班差额、非生产奖金和年终奖金",
+        "excludedEn": "Stock, benefits, overtime, shift differentials, nonproduction bonuses, and year-end bonuses",
+        "apiSeries": {
+          "p25": "OEUN000000000000017211212",
+          "median": "OEUN000000000000017211213",
+          "p75": "OEUN000000000000017211214"
+        },
+        "sourceId": "bls-oews-2025-national"
+      },
+      "china": [
+        {
+          "id": "cn-semiconductor-equipment-engineer",
+          "occupationZh": "半导体设备工程师",
+          "occupationEn": "Semiconductor Equipment Engineer",
+          "matchQuality": "direct",
+          "matchNoteZh": "直接匹配半导体设备工程方向，但不代表工厂软件、CIM 或 AMHS 全部岗位。",
+          "matchNoteEn": "Direct match for semiconductor equipment engineering, but not for every factory-software, CIM, or AMHS role.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "电子技术、半导体与集成电路行业",
+          "geographyEn": "Electronics, semiconductor, and integrated-circuit industry",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 13200
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-semiconductor-automation-engineer",
+          "occupationZh": "自动化工程师",
+          "occupationEn": "Automation Engineer",
+          "matchQuality": "direct",
+          "matchNoteZh": "来自电子技术、半导体与集成电路行业切片，直接表达行业内自动化岗位均值。",
+          "matchNoteEn": "Industry-slice mean for Automation Engineers in electronics, semiconductor, and integrated circuits.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "电子技术、半导体与集成电路行业",
+          "geographyEn": "Electronics, semiconductor, and integrated-circuit industry",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "mean",
+          "values": {
+            "mean": 8100
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        },
+        {
+          "id": "cn-automation-engineer-regional",
+          "occupationZh": "自动化工程师",
+          "occupationEn": "Automation Engineer",
+          "matchQuality": "adjacent",
+          "matchNoteZh": "区域数字热门岗位切片，范围比半导体行业更宽，必须与行业切片分开。",
+          "matchNoteEn": "Regional digital-role slice with broader industry coverage; it must remain separate from the semiconductor-industry slice.",
+          "employmentType": "market-recruitment",
+          "employmentLevel": "unspecified",
+          "geographyZh": "京津冀、长三角与珠三角",
+          "geographyEn": "Beijing-Tianjin-Hebei, Yangtze River Delta, and Pearl River Delta",
+          "currency": "CNY",
+          "period": "month",
+          "statistic": "regional-mean-envelope",
+          "values": {
+            "low": 9500,
+            "high": 10500,
+            "points": [
+              {
+                "geographyZh": "京津冀",
+                "geographyEn": "Beijing-Tianjin-Hebei",
+                "mean": 9500
+              },
+              {
+                "geographyZh": "长三角",
+                "geographyEn": "Yangtze River Delta",
+                "mean": 9700
+              },
+              {
+                "geographyZh": "珠三角",
+                "geographyEn": "Pearl River Delta",
+                "mean": 10500
+              }
+            ]
+          },
+          "basis": "market-posted-recruitment-average",
+          "sourceId": "mohrss-market-recruitment-2026-q1"
+        }
+      ],
+      "notesZh": "设备、半导体行业自动化和区域通用自动化是三种不同总体，必须独立展示。",
+      "notesEn": "Equipment, semiconductor-industry automation, and regional general automation are three different populations and must remain separate."
+    },
+    {
+      "roleFamilyId": "rf-behavioral",
+      "roleNameZh": "行为面试",
+      "roleNameEn": "Behavioral Interview",
+      "compensationScope": "cross-cutting-skill",
+      "benchmarkStatus": "not-applicable",
+      "us": null,
+      "china": [],
+      "notesZh": "这是跨岗位面试能力，不是独立职业；薪资应继承被申请岗位族，不能写 0 或伪造宽口径基准。",
+      "notesEn": "This is a cross-role interview skill, not an occupation; compensation must come from the target role family and must never be represented as zero or an invented broad benchmark."
+    },
+    {
+      "roleFamilyId": "rf-project-deep-dive",
+      "roleNameZh": "技术项目深挖",
+      "roleNameEn": "Technical Project Deep Dive",
+      "compensationScope": "cross-cutting-skill",
+      "benchmarkStatus": "not-applicable",
+      "us": null,
+      "china": [],
+      "notesZh": "这是跨岗位面试能力，不是独立职业；薪资应继承被申请岗位族，不能写 0 或伪造宽口径基准。",
+      "notesEn": "This is a cross-role interview skill, not an occupation; compensation must come from the target role family and must never be represented as zero or an invented broad benchmark."
+    },
+    {
+      "roleFamilyId": "rf-english-communication",
+      "roleNameZh": "技术英文表达",
+      "roleNameEn": "Technical English Communication",
+      "compensationScope": "cross-cutting-skill",
+      "benchmarkStatus": "not-applicable",
+      "us": null,
+      "china": [],
+      "notesZh": "这是跨岗位沟通能力，不是独立职业；薪资应继承被申请岗位族，不能写 0 或伪造宽口径基准。",
+      "notesEn": "This is a cross-role communication skill, not an occupation; compensation must come from the target role family and must never be represented as zero or an invented broad benchmark."
+    }
+  ]
+}

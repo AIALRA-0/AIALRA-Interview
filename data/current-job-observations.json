@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceDate": "2026-07-26",
+  "jobs": [
+    {
+      "id": "job-tsmc-arizona-summer-2027-engineering",
+      "organizationId": "tsmc-arizona",
+      "titleZh": "2027 年暑期工程实习机会",
+      "titleEn": "Summer 2027 Engineering Internship Opportunities",
+      "originalTitle": "[Summer 2027] TSMC AZ Internship Opportunities - Engineering Roles",
+      "requisitionId": "7312",
+      "employmentType": "internship",
+      "location": "Phoenix, Arizona, United States",
+      "workplaceMode": "on-site",
+      "postingStatus": "current-at-observation",
+      "postedAt": "2026-07-03",
+      "observedAt": "2026-07-26",
+      "roleFamilyIds": [
+        "rf-manufacturing-automation",
+        "rf-embedded",
+        "rf-ai-eda"
+      ],
+      "responsibilitiesZh": [
+        "覆盖制程整合、良率、制程、设备、智能制造、AMHS、质量、产品、光罩、工具安装、安全与 CIM 等多个实习方向",
+        "在先进晶圆厂环境中使用数据分析、系统化排障、自动化、监控或机器学习方法改进生产",
+        "以跨团队协作为基础完成十周全职现场项目并汇报成果"
+      ],
+      "responsibilitiesEn": [
+        "Covers internship tracks in process integration, yield, process, equipment, intelligent manufacturing, AMHS, quality, product, mask, tool install, safety, and CIM",
+        "Uses data analysis, systematic troubleshooting, automation, observability, or machine learning to improve advanced-fab operations",
+        "Completes a ten-week full-time on-site project with cross-functional collaboration and presentation"
+      ],
+      "minimumQualificationsZh": [
+        "就读于受认可大学的相关本科、硕士或博士项目",
+        "能够在 2027 年指定日期于 Phoenix 现场全职工作十周",
+        "具备主动学习、协作、沟通、计算机与展示能力"
+      ],
+      "minimumQualificationsEn": [
+        "Currently enrolled in a relevant bachelor’s, master’s, or PhD program at an accredited university",
+        "Able to work full-time on site in Phoenix for ten weeks during one of the specified Summer 2027 windows",
+        "Demonstrates self-directed learning, collaboration, communication, computing, and presentation skills"
+      ],
+      "eligibilityZh": [
+        "申请人必须在美国具有合法工作资格",
+        "岗位可能接触出口管制技术数据，非美国人士可能需要出口许可",
+        "是否可由 F-1 CPT 满足要求必须在申请前向招聘方逐岗确认"
+      ],
+      "eligibilityEn": [
+        "Applicants must be legally eligible to work in the United States",
+        "Roles may involve export-controlled technical data, and non-U.S. persons may require an export license",
+        "Whether F-1 CPT satisfies the requirement must be confirmed with recruiting for the exact track before applying"
+      ],
+      "compensation": {
+        "status": "not-disclosed",
+        "minimum": null,
+        "maximum": null,
+        "currency": null,
+        "period": null,
+        "location": "Phoenix, Arizona, United States",
+        "sourceUrl": "https://ro.careers.tsmc.com/job/Phoenix-Summer-2027-TSMC-AZ-Internship-Opportunities-Engineering-Roles-AZ-85001/1361003166/",
+        "sourceTitle": "[Summer 2027] TSMC AZ Internship Opportunities - Engineering Roles",
+        "basis": "employer-posting",
+        "observedAt": "2026-07-26",
+        "notesZh": "官方岗位页在观察日未披露现金薪资区间；页面说明可提供搬迁协助",
+        "notesEn": "The official posting did not disclose a cash-pay range on the observation date; it stated that relocation assistance is available"
+      },
+      "sourceUrl": "https://ro.careers.tsmc.com/job/Phoenix-Summer-2027-TSMC-AZ-Internship-Opportunities-Engineering-Roles-AZ-85001/1361003166/"
+    },
+    {
+      "id": "job-qolab-quantum-hardware-engineer",
+      "organizationId": "qolab",
+      "titleZh": "量子硬件工程师",
+      "titleEn": "Quantum Hardware Engineer",
+      "originalTitle": "Quantum hardware engineer",
+      "requisitionId": null,
+      "employmentType": "full-time",
+      "location": "Madison, Wisconsin, United States",
+      "workplaceMode": "on-site",
+      "postingStatus": "current-at-observation",
+      "postedAt": null,
+      "observedAt": "2026-07-26",
+      "roleFamilyIds": ["rf-analog-custom", "rf-manufacturing-automation"],
+      "responsibilitiesZh": [
+        "设计、制造并表征超导量子比特及相关器件",
+        "改进制造工艺以提升量子比特相干性与可重复性",
+        "在稀释制冷机等低温测试环境中开发量子比特控制与测量硬件"
+      ],
+      "responsibilitiesEn": [
+        "Designs, builds, and characterizes superconducting qubits and related devices",
+        "Develops fabrication processes that improve qubit coherence and reproducibility",
+        "Builds qubit-control and measurement hardware in cryogenic environments including dilution refrigerators"
+      ],
+      "minimumQualificationsZh": [
+        "物理、电气工程或相关专业本科、硕士或博士学位",
+        "三年以上量子硬件或相近研发环境经验",
+        "具备超导量子比特、低温测量、器件制造或相关量子技术经验",
+        "能够在 Madison 现场工作"
+      ],
+      "minimumQualificationsEn": [
+        "BS, MS, or PhD in physics, electrical engineering, or a related field",
+        "Three or more years of experience in quantum hardware or a similar R&D environment",
+        "Experience with superconducting qubits, cryogenic measurement, device fabrication, or related quantum technologies",
+        "Able to work on site in Madison"
+      ],
+      "eligibilityZh": [
+        "官方页面未披露签证赞助或出口管制条件，申请前需要逐项确认"
+      ],
+      "eligibilityEn": [
+        "The official page did not disclose visa sponsorship or export-control terms; both require posting-specific confirmation"
+      ],
+      "compensation": {
+        "status": "not-disclosed",
+        "minimum": null,
+        "maximum": null,
+        "currency": null,
+        "period": null,
+        "location": "Madison, Wisconsin, United States",
+        "sourceUrl": "https://qolab.ai/careers/quantum-hardware-engineer",
+        "sourceTitle": "Quantum hardware engineer",
+        "basis": "employer-posting",
+        "observedAt": "2026-07-26",
+        "notesZh": "官方岗位页在观察日未披露基本工资、奖金或股权区间",
+        "notesEn": "The official posting did not disclose base salary, bonus, or equity ranges on the observation date"
+      },
+      "sourceUrl": "https://qolab.ai/careers/quantum-hardware-engineer"
+    }
+  ]
+}

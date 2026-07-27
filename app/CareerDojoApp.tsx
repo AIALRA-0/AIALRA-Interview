@@ -16,8 +16,12 @@ import type {
   ApplicationRecord,
   BilingualTerm,
   Company,
+  CompensationBenchmarkAsset,
+  CompensationRange,
+  CurrentJobObservation,
   InterviewQuestion,
   InterviewQuestionSummary,
+  MarketCompensationBenchmark,
   OrganizationBankBootstrap,
   OrganizationRelation,
   OrganizationUniverseAsset,
@@ -54,6 +58,8 @@ type CandidateProfileDisplay = {
 
 type AppProps = {
   initialCompanies: Company[];
+  currentJobs: CurrentJobObservation[];
+  compensationBenchmarks: CompensationBenchmarkAsset;
   organizationBank: OrganizationBankBootstrap;
   organizationRelations: OrganizationRelation[];
   roles: RoleFamily[];
@@ -64,6 +70,15 @@ type AppProps = {
 
 type ApplicationDraft = {
   roleTitle: string;
+  requisitionId: string;
+  roleFamilyId: string;
+  team: string;
+  businessUnit: string;
+  level: string;
+  targetLocation: string;
+  workplaceMode: string;
+  postedAt: string;
+  postingStatus: string;
   employmentType: string;
   jobUrl: string;
   deadline: string;
@@ -72,13 +87,44 @@ type ApplicationDraft = {
   contact: string;
   resumeVersion: string;
   jdKeywords: string;
+  responsibilities: string;
+  minimumQualifications: string;
+  preferredQualifications: string;
+  eligibilityNotes: string;
   sourceObservedAt: string;
+  compensationStatus: string;
+  salaryMin: string;
+  salaryMax: string;
+  salaryCurrency: string;
+  salaryPeriod: string;
+  salaryLocation: string;
+  salarySourceUrl: string;
+  salarySourceTitle: string;
+  salaryBasis: string;
+  salaryObservedAt: string;
+  salaryNotes: string;
   matchScore: number;
   notes: string;
 };
 
+type ApplicationPatch = Partial<
+  ApplicationDraft & {
+    status: string;
+    priority: string;
+  }
+>;
+
 const emptyApplicationDraft: ApplicationDraft = {
   roleTitle: "",
+  requisitionId: "",
+  roleFamilyId: "",
+  team: "",
+  businessUnit: "",
+  level: "",
+  targetLocation: "",
+  workplaceMode: "unknown",
+  postedAt: "",
+  postingStatus: "unknown",
   employmentType: "internship",
   jobUrl: "",
   deadline: "",
@@ -87,7 +133,22 @@ const emptyApplicationDraft: ApplicationDraft = {
   contact: "",
   resumeVersion: "",
   jdKeywords: "",
+  responsibilities: "",
+  minimumQualifications: "",
+  preferredQualifications: "",
+  eligibilityNotes: "",
   sourceObservedAt: "",
+  compensationStatus: "not-disclosed",
+  salaryMin: "",
+  salaryMax: "",
+  salaryCurrency: "",
+  salaryPeriod: "",
+  salaryLocation: "",
+  salarySourceUrl: "",
+  salarySourceTitle: "",
+  salaryBasis: "",
+  salaryObservedAt: "",
+  salaryNotes: "",
   matchScore: 0,
   notes: "",
 };
@@ -176,6 +237,45 @@ const screeningSignalOptions = [
   ["orange", "出口复核 / Export review"],
   ["red", "硬门槛 / Restricted"],
   ["unknown", "待核验 / Unverified"],
+] as const;
+
+const postingStatusOptions = [
+  ["unknown", "待核验 / Unverified"],
+  ["open", "开放 / Open"],
+  ["paused", "暂停 / Paused"],
+  ["closed", "关闭 / Closed"],
+] as const;
+
+const workplaceModeOptions = [
+  ["unknown", "待核验 / Unverified"],
+  ["on-site", "现场 / On-site"],
+  ["hybrid", "混合 / Hybrid"],
+  ["remote", "远程 / Remote"],
+] as const;
+
+const compensationStatusOptions = [
+  ["not-disclosed", "企业未披露 / Not disclosed by employer"],
+  ["disclosed", "企业或政府披露 / Disclosed"],
+  ["estimated", "外部市场估计 / External estimate"],
+] as const;
+
+const salaryPeriodOptions = [
+  ["", "未设置 / Not set"],
+  ["hour", "每小时 / Hour"],
+  ["day", "每日 / Day"],
+  ["week", "每周 / Week"],
+  ["month", "每月 / Month"],
+  ["year", "每年 / Year"],
+  ["one-time", "一次性 / One-time"],
+  ["project", "每项目 / Project"],
+] as const;
+
+const salaryBasisOptions = [
+  ["", "未设置 / Not set"],
+  ["employer-posting", "企业岗位页 / Employer posting"],
+  ["government-statistic", "政府统计 / Government statistic"],
+  ["government-disclosure", "政府披露 / Government disclosure"],
+  ["third-party-estimate", "第三方估计 / Third-party estimate"],
 ] as const;
 
 const regionLabels = organizationLabelsRaw.regionGroups;
@@ -622,6 +722,119 @@ function priorityLabel(value: string) {
       : value === "low"
         ? "低 / Low"
         : `${value} / Unclassified`;
+}
+
+function postingStatusLabel(value: string) {
+  return (
+    postingStatusOptions.find(([id]) => id === value)?.[1] ||
+    "待核验 / Unverified"
+  );
+}
+
+function workplaceModeLabel(value: string) {
+  return (
+    workplaceModeOptions.find(([id]) => id === value)?.[1] ||
+    "待核验 / Unverified"
+  );
+}
+
+function compensationStatusLabel(value: string) {
+  return (
+    compensationStatusOptions.find(([id]) => id === value)?.[1] ||
+    "企业未披露 / Not disclosed by employer"
+  );
+}
+
+function salaryPeriodLabel(value: string | null) {
+  return (
+    salaryPeriodOptions.find(([id]) => id === value)?.[1] ||
+    "计薪周期待核 / Period unverified"
+  );
+}
+
+function currencyAmount(value: string | null, currency: string | null) {
+  if (!value || !currency) return "";
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return value;
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: amount % 1 === 0 ? 0 : 2,
+    }).format(amount);
+  } catch {
+    return `${currency} ${value}`;
+  }
+}
+
+function compensationText(compensation: CompensationRange) {
+  if (compensation.status === "not-disclosed") {
+    return "未披露 / Not disclosed";
+  }
+  const minimum = currencyAmount(compensation.minimum, compensation.currency);
+  const maximum = currencyAmount(compensation.maximum, compensation.currency);
+  const range =
+    minimum && maximum
+      ? `${minimum}–${maximum}`
+      : minimum
+        ? `至少 ${minimum} / At least ${minimum}`
+        : maximum
+          ? `最高 ${maximum} / Up to ${maximum}`
+          : "区间待核 / Range unverified";
+  return `${range} · ${salaryPeriodLabel(compensation.period)}`;
+}
+
+function applicationCompensationText(application: ApplicationRecord) {
+  return compensationText({
+    status: application.compensation_status || "not-disclosed",
+    minimum: application.salary_min || null,
+    maximum: application.salary_max || null,
+    currency: application.salary_currency || null,
+    period: (application.salary_period as CompensationRange["period"]) || null,
+    location: application.salary_location || application.target_location || "",
+    sourceUrl: application.salary_source_url || "",
+    sourceTitle: application.salary_source_title || "",
+    basis: (application.salary_basis as CompensationRange["basis"]) || null,
+    observedAt: application.salary_observed_at || "",
+    notesZh: "",
+    notesEn: "",
+  });
+}
+
+function benchmarkAmount(value: number | undefined, currency: string): string {
+  if (value === undefined) return "—";
+  return new Intl.NumberFormat(currency === "CNY" ? "zh-CN" : "en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function benchmarkValueText(benchmark: MarketCompensationBenchmark) {
+  const { values, currency, statistic } = benchmark;
+  if (statistic === "p25-p50-p75") {
+    return `P25 ${benchmarkAmount(values.p25, currency)} · P50 ${benchmarkAmount(
+      values.median,
+      currency,
+    )} · P75 ${benchmarkAmount(values.p75, currency)}`;
+  }
+  if (statistic === "regional-mean-envelope") {
+    return `${benchmarkAmount(values.low, currency)}–${benchmarkAmount(
+      values.high,
+      currency,
+    )} 地区均值包络 / regional mean envelope`;
+  }
+  return `${benchmarkAmount(values.mean, currency)} 平均招聘薪酬 / recruitment mean`;
+}
+
+function benchmarkMatchLabel(
+  value: MarketCompensationBenchmark["matchQuality"],
+) {
+  return value === "direct"
+    ? "直接匹配 / Direct"
+    : value === "adjacent"
+      ? "邻近代理 / Adjacent proxy"
+      : "宽口径背景 / Broad context";
 }
 
 function fitRank(value: string) {
@@ -1337,6 +1550,8 @@ function ProgressBar({ value }: { value: number }) {
 
 export function CareerDojoApp({
   initialCompanies,
+  currentJobs,
+  compensationBenchmarks,
   organizationBank,
   organizationRelations,
   roles,
@@ -1391,11 +1606,15 @@ export function CareerDojoApp({
   const [privateProfileMessage, setPrivateProfileMessage] = useState("");
   const [applicationBuilderVisible, setApplicationBuilderVisible] =
     useState(false);
+  const [editingApplicationId, setEditingApplicationId] = useState<
+    string | null
+  >(null);
   const [applicationDraft, setApplicationDraft] = useState<ApplicationDraft>(
     emptyApplicationDraft,
   );
   const companyModalRef = useRef<HTMLElement>(null);
   const questionModalRef = useRef<HTMLElement>(null);
+  const applicationModalRef = useRef<HTMLElement>(null);
   const questionResultsRef = useRef<HTMLDivElement>(null);
   const questionIndexRef = useRef<QuestionBankIndex | null>(null);
   const questionDetailCacheRef = useRef(new Map<string, InterviewQuestion>());
@@ -1564,11 +1783,13 @@ export function CareerDojoApp({
   }, []);
 
   useEffect(() => {
-    const modal = selectedCompany
-      ? companyModalRef.current
-      : selectedQuestion
-        ? questionModalRef.current
-        : null;
+    const modal = editingApplicationId
+      ? applicationModalRef.current
+      : selectedCompany
+        ? companyModalRef.current
+        : selectedQuestion
+          ? questionModalRef.current
+          : null;
     if (!modal) return;
     const focusModal = modal;
 
@@ -1591,7 +1812,9 @@ export function CareerDojoApp({
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
-        if (selectedCompany) {
+        if (editingApplicationId) {
+          setEditingApplicationId(null);
+        } else if (selectedCompany) {
           setApplicationBuilderVisible(false);
           setSelectedCompany(null);
         } else {
@@ -1647,7 +1870,7 @@ export function CareerDojoApp({
       document.body.style.overflow = previousOverflow;
       previousFocus?.focus();
     };
-  }, [selectedCompany, selectedQuestion]);
+  }, [editingApplicationId, selectedCompany, selectedQuestion]);
 
   function mutate(body: Record<string, unknown>): Promise<boolean> {
     const operation = mutationQueueRef.current.then(async () => {
@@ -1749,6 +1972,31 @@ export function CareerDojoApp({
     () => new Map(companies.map((company) => [company.id, company])),
     [companies],
   );
+  const compensationBenchmarkByRoleId = useMemo(
+    () =>
+      new Map(
+        compensationBenchmarks.benchmarks.map((benchmark) => [
+          benchmark.roleFamilyId,
+          benchmark,
+        ]),
+      ),
+    [compensationBenchmarks],
+  );
+  const compensationSourceById = useMemo(
+    () =>
+      new Map(
+        compensationBenchmarks.sourceCatalog.map((source) => [
+          source.id,
+          source,
+        ]),
+      ),
+    [compensationBenchmarks],
+  );
+  const editingApplication = editingApplicationId
+    ? persisted.applications.find(
+        (application) => application.id === editingApplicationId,
+      ) || null
+    : null;
   const selectedCompanyRelations = selectedCompany
     ? organizationRelations.filter(
         (relation) =>
@@ -2113,6 +2361,15 @@ export function CareerDojoApp({
       roleTitle: titleTerm
         ? `${titleTerm.zh} / ${titleTerm.en}`
         : "目标岗位待确认 / Target role to verify",
+      requisitionId: "",
+      roleFamilyId: role?.id || company.roleFamilyIds[0] || "",
+      team: "",
+      businessUnit: "",
+      level: "",
+      targetLocation: company.locations[0] || "",
+      workplaceMode: "unknown",
+      postedAt: "",
+      postingStatus: "unknown",
       employmentType: "internship",
       jobUrl: company.careerUrl,
       deadline: "",
@@ -2124,8 +2381,87 @@ export function CareerDojoApp({
       jdKeywords: company.requirementAtoms
         .map((term) => `${term.zh} / ${term.en}`)
         .join(" · "),
+      responsibilities: "",
+      minimumQualifications: "",
+      preferredQualifications: "",
+      eligibilityNotes: "",
       sourceObservedAt: company.lastVerified,
+      compensationStatus: "not-disclosed",
+      salaryMin: "",
+      salaryMax: "",
+      salaryCurrency: "",
+      salaryPeriod: "",
+      salaryLocation: company.locations[0] || "",
+      salarySourceUrl: "",
+      salarySourceTitle: "",
+      salaryBasis: "",
+      salaryObservedAt: "",
+      salaryNotes: "",
       matchScore: rank === 0 ? 88 : rank === 1 ? 76 : rank === 2 ? 62 : 45,
+      notes: `${company.relevanceZh}\n${company.relevanceEn}`,
+    });
+    setApplicationBuilderVisible(true);
+  }
+
+  function beginCurrentJob(job: CurrentJobObservation) {
+    const company = companyById.get(job.organizationId);
+    if (!company) return;
+    setSelectedCompany(company);
+    setApplicationDraft({
+      roleTitle: `${job.titleZh} / ${job.titleEn}`,
+      requisitionId: job.requisitionId || "",
+      roleFamilyId: job.roleFamilyIds[0] || "",
+      team: "",
+      businessUnit: "",
+      level: "",
+      targetLocation: job.location,
+      workplaceMode: job.workplaceMode,
+      postedAt: job.postedAt || "",
+      postingStatus:
+        job.postingStatus === "current-at-observation" ? "open" : "unknown",
+      employmentType:
+        job.employmentType === "full-time" ? "new-grad" : job.employmentType,
+      jobUrl: job.sourceUrl,
+      deadline: "",
+      sponsorshipSignal: signalKey(company.visaSignal),
+      exportSignal:
+        signalKey(company.visaSignal) === "red" ? "orange" : "unknown",
+      contact: "",
+      resumeVersion: "",
+      jdKeywords: job.minimumQualificationsZh
+        .map(
+          (item, index) =>
+            `${item} / ${job.minimumQualificationsEn[index] || ""}`,
+        )
+        .join("\n"),
+      responsibilities: job.responsibilitiesZh
+        .map(
+          (item, index) => `${item} / ${job.responsibilitiesEn[index] || ""}`,
+        )
+        .join("\n"),
+      minimumQualifications: job.minimumQualificationsZh
+        .map(
+          (item, index) =>
+            `${item} / ${job.minimumQualificationsEn[index] || ""}`,
+        )
+        .join("\n"),
+      preferredQualifications: "",
+      eligibilityNotes: job.eligibilityZh
+        .map((item, index) => `${item} / ${job.eligibilityEn[index] || ""}`)
+        .join("\n"),
+      sourceObservedAt: job.observedAt,
+      compensationStatus: job.compensation.status,
+      salaryMin: job.compensation.minimum || "",
+      salaryMax: job.compensation.maximum || "",
+      salaryCurrency: job.compensation.currency || "",
+      salaryPeriod: job.compensation.period || "",
+      salaryLocation: job.compensation.location,
+      salarySourceUrl: job.compensation.sourceUrl,
+      salarySourceTitle: job.compensation.sourceTitle,
+      salaryBasis: job.compensation.basis || "",
+      salaryObservedAt: job.compensation.observedAt,
+      salaryNotes: `${job.compensation.notesZh}\n${job.compensation.notesEn}`,
+      matchScore: fitRank(company.fitTier) <= 1 ? 78 : 62,
       notes: `${company.relevanceZh}\n${company.relevanceEn}`,
     });
     setApplicationBuilderVisible(true);
@@ -2153,28 +2489,23 @@ export function CareerDojoApp({
 
   async function updateApplication(
     application: ApplicationRecord,
-    patch: Partial<{
-      roleTitle: string;
-      employmentType: string;
-      status: string;
-      priority: string;
-      jobUrl: string;
-      deadline: string;
-      sponsorshipSignal: string;
-      exportSignal: string;
-      contact: string;
-      resumeVersion: string;
-      jdKeywords: string;
-      sourceObservedAt: string;
-      matchScore: number;
-      notes: string;
-    }>,
+    patch: ApplicationPatch,
   ) {
     await mutate({
       action: "patchApplication",
       id: application.id,
       patch,
     });
+  }
+
+  function commitApplicationField(
+    application: ApplicationRecord,
+    field: keyof ApplicationDraft,
+    value: string | number,
+  ) {
+    void updateApplication(application, {
+      [field]: value,
+    } as ApplicationPatch);
   }
 
   async function deleteApplication(application: ApplicationRecord) {
@@ -2506,7 +2837,8 @@ export function CareerDojoApp({
           <div className="topbar-actions">
             <span className="evidence-pill">
               <i />
-              证据日期 / Evidence date {effectiveProfile.evidenceDate}
+              组织证据 / Org evidence {effectiveProfile.evidenceDate} · 薪资 /
+              Pay {compensationBenchmarks.evidenceDate}
             </span>
             <button
               className="primary-button"
@@ -3142,6 +3474,9 @@ export function CareerDojoApp({
                         question.roleFamilies.includes(role.id),
                       ).length
                     : null;
+                const compensationBenchmark = compensationBenchmarkByRoleId.get(
+                  role.id,
+                );
                 return (
                   <article
                     className={`role-card ${priority ? "priority" : ""}`}
@@ -3178,6 +3513,124 @@ export function CareerDojoApp({
                           : `${roleQuestions} 道训练任务 / drills`}
                       </span>
                     </div>
+                    <section className="role-compensation-benchmark">
+                      <div className="role-compensation-heading">
+                        <strong>市场工资基准 / Market wage benchmark</strong>
+                        <small>
+                          非雇主报价 / Not an employer offer ·{" "}
+                          {compensationBenchmarks.evidenceDate}
+                        </small>
+                      </div>
+                      {compensationBenchmark?.us ? (
+                        <div className="role-compensation-market">
+                          <span>美国 / U.S.</span>
+                          <strong>
+                            {benchmarkValueText(compensationBenchmark.us)}
+                          </strong>
+                          <small>
+                            {compensationBenchmark.us.occupationZh} /{" "}
+                            {compensationBenchmark.us.occupationEn} ·{" "}
+                            {benchmarkMatchLabel(
+                              compensationBenchmark.us.matchQuality,
+                            )}{" "}
+                            · USD/年 / year
+                          </small>
+                        </div>
+                      ) : null}
+                      {compensationBenchmark?.china[0] ? (
+                        <div className="role-compensation-market">
+                          <span>中国 / China</span>
+                          <strong>
+                            {benchmarkValueText(compensationBenchmark.china[0])}
+                          </strong>
+                          <small>
+                            {compensationBenchmark.china[0].occupationZh} /{" "}
+                            {compensationBenchmark.china[0].occupationEn} ·{" "}
+                            {benchmarkMatchLabel(
+                              compensationBenchmark.china[0].matchQuality,
+                            )}{" "}
+                            · CNY/月 / month
+                          </small>
+                        </div>
+                      ) : null}
+                      {compensationBenchmark?.benchmarkStatus ===
+                      "not-applicable" ? (
+                        <p>
+                          {compensationBenchmark.notesZh}
+                          <span lang="en">{compensationBenchmark.notesEn}</span>
+                        </p>
+                      ) : null}
+                      {compensationBenchmark?.us ||
+                      compensationBenchmark?.china.length ? (
+                        <details>
+                          <summary>
+                            查看口径、全部中国代理与来源 / Method, all China
+                            proxies, and sources
+                          </summary>
+                          <div className="role-compensation-details">
+                            {compensationBenchmark.us ? (
+                              <article>
+                                <strong>
+                                  {compensationBenchmark.us.geographyZh} /{" "}
+                                  {compensationBenchmark.us.geographyEn}
+                                </strong>
+                                <p>
+                                  {compensationBenchmark.us.matchNoteZh}
+                                  <span lang="en">
+                                    {compensationBenchmark.us.matchNoteEn}
+                                  </span>
+                                </p>
+                                {compensationSourceById.has(
+                                  compensationBenchmark.us.sourceId,
+                                ) ? (
+                                  <a
+                                    href={
+                                      compensationSourceById.get(
+                                        compensationBenchmark.us.sourceId,
+                                      )!.url
+                                    }
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    BLS OEWS 2025 · 官方来源 / Official source ↗
+                                  </a>
+                                ) : null}
+                              </article>
+                            ) : null}
+                            {compensationBenchmark.china.map((benchmark) => {
+                              const source = compensationSourceById.get(
+                                benchmark.sourceId,
+                              );
+                              return (
+                                <article key={benchmark.id}>
+                                  <strong>
+                                    {benchmark.occupationZh} /{" "}
+                                    {benchmark.occupationEn}
+                                  </strong>
+                                  <b>{benchmarkValueText(benchmark)}</b>
+                                  <p>
+                                    {benchmark.matchNoteZh}
+                                    <span lang="en">
+                                      {benchmark.matchNoteEn}
+                                    </span>
+                                  </p>
+                                  {source ? (
+                                    <a
+                                      href={source.url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      {source.referencePeriod} · 官方来源 /
+                                      Official source ↗
+                                    </a>
+                                  ) : null}
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </details>
+                      ) : null}
+                    </section>
                     <div
                       className="stage-list atomic-stage-list"
                       aria-label="面试环节 / Interview stages"
@@ -3352,6 +3805,88 @@ export function CareerDojoApp({
                 </small>
               </div>
             </div>
+
+            <section
+              className="training-protocol"
+              aria-labelledby="training-protocol-title"
+            >
+              <div className="training-protocol-heading">
+                <span className="section-kicker">
+                  独有训练协议 / DISTINCTIVE TRAINING PROTOCOL
+                </span>
+                <h3 id="training-protocol-title">
+                  从读懂 JD 到盲测迁移的完整闭环 / From JD evidence to blind
+                  transfer
+                </h3>
+                <p>
+                  综合成熟平台的路径、提示、模拟面试与评测机制，再针对芯片与 EDA
+                  岗位补上真实工程工件。
+                  <span lang="en">
+                    We combine proven progression, hints, mock interviews, and
+                    assessment patterns, then add authentic chip and EDA
+                    engineering artifacts.
+                  </span>
+                </p>
+              </div>
+              <div className="training-protocol-grid">
+                {[
+                  [
+                    "01",
+                    "JD 证据编译器",
+                    "JD Evidence Compiler",
+                    "先把职责、硬门槛与偏好拆成可训练信号。",
+                    "Compile responsibilities, hard gates, and preferences into trainable signals.",
+                  ],
+                  [
+                    "02",
+                    "递进关卡",
+                    "Staged Gates",
+                    "规格理解、定位、实现、验证、优化、表达逐关放行。",
+                    "Pass specification, localization, implementation, verification, optimization, and explanation gates.",
+                  ],
+                  [
+                    "03",
+                    "真实工程台",
+                    "Authentic Workspace",
+                    "围绕仓库、测试、波形、日志与 QoR 证据完成任务。",
+                    "Work with repositories, tests, waveforms, logs, and QoR evidence.",
+                  ],
+                  [
+                    "04",
+                    "有限提示预算",
+                    "Hint Budget",
+                    "提示逐层解锁，并记录独立完成度而非只看答案。",
+                    "Unlock hints progressively and score independence, not answer exposure.",
+                  ],
+                  [
+                    "05",
+                    "证据化复盘",
+                    "Evidence Report",
+                    "用命令记录、差异、波形或测试结果支撑结论。",
+                    "Support conclusions with transcripts, diffs, waveforms, or test results.",
+                  ],
+                  [
+                    "06",
+                    "盲测与迁移",
+                    "Blind Transfer",
+                    "隔日用新约束复测，区分记忆、理解与可迁移能力。",
+                    "Retest later under new constraints to separate recall from transferable skill.",
+                  ],
+                ].map(([index, zh, en, descriptionZh, descriptionEn]) => (
+                  <article key={index}>
+                    <span>{index}</span>
+                    <h4>
+                      {zh}
+                      <small lang="en">{en}</small>
+                    </h4>
+                    <p>
+                      {descriptionZh}
+                      <span lang="en">{descriptionEn}</span>
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
 
             {questionIndexState !== "ready" ? (
               <div
@@ -3757,6 +4292,123 @@ export function CareerDojoApp({
               </div>
             </div>
 
+            <article className="panel current-jobs-panel">
+              <div className="panel-heading">
+                <div>
+                  <span className="section-kicker">
+                    观察日具体岗位 / OBSERVED REQUISITIONS
+                  </span>
+                  <h3>
+                    有官方岗位证据的观察清单 / Officially evidenced posting
+                    watchlist
+                  </h3>
+                </div>
+                <span>
+                  {currentJobs.length} 条岗位记录 / requisitions ·
+                  观察日存在不代表 今日仍开放 / observed, not guaranteed open
+                  today
+                </span>
+              </div>
+              <div className="current-job-grid">
+                {currentJobs.map((job) => {
+                  const company = companyById.get(job.organizationId);
+                  return (
+                    <section className="current-job-card" key={job.id}>
+                      <div className="current-job-card-top">
+                        <span>
+                          {job.postingStatus === "current-at-observation"
+                            ? "观察日开放 / Open when observed"
+                            : "状态待核 / Status unverified"}
+                        </span>
+                        <small>
+                          {job.observedAt} ·{" "}
+                          {job.requisitionId
+                            ? `REQ ${job.requisitionId}`
+                            : "REQ ID 未披露 / not disclosed"}
+                        </small>
+                      </div>
+                      <h4>
+                        <BilingualHeading zh={job.titleZh} en={job.titleEn} />
+                      </h4>
+                      <p className="current-job-company">
+                        {company ? (
+                          <CompanyName company={company} />
+                        ) : (
+                          job.organizationId
+                        )}
+                      </p>
+                      <div className="current-job-facts">
+                        <span>
+                          地点 / Location <b>{job.location}</b>
+                        </span>
+                        <span>
+                          模式 / Mode{" "}
+                          <b>{workplaceModeLabel(job.workplaceMode)}</b>
+                        </span>
+                        <span>
+                          类型 / Type{" "}
+                          <b>
+                            {job.employmentType === "full-time"
+                              ? "全职 / Full-time"
+                              : employmentTypeLabel(job.employmentType)}
+                          </b>
+                        </span>
+                        <span>
+                          薪资 / Compensation{" "}
+                          <b>{compensationText(job.compensation)}</b>
+                        </span>
+                      </div>
+                      <div className="current-job-target-grid">
+                        <div>
+                          <small>首要职责 / Primary responsibility</small>
+                          <BilingualParagraph
+                            zh={job.responsibilitiesZh[0]}
+                            en={job.responsibilitiesEn[0]}
+                          />
+                        </div>
+                        <div>
+                          <small>最低门槛 / Minimum qualification</small>
+                          <BilingualParagraph
+                            zh={job.minimumQualificationsZh[0]}
+                            en={job.minimumQualificationsEn[0]}
+                          />
+                        </div>
+                        <div>
+                          <small>资格边界 / Eligibility boundary</small>
+                          <BilingualParagraph
+                            zh={
+                              job.eligibilityZh[0] ||
+                              "须按具体岗位核验 / Verify against the posting"
+                            }
+                            en={
+                              job.eligibilityEn[0] ||
+                              "Verify eligibility against the exact posting."
+                            }
+                          />
+                        </div>
+                      </div>
+                      <p className="current-job-compensation-note">
+                        {job.compensation.notesZh}
+                        <span lang="en">{job.compensation.notesEn}</span>
+                      </p>
+                      <div className="current-job-actions">
+                        <a
+                          href={job.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          官方岗位 / Official posting ↗
+                        </a>
+                        <button onClick={() => beginCurrentJob(job)}>
+                          加入管线 / Track requisition →
+                        </button>
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            </article>
+
             {persisted.applications.length === 0 ? (
               <article className="empty-state">
                 <span>00</span>
@@ -3817,6 +4469,15 @@ export function CareerDojoApp({
                               {employmentTypeLabel(application.employment_type)}
                             </span>
                             <span>
+                              地点 / Location{" "}
+                              {application.target_location ||
+                                "待核验 / Unverified"}
+                            </span>
+                            <span className="application-compensation">
+                              薪资 / Compensation{" "}
+                              {applicationCompensationText(application)}
+                            </span>
+                            <span>
                               匹配 / Match {application.match_score || 0}
                             </span>
                             <span>
@@ -3845,154 +4506,14 @@ export function CareerDojoApp({
                               ))}
                             </select>
                           </label>
-                          <details className="application-details">
-                            <summary>编辑具体岗位 / Edit requisition</summary>
-                            <label>
-                              <span>岗位名称 / Role title</span>
-                              <input
-                                defaultValue={application.role_title}
-                                onBlur={(event) => {
-                                  if (
-                                    event.target.value !==
-                                    application.role_title
-                                  ) {
-                                    updateApplication(application, {
-                                      roleTitle: event.target.value,
-                                    });
-                                  }
-                                }}
-                              />
-                            </label>
-                            <label>
-                              <span>截止日期 / Deadline</span>
-                              <input
-                                type="date"
-                                defaultValue={application.deadline}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    deadline: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <label>
-                              <span>优先级 / Priority</span>
-                              <select
-                                value={application.priority}
-                                onChange={(event) =>
-                                  updateApplication(application, {
-                                    priority: event.target.value,
-                                  })
-                                }
-                              >
-                                <option value="high">高 / High</option>
-                                <option value="medium">中 / Medium</option>
-                                <option value="low">低 / Low</option>
-                              </select>
-                            </label>
-                            <label>
-                              <span>
-                                工作授权信号 / Work authorization signal
-                              </span>
-                              <select
-                                value={application.sponsorship_signal}
-                                onChange={(event) =>
-                                  updateApplication(application, {
-                                    sponsorshipSignal: event.target.value,
-                                  })
-                                }
-                              >
-                                {screeningSignalOptions.map(
-                                  ([value, label]) => (
-                                    <option value={value} key={value}>
-                                      {label}
-                                    </option>
-                                  ),
-                                )}
-                              </select>
-                            </label>
-                            <label>
-                              <span>出口管制信号 / Export-control signal</span>
-                              <select
-                                value={application.export_signal}
-                                onChange={(event) =>
-                                  updateApplication(application, {
-                                    exportSignal: event.target.value,
-                                  })
-                                }
-                              >
-                                {screeningSignalOptions.map(
-                                  ([value, label]) => (
-                                    <option value={value} key={value}>
-                                      {label}
-                                    </option>
-                                  ),
-                                )}
-                              </select>
-                            </label>
-                            <label>
-                              <span>联系人 / Contact</span>
-                              <input
-                                defaultValue={application.contact}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    contact: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <label>
-                              <span>简历版本 / Resume version</span>
-                              <input
-                                defaultValue={application.resume_version}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    resumeVersion: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <label>
-                              <span>岗位关键词 / JD keywords</span>
-                              <textarea
-                                defaultValue={application.jd_keywords}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    jdKeywords: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <label>
-                              <span>岗位链接 / Requisition URL</span>
-                              <input
-                                type="url"
-                                defaultValue={application.job_url}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    jobUrl: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <label>
-                              <span>复盘备注 / Reflection notes</span>
-                              <textarea
-                                defaultValue={application.notes}
-                                onBlur={(event) =>
-                                  updateApplication(application, {
-                                    notes: event.target.value,
-                                  })
-                                }
-                              />
-                            </label>
-                            <button
-                              className="delete-button"
-                              onClick={() => deleteApplication(application)}
-                            >
-                              删除这条岗位记录 / Delete requisition
-                            </button>
-                          </details>
+                          <button
+                            className="application-edit-button"
+                            onClick={() =>
+                              setEditingApplicationId(application.id)
+                            }
+                          >
+                            完整岗位档案 / Full requisition profile →
+                          </button>
                           {application.job_url ? (
                             <a
                               href={application.job_url}
@@ -4568,57 +5089,64 @@ export function CareerDojoApp({
             </section>
 
             <div className="modal-columns organization-analysis-grid">
-              <article>
-                <h3>
-                  <BilingualHeading zh="业务方向" en="Business domains" />
-                </h3>
-                <div className="tag-row atomic-tag-row">
-                  {selectedCompany.focusAtoms.map((term) => (
-                    <span key={term.id}>
-                      <BilingualTermLabel term={term} />
-                    </span>
-                  ))}
-                </div>
-              </article>
-              <article>
-                <h3>
-                  <BilingualHeading zh="机会形态" en="Opportunity formats" />
-                </h3>
-                <div className="tag-row atomic-tag-row">
-                  {selectedCompany.opportunityAtoms.map((term) => (
-                    <span key={term.id}>
-                      <BilingualTermLabel term={term} />
-                    </span>
-                  ))}
-                </div>
-              </article>
-              <article>
-                <h3>
-                  <BilingualHeading zh="需求能力" en="Required capabilities" />
-                </h3>
-                <ul className="atomic-content-list">
-                  {selectedCompany.requirementAtoms.map((term) => (
-                    <li key={term.id}>
-                      <BilingualTermLabel term={term} />
-                    </li>
-                  ))}
-                </ul>
-              </article>
-              <article>
-                <h3>
-                  <BilingualHeading
-                    zh="你的补强目标"
-                    en="Your preparation targets"
-                  />
-                </h3>
-                <ul className="atomic-content-list">
-                  {selectedCompany.preparationAtoms.map((term) => (
-                    <li key={term.id}>
-                      <BilingualTermLabel term={term} />
-                    </li>
-                  ))}
-                </ul>
-              </article>
+              <div className="organization-analysis-column">
+                <article>
+                  <h3>
+                    <BilingualHeading zh="业务方向" en="Business domains" />
+                  </h3>
+                  <div className="tag-row atomic-tag-row">
+                    {selectedCompany.focusAtoms.map((term) => (
+                      <span key={term.id}>
+                        <BilingualTermLabel term={term} />
+                      </span>
+                    ))}
+                  </div>
+                </article>
+                <article>
+                  <h3>
+                    <BilingualHeading
+                      zh="需求能力"
+                      en="Required capabilities"
+                    />
+                  </h3>
+                  <ul className="atomic-content-list">
+                    {selectedCompany.requirementAtoms.map((term) => (
+                      <li key={term.id}>
+                        <BilingualTermLabel term={term} />
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </div>
+              <div className="organization-analysis-column">
+                <article>
+                  <h3>
+                    <BilingualHeading zh="机会形态" en="Opportunity formats" />
+                  </h3>
+                  <div className="tag-row atomic-tag-row">
+                    {selectedCompany.opportunityAtoms.map((term) => (
+                      <span key={term.id}>
+                        <BilingualTermLabel term={term} />
+                      </span>
+                    ))}
+                  </div>
+                </article>
+                <article>
+                  <h3>
+                    <BilingualHeading
+                      zh="你的补强目标"
+                      en="Your preparation targets"
+                    />
+                  </h3>
+                  <ul className="atomic-content-list">
+                    {selectedCompany.preparationAtoms.map((term) => (
+                      <li key={term.id}>
+                        <BilingualTermLabel term={term} />
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </div>
             </div>
 
             <div className="modal-evidence">
@@ -4672,6 +5200,9 @@ export function CareerDojoApp({
                   </p>
                 </div>
                 <div className="application-builder-grid">
+                  <h4 className="form-section-heading">
+                    岗位身份 / Requisition identity
+                  </h4>
                   <label>
                     <span>岗位名称 / Role title *</span>
                     <input
@@ -4683,6 +5214,37 @@ export function CareerDojoApp({
                         }))
                       }
                     />
+                  </label>
+                  <label>
+                    <span>岗位编号 / Requisition ID</span>
+                    <input
+                      value={applicationDraft.requisitionId}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          requisitionId: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>岗位族 / Role family</span>
+                    <select
+                      value={applicationDraft.roleFamilyId}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          roleFamilyId: event.target.value,
+                        }))
+                      }
+                    >
+                      <option value="">待核验 / Unverified</option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {role.nameZh} / {role.name}
+                        </option>
+                      ))}
+                    </select>
                   </label>
                   <label>
                     <span>机会类型 / Opportunity type</span>
@@ -4701,6 +5263,103 @@ export function CareerDojoApp({
                         </option>
                       ))}
                     </select>
+                  </label>
+                  <label>
+                    <span>团队 / Team</span>
+                    <input
+                      value={applicationDraft.team}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          team: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>业务单元 / Business unit</span>
+                    <input
+                      value={applicationDraft.businessUnit}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          businessUnit: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>级别 / Level</span>
+                    <input
+                      value={applicationDraft.level}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          level: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>目标地点 / Target location</span>
+                    <input
+                      value={applicationDraft.targetLocation}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          targetLocation: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>办公模式 / Workplace mode</span>
+                    <select
+                      value={applicationDraft.workplaceMode}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          workplaceMode: event.target.value,
+                        }))
+                      }
+                    >
+                      {workplaceModeOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>发布状态 / Posting status</span>
+                    <select
+                      value={applicationDraft.postingStatus}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          postingStatus: event.target.value,
+                        }))
+                      }
+                    >
+                      {postingStatusOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>发布日期 / Posted date</span>
+                    <input
+                      type="date"
+                      value={applicationDraft.postedAt}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          postedAt: event.target.value,
+                        }))
+                      }
+                    />
                   </label>
                   <label>
                     <span>岗位链接 / Requisition URL</span>
@@ -4728,6 +5387,22 @@ export function CareerDojoApp({
                       }
                     />
                   </label>
+                  <label>
+                    <span>来源观察日 / Source observed</span>
+                    <input
+                      type="date"
+                      value={applicationDraft.sourceObservedAt}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          sourceObservedAt: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <h4 className="form-section-heading">
+                    门槛与材料 / Eligibility and materials
+                  </h4>
                   <label>
                     <span>工作授权信号 / Work authorization signal</span>
                     <select
@@ -4788,6 +5463,21 @@ export function CareerDojoApp({
                       }
                     />
                   </label>
+                  <label>
+                    <span>匹配度 / Match score</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={applicationDraft.matchScore}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          matchScore: Number(event.target.value),
+                        }))
+                      }
+                    />
+                  </label>
                   <label className="wide-field">
                     <span>岗位关键词 / JD keywords</span>
                     <textarea
@@ -4800,6 +5490,236 @@ export function CareerDojoApp({
                       }
                     />
                   </label>
+                  <label className="wide-field">
+                    <span>岗位职责 / Responsibilities</span>
+                    <textarea
+                      value={applicationDraft.responsibilities}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          responsibilities: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>最低要求 / Minimum qualifications</span>
+                    <textarea
+                      value={applicationDraft.minimumQualifications}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          minimumQualifications: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>优先条件 / Preferred qualifications</span>
+                    <textarea
+                      value={applicationDraft.preferredQualifications}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          preferredQualifications: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>资格说明 / Eligibility notes</span>
+                    <textarea
+                      value={applicationDraft.eligibilityNotes}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          eligibilityNotes: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <h4 className="form-section-heading">
+                    薪资证据 / Compensation evidence
+                  </h4>
+                  <label>
+                    <span>薪资状态 / Compensation status</span>
+                    <select
+                      value={applicationDraft.compensationStatus}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          compensationStatus: event.target.value,
+                          ...(event.target.value === "not-disclosed"
+                            ? {
+                                salaryMin: "",
+                                salaryMax: "",
+                                salaryCurrency: "",
+                                salaryPeriod: "",
+                              }
+                            : {}),
+                        }))
+                      }
+                    >
+                      {compensationStatusOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>币种 / Currency</span>
+                    <input
+                      placeholder="USD / CNY"
+                      maxLength={3}
+                      disabled={
+                        applicationDraft.compensationStatus === "not-disclosed"
+                      }
+                      value={applicationDraft.salaryCurrency}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryCurrency: event.target.value.toUpperCase(),
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>区间下限 / Range minimum</span>
+                    <input
+                      inputMode="decimal"
+                      disabled={
+                        applicationDraft.compensationStatus === "not-disclosed"
+                      }
+                      value={applicationDraft.salaryMin}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryMin: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>区间上限 / Range maximum</span>
+                    <input
+                      inputMode="decimal"
+                      disabled={
+                        applicationDraft.compensationStatus === "not-disclosed"
+                      }
+                      value={applicationDraft.salaryMax}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryMax: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>计薪周期 / Pay period</span>
+                    <select
+                      disabled={
+                        applicationDraft.compensationStatus === "not-disclosed"
+                      }
+                      value={applicationDraft.salaryPeriod}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryPeriod: event.target.value,
+                        }))
+                      }
+                    >
+                      {salaryPeriodOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>薪资适用地点 / Salary location</span>
+                    <input
+                      value={applicationDraft.salaryLocation}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryLocation: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    <span>证据类型 / Evidence basis</span>
+                    <select
+                      value={applicationDraft.salaryBasis}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryBasis: event.target.value,
+                        }))
+                      }
+                    >
+                      {salaryBasisOptions.map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>薪资观察日 / Salary observed</span>
+                    <input
+                      type="date"
+                      value={applicationDraft.salaryObservedAt}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryObservedAt: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>薪资来源标题 / Compensation source title</span>
+                    <input
+                      value={applicationDraft.salarySourceTitle}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salarySourceTitle: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>薪资来源链接 / Compensation source URL</span>
+                    <input
+                      type="url"
+                      value={applicationDraft.salarySourceUrl}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salarySourceUrl: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label className="wide-field">
+                    <span>薪资口径说明 / Compensation notes</span>
+                    <textarea
+                      value={applicationDraft.salaryNotes}
+                      onChange={(event) =>
+                        setApplicationDraft((draft) => ({
+                          ...draft,
+                          salaryNotes: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <h4 className="form-section-heading">
+                    决策记录 / Decision record
+                  </h4>
                   <label className="wide-field">
                     <span>匹配备注 / Match notes</span>
                     <textarea
@@ -4858,6 +5778,586 @@ export function CareerDojoApp({
                   官方招聘页 / Official careers ↗
                 </a>
               ) : null}
+            </div>
+          </section>
+        </div>
+      ) : null}
+
+      {editingApplication ? (
+        <div className="modal-backdrop" role="presentation">
+          <section
+            ref={applicationModalRef}
+            className="detail-modal application-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="application-dialog-title"
+            tabIndex={-1}
+          >
+            <button
+              className="modal-close"
+              onClick={() => setEditingApplicationId(null)}
+              aria-label="关闭岗位档案 / Close requisition profile"
+            >
+              ×
+            </button>
+            <header className="application-modal-heading">
+              <div>
+                <span className="section-kicker">
+                  具体岗位事实档案 / REQUISITION FACT SHEET
+                </span>
+                <h2 id="application-dialog-title">
+                  {editingApplication.company_name}
+                </h2>
+                <p>{editingApplication.role_title}</p>
+              </div>
+              <div className="application-modal-status">
+                <span>
+                  {postingStatusLabel(editingApplication.posting_status)} ·{" "}
+                  {compensationStatusLabel(
+                    editingApplication.compensation_status,
+                  )}
+                </span>
+                <strong>
+                  {applicationCompensationText(editingApplication)}
+                </strong>
+              </div>
+            </header>
+
+            <section className="application-editor-section">
+              <div className="application-editor-heading">
+                <span>01</span>
+                <div>
+                  <h3>岗位身份 / Requisition identity</h3>
+                  <p>
+                    记录可核验的岗位、团队、地点与时间，不从组织档案反推具体
+                    JD。
+                    <span lang="en">
+                      Record verifiable role, team, location, and timing facts;
+                      never infer an exact JD from an organization profile.
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="application-editor-grid">
+                {(
+                  [
+                    [
+                      "role_title",
+                      "roleTitle",
+                      "岗位名称 / Role title",
+                      "text",
+                    ],
+                    [
+                      "requisition_id",
+                      "requisitionId",
+                      "岗位编号 / Requisition ID",
+                      "text",
+                    ],
+                    ["team", "team", "团队 / Team", "text"],
+                    [
+                      "business_unit",
+                      "businessUnit",
+                      "业务单元 / Business unit",
+                      "text",
+                    ],
+                    ["level", "level", "级别 / Level", "text"],
+                    [
+                      "target_location",
+                      "targetLocation",
+                      "目标地点 / Target location",
+                      "text",
+                    ],
+                    ["posted_at", "postedAt", "发布日期 / Posted date", "date"],
+                    ["deadline", "deadline", "截止日期 / Deadline", "date"],
+                    [
+                      "source_observed_at",
+                      "sourceObservedAt",
+                      "来源观察日 / Source observed",
+                      "date",
+                    ],
+                    ["job_url", "jobUrl", "岗位链接 / Requisition URL", "url"],
+                  ] as const
+                ).map(([recordKey, patchKey, label, type]) => (
+                  <label
+                    className={recordKey === "job_url" ? "wide-field" : ""}
+                    key={recordKey}
+                  >
+                    <span>{label}</span>
+                    <input
+                      type={type}
+                      defaultValue={String(editingApplication[recordKey] || "")}
+                      onBlur={(event) =>
+                        commitApplicationField(
+                          editingApplication,
+                          patchKey,
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                ))}
+                <label>
+                  <span>岗位族 / Role family</span>
+                  <select
+                    value={editingApplication.role_family_id}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "roleFamilyId",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    <option value="">待核验 / Unverified</option>
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.nameZh} / {role.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>机会类型 / Opportunity type</span>
+                  <select
+                    value={editingApplication.employment_type}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "employmentType",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {employmentTypeOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>办公模式 / Workplace mode</span>
+                  <select
+                    value={editingApplication.workplace_mode}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "workplaceMode",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {workplaceModeOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>发布状态 / Posting status</span>
+                  <select
+                    value={editingApplication.posting_status}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "postingStatus",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {postingStatusOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section className="application-editor-section">
+              <div className="application-editor-heading">
+                <span>02</span>
+                <div>
+                  <h3>目标与门槛 / Targets and gates</h3>
+                  <p>
+                    把职责、硬门槛、优先项和身份限制分开记录，避免混成模糊标签。
+                    <span lang="en">
+                      Keep responsibilities, hard requirements, preferences, and
+                      eligibility constraints separate.
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="application-editor-grid">
+                <label>
+                  <span>工作授权信号 / Work authorization</span>
+                  <select
+                    value={editingApplication.sponsorship_signal}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "sponsorshipSignal",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {screeningSignalOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>出口管制信号 / Export control</span>
+                  <select
+                    value={editingApplication.export_signal}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "exportSignal",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {screeningSignalOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {(
+                  [
+                    ["contact", "contact", "联系人 / Contact"],
+                    [
+                      "resume_version",
+                      "resumeVersion",
+                      "简历版本 / Resume version",
+                    ],
+                  ] as const
+                ).map(([recordKey, patchKey, label]) => (
+                  <label key={recordKey}>
+                    <span>{label}</span>
+                    <input
+                      defaultValue={String(editingApplication[recordKey] || "")}
+                      onBlur={(event) =>
+                        commitApplicationField(
+                          editingApplication,
+                          patchKey,
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                ))}
+                <label>
+                  <span>匹配度 / Match score</span>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    defaultValue={editingApplication.match_score}
+                    onBlur={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "matchScore",
+                        Number(event.target.value),
+                      )
+                    }
+                  />
+                </label>
+                {(
+                  [
+                    ["jd_keywords", "jdKeywords", "岗位关键词 / JD keywords"],
+                    [
+                      "responsibilities",
+                      "responsibilities",
+                      "岗位职责 / Responsibilities",
+                    ],
+                    [
+                      "minimum_qualifications",
+                      "minimumQualifications",
+                      "最低要求 / Minimum qualifications",
+                    ],
+                    [
+                      "preferred_qualifications",
+                      "preferredQualifications",
+                      "优先条件 / Preferred qualifications",
+                    ],
+                    [
+                      "eligibility_notes",
+                      "eligibilityNotes",
+                      "资格说明 / Eligibility notes",
+                    ],
+                  ] as const
+                ).map(([recordKey, patchKey, label]) => (
+                  <label className="wide-field" key={recordKey}>
+                    <span>{label}</span>
+                    <textarea
+                      defaultValue={String(editingApplication[recordKey] || "")}
+                      onBlur={(event) =>
+                        commitApplicationField(
+                          editingApplication,
+                          patchKey,
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section className="application-editor-section compensation-editor">
+              <div className="application-editor-heading">
+                <span>03</span>
+                <div>
+                  <h3>薪资证据 / Compensation evidence</h3>
+                  <p>
+                    “未披露”保留为空；外部统计必须标为市场估计，不能冒充雇主报价。
+                    <span lang="en">
+                      Keep undisclosed pay empty. External statistics must stay
+                      labeled as estimates, never employer offers.
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="application-editor-grid">
+                <label>
+                  <span>薪资状态 / Compensation status</span>
+                  <select
+                    value={
+                      editingApplication.compensation_status || "not-disclosed"
+                    }
+                    onChange={(event) =>
+                      void updateApplication(editingApplication, {
+                        compensationStatus: event.target.value,
+                        ...(event.target.value === "not-disclosed"
+                          ? {
+                              salaryMin: "",
+                              salaryMax: "",
+                              salaryCurrency: "",
+                              salaryPeriod: "",
+                            }
+                          : {}),
+                      })
+                    }
+                  >
+                    {compensationStatusOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {(
+                  [
+                    ["salary_currency", "salaryCurrency", "币种 / Currency"],
+                    ["salary_min", "salaryMin", "区间下限 / Range minimum"],
+                    ["salary_max", "salaryMax", "区间上限 / Range maximum"],
+                    [
+                      "salary_location",
+                      "salaryLocation",
+                      "适用地点 / Salary location",
+                    ],
+                    [
+                      "salary_observed_at",
+                      "salaryObservedAt",
+                      "观察日 / Observed date",
+                    ],
+                  ] as const
+                ).map(([recordKey, patchKey, label]) => (
+                  <label key={recordKey}>
+                    <span>{label}</span>
+                    <input
+                      type={
+                        recordKey === "salary_observed_at" ? "date" : "text"
+                      }
+                      disabled={
+                        editingApplication.compensation_status ===
+                          "not-disclosed" &&
+                        [
+                          "salary_currency",
+                          "salary_min",
+                          "salary_max",
+                        ].includes(recordKey)
+                      }
+                      defaultValue={String(editingApplication[recordKey] || "")}
+                      onBlur={(event) =>
+                        commitApplicationField(
+                          editingApplication,
+                          patchKey,
+                          recordKey === "salary_currency"
+                            ? event.target.value.toUpperCase()
+                            : event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                ))}
+                <label>
+                  <span>计薪周期 / Pay period</span>
+                  <select
+                    disabled={
+                      editingApplication.compensation_status === "not-disclosed"
+                    }
+                    value={editingApplication.salary_period}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "salaryPeriod",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {salaryPeriodOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>证据类型 / Evidence basis</span>
+                  <select
+                    value={editingApplication.salary_basis}
+                    onChange={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "salaryBasis",
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {salaryBasisOptions.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {(
+                  [
+                    [
+                      "salary_source_title",
+                      "salarySourceTitle",
+                      "来源标题 / Source title",
+                      "text",
+                    ],
+                    [
+                      "salary_source_url",
+                      "salarySourceUrl",
+                      "来源链接 / Source URL",
+                      "url",
+                    ],
+                  ] as const
+                ).map(([recordKey, patchKey, label, type]) => (
+                  <label className="wide-field" key={recordKey}>
+                    <span>{label}</span>
+                    <input
+                      type={type}
+                      defaultValue={String(editingApplication[recordKey] || "")}
+                      onBlur={(event) =>
+                        commitApplicationField(
+                          editingApplication,
+                          patchKey,
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                ))}
+                <label className="wide-field">
+                  <span>口径说明 / Compensation notes</span>
+                  <textarea
+                    defaultValue={editingApplication.salary_notes}
+                    onBlur={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "salaryNotes",
+                        event.target.value,
+                      )
+                    }
+                  />
+                </label>
+              </div>
+            </section>
+
+            <section className="application-editor-section">
+              <div className="application-editor-heading">
+                <span>04</span>
+                <div>
+                  <h3>推进决策 / Pipeline decision</h3>
+                  <p>
+                    保留优先级与复盘依据，让每次投递反哺下一轮策略。
+                    <span lang="en">
+                      Preserve priority and reasoning so every application
+                      improves the next decision.
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="application-editor-grid">
+                <label>
+                  <span>优先级 / Priority</span>
+                  <select
+                    value={editingApplication.priority}
+                    onChange={(event) =>
+                      void updateApplication(editingApplication, {
+                        priority: event.target.value,
+                      })
+                    }
+                  >
+                    <option value="high">高 / High</option>
+                    <option value="medium">中 / Medium</option>
+                    <option value="low">低 / Low</option>
+                  </select>
+                </label>
+                <label className="wide-field">
+                  <span>复盘备注 / Reflection notes</span>
+                  <textarea
+                    defaultValue={editingApplication.notes}
+                    onBlur={(event) =>
+                      commitApplicationField(
+                        editingApplication,
+                        "notes",
+                        event.target.value,
+                      )
+                    }
+                  />
+                </label>
+              </div>
+            </section>
+
+            <div className="modal-actions application-modal-actions">
+              {editingApplication.job_url ? (
+                <a
+                  className="text-link"
+                  href={editingApplication.job_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  官方岗位 / Official posting ↗
+                </a>
+              ) : null}
+              <button
+                className="delete-button"
+                onClick={async () => {
+                  await deleteApplication(editingApplication);
+                  setEditingApplicationId(null);
+                }}
+              >
+                删除岗位记录 / Delete requisition
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => setEditingApplicationId(null)}
+              >
+                完成 / Done
+              </button>
             </div>
           </section>
         </div>

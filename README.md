@@ -14,7 +14,9 @@ infer rejection causes or automatically reweight skills from sparse outcomes.
 
 ## Current snapshot
 
-Evidence date: **2026-07-23**
+Organization and question evidence snapshot: **2026-07-23**
+
+Current-job and compensation evidence snapshot: **2026-07-26**
 
 - **799** organization-market nodes: **360** in the U.S.-first universe and
   **439** in the China-first universe, spanning companies, state-owned groups,
@@ -33,6 +35,13 @@ Evidence date: **2026-07-23**
   direct control source is added. The UI distinguishes **27** direct
   ownership-registry entries from **313** organization-context review sources
 - **15** normalized role families with **2,217** audited company-to-role edges
+- **12** technical role families with auditable U.S. BLS OEWS May 2025
+  P25/P50/P75 wage benchmarks and separate China government recruitment-pay
+  proxies; 3 cross-cutting capability families are explicitly not occupations
+  and receive no invented salary
+- **2** normalized, first-party current-job observations. Both preserve the
+  employer pages' actual `not-disclosed` compensation state rather than
+  displaying zero or presenting a market proxy as an offer
 - **130** atomic skills with prerequisite relationships and **177** bilingual
   atomic display terms
 - **2,100** fully bilingual training tasks: 210 independently authored,
@@ -63,8 +72,13 @@ specific official job posting before applying.
   available without serializing the full atlas into the initial HTML
 - Role-specific readiness estimates based on evidence, not fabricated
   acceptance probabilities
-- Editable requisition tracker for JD URL, deadline, eligibility signals,
-  contacts, resume version, keywords, notes, and funnel stage
+- Full requisition fact sheet for role ID, family, team, business unit, level,
+  location, workplace mode, posting state, responsibilities, minimum and
+  preferred qualifications, eligibility, materials, funnel stage, and
+  evidence-backed compensation status/range/source
+- Distinctive training protocol spanning JD evidence compilation, staged
+  gates, authentic engineering artifacts, bounded hints, evidence reports,
+  fault injection, blind transfer, and outcome feedback
 - Per-user Cloudflare D1 persistence with authenticated-user isolation
 
 ## Research
@@ -74,6 +88,7 @@ specific official job posting before applying.
 - [China company universe](research/china-company-universe.md)
 - [Strategy framework](research/strategy-framework.md)
 - [Competitive landscape](research/competitive-landscape.md)
+- [Compensation methodology](research/compensation-methodology.md)
 - [Interview content contract](research/interview-content-contract.md)
 - [Bilingual question-bank v2 design and audit](research/bilingual-question-bank-v2.md)
 - [Pre-fix independent quality audit](research/question-bank-quality-audit-v2.md)
@@ -115,6 +130,15 @@ npm run dev
 
 The local app runs at `http://localhost:3000`.
 
+## Production
+
+The canonical authenticated entry point is
+`https://carreerdojo.aialra.online`. Its edge path is Cloudflare DNS → VPS
+Nginx → the existing AIALRA Auth Gateway and Authentik → a loopback-only,
+shared-secret-authenticated origin proxy → the private Sites deployment and
+existing Sites D1. See [deploy/README.md](deploy/README.md). Neither the Sites
+bypass bearer nor the proxy shared secret belongs in Git.
+
 ## Quality gates
 
 ```bash
@@ -129,7 +153,9 @@ source-scenario payloads, all 168 minimal-invalid-fixture exercises, all 168
 contract-only exercises, the complete TAP fixture lineage, privacy boundaries,
 TypeScript, lint, production build output, server rendering, API
 authentication, user isolation, request validation, cache privacy, and the
-generated D1 migration.
+generated D1 migration. It also verifies compensation-source semantics,
+non-disclosure handling, legacy application-table migration, Authentik proxy
+identity, same-origin mutation enforcement, and deployment secret boundaries.
 
 Run the separate network audit when refreshing the evidence snapshot:
 

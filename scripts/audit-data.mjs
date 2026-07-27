@@ -400,7 +400,7 @@ assert.ok(profile.id);
 assert.ok(nonEmptyArray(profile.priorityRoleFamilies));
 assert.ok(nonEmptyArray(profile.criticalGaps));
 const privateCandidateFingerprintPattern =
-  /USC MSECE|Rensselaer|\bRPI\b|3\.67|ZU4EV|TinyTapeout|five-stage RISC-V|五级流水|FIR flow|Viterbi flow|Ramulator(?:2)?/i;
+  /USC MSECE|Rensselaer|\bRPI\b|3\.67|ZU4EV|TinyTapeout(?!\.com)|five-stage RISC-V|五级流水|FIR flow|Viterbi flow|Ramulator(?:2)?/i;
 const privateStructuredTimelinePattern =
   /"(?:targetWindow|targetWindowEn|start|startEn)"\s*:\s*"(?:Fall 2026|Summer 2027)"/i;
 const candidateAuthorizationPattern = /\b(?:F-1|CPT)\b/i;

@@ -1,11 +1,13 @@
 import cnCompaniesRaw from "../data/companies.cn.json";
 import cnExpansionRaw from "../data/expansion-cn-candidates.json";
+import currentJobObservationsRaw from "../data/current-job-observations.json";
 import usCompaniesRaw from "../data/companies.us.json";
 import usExpansionRaw from "../data/expansion-us-candidates.json";
 import organizationLabelsRaw from "../data/organization-labels.json";
 import organizationProfileContentRaw from "../data/organization-profile-content.json";
 import organizationRelationsRaw from "../data/organization-relations.json";
 import profileRaw from "../data/profile.json";
+import roleCompensationBenchmarksRaw from "../data/role-compensation-benchmarks.json";
 import roleFamiliesRaw from "../data/role-families.json";
 import roleMappingRaw from "../data/role-mapping.json";
 import skillGraphRaw from "../data/skill-graph.json";
@@ -16,6 +18,8 @@ import { CareerDojoApp } from "./CareerDojoApp";
 import { enrichOrganization } from "./organization-intelligence";
 import type {
   Company,
+  CompensationBenchmarkAsset,
+  CurrentJobObservation,
   OrganizationBankBootstrap,
   OrganizationRelation,
   Profile,
@@ -149,6 +153,10 @@ const organizationBank: OrganizationBankBootstrap = {
   assetSha256: organizationManifestRaw.asset.sha256,
 };
 const profile = profileRaw as unknown as Profile;
+const currentJobs =
+  currentJobObservationsRaw.jobs as unknown as CurrentJobObservation[];
+const compensationBenchmarks =
+  roleCompensationBenchmarksRaw as unknown as CompensationBenchmarkAsset;
 const organizationRelations =
   organizationRelationsRaw as unknown as OrganizationRelation[];
 
@@ -156,6 +164,8 @@ export default function Home() {
   return (
     <CareerDojoApp
       initialCompanies={companies.slice(0, 12)}
+      currentJobs={currentJobs}
+      compensationBenchmarks={compensationBenchmarks}
       organizationBank={organizationBank}
       organizationRelations={organizationRelations}
       roles={roles}
