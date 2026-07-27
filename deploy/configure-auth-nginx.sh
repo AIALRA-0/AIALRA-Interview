@@ -95,28 +95,40 @@ done
 nginx -t
 systemctl reload nginx
 
-status="$(
-  curl -skS \
-    --resolve "$HOSTNAME:443:127.0.0.1" \
-    -o /dev/null \
-    -w '%{http_code}' \
-    "https://$HOSTNAME/"
-)"
+status=''
+for attempt in {1..30}; do
+  status="$(
+    curl --noproxy '*' -skS \
+      --resolve "$HOSTNAME:443:127.0.0.1" \
+      -o /dev/null \
+      -w '%{http_code}' \
+      "https://$HOSTNAME/" ||
+      true
+  )"
+  [[ "$status" == '302' ]] && break
+  sleep 1
+done
 if [[ "$status" != '302' ]]; then
   printf 'Protected entry returned unexpected HTTP %s\n' "$status" >&2
-  exit 1
+  false
 fi
 
-health_status="$(
-  curl -skS \
-    --resolve "$HOSTNAME:443:127.0.0.1" \
-    -o /dev/null \
-    -w '%{http_code}' \
-    "https://$HOSTNAME/__origin_health"
-)"
+health_status=''
+for attempt in {1..30}; do
+  health_status="$(
+    curl --noproxy '*' -skS \
+      --resolve "$HOSTNAME:443:127.0.0.1" \
+      -o /dev/null \
+      -w '%{http_code}' \
+      "https://$HOSTNAME/__origin_health" ||
+      true
+  )"
+  [[ "$health_status" == '404' ]] && break
+  sleep 1
+done
 if [[ "$health_status" != '404' ]]; then
   printf 'The private origin health endpoint returned unexpected HTTP %s\n' "$health_status" >&2
-  exit 1
+  false
 fi
 
 trap - ERR

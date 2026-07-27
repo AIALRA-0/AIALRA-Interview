@@ -56,6 +56,8 @@ test("deployment scripts use the exact requested hostname and root-only secrets"
   assert.match(secrets, /chmod 0600/);
   assert.match(auth, /APP_SLUG='carreerdojo'/);
   assert.match(auth, /reconcile_authentik_callbacks\.sh/);
+  assert.match(auth, /for attempt in \{1\.\.30\}/);
+  assert.match(auth, /curl --noproxy '\*' -skS/);
   assert.match(dns, /dns_cloudflare_api_token/);
   assert.doesNotMatch(
     `${secrets}\n${dns}\n${auth}`,
