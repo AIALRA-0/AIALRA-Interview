@@ -45,14 +45,18 @@ test("the precise job, compensation, training, and editor layouts stay present",
   for (const selector of [
     ".current-job-grid",
     ".current-job-target-grid",
-    ".role-compensation-benchmark",
+    ".position-compensation-card",
+    ".specific-position-grid",
+    ".equivalence-panel",
+    ".pay-method-primer-grid",
     ".training-protocol-grid",
     ".application-editor-grid",
   ]) {
     assert.match(css, new RegExp(selector.replaceAll(".", "\\.")));
   }
-  assert.match(app, /市场工资基准 \/ Market wage benchmark/);
-  assert.match(app, /非雇主报价 \/ Not an employer offer/);
+  assert.match(app, /具体职位薪资对照 \/ Specific-position pay/);
+  assert.match(app, /两侧各用独立证据|两个独立来源/);
+  assert.match(app, /P25、P50、P75 是什么？/);
   assert.match(app, /JD 证据编译器/);
   assert.match(app, /完整岗位档案 \/ Full requisition profile/);
 });

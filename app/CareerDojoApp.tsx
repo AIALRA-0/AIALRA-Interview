@@ -21,11 +21,12 @@ import type {
   CurrentJobObservation,
   InterviewQuestion,
   InterviewQuestionSummary,
-  MarketCompensationBenchmark,
   OrganizationBankBootstrap,
   OrganizationRelation,
   OrganizationUniverseAsset,
   PersistedState,
+  PositionCompensationComparison,
+  PositionCompensationComparisonAsset,
   Profile,
   QuestionBankBootstrap,
   QuestionBankIndex,
@@ -33,7 +34,12 @@ import type {
   QuestionOracle,
   RoleFamily,
   SkillNode,
+  SpecificPositionCompensation,
 } from "./types";
+import {
+  calculatePositionComparison,
+  type PositionComparisonCalculation,
+} from "./compensation-calculator";
 
 type ViewId =
   "mission" | "atlas" | "roles" | "dojo" | "applications" | "evidence";
@@ -60,6 +66,7 @@ type AppProps = {
   initialCompanies: Company[];
   currentJobs: CurrentJobObservation[];
   compensationBenchmarks: CompensationBenchmarkAsset;
+  positionCompensationComparisons: PositionCompensationComparisonAsset;
   organizationBank: OrganizationBankBootstrap;
   organizationRelations: OrganizationRelation[];
   roles: RoleFamily[];
@@ -801,8 +808,7 @@ function applicationCompensationText(application: ApplicationRecord) {
   });
 }
 
-function benchmarkAmount(value: number | undefined, currency: string): string {
-  if (value === undefined) return "—";
+function positionMoney(value: number, currency: "USD" | "CNY"): string {
   return new Intl.NumberFormat(currency === "CNY" ? "zh-CN" : "en-US", {
     style: "currency",
     currency,
@@ -810,31 +816,56 @@ function benchmarkAmount(value: number | undefined, currency: string): string {
   }).format(value);
 }
 
-function benchmarkValueText(benchmark: MarketCompensationBenchmark) {
-  const { values, currency, statistic } = benchmark;
-  if (statistic === "p25-p50-p75") {
-    return `P25 ${benchmarkAmount(values.p25, currency)} · P50 ${benchmarkAmount(
-      values.median,
-      currency,
-    )} · P75 ${benchmarkAmount(values.p75, currency)}`;
-  }
-  if (statistic === "regional-mean-envelope") {
-    return `${benchmarkAmount(values.low, currency)}–${benchmarkAmount(
-      values.high,
-      currency,
-    )} 地区均值包络 / regional mean envelope`;
-  }
-  return `${benchmarkAmount(values.mean, currency)} 平均招聘薪酬 / recruitment mean`;
+function positionMoneyRange(
+  minimum: number,
+  maximum: number,
+  currency: "USD" | "CNY",
+) {
+  return `${positionMoney(minimum, currency)}–${positionMoney(
+    maximum,
+    currency,
+  )}`;
 }
 
-function benchmarkMatchLabel(
-  value: MarketCompensationBenchmark["matchQuality"],
+function internationalDollar(value: number) {
+  return `Int$${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+  }).format(value)}`;
+}
+
+function positionBasisLabel(
+  value: SpecificPositionCompensation["basis"],
 ) {
-  return value === "direct"
-    ? "直接匹配 / Direct"
-    : value === "adjacent"
-      ? "邻近代理 / Adjacent proxy"
-      : "宽口径背景 / Broad context";
+  if (value === "employer-posting") {
+    return "雇主原始职位 / Employer posting";
+  }
+  if (value === "third-party-campus-posting") {
+    return "第三方校招职位 / Third-party campus posting";
+  }
+  if (value === "third-party-job-board") {
+    return "第三方招聘平台 / Third-party job board";
+  }
+  return "第三方职位估算 / Third-party position estimate";
+}
+
+function sourceStatusLabel(
+  value: SpecificPositionCompensation["sourceStatus"],
+) {
+  return value === "current"
+    ? "当前观察 / Current observation"
+    : "本招聘周期历史快照 / Historical snapshot in current cycle";
+}
+
+function equivalenceWinnerLabel(value: "US" | "CN" | "TIE") {
+  if (value === "US") return "美国职位 / U.S. position";
+  if (value === "CN") return "中国职位 / China position";
+  return "基本持平 / Approximately tied";
+}
+
+function percentText(value: number) {
+  return `${new Intl.NumberFormat("zh-CN", {
+    maximumFractionDigits: 1,
+  }).format(value)}%`;
 }
 
 function fitRank(value: string) {
@@ -1523,6 +1554,330 @@ function Metric({
   );
 }
 
+function SpecificPositionPanel({
+  market,
+  position,
+  calculation,
+}: {
+  market: "US" | "CN";
+  position: SpecificPositionCompensation;
+  calculation: PositionComparisonCalculation;
+}) {
+  const isUs = market === "US";
+  const currency = position.currency;
+  const gross = isUs ? calculation.us.gross : calculation.china.gross;
+  const cashNetMinimum = isUs
+    ? calculation.us.standardNet.minimum.netAnnual
+    : calculation.china.net.minimum.cashNetAnnual;
+  const cashNetMaximum = isUs
+    ? calculation.us.standardNet.maximum.netAnnual
+    : calculation.china.net.maximum.cashNetAnnual;
+  const effectiveRate = isUs
+    ? calculation.us.standardNet.midpoint.effectiveTaxRate
+    : calculation.china.net.midpoint.effectiveCashDeductionRate;
+
+  return (
+    <article className="specific-position-panel">
+      <div className="specific-position-market">
+        <span>{isUs ? "美国职位 / U.S. POSITION" : "中国职位 / CHINA POSITION"}</span>
+        <small>
+          {position.currency} · {sourceStatusLabel(position.sourceStatus)}
+        </small>
+      </div>
+      <h4>
+        {position.companyZh && position.companyZh !== position.companyEn
+          ? `${position.companyZh} / `
+          : ""}
+        {position.companyEn}
+      </h4>
+      <strong className="specific-position-title">
+        {position.titleZh} / <span lang="en">{position.titleEn}</span>
+      </strong>
+      <div className="specific-position-meta">
+        <span>
+          {position.locationZh} / <span lang="en">{position.locationEn}</span>
+        </span>
+        <span>
+          {position.levelZh} / <span lang="en">{position.levelEn}</span>
+        </span>
+      </div>
+
+      <dl className="specific-position-numbers">
+        <div>
+          <dt>税前年薪 / Gross annual</dt>
+          <dd>{positionMoneyRange(gross.minimum, gross.maximum, currency)}</dd>
+        </div>
+        <div>
+          <dt>税前月均 / Gross monthly average</dt>
+          <dd>
+            {positionMoneyRange(
+              gross.minimum / 12,
+              gross.maximum / 12,
+              currency,
+            )}
+          </dd>
+        </div>
+        <div>
+          <dt>预估现金到手年薪 / Estimated annual cash net</dt>
+          <dd>
+            {positionMoneyRange(cashNetMinimum, cashNetMaximum, currency)}
+          </dd>
+        </div>
+        <div>
+          <dt>预估现金到手月均 / Estimated monthly cash net</dt>
+          <dd>
+            {positionMoneyRange(
+              cashNetMinimum / 12,
+              cashNetMaximum / 12,
+              currency,
+            )}
+          </dd>
+        </div>
+      </dl>
+
+      <div className="specific-position-scenarios">
+        <span>
+          中点现金扣除率 / Midpoint cash deduction{" "}
+          <strong>{percentText(effectiveRate * 100)}</strong>
+        </span>
+        {isUs ? (
+          <span>
+            合资格 F-1 免 FICA 中点 / Eligible F-1 FICA-exempt midpoint{" "}
+            <strong>
+              {positionMoney(
+                calculation.us.ficaExemptNet.midpoint.netAnnual,
+                "USD",
+              )}
+              /年 ·{" "}
+              {positionMoney(
+                calculation.us.ficaExemptNet.midpoint.netMonthly,
+                "USD",
+              )}
+              /月
+            </strong>
+          </span>
+        ) : (
+          <span>
+            中点个人公积金（另列受限储蓄）/ Midpoint employee housing fund
+            (separate restricted savings){" "}
+            <strong>
+              {positionMoney(
+                calculation.china.net.midpoint.employeeHousingFund,
+                "CNY",
+              )}
+              /年 ·{" "}
+              {positionMoney(
+                calculation.china.net.midpoint.employeeHousingFund / 12,
+                "CNY",
+              )}
+              /月
+            </strong>
+          </span>
+        )}
+      </div>
+
+      <div className="specific-position-source">
+        <span>
+          {position.compensationTypeZh} /{" "}
+          <span lang="en">{position.compensationTypeEn}</span>
+        </span>
+        <span>
+          {positionBasisLabel(position.basis)} · {position.payMonthsPerYear}{" "}
+          个计薪月 / salary months
+        </span>
+        <a href={position.sourceUrl} target="_blank" rel="noreferrer">
+          {position.sourceTitle} · 原始证据 / Source evidence ↗
+        </a>
+        <small>
+          {position.notesZh} <span lang="en">{position.notesEn}</span>
+        </small>
+      </div>
+    </article>
+  );
+}
+
+function PositionCompensationCard({
+  comparison,
+  asset,
+}: {
+  comparison: PositionCompensationComparison;
+  asset: PositionCompensationComparisonAsset;
+}) {
+  const calculation = calculatePositionComparison(comparison, asset);
+  const ppp = asset.methodology.privateConsumptionPpp;
+  const fx = asset.methodology.nominalFx;
+
+  return (
+    <section className="position-compensation-card">
+      <div className="position-compensation-heading">
+        <div>
+          <strong>具体职位薪资对照 / Specific-position pay</strong>
+          <small>
+            两个独立来源 · 各自计算 / Two independent sources · separately
+            calculated
+          </small>
+        </div>
+        <time dateTime={asset.evidenceDate}>{asset.evidenceDate}</time>
+      </div>
+
+      <div className="specific-position-grid">
+        <SpecificPositionPanel
+          market="US"
+          position={comparison.us}
+          calculation={calculation}
+        />
+        <SpecificPositionPanel
+          market="CN"
+          position={comparison.china}
+          calculation={calculation}
+        />
+      </div>
+
+      <div className="equivalence-panel">
+        <div className="equivalence-heading">
+          <strong>
+            税后购买力等效 / After-tax purchasing-power equivalence
+          </strong>
+          <small>
+            世界银行私人消费 PPP / World Bank private-consumption PPP
+          </small>
+        </div>
+        <dl>
+          <div>
+            <dt>美国普通雇员中点 / U.S. standard midpoint</dt>
+            <dd>
+              {internationalDollar(
+                calculation.equivalence.usStandardNetPurchasingPower,
+              )}
+              /年
+            </dd>
+          </div>
+          <div>
+            <dt>美国合资格 F-1 中点 / U.S. eligible F-1 midpoint</dt>
+            <dd>
+              {internationalDollar(
+                calculation.equivalence.usFicaExemptNetPurchasingPower,
+              )}
+              /年
+            </dd>
+          </div>
+          <div>
+            <dt>中国现金到手中点 / China cash-net midpoint</dt>
+            <dd>
+              {internationalDollar(
+                calculation.equivalence.chinaCashNetPurchasingPower,
+              )}
+              /年
+            </dd>
+          </div>
+          <div>
+            <dt>中国名义汇率折算 / China nominal-FX conversion</dt>
+            <dd>
+              {positionMoney(
+                calculation.equivalence.chinaCashNetNominalUsd,
+                "USD",
+              )}
+              /年 ·{" "}
+              {positionMoney(
+                calculation.equivalence.chinaCashNetNominalUsd / 12,
+                "USD",
+              )}
+              /月
+            </dd>
+          </div>
+        </dl>
+        <div className="equivalence-verdicts">
+          <p>
+            普通雇员场景 / Standard employee:{" "}
+            <strong>
+              {equivalenceWinnerLabel(
+                calculation.equivalence.standardWinner,
+              )}{" "}
+              {percentText(calculation.equivalence.standardAdvantagePercent)}
+              购买力优势 / purchasing-power advantage
+            </strong>
+          </p>
+          <p>
+            合资格 F-1 敏感性 / Eligible F-1 sensitivity:{" "}
+            <strong>
+              {equivalenceWinnerLabel(
+                calculation.equivalence.ficaExemptWinner,
+              )}{" "}
+              {percentText(
+                calculation.equivalence.ficaExemptAdvantagePercent,
+              )}
+              购买力优势 / purchasing-power advantage
+            </strong>
+          </p>
+        </div>
+        <p className="equivalence-caution">
+          这是税后现金购买力信号，不是对职业发展、签证、股权、医保、住房或城市生活质量的总评。
+          <span lang="en">
+            This is an after-tax cash purchasing-power signal, not an overall
+            verdict on career growth, immigration, equity, healthcare, housing,
+            or city quality of life.
+          </span>
+        </p>
+      </div>
+
+      <details className="position-method-details">
+        <summary>查看配对限制、公式与官方依据 / Pairing limits, formulas, and sources</summary>
+        <div>
+          <p>
+            {comparison.comparisonNoteZh}
+            <span lang="en">{comparison.comparisonNoteEn}</span>
+          </p>
+          <p>
+            美国：{asset.methodology.usTaxScenario.filingStatusZh}；中国：
+            {asset.methodology.chinaTaxScenario.filingStatusZh}。
+            <span lang="en">
+              U.S.: {asset.methodology.usTaxScenario.filingStatusEn}; China:{" "}
+              {asset.methodology.chinaTaxScenario.filingStatusEn}.
+            </span>
+          </p>
+          <p>
+            {asset.methodology.usTaxScenario.notesZh}
+            <span lang="en">{asset.methodology.usTaxScenario.notesEn}</span>
+          </p>
+          <p>
+            {asset.methodology.chinaTaxScenario.notesZh}
+            <span lang="en">{asset.methodology.chinaTaxScenario.notesEn}</span>
+          </p>
+          <p>
+            名义汇率为 1 USD = {fx.cnyPerUsd} CNY（{fx.referenceDate}）；中国{" "}
+            {ppp.referenceYear} 私人消费 PPP 为 {ppp.chinaCnyPerInternationalDollar}{" "}
+            CNY/Int$，美国为 {ppp.unitedStatesUsdPerInternationalDollar} USD/Int$。
+            <span lang="en">
+              Nominal FX is 1 USD = {fx.cnyPerUsd} CNY ({fx.referenceDate});
+              China&apos;s {ppp.referenceYear} private-consumption PPP is{" "}
+              {ppp.chinaCnyPerInternationalDollar} CNY/Int$ and the U.S. factor
+              is {ppp.unitedStatesUsdPerInternationalDollar} USD/Int$.
+            </span>
+          </p>
+          <div className="method-source-links">
+            <a href={ppp.sourceUrl} target="_blank" rel="noreferrer">
+              {ppp.sourceTitleZh} / {ppp.sourceTitleEn} ↗
+            </a>
+            <a href={fx.sourceUrl} target="_blank" rel="noreferrer">
+              {fx.sourceTitleZh} / {fx.sourceTitleEn} ↗
+            </a>
+            {asset.methodology.usTaxScenario.sources.map((source) => (
+              <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
+                {source.titleZh} / {source.titleEn} ↗
+              </a>
+            ))}
+            {asset.methodology.chinaTaxScenario.sources.map((source) => (
+              <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
+                {source.titleZh} / {source.titleEn} ↗
+              </a>
+            ))}
+          </div>
+        </div>
+      </details>
+    </section>
+  );
+}
+
 function StatusDot({ signal }: { signal: string }) {
   const key = signalKey(signal);
   return (
@@ -1552,6 +1907,7 @@ export function CareerDojoApp({
   initialCompanies,
   currentJobs,
   compensationBenchmarks,
+  positionCompensationComparisons,
   organizationBank,
   organizationRelations,
   roles,
@@ -1972,25 +2328,15 @@ export function CareerDojoApp({
     () => new Map(companies.map((company) => [company.id, company])),
     [companies],
   );
-  const compensationBenchmarkByRoleId = useMemo(
+  const positionCompensationByRoleId = useMemo(
     () =>
       new Map(
-        compensationBenchmarks.benchmarks.map((benchmark) => [
-          benchmark.roleFamilyId,
-          benchmark,
+        positionCompensationComparisons.comparisons.map((comparison) => [
+          comparison.roleFamilyId,
+          comparison,
         ]),
       ),
-    [compensationBenchmarks],
-  );
-  const compensationSourceById = useMemo(
-    () =>
-      new Map(
-        compensationBenchmarks.sourceCatalog.map((source) => [
-          source.id,
-          source,
-        ]),
-      ),
-    [compensationBenchmarks],
+    [positionCompensationComparisons],
   );
   const editingApplication = editingApplicationId
     ? persisted.applications.find(
@@ -2838,7 +3184,7 @@ export function CareerDojoApp({
             <span className="evidence-pill">
               <i />
               组织证据 / Org evidence {effectiveProfile.evidenceDate} · 薪资 /
-              Pay {compensationBenchmarks.evidenceDate}
+              Pay {positionCompensationComparisons.evidenceDate}
             </span>
             <button
               className="primary-button"
@@ -3458,6 +3804,68 @@ export function CareerDojoApp({
               </p>
             </div>
 
+            <section className="pay-method-primer">
+              <div>
+                <span className="section-kicker">
+                  薪资阅读方法 / HOW TO READ PAY
+                </span>
+                <h3>具体职位先行，统一周期，税后再等效 / Position first, normalized periods, then after-tax equivalence</h3>
+              </div>
+              <div className="pay-method-primer-grid">
+                <article>
+                  <strong>P25、P50、P75 是什么？ / What are P25, P50, and P75?</strong>
+                  <p>
+                    P25 表示约 25% 的观测工资不高于该值；P50 是中位数；P75
+                    表示约 75% 的观测工资不高于该值。它们不是最低、平均、最高。
+                    <span lang="en">
+                      P25 is the 25th-percentile cutoff, P50 is the median, and
+                      P75 is the 75th-percentile cutoff. They are not minimum,
+                      average, and maximum.
+                    </span>
+                  </p>
+                </article>
+                <article>
+                  <strong>为什么这里不用 P25/P50/P75？ / Why not use percentiles here?</strong>
+                  <p>
+                    本页每组是两个具体招聘职位的刊载区间，不是职业样本分布，因此不把区间端点冒充分位数。职业大类统计仅保留为
+                    {compensationBenchmarks.evidenceDate} 的背景口径。
+                    <span lang="en">
+                      Each pair uses two specific posting ranges, not an
+                      occupational sample distribution, so range endpoints are
+                      never mislabeled as percentiles. Broad occupational data
+                      remains background context only.
+                    </span>
+                  </p>
+                </article>
+                <article>
+                  <strong>如何统一中美周期？ / How are periods normalized?</strong>
+                  <p>
+                    每个职位同时显示税前年薪、税前月均、预估到手年薪和预估到手月均。中国职位按刊载月薪乘独立的计薪月数，再除以
+                    12 得到日历月均。
+                    <span lang="en">
+                      Every position shows gross annual, gross monthly average,
+                      estimated annual net, and estimated monthly net. China
+                      postings use their own salary-month count before
+                      conversion to a 12-month calendar average.
+                    </span>
+                  </p>
+                </article>
+                <article>
+                  <strong>哪个市场“更优”？ / Which market is “better”?</strong>
+                  <p>
+                    主判据是税后现金中点 ÷
+                    世界银行私人消费购买力平价因子；名义汇率另列，避免把换汇金额当成本地购买力。结果只回答现金购买力，不替代职业、签证与生活选择。
+                    <span lang="en">
+                      The primary signal divides midpoint after-tax cash by the
+                      World Bank private-consumption PPP factor; nominal FX is
+                      shown separately. It measures cash purchasing power, not
+                      the full career or life decision.
+                    </span>
+                  </p>
+                </article>
+              </div>
+            </section>
+
             <div className="role-grid">
               {roles.map((role) => {
                 const presentation = rolePresentationFor(role);
@@ -3474,9 +3882,8 @@ export function CareerDojoApp({
                         question.roleFamilies.includes(role.id),
                       ).length
                     : null;
-                const compensationBenchmark = compensationBenchmarkByRoleId.get(
-                  role.id,
-                );
+                const positionCompensation =
+                  positionCompensationByRoleId.get(role.id);
                 return (
                   <article
                     className={`role-card ${priority ? "priority" : ""}`}
@@ -3513,124 +3920,28 @@ export function CareerDojoApp({
                           : `${roleQuestions} 道训练任务 / drills`}
                       </span>
                     </div>
-                    <section className="role-compensation-benchmark">
-                      <div className="role-compensation-heading">
-                        <strong>市场工资基准 / Market wage benchmark</strong>
-                        <small>
-                          非雇主报价 / Not an employer offer ·{" "}
-                          {compensationBenchmarks.evidenceDate}
-                        </small>
-                      </div>
-                      {compensationBenchmark?.us ? (
-                        <div className="role-compensation-market">
-                          <span>美国 / U.S.</span>
-                          <strong>
-                            {benchmarkValueText(compensationBenchmark.us)}
-                          </strong>
-                          <small>
-                            {compensationBenchmark.us.occupationZh} /{" "}
-                            {compensationBenchmark.us.occupationEn} ·{" "}
-                            {benchmarkMatchLabel(
-                              compensationBenchmark.us.matchQuality,
-                            )}{" "}
-                            · USD/年 / year
-                          </small>
-                        </div>
-                      ) : null}
-                      {compensationBenchmark?.china[0] ? (
-                        <div className="role-compensation-market">
-                          <span>中国 / China</span>
-                          <strong>
-                            {benchmarkValueText(compensationBenchmark.china[0])}
-                          </strong>
-                          <small>
-                            {compensationBenchmark.china[0].occupationZh} /{" "}
-                            {compensationBenchmark.china[0].occupationEn} ·{" "}
-                            {benchmarkMatchLabel(
-                              compensationBenchmark.china[0].matchQuality,
-                            )}{" "}
-                            · CNY/月 / month
-                          </small>
-                        </div>
-                      ) : null}
-                      {compensationBenchmark?.benchmarkStatus ===
-                      "not-applicable" ? (
+                    {positionCompensation ? (
+                      <PositionCompensationCard
+                        comparison={positionCompensation}
+                        asset={positionCompensationComparisons}
+                      />
+                    ) : (
+                      <section className="position-compensation-empty">
+                        <strong>
+                          通用能力不单独定价 / Cross-cutting skill is not
+                          separately priced
+                        </strong>
                         <p>
-                          {compensationBenchmark.notesZh}
-                          <span lang="en">{compensationBenchmark.notesEn}</span>
+                          该能力继承你所选技术职位的薪资；为了保持每个面板独立准确，这里不复用其他岗位的数字。
+                          <span lang="en">
+                            This skill inherits the pay of the technical
+                            position you select. No other role&apos;s result is
+                            reused here, preserving panel-level evidence
+                            integrity.
+                          </span>
                         </p>
-                      ) : null}
-                      {compensationBenchmark?.us ||
-                      compensationBenchmark?.china.length ? (
-                        <details>
-                          <summary>
-                            查看口径、全部中国代理与来源 / Method, all China
-                            proxies, and sources
-                          </summary>
-                          <div className="role-compensation-details">
-                            {compensationBenchmark.us ? (
-                              <article>
-                                <strong>
-                                  {compensationBenchmark.us.geographyZh} /{" "}
-                                  {compensationBenchmark.us.geographyEn}
-                                </strong>
-                                <p>
-                                  {compensationBenchmark.us.matchNoteZh}
-                                  <span lang="en">
-                                    {compensationBenchmark.us.matchNoteEn}
-                                  </span>
-                                </p>
-                                {compensationSourceById.has(
-                                  compensationBenchmark.us.sourceId,
-                                ) ? (
-                                  <a
-                                    href={
-                                      compensationSourceById.get(
-                                        compensationBenchmark.us.sourceId,
-                                      )!.url
-                                    }
-                                    target="_blank"
-                                    rel="noreferrer"
-                                  >
-                                    BLS OEWS 2025 · 官方来源 / Official source ↗
-                                  </a>
-                                ) : null}
-                              </article>
-                            ) : null}
-                            {compensationBenchmark.china.map((benchmark) => {
-                              const source = compensationSourceById.get(
-                                benchmark.sourceId,
-                              );
-                              return (
-                                <article key={benchmark.id}>
-                                  <strong>
-                                    {benchmark.occupationZh} /{" "}
-                                    {benchmark.occupationEn}
-                                  </strong>
-                                  <b>{benchmarkValueText(benchmark)}</b>
-                                  <p>
-                                    {benchmark.matchNoteZh}
-                                    <span lang="en">
-                                      {benchmark.matchNoteEn}
-                                    </span>
-                                  </p>
-                                  {source ? (
-                                    <a
-                                      href={source.url}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      {source.referencePeriod} · 官方来源 /
-                                      Official source ↗
-                                    </a>
-                                  ) : null}
-                                </article>
-                              );
-                            })}
-                          </div>
-                        </details>
-                      ) : null}
-                    </section>
+                      </section>
+                    )}
                     <div
                       className="stage-list atomic-stage-list"
                       aria-label="面试环节 / Interview stages"

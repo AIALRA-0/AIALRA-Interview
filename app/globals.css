@@ -1245,12 +1245,12 @@ main {
 
 .role-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
 }
 
 .role-card {
-  min-height: 320px;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   padding: 22px;
@@ -1314,112 +1314,6 @@ main {
   font-size: 10px;
 }
 
-.role-compensation-benchmark {
-  margin: 0 0 16px;
-  border: 1px solid var(--line);
-  border-top: 2px solid var(--ink);
-  background: var(--card);
-}
-
-.role-compensation-heading,
-.role-compensation-market {
-  display: grid;
-  gap: 4px;
-  padding: 11px 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.role-compensation-heading {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-}
-
-.role-compensation-heading strong {
-  font-size: 10px;
-}
-
-.role-compensation-heading small {
-  color: var(--ink-soft);
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 8px;
-  text-align: right;
-}
-
-.role-compensation-market > span {
-  color: var(--ink-soft);
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 8px;
-  font-weight: 750;
-}
-
-.role-compensation-market > strong {
-  overflow-wrap: anywhere;
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.role-compensation-market > small {
-  color: var(--ink-soft);
-  font-size: 8px;
-  line-height: 1.45;
-}
-
-.role-card .role-compensation-benchmark > p {
-  min-height: 0;
-  padding: 12px;
-  font-size: 9px;
-}
-
-.role-card .role-compensation-benchmark > p span,
-.role-compensation-details p span {
-  display: block;
-  margin-top: 3px;
-}
-
-.role-compensation-benchmark details {
-  padding: 10px 12px;
-}
-
-.role-compensation-benchmark summary {
-  cursor: pointer;
-  font-size: 9px;
-  font-weight: 750;
-  line-height: 1.45;
-}
-
-.role-compensation-details {
-  display: grid;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.role-compensation-details article {
-  display: grid;
-  gap: 5px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  background: var(--paper);
-}
-
-.role-compensation-details article > strong,
-.role-compensation-details article > b {
-  font-size: 9px;
-  line-height: 1.45;
-}
-
-.role-card .role-compensation-details p {
-  min-height: 0;
-  font-size: 8px;
-  line-height: 1.5;
-}
-
-.role-compensation-details a {
-  font-size: 8px;
-  font-weight: 750;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
 .role-card .stage-list {
   margin-bottom: 18px;
 }
@@ -1429,6 +1323,355 @@ main {
   padding: 12px 0 0;
   border-top: 1px solid var(--line);
   text-align: left;
+}
+
+.pay-method-primer {
+  display: grid;
+  gap: 18px;
+  margin: 0 0 22px;
+  padding: 22px;
+  border: 1px solid var(--ink);
+  background: var(--card);
+}
+
+.pay-method-primer h3 {
+  max-width: 920px;
+  margin: 8px 0 0;
+  font-size: 22px;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.pay-method-primer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.pay-method-primer-grid article {
+  padding: 15px;
+  background: var(--paper);
+}
+
+.pay-method-primer-grid strong {
+  display: block;
+  min-height: 32px;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.pay-method-primer-grid p,
+.position-compensation-card p,
+.position-compensation-empty p {
+  min-height: 0;
+}
+
+.pay-method-primer-grid p {
+  margin: 9px 0 0;
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.pay-method-primer-grid p span,
+.position-method-details p span,
+.position-compensation-empty p span,
+.equivalence-caution span {
+  display: block;
+  margin-top: 4px;
+}
+
+.position-compensation-card {
+  margin: 4px 0 18px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.position-compensation-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.position-compensation-heading > div {
+  display: grid;
+  gap: 4px;
+}
+
+.position-compensation-heading strong {
+  font-size: 12px;
+}
+
+.position-compensation-heading small,
+.position-compensation-heading time {
+  color: var(--ink-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.specific-position-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--ink);
+}
+
+.specific-position-panel {
+  min-width: 0;
+  padding: 16px;
+}
+
+.specific-position-panel + .specific-position-panel {
+  border-left: 1px solid var(--ink);
+}
+
+.specific-position-market {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 13px;
+  color: var(--ink-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 8px;
+  font-weight: 760;
+}
+
+.specific-position-market span:first-child {
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+
+.specific-position-panel h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.specific-position-title {
+  display: block;
+  min-height: 36px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.specific-position-meta {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0 14px;
+  color: var(--ink-soft);
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.specific-position-meta > span,
+.specific-position-source > span {
+  overflow-wrap: anywhere;
+}
+
+.specific-position-numbers,
+.equivalence-panel dl {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--line);
+}
+
+.specific-position-numbers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.specific-position-numbers > div,
+.equivalence-panel dl > div {
+  min-width: 0;
+  padding: 10px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.specific-position-numbers > div:nth-child(2n) {
+  border-right: 0;
+}
+
+.specific-position-numbers > div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.specific-position-numbers dt,
+.equivalence-panel dt {
+  margin-bottom: 5px;
+  color: var(--ink-soft);
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.specific-position-numbers dd,
+.equivalence-panel dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+.specific-position-scenarios,
+.specific-position-source {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+.specific-position-scenarios {
+  padding: 10px;
+  border-left: 2px solid var(--ink);
+  background: var(--paper-deep);
+}
+
+.specific-position-scenarios strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink);
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.specific-position-source {
+  color: var(--ink-soft);
+}
+
+.specific-position-source a,
+.method-source-links a {
+  color: var(--ink);
+  font-weight: 760;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.specific-position-source small {
+  line-height: 1.5;
+}
+
+.specific-position-source small span {
+  display: block;
+}
+
+.equivalence-panel {
+  padding: 16px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--card);
+}
+
+.equivalence-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.equivalence-heading strong {
+  font-size: 11px;
+}
+
+.equivalence-heading small {
+  color: var(--ink-soft);
+  font-size: 8px;
+}
+
+.equivalence-panel dl {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.equivalence-panel dl > div:last-child {
+  border-right: 0;
+}
+
+.equivalence-panel dl > div {
+  border-bottom: 0;
+}
+
+.equivalence-verdicts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 12px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.role-card .equivalence-verdicts p {
+  margin: 0;
+  padding: 10px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.equivalence-verdicts strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+}
+
+.role-card .equivalence-caution {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.position-method-details {
+  padding: 12px 16px;
+}
+
+.position-method-details summary {
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 760;
+}
+
+.position-method-details > div {
+  display: grid;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.role-card .position-method-details p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.method-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 8px;
+}
+
+.position-compensation-empty {
+  margin: 4px 0 18px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ink);
+  background: var(--paper);
+}
+
+.position-compensation-empty strong {
+  font-size: 10px;
+}
+
+.role-card .position-compensation-empty p {
+  margin: 7px 0 0;
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.55;
 }
 
 .skill-map-panel {
@@ -3741,9 +3984,21 @@ main {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .role-grid,
   .question-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pay-method-primer-grid,
+  .equivalence-panel dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .equivalence-panel dl > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .equivalence-panel dl > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
   }
 
   .training-protocol-grid {
@@ -3896,6 +4151,28 @@ main {
   .rubric-grid,
   .self-score {
     grid-template-columns: 1fr;
+  }
+
+  .pay-method-primer-grid,
+  .specific-position-grid,
+  .equivalence-panel dl,
+  .equivalence-verdicts {
+    grid-template-columns: 1fr;
+  }
+
+  .specific-position-panel + .specific-position-panel {
+    border-top: 1px solid var(--ink);
+    border-left: 0;
+  }
+
+  .equivalence-panel dl > div,
+  .equivalence-panel dl > div:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .equivalence-panel dl > div:last-child {
+    border-bottom: 0;
   }
 
   .training-protocol-heading,

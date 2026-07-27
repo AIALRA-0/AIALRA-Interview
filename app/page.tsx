@@ -6,6 +6,7 @@ import usExpansionRaw from "../data/expansion-us-candidates.json";
 import organizationLabelsRaw from "../data/organization-labels.json";
 import organizationProfileContentRaw from "../data/organization-profile-content.json";
 import organizationRelationsRaw from "../data/organization-relations.json";
+import positionCompensationComparisonsRaw from "../data/position-compensation-comparisons.json";
 import profileRaw from "../data/profile.json";
 import roleCompensationBenchmarksRaw from "../data/role-compensation-benchmarks.json";
 import roleFamiliesRaw from "../data/role-families.json";
@@ -22,6 +23,7 @@ import type {
   CurrentJobObservation,
   OrganizationBankBootstrap,
   OrganizationRelation,
+  PositionCompensationComparisonAsset,
   Profile,
   QuestionBankBootstrap,
   RoleFamily,
@@ -157,6 +159,8 @@ const currentJobs =
   currentJobObservationsRaw.jobs as unknown as CurrentJobObservation[];
 const compensationBenchmarks =
   roleCompensationBenchmarksRaw as unknown as CompensationBenchmarkAsset;
+const positionCompensationComparisons =
+  positionCompensationComparisonsRaw as unknown as PositionCompensationComparisonAsset;
 const organizationRelations =
   organizationRelationsRaw as unknown as OrganizationRelation[];
 
@@ -166,6 +170,7 @@ export default function Home() {
       initialCompanies={companies.slice(0, 12)}
       currentJobs={currentJobs}
       compensationBenchmarks={compensationBenchmarks}
+      positionCompensationComparisons={positionCompensationComparisons}
       organizationBank={organizationBank}
       organizationRelations={organizationRelations}
       roles={roles}

@@ -253,6 +253,105 @@ export type CompensationBenchmarkAsset = {
   benchmarks: RoleCompensationBenchmark[];
 };
 
+export type PositionCompensationBasis =
+  | "employer-posting"
+  | "third-party-job-board"
+  | "third-party-campus-posting"
+  | "third-party-estimate";
+
+export type SpecificPositionCompensation = {
+  id: string;
+  companyZh: string;
+  companyEn: string;
+  titleZh: string;
+  titleEn: string;
+  locationZh: string;
+  locationEn: string;
+  taxRegion: "CA" | "TX" | "SH";
+  levelZh: string;
+  levelEn: string;
+  minimum: number;
+  maximum: number;
+  currency: "USD" | "CNY";
+  period: "month" | "year";
+  payMonthsPerYear: number;
+  compensationTypeZh: string;
+  compensationTypeEn: string;
+  basis: PositionCompensationBasis;
+  sourceStatus: "current" | "historical-current-cycle";
+  sourceUrl: string;
+  sourceTitle: string;
+  observedAt: string;
+  notesZh: string;
+  notesEn: string;
+};
+
+export type PositionCompensationComparison = {
+  roleFamilyId: string;
+  roleNameZh: string;
+  roleNameEn: string;
+  comparisonNoteZh: string;
+  comparisonNoteEn: string;
+  us: SpecificPositionCompensation;
+  china: SpecificPositionCompensation;
+};
+
+export type PositionCompensationComparisonAsset = {
+  schemaVersion: string;
+  evidenceDate: string;
+  titleZh: string;
+  titleEn: string;
+  methodology: {
+    nominalFx: {
+      cnyPerUsd: number;
+      referenceDate: string;
+      sourceTitleZh: string;
+      sourceTitleEn: string;
+      sourceUrl: string;
+    };
+    privateConsumptionPpp: {
+      chinaCnyPerInternationalDollar: number;
+      unitedStatesUsdPerInternationalDollar: number;
+      referenceYear: number;
+      sourceTitleZh: string;
+      sourceTitleEn: string;
+      sourceUrl: string;
+    };
+    usTaxScenario: {
+      filingStatusZh: string;
+      filingStatusEn: string;
+      federalTaxYear: number;
+      californiaLiabilityScheduleYear: number;
+      californiaSdiYear: number;
+      notesZh: string;
+      notesEn: string;
+      sources: Array<{
+        titleZh: string;
+        titleEn: string;
+        url: string;
+      }>;
+    };
+    chinaTaxScenario: {
+      cityZh: string;
+      cityEn: string;
+      filingStatusZh: string;
+      filingStatusEn: string;
+      employeeSocialInsuranceRate: number;
+      employeeHousingFundRateAssumption: number;
+      monthlyContributionBaseMinimum: number;
+      monthlyContributionBaseMaximum: number;
+      notesZh: string;
+      notesEn: string;
+      sources: Array<{
+        titleZh: string;
+        titleEn: string;
+        url: string;
+      }>;
+    };
+  };
+  comparisons: PositionCompensationComparison[];
+};
+
 export type CurrentJobObservation = {
   id: string;
   organizationId: string;
