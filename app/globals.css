@@ -3243,6 +3243,202 @@ main {
   background: #f6f6f6;
 }
 
+.organization-position-evidence {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 12px;
+  padding: 20px;
+  border: 1px solid var(--ink);
+  border-radius: 15px;
+  background: var(--card);
+}
+
+.organization-position-policy {
+  max-width: 920px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.organization-current-job-list,
+.organization-position-pay-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.organization-current-job {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.organization-current-job > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ink-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.organization-current-job h4,
+.organization-current-job p {
+  margin: 0;
+}
+
+.organization-current-job h4 {
+  font-size: 15px;
+}
+
+.organization-current-job p {
+  color: var(--ink-soft);
+  font-size: 10px;
+}
+
+.organization-current-job dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--line);
+}
+
+.organization-current-job dl > div {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+}
+
+.organization-current-job dl > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.organization-current-job dt {
+  color: var(--ink-soft);
+  font-size: 9px;
+}
+
+.organization-current-job dd {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.organization-current-job summary {
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.organization-current-job-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.organization-current-job-details section {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.organization-current-job-details strong {
+  font-size: 10px;
+}
+
+.bilingual-bullet-lists {
+  display: grid;
+  gap: 8px;
+}
+
+.bilingual-bullet-lists ul {
+  margin: 8px 0 0;
+  padding-left: 16px;
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.organization-current-job > a {
+  width: fit-content;
+  font-size: 10px;
+  font-weight: 760;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.organization-position-pay-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+}
+
+.organization-position-pay-grid .specific-position-panel {
+  border: 0;
+}
+
+.organization-position-pay-grid .specific-position-panel:nth-child(2n) {
+  border-left: 1px solid var(--ink);
+}
+
+.organization-position-pay-grid .specific-position-panel:only-child {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(360px, 1.28fr);
+  gap: 10px 24px;
+}
+
+.organization-position-pay-grid
+  .specific-position-panel:only-child
+  > :is(.specific-position-market, h4, .specific-position-title, .specific-position-meta) {
+  grid-column: 1;
+}
+
+.organization-position-pay-grid
+  .specific-position-panel:only-child
+  > :is(.specific-position-numbers, .specific-position-scenarios) {
+  grid-column: 2;
+}
+
+.organization-position-pay-grid
+  .specific-position-panel:only-child
+  > .specific-position-numbers {
+  grid-row: 1 / span 4;
+}
+
+.organization-position-pay-grid
+  .specific-position-panel:only-child
+  > .specific-position-source {
+  grid-column: 1 / -1;
+}
+
+.organization-position-empty {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.organization-position-empty strong {
+  font-size: 11px;
+}
+
+.organization-position-empty p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
 .organization-relations-heading,
 .organization-relation-top {
   display: flex;
@@ -4585,6 +4781,7 @@ main {
   .organization-narrative-grid > article,
   .organization-role-profile,
   .organization-relations,
+  .organization-position-evidence,
   .organization-analysis-column > article {
     padding: 16px;
   }
@@ -4593,6 +4790,22 @@ main {
   .organization-relation-top,
   .organization-ownership-heading {
     display: grid;
+  }
+
+  .organization-position-pay-grid,
+  .organization-current-job-details,
+  .organization-current-job dl {
+    grid-template-columns: 1fr;
+  }
+
+  .organization-position-pay-grid .specific-position-panel:nth-child(2n),
+  .organization-current-job dl > div + div {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .organization-position-pay-grid .specific-position-panel:only-child {
+    display: block;
   }
 
   .ownership-status {

@@ -261,6 +261,7 @@ export type PositionCompensationBasis =
 
 export type SpecificPositionCompensation = {
   id: string;
+  organizationId: string;
   companyZh: string;
   companyEn: string;
   titleZh: string;

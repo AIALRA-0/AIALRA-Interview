@@ -101,6 +101,53 @@ test("China ownership audit exactly covers every company node", async () => {
   }
 });
 
+test("foreign-company Chinese labels never use generated China suffixes or invented translations", async () => {
+  const expansion = await json("data/expansion-cn-candidates.json");
+  const foreignCompanies = expansion.filter((company) =>
+    company.id.startsWith("cn-foreign-"),
+  );
+  const englishOnlyIds = new Set([
+    "cn-foreign-abb",
+    "cn-foreign-altair",
+    "cn-foreign-amd",
+    "cn-foreign-ansys",
+    "cn-foreign-asm-international",
+    "cn-foreign-axcelis",
+    "cn-foreign-formfactor",
+    "cn-foreign-imagination",
+    "cn-foreign-jsr",
+    "cn-foreign-screen",
+    "cn-foreign-vat-group",
+  ]);
+
+  assert.equal(foreignCompanies.length, 88);
+  for (const company of foreignCompanies) {
+    assert.doesNotMatch(
+      company.nameZh || "",
+      /中国$/,
+      `${company.id} must not concatenate 中国 onto a brand name`,
+    );
+    if (englishOnlyIds.has(company.id)) {
+      assert.equal(
+        company.nameZh,
+        undefined,
+        `${company.id} must retain its official English brand in Chinese-only mode`,
+      );
+    }
+  }
+  assert.equal(
+    foreignCompanies.find((company) => company.id === "cn-foreign-ansys")
+      ?.nameEn,
+    "Ansys China",
+  );
+  assert.equal(
+    foreignCompanies.find(
+      (company) => company.id === "cn-foreign-analog-devices",
+    )?.nameZh,
+    "亚德诺半导体",
+  );
+});
+
 test("published organization asset and UI expose audited ownership safely", async () => {
   const [ownership, organizationAsset, component, buildScript] =
     await Promise.all([

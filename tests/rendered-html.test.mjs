@@ -648,6 +648,46 @@ test("site language mode is global, persistent, and available from every view", 
   assert.match(stylesheet, /@media \(max-width: 520px\)/);
 });
 
+test("organization search follows the selected site language and exact jobs stay company-bound", async () => {
+  const [component, stylesheet] = await Promise.all([
+    readFile(new URL("app/CareerDojoApp.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+
+  assert.match(
+    component,
+    /companySearchCorpus\(company,\s*questionLanguageMode\)/,
+  );
+  assert.match(component, /function organizationSearchMatches\(/);
+  assert.match(component, /token === queryToken/);
+  assert.doesNotMatch(component, /token\.startsWith\(queryToken\)/);
+  assert.match(
+    component,
+    /function positionMatchesCompany\(/,
+  );
+  assert.match(
+    component,
+    /经来源绑定的岗位与薪资/,
+  );
+  assert.match(
+    component,
+    /方向薪资不会填入企业岗位/,
+  );
+  assert.match(
+    component,
+    /selectedCompanyCurrentJobs\.length \+\s*selectedCompanyPositionEvidence\.length/,
+  );
+  assert.match(
+    component,
+    /尚无通过校验的企业具体岗位记录/,
+  );
+  assert.match(component, /岗位来源 \/ Job source/);
+  assert.match(component, /岗位链接 \/ Requisition link/);
+  assert.doesNotMatch(component, /官方招聘入口 \/ Official careers/);
+  assert.match(stylesheet, /\.organization-position-evidence\s*\{/);
+  assert.match(stylesheet, /\.organization-position-pay-grid\s*\{/);
+});
+
 test("question index and deterministic detail shards stay synchronized", async () => {
   const [sourceText, indexText, manifestText, pageSource] = await Promise.all([
     readFile(new URL("data/questions.seed.json", root), "utf8"),

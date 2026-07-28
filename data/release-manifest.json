@@ -3,22 +3,22 @@
   "releaseId": "v4",
   "evidenceDate": "2026-07-27",
   "organizations": {
-    "total": 887,
+    "total": 891,
     "regionCounts": {
       "US": 360,
-      "CN": 527,
+      "CN": 531,
       "Global": 0
     },
     "canonicalCategoryGroups": 528,
     "categoryAliasGroups": 64,
     "atomicCategoryFilters": 531,
     "atomicCategoryAliasGroups": 70,
-    "bilingualNames": 731,
-    "englishOnlyNames": 156,
-    "canonicalRoleEdges": 2541,
-    "chinaCompanyOwnershipRecords": 390,
+    "bilingualNames": 724,
+    "englishOnlyNames": 167,
+    "canonicalRoleEdges": 2553,
+    "chinaCompanyOwnershipRecords": 394,
     "provisionallyAuditedOwnershipRecords": 176,
-    "ownershipNeedsDirectSource": 214
+    "ownershipNeedsDirectSource": 218
   },
   "roleFamilies": 15,
   "organizationRelations": 6,

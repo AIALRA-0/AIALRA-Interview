@@ -4,6 +4,25 @@ const root = new URL("../", import.meta.url);
 const observedAt = "2026-07-27";
 const prefix = "cn-foreign-";
 
+// A Chinese-language interface must not manufacture a Chinese company name.
+// These brands use their Latin-script names on their own Chinese surfaces, or
+// the old seed label referred to a partner / literal transliteration rather
+// than a reviewed company name. Keep nameZh empty so the UI falls back to the
+// official English brand, as required by the organization-name policy.
+const englishOnlyBrandIds = new Set([
+  "abb",
+  "altair",
+  "amd",
+  "ansys",
+  "asm-international",
+  "axcelis",
+  "formfactor",
+  "imagination",
+  "jsr",
+  "screen",
+  "vat-group",
+]);
+
 const groupProfiles = {
   eda: {
     categories: ["工业软件", "芯片设计", "集成电路"],
@@ -157,18 +176,22 @@ const seeds = [
 ];
 
 function companyFrom(seed) {
-  const [id, nameEn, nameZh, country, locations, group, focusZh, focusEn, careerUrl] =
+  const [id, nameEn, seededNameZh, country, locations, group, focusZh, focusEn, careerUrl] =
     seed;
   const profile = groupProfiles[group];
   const displayNameEn = /(China|Nanjing|Asia)$/i.test(nameEn)
     ? nameEn
     : `${nameEn} China`;
+  const nameZh = englishOnlyBrandIds.has(id)
+    ? ""
+    : seededNameZh.replace(/中国$/, "").trim();
+  const displayNameZh = nameZh || displayNameEn;
   return {
     id: `${prefix}${id}`,
     name: displayNameEn,
     nameEn: displayNameEn,
-    nameZh,
-    aliases: [nameZh, nameEn],
+    ...(nameZh ? { nameZh } : {}),
+    aliases: [...new Set([nameZh, nameEn].filter(Boolean))],
     country,
     region: locations[0],
     companyType: "company",
@@ -194,31 +217,32 @@ function companyFrom(seed) {
     ],
     lastVerified: observedAt,
     confidence: "medium",
-    descriptionZh: `${nameZh}是${nameEn}在中国大陆的业务与人才节点，相关工作覆盖${focusZh}。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。`,
+    descriptionZh: `${displayNameZh}是${nameEn}在中国大陆的业务与人才节点，相关工作覆盖${focusZh}。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。`,
     descriptionEn: `${displayNameEn}'s mainland-China organization and talent footprint spans ${focusEn}. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.`,
-    relevanceZh: `对你的芯片、EDA、验证、基础设施与自动化路线而言，${nameZh}可重点追踪${profile.roleFamilies.join("、")}岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。`,
+    relevanceZh: `对你的芯片、EDA、验证、基础设施与自动化路线而言，${displayNameZh}可重点追踪${profile.roleFamilies.join("、")}岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。`,
     relevanceEn: `For your chip, EDA, verification, infrastructure, and automation path, prioritize ${profile.roleFamilies.join(", ")} roles at ${displayNameEn}. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition.`,
   };
 }
 
 function ownershipRecord(company) {
   const evidence = company.evidence[0];
+  const displayNameZh = company.nameZh || company.nameEn;
   return {
     organizationId: company.id,
-    nameZh: company.nameZh,
+    nameZh: company.nameZh || "",
     nameEn: company.nameEn,
     sourceFile: "data/expansion-cn-candidates.json",
     sourceCompanyType: "company",
     ownershipClass: "foreign-controlled",
     sourceOwnershipTag: "official-parent-domain-China-presence",
-    summaryZh: `${company.nameZh}通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。`,
+    summaryZh: `${displayNameZh}通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。`,
     summaryEn: `${company.nameEn} is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.`,
     confidence: "medium",
     classificationBasis: "existing-explicit-ownership-category",
     reviewStatus: "provisionally-audited",
     evidence: [
       {
-        titleZh: `${company.nameZh}官方在华机构或招聘入口`,
+        titleZh: `${displayNameZh}官方在华机构或招聘入口`,
         titleEn: `${company.nameEn} — official China presence or careers`,
         url: evidence.url,
         sourceType: evidence.type,

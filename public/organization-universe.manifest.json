@@ -1,17 +1,17 @@
 {
   "schemaVersion": "1.0.0",
   "assetVersion": "2026-07-27.1",
-  "sourceSha256": "57f956a13f04b10e8fd8bdc4397e45488750517eddb491523eb2bc122c1fa07b",
+  "sourceSha256": "3b55580701f892bd4250bcfeb8ebb1ce7308eaf1ea4e0547539ef50c365ee368",
   "evidenceDate": "2026-07-27",
-  "organizationCount": 887,
+  "organizationCount": 891,
   "regionCounts": {
     "US": 360,
-    "CN": 527,
+    "CN": 531,
     "Global": 0
   },
   "asset": {
     "url": "/organization-universe.json",
-    "sha256": "d98959bfa6963a1cbe8a59bfdd568e3eb6cd9c9aa51b8cc5e60606cfca0a8881",
-    "bytes": 4279892
+    "sha256": "9b09f1b4bca162ff8c04adb2ccb53bbed0e3037f9310ae82d790cb3cb356c544",
+    "bytes": 4297929
   }
 }

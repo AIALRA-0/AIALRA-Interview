@@ -717,11 +717,14 @@ for (const record of ownershipRecords) {
   );
   assert.ok(
     typeof record.nameZh === "string" &&
-      record.nameZh.trim() &&
+      (!record.nameZh.trim() ||
+        hasChinese(record.nameZh) ||
+        record.nameZh.trim().toLowerCase() ===
+          record.nameEn.trim().toLowerCase()) &&
       /[A-Za-z]/.test(record.nameEn) &&
       hasChinese(record.summaryZh) &&
       /[A-Za-z]/.test(record.summaryEn),
-    `ownership record ${record.organizationId} needs bilingual identity and summary fields`,
+    `ownership record ${record.organizationId} needs a verified Chinese name or an explicit English-only identity plus bilingual summaries`,
   );
   assert.ok(
     ["high", "medium", "low"].includes(record.confidence),
@@ -1044,6 +1047,9 @@ let bilingualOrganizationCount = 0;
 let englishOnlyOrganizationCount = 0;
 const resolvedOrganizationNamesEn = [];
 const resolvedOrganizationNamesZh = [];
+const chinaOrganizationNameIds = new Set(
+  cnCompanies.map((company) => company.id),
+);
 for (const company of companies) {
   const sourceNameIsChinese = hanPattern.test(company.name);
   const aliasEn = company.aliases.find((alias) => latinPattern.test(alias));
@@ -1076,7 +1082,11 @@ for (const company of companies) {
       nameEn.trim().toLowerCase(),
       `company ${company.id} repeats the same organization name twice`,
     );
-    resolvedOrganizationNamesZh.push(nameZh.trim().toLowerCase());
+    resolvedOrganizationNamesZh.push(
+      `${chinaOrganizationNameIds.has(company.id) ? "CN" : "US"}:${nameZh
+        .trim()
+        .toLowerCase()}`,
+    );
     bilingualOrganizationCount += 1;
   } else {
     assert.ok(
@@ -1104,7 +1114,7 @@ assert.equal(
 assert.equal(
   new Set(resolvedOrganizationNamesZh).size,
   resolvedOrganizationNamesZh.length,
-  "canonical Chinese organization names must be unique",
+  "canonical Chinese organization names must be unique inside each opportunity market",
 );
 
 assert.equal(

@@ -519,12 +519,6 @@ function organizationClassTerm(company: Company) {
       };
 }
 
-function categoryLabel(category: string) {
-  const label = categoryLabels[category];
-  if (!label) return "未分类 / Unclassified";
-  return `${label.zh} / ${label.en}`;
-}
-
 function categoryAtoms(category: string): BilingualTerm[] {
   const override = categoryAtomOverrides[category];
   if (override) return override;
@@ -596,6 +590,34 @@ function BilingualParagraph({
   );
 }
 
+function BilingualBulletList({
+  zh,
+  en,
+}: {
+  zh: string[];
+  en: string[];
+}) {
+  const mode = useSiteLanguageMode();
+  return (
+    <div className={`bilingual-bullet-lists mode-${mode}`}>
+      {mode !== "en" ? (
+        <ul lang="zh-CN">
+          {zh.map((item) => (
+            <li key={`zh-${item}`}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
+      {mode !== "zh" ? (
+        <ul lang="en">
+          {en.map((item) => (
+            <li key={`en-${item}`}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 function ProfileDisplayText({
   value,
   variant = "paragraph",
@@ -650,15 +672,105 @@ function companyName(company: Company) {
     : company.nameEn;
 }
 
+function positionMatchesCompany(
+  company: Company,
+  position: SpecificPositionCompensation,
+  market: "US" | "CN",
+) {
+  return (
+    Boolean(position.organizationId) &&
+    position.organizationId === company.id &&
+    regionOf(company) === market
+  );
+}
+
+function companySearchCorpus(
+  company: Company,
+  mode: SiteLanguageMode,
+) {
+  const neutral = [
+    company.id,
+    company.fitTier,
+    company.visaSignal,
+    ...company.locations,
+  ];
+  const chinese = [
+    company.nameZh || company.nameEn,
+    ...(company.nameZh
+      ? company.aliases.filter((alias) => hanCharacterPattern.test(alias))
+      : [company.nameEn]),
+    ...company.categories.flatMap((category) =>
+      categoryAtoms(category).map((atom) => atom.zh),
+    ),
+    company.ownership?.labelZh || "",
+    company.ownership?.summaryZh || "",
+    company.ownership?.definitionZh || "",
+    regionLabel(regionOf(company)).split(" / ")[0],
+    ...company.focusAtoms.map((item) => item.zh),
+    ...company.roleAtoms.map((item) => item.zh),
+    ...company.opportunityAtoms.map((item) => item.zh),
+    ...company.requirementAtoms.map((item) => item.zh),
+    ...company.preparationAtoms.map((item) => item.zh),
+    company.descriptionZh,
+    company.relevanceZh,
+  ];
+  const english = [
+    company.name,
+    company.nameEn,
+    ...company.aliases.filter((alias) => latinCharacterPattern.test(alias)),
+    ...company.categories.flatMap((category) =>
+      categoryAtoms(category).map((atom) => atom.en),
+    ),
+    company.ownership?.labelEn || "",
+    company.ownership?.summaryEn || "",
+    company.ownership?.definitionEn || "",
+    regionLabel(regionOf(company)).split(" / ")[1] || "",
+    company.country,
+    company.region,
+    ...company.focusAtoms.map((item) => item.en),
+    ...company.roleAtoms.map((item) => item.en),
+    ...company.opportunityAtoms.map((item) => item.en),
+    ...company.requirementAtoms.map((item) => item.en),
+    ...company.preparationAtoms.map((item) => item.en),
+    company.whyRelevant,
+    company.descriptionEn,
+    company.relevanceEn,
+  ];
+  if (mode === "zh") return [...neutral, ...chinese];
+  if (mode === "en") return [...neutral, ...english];
+  return [...neutral, ...chinese, ...english];
+}
+
+function organizationSearchMatches(corpus: string[], rawTerm: string) {
+  const term = rawTerm.normalize("NFKC").trim().toLowerCase();
+  if (!term) return true;
+  const haystack = corpus
+    .join(" ")
+    .normalize("NFKC")
+    .toLowerCase();
+  const tokens =
+    haystack.match(/[\p{Script=Han}]+|[\p{L}\p{N}]+/gu) || [];
+  const queryTokens =
+    term.match(/[\p{Script=Han}]+|[\p{L}\p{N}]+/gu) || [term];
+
+  return queryTokens.every((queryToken) => {
+    if (hanCharacterPattern.test(queryToken)) {
+      return haystack.includes(queryToken);
+    }
+    return tokens.some((token) => token === queryToken);
+  });
+}
+
 function CompanyName({ company }: { company: Company }) {
   const mode = useSiteLanguageMode();
-  const showZh = Boolean(company.nameZh) && mode !== "en";
+  const chineseName = company.nameZh || "";
+  const showZh = Boolean(chineseName) && mode !== "en";
   const showEn = !company.nameZh || mode !== "zh";
   return (
     <span className={`bilingual-organization-name mode-${mode}`}>
       {showZh ? (
         <span lang="zh-CN" className="organization-name-primary">
-          {company.nameZh}
+          {chineseName}
         </span>
       ) : null}
       {showEn ? (
@@ -2785,6 +2897,37 @@ export function CareerDojoApp({
       ),
     [positionCompensationComparisons],
   );
+  const selectedCompanyPositionEvidence = selectedCompany
+    ? positionCompensationComparisons.comparisons.flatMap((comparison) => {
+        const matches: Array<{
+          comparison: PositionCompensationComparison;
+          market: "US" | "CN";
+          position: SpecificPositionCompensation;
+        }> = [];
+        if (positionMatchesCompany(selectedCompany, comparison.us, "US")) {
+          matches.push({
+            comparison,
+            market: "US",
+            position: comparison.us,
+          });
+        }
+        if (
+          positionMatchesCompany(selectedCompany, comparison.china, "CN")
+        ) {
+          matches.push({
+            comparison,
+            market: "CN",
+            position: comparison.china,
+          });
+        }
+        return matches;
+      })
+    : [];
+  const selectedCompanyCurrentJobs = selectedCompany
+    ? currentJobs.filter(
+        (job) => job.organizationId === selectedCompany.id,
+      )
+    : [];
   const editingApplication = editingApplicationId
     ? persisted.applications.find(
         (application) => application.id === editingApplicationId,
@@ -2826,41 +2969,10 @@ export function CareerDojoApp({
       )
       .filter((company) => {
         if (!term) return true;
-        return [
-          company.name,
-          company.nameEn,
-          company.nameZh || "",
-          ...company.aliases,
-          ...company.categories,
-          ...company.categories.map(categoryLabel),
-          organizationClassLabel(company),
-          company.ownership?.summaryZh || "",
-          company.ownership?.summaryEn || "",
-          company.ownership?.definitionZh || "",
-          company.ownership?.definitionEn || "",
-          regionLabel(regionOf(company)),
-          company.country,
-          company.region,
-          ...company.locations,
-          ...company.focusAreas,
-          ...company.roleFamilies,
-          ...company.opportunityTypes,
-          ...company.requirements,
-          ...company.gaps,
-          company.whyRelevant,
-          company.descriptionZh,
-          company.descriptionEn,
-          company.relevanceZh,
-          company.relevanceEn,
-          ...company.focusAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.roleAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.opportunityAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.requirementAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.preparationAtoms.flatMap((item) => [item.zh, item.en]),
-        ]
-          .join(" ")
-          .toLowerCase()
-          .includes(term);
+        return organizationSearchMatches(
+          companySearchCorpus(company, questionLanguageMode),
+          term,
+        );
       })
       .sort(
         (a, b) =>
@@ -2874,6 +2986,7 @@ export function CareerDojoApp({
     ownership,
     region,
     search,
+    questionLanguageMode,
     visa,
   ]);
 
@@ -4346,8 +4459,11 @@ export function CareerDojoApp({
                           className="secondary-button"
                           onClick={() => setCompanyLimit((value) => value + 60)}
                         >
-                          再加载 60 个节点 / Load 60 more（已显示 / shown{" "}
-                          {companyLimit}/{filteredCompanies.length}）
+                          {questionModeText(
+                            questionLanguageMode,
+                            `再加载 60 个节点（已显示 ${companyLimit}/${filteredCompanies.length}）`,
+                            `Load 60 more (showing ${companyLimit}/${filteredCompanies.length})`,
+                          )}
                         </button>
                       </div>
                     ) : null}
@@ -5496,7 +5612,7 @@ export function CareerDojoApp({
                               target="_blank"
                               rel="noreferrer"
                             >
-                              官方招聘入口 / Official careers ↗
+                              岗位链接 / Requisition link ↗
                             </a>
                           ) : null}
                         </article>
@@ -6050,6 +6166,192 @@ export function CareerDojoApp({
                 </div>
               </section>
             ) : null}
+
+            <section className="organization-position-evidence">
+              <div className="organization-relations-heading">
+                <div>
+                  <span className="section-kicker">
+                    具体企业岗位 / COMPANY-SPECIFIC REQUISITIONS
+                  </span>
+                  <h3>
+                    <BilingualHeading
+                      zh="经来源绑定的岗位与薪资"
+                      en="Source-bound jobs and compensation"
+                    />
+                  </h3>
+                </div>
+                <span>
+                  {selectedCompanyCurrentJobs.length +
+                    selectedCompanyPositionEvidence.length}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "条独立岗位记录",
+                    "independent position records",
+                  )}
+                </span>
+              </div>
+              <BilingualParagraph
+                className="organization-position-policy"
+                zh="这里只显示绑定到该企业、具体岗位、地点、级别、观察日期和原始来源的记录。方向薪资不会填入企业岗位；雇主未披露时明确标为“未披露”。"
+                en="Only records bound to this employer, exact title, location, level, observation date, and original source appear here. Role-family benchmarks are never inserted as company pay; employer omissions remain explicitly undisclosed."
+              />
+
+              {selectedCompanyCurrentJobs.length ? (
+                <div className="organization-current-job-list">
+                  {selectedCompanyCurrentJobs.map((job) => (
+                    <article
+                      className="organization-current-job"
+                      key={job.id}
+                    >
+                      <div>
+                        <span>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "当前岗位观察",
+                            "Current requisition observation",
+                          )}
+                        </span>
+                        <time dateTime={job.observedAt}>
+                          {job.observedAt}
+                        </time>
+                      </div>
+                      <h4>
+                        {questionModeText(
+                          questionLanguageMode,
+                          job.titleZh,
+                          job.titleEn,
+                        )}
+                      </h4>
+                      <p>
+                        {job.location} · {employmentTypeLabel(job.employmentType)}
+                      </p>
+                      <dl>
+                        <div>
+                          <dt>
+                            {questionModeText(
+                              questionLanguageMode,
+                              "企业披露薪资",
+                              "Employer-disclosed pay",
+                            )}
+                          </dt>
+                          <dd>{compensationText(job.compensation)}</dd>
+                        </div>
+                        <div>
+                          <dt>
+                            {questionModeText(
+                              questionLanguageMode,
+                              "岗位编号",
+                              "Requisition ID",
+                            )}
+                          </dt>
+                          <dd>{job.requisitionId}</dd>
+                        </div>
+                      </dl>
+                      <details>
+                        <summary>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "职责、最低要求与资格条件",
+                            "Responsibilities, minimum qualifications, and eligibility",
+                          )}
+                        </summary>
+                        <div className="organization-current-job-details">
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "岗位职责",
+                                "Responsibilities",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.responsibilitiesZh}
+                              en={job.responsibilitiesEn}
+                            />
+                          </section>
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "最低要求",
+                                "Minimum qualifications",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.minimumQualificationsZh}
+                              en={job.minimumQualificationsEn}
+                            />
+                          </section>
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "资格条件",
+                                "Eligibility",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.eligibilityZh}
+                              en={job.eligibilityEn}
+                            />
+                          </section>
+                        </div>
+                      </details>
+                      <a
+                        href={job.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {questionModeText(
+                          questionLanguageMode,
+                          "打开原始岗位",
+                          "Open original requisition",
+                        )}{" "}
+                        ↗
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
+
+              {selectedCompanyPositionEvidence.length ? (
+                <div className="organization-position-pay-grid">
+                  {selectedCompanyPositionEvidence.map(
+                    ({ comparison, market, position }) => (
+                      <SpecificPositionPanel
+                        key={position.id}
+                        market={market}
+                        position={position}
+                        calculation={calculatePositionComparison(
+                          comparison,
+                          positionCompensationComparisons,
+                        )}
+                      />
+                    ),
+                  )}
+                </div>
+              ) : null}
+
+              {!selectedCompanyCurrentJobs.length &&
+              !selectedCompanyPositionEvidence.length ? (
+                <div className="organization-position-empty">
+                  <strong>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "尚无通过校验的企业具体岗位记录",
+                      "No validated company-specific requisition yet",
+                    )}
+                  </strong>
+                  <p>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "当前档案只证明组织和招聘入口存在；不会把同方向其他企业的职位或平均薪资复制到这里。",
+                      "The current profile proves only the organization and its careers entry point; positions or average pay from other employers are not copied here.",
+                    )}
+                  </p>
+                </div>
+              ) : null}
+            </section>
 
             <section className="organization-role-profile">
               <h3>
@@ -6779,7 +7081,19 @@ export function CareerDojoApp({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  官方招聘页 / Official careers ↗
+                  {selectedCompany.evidence.some(
+                    (evidence) =>
+                      evidence.url === selectedCompany.careerUrl &&
+                      evidence.type?.startsWith("third-party-"),
+                  )
+                    ? "岗位来源 / Job source ↗"
+                    : selectedCompany.evidence.some(
+                          (evidence) =>
+                            evidence.url === selectedCompany.careerUrl &&
+                            evidence.type?.startsWith("official-"),
+                        )
+                      ? "官方招聘页 / Official careers ↗"
+                      : "招聘入口 / Careers source ↗"}
                 </a>
               ) : null}
             </div>

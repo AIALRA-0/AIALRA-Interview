@@ -10914,12 +10914,261 @@
     "relevanceEn": "The technical footprint of Guangzhou Metro Group includes Rail Transit, Intelligent Operations. Relevant roles commonly draw on control algorithms, embedded software, data engineering, system verification. Internship, research, or full-time role types and candidate eligibility are not fixed; verify both in the current, specific posting before applying."
   },
   {
+    "id": "cn-ranpu-micro",
+    "name": "冉谱微",
+    "nameEn": "Ranpu Micro",
+    "nameZh": "冉谱微",
+    "aliases": [
+      "Ranpu Micro"
+    ],
+    "country": "China",
+    "region": "上海",
+    "companyType": "company",
+    "categories": [
+      "工业软件",
+      "芯片设计",
+      "集成电路"
+    ],
+    "locations": [
+      "上海张江"
+    ],
+    "focusAreas": [
+      "EDA 软件",
+      "集成电路设计工具"
+    ],
+    "roleFamilies": [
+      "EDA研发",
+      "CAD工程",
+      "软件工程"
+    ],
+    "fitTier": "P1",
+    "difficulty": "role-specific",
+    "visaSignal": "posting-specific",
+    "whyRelevant": "A specific Shanghai EDA software-engineering requisition directly matches the target EDA R&D and CAD-flow path; the organization profile remains low-confidence until an official company source is added.",
+    "requirements": [
+      "C++与数据结构",
+      "EDA流程基础",
+      "按具体岗位核验学历与经验"
+    ],
+    "gaps": [
+      "官方企业资料",
+      "可复现EDA项目",
+      "工程级C++证据"
+    ],
+    "opportunityTypes": [
+      "社会招聘"
+    ],
+    "careerUrl": "https://m.zhipin.com/job_detail/1bf24211e90406e21Hdz3tS_FVNU.html",
+    "evidence": [
+      {
+        "title": "BOSS 直聘：冉谱微 EDA 软件工程师",
+        "url": "https://m.zhipin.com/job_detail/1bf24211e90406e21Hdz3tS_FVNU.html",
+        "type": "third-party-current-job",
+        "observedAt": "2026-07-26"
+      }
+    ],
+    "lastVerified": "2026-07-26",
+    "confidence": "low",
+    "descriptionZh": "冉谱微因一条可核验到企业名、岗位、地点与薪资的上海 EDA 软件工程师招聘记录进入图谱；目前尚缺企业官方资料，因此组织背景与所有制保持待核验。",
+    "descriptionEn": "Ranpu Micro enters the atlas through a Shanghai EDA software-engineer record with a traceable employer name, title, location, and pay range. Official company material is still missing, so its organization background and ownership remain unverified.",
+    "relevanceZh": "该岗位直接对应 EDA 研发、CAD 流程与工程级 C++；申请前应继续核验企业主体、团队产品、岗位状态与最终报价。",
+    "relevanceEn": "The observed role directly maps to EDA R&D, CAD flows, and production C++. Verify the legal entity, product team, posting status, and final offer before applying."
+  },
+  {
+    "id": "cn-riguan-technology",
+    "name": "成都日观科技有限公司",
+    "nameEn": "Chengdu Riguan Technology",
+    "nameZh": "成都日观科技有限公司",
+    "aliases": [
+      "成都日观科技",
+      "Riguan Technology"
+    ],
+    "country": "China",
+    "region": "成都",
+    "companyType": "company",
+    "categories": [
+      "工业软件",
+      "芯片设计",
+      "人工智能"
+    ],
+    "locations": [
+      "成都",
+      "上海临港"
+    ],
+    "focusAreas": [
+      "AI for EDA",
+      "EDA 软件"
+    ],
+    "roleFamilies": [
+      "EDA研发",
+      "人工智能工程",
+      "软件工程"
+    ],
+    "fitTier": "P1",
+    "difficulty": "role-specific",
+    "visaSignal": "posting-specific",
+    "whyRelevant": "A specific AI-for-EDA software role matches the combined agent, machine-learning, and EDA direction; official company evidence remains a required follow-up.",
+    "requirements": [
+      "机器学习或大模型基础",
+      "C++或Python",
+      "EDA工具开发认知"
+    ],
+    "gaps": [
+      "官方企业资料",
+      "AI for EDA评估证据",
+      "EDA算法项目"
+    ],
+    "opportunityTypes": [
+      "社会招聘"
+    ],
+    "careerUrl": "https://m.zhipin.com/job_detail/df9a88bb33a0fa7c0nRy3N-0FVJQ.html",
+    "evidence": [
+      {
+        "title": "BOSS 直聘：成都日观科技 EDA 软件工程师（AI 方向）",
+        "url": "https://m.zhipin.com/job_detail/df9a88bb33a0fa7c0nRy3N-0FVJQ.html",
+        "type": "third-party-current-job",
+        "observedAt": "2026-07-26"
+      }
+    ],
+    "lastVerified": "2026-07-26",
+    "confidence": "low",
+    "descriptionZh": "成都日观科技有限公司因一条上海临港 AI 方向 EDA 软件工程师招聘记录进入图谱；岗位证据可追溯，但企业官方背景资料仍待补充。",
+    "descriptionEn": "Chengdu Riguan Technology enters the atlas through a traceable AI-track EDA software-engineer posting in Shanghai Lingang. The requisition evidence is preserved, while official company background material is still pending.",
+    "relevanceZh": "该岗位直接连接 AI Agent、大模型与 EDA 工具开发；申请前必须核验团队产品、用工主体、岗位有效性与薪资构成。",
+    "relevanceEn": "The role directly connects AI agents and foundation models with EDA-tool development. Verify the product team, employing entity, posting validity, and compensation composition before applying."
+  },
+  {
+    "id": "cn-zhuoshi-fund",
+    "name": "卓识基金",
+    "nameEn": "Zhuoshi Fund",
+    "nameZh": "卓识基金",
+    "aliases": [
+      "Zhuoshi Fund"
+    ],
+    "country": "China",
+    "region": "上海",
+    "companyType": "company",
+    "categories": [
+      "FPGA",
+      "高性能计算",
+      "计算系统"
+    ],
+    "locations": [
+      "上海"
+    ],
+    "focusAreas": [
+      "FPGA加速",
+      "C++与DMA",
+      "低延迟计算"
+    ],
+    "roleFamilies": [
+      "FPGA开发",
+      "软件工程",
+      "系统工程"
+    ],
+    "fitTier": "P2",
+    "difficulty": "role-specific",
+    "visaSignal": "posting-specific",
+    "whyRelevant": "A campus FPGA requisition exposes a concrete low-latency C++ and DMA path outside conventional chip vendors; the record is historical for the current hiring cycle.",
+    "requirements": [
+      "FPGA开发",
+      "C++",
+      "DMA与系统性能分析"
+    ],
+    "gaps": [
+      "官方企业资料",
+      "低延迟系统证据",
+      "FPGA性能基准"
+    ],
+    "opportunityTypes": [
+      "校园招聘"
+    ],
+    "careerUrl": "https://www.nowcoder.com/jobs/detail/421773",
+    "evidence": [
+      {
+        "title": "牛客网：卓识基金 FPGA 开发工程师（C++/DMA）",
+        "url": "https://www.nowcoder.com/jobs/detail/421773",
+        "type": "third-party-campus-posting",
+        "observedAt": "2026-07-26"
+      }
+    ],
+    "lastVerified": "2026-07-26",
+    "confidence": "low",
+    "descriptionZh": "卓识基金因本招聘周期的一条 FPGA 开发工程师校招记录进入图谱；投递窗口已经结束，企业背景与后续岗位必须重新核验。",
+    "descriptionEn": "Zhuoshi Fund enters the atlas through an FPGA development campus posting from the current hiring cycle. The application window has closed, and both company background and future openings require fresh verification.",
+    "relevanceZh": "该岗位提供 FPGA、C++、DMA 与低延迟系统的跨行业目标；目前只能作为历史岗位证据，不能视作在招机会。",
+    "relevanceEn": "The role provides a cross-industry target spanning FPGA, C++, DMA, and low-latency systems. It is historical position evidence, not an active opening."
+  },
+  {
+    "id": "cn-rongming-microelectronics",
+    "name": "镕铭微电子（上海）有限公司",
+    "nameEn": "Rongming Microelectronics",
+    "nameZh": "镕铭微电子（上海）有限公司",
+    "aliases": [
+      "镕铭微电子",
+      "Rongming Microelectronics"
+    ],
+    "country": "China",
+    "region": "上海",
+    "companyType": "company",
+    "categories": [
+      "芯片",
+      "嵌入式系统",
+      "视频芯片"
+    ],
+    "locations": [
+      "上海"
+    ],
+    "focusAreas": [
+      "视频编解码固件",
+      "Linux内核",
+      "NVMe"
+    ],
+    "roleFamilies": [
+      "嵌入式软件",
+      "固件开发",
+      "软件工程"
+    ],
+    "fitTier": "P2",
+    "difficulty": "role-specific",
+    "visaSignal": "posting-specific",
+    "whyRelevant": "A campus embedded-software requisition maps directly to firmware, Linux-kernel, video-codec, and NVMe preparation, with official company context still pending.",
+    "requirements": [
+      "嵌入式C/C++",
+      "Linux内核",
+      "驱动或存储协议基础"
+    ],
+    "gaps": [
+      "官方企业资料",
+      "驱动开发项目",
+      "硬件调试记录"
+    ],
+    "opportunityTypes": [
+      "校园招聘"
+    ],
+    "careerUrl": "https://www.nowcoder.com/jobs/detail/430316",
+    "evidence": [
+      {
+        "title": "牛客网：镕铭微电子嵌入式软件开发工程师",
+        "url": "https://www.nowcoder.com/jobs/detail/430316",
+        "type": "third-party-campus-posting",
+        "observedAt": "2026-07-26"
+      }
+    ],
+    "lastVerified": "2026-07-26",
+    "confidence": "low",
+    "descriptionZh": "镕铭微电子（上海）有限公司因一条嵌入式软件开发工程师校招记录进入图谱；岗位聚焦视频编解码固件、Linux 内核与 NVMe，企业官方资料仍待补充。",
+    "descriptionEn": "Rongming Microelectronics enters the atlas through a campus embedded-software posting focused on video-codec firmware, the Linux kernel, and NVMe. Official company material remains pending.",
+    "relevanceZh": "该岗位直接对应嵌入式软件与固件路线；申请前必须复核岗位状态、团队产品、毕业时间要求与最终薪资。",
+    "relevanceEn": "The role directly matches the embedded-software and firmware path. Verify posting status, product team, graduation window, and final compensation before applying."
+  },
+  {
     "id": "cn-foreign-intel",
     "name": "Intel China",
     "nameEn": "Intel China",
-    "nameZh": "英特尔中国",
+    "nameZh": "英特尔",
     "aliases": [
-      "英特尔中国",
+      "英特尔",
       "Intel"
     ],
     "country": "United States",
@@ -10979,18 +11228,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "英特尔中国是Intel在中国大陆的业务与人才节点，相关工作覆盖CPU、数据中心、平台软件与芯片工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "英特尔是Intel在中国大陆的业务与人才节点，相关工作覆盖CPU、数据中心、平台软件与芯片工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Intel China's mainland-China organization and talent footprint spans CPUs, data-center platforms, software, and silicon engineering. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英特尔中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英特尔可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Intel China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-amd",
     "name": "AMD China",
     "nameEn": "AMD China",
-    "nameZh": "超威半导体中国",
     "aliases": [
-      "超威半导体中国",
       "AMD"
     ],
     "country": "United States",
@@ -11047,18 +11294,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "超威半导体中国是AMD在中国大陆的业务与人才节点，相关工作覆盖CPU、GPU、FPGA与自适应计算。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "AMD China是AMD在中国大陆的业务与人才节点，相关工作覆盖CPU、GPU、FPGA与自适应计算。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "AMD China's mainland-China organization and talent footprint spans CPUs, GPUs, FPGAs, and adaptive computing. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，超威半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，AMD China可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at AMD China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-nvidia",
     "name": "NVIDIA China",
     "nameEn": "NVIDIA China",
-    "nameZh": "英伟达中国",
+    "nameZh": "英伟达",
     "aliases": [
-      "英伟达中国",
+      "英伟达",
       "NVIDIA"
     ],
     "country": "United States",
@@ -11117,18 +11364,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "英伟达中国是NVIDIA在中国大陆的业务与人才节点，相关工作覆盖GPU、AI计算、系统软件与汽车平台。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "英伟达是NVIDIA在中国大陆的业务与人才节点，相关工作覆盖GPU、AI计算、系统软件与汽车平台。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "NVIDIA China's mainland-China organization and talent footprint spans GPUs, AI computing, systems software, and automotive platforms. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英伟达中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英伟达可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at NVIDIA China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-qualcomm",
     "name": "Qualcomm China",
     "nameEn": "Qualcomm China",
-    "nameZh": "高通中国",
+    "nameZh": "高通",
     "aliases": [
-      "高通中国",
+      "高通",
       "Qualcomm"
     ],
     "country": "United States",
@@ -11186,18 +11433,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "高通中国是Qualcomm在中国大陆的业务与人才节点，相关工作覆盖移动SoC、无线通信、汽车与边缘AI。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "高通是Qualcomm在中国大陆的业务与人才节点，相关工作覆盖移动SoC、无线通信、汽车与边缘AI。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Qualcomm China's mainland-China organization and talent footprint spans mobile SoCs, wireless, automotive, and edge AI. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，高通中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，高通可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Qualcomm China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-synopsys",
     "name": "Synopsys China",
     "nameEn": "Synopsys China",
-    "nameZh": "新思科技中国",
+    "nameZh": "新思科技",
     "aliases": [
-      "新思科技中国",
+      "新思科技",
       "Synopsys"
     ],
     "country": "United States",
@@ -11257,18 +11504,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "新思科技中国是Synopsys在中国大陆的业务与人才节点，相关工作覆盖EDA软件、半导体IP与芯片设计服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "新思科技是Synopsys在中国大陆的业务与人才节点，相关工作覆盖EDA软件、半导体IP与芯片设计服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Synopsys China's mainland-China organization and talent footprint spans EDA software, semiconductor IP, and silicon design services. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，新思科技中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，新思科技可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Synopsys China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-cadence",
     "name": "Cadence China",
     "nameEn": "Cadence China",
-    "nameZh": "楷登电子中国",
+    "nameZh": "楷登电子",
     "aliases": [
-      "楷登电子中国",
+      "楷登电子",
       "Cadence"
     ],
     "country": "United States",
@@ -11326,18 +11573,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "楷登电子中国是Cadence在中国大陆的业务与人才节点，相关工作覆盖EDA、计算软件、IP与系统分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "楷登电子是Cadence在中国大陆的业务与人才节点，相关工作覆盖EDA、计算软件、IP与系统分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Cadence China's mainland-China organization and talent footprint spans EDA, computational software, IP, and system analysis. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，楷登电子中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，楷登电子可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Cadence China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-siemens-eda",
     "name": "Siemens EDA China",
     "nameEn": "Siemens EDA China",
-    "nameZh": "西门子EDA中国",
+    "nameZh": "西门子EDA",
     "aliases": [
-      "西门子EDA中国",
+      "西门子EDA",
       "Siemens EDA"
     ],
     "country": "Germany",
@@ -11395,18 +11642,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "西门子EDA中国是Siemens EDA在中国大陆的业务与人才节点，相关工作覆盖IC设计、验证、PCB与数字孪生软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "西门子EDA是Siemens EDA在中国大陆的业务与人才节点，相关工作覆盖IC设计、验证、PCB与数字孪生软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Siemens EDA China's mainland-China organization and talent footprint spans IC design, verification, PCB, and digital-twin software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，西门子EDA中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，西门子EDA可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Siemens EDA China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-ansys",
     "name": "Ansys China",
     "nameEn": "Ansys China",
-    "nameZh": "安世亚太中国",
     "aliases": [
-      "安世亚太中国",
       "Ansys"
     ],
     "country": "United States",
@@ -11463,18 +11708,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "安世亚太中国是Ansys在中国大陆的业务与人才节点，相关工作覆盖多物理场仿真、芯片封装与系统可靠性。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "Ansys China是Ansys在中国大陆的业务与人才节点，相关工作覆盖多物理场仿真、芯片封装与系统可靠性。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Ansys China's mainland-China organization and talent footprint spans multiphysics simulation, chip-package analysis, and system reliability. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，安世亚太中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Ansys China可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Ansys China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-mathworks",
     "name": "MathWorks China",
     "nameEn": "MathWorks China",
-    "nameZh": "迈斯沃克中国",
+    "nameZh": "迈斯沃克",
     "aliases": [
-      "迈斯沃克中国",
+      "迈斯沃克",
       "MathWorks"
     ],
     "country": "United States",
@@ -11530,18 +11775,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "迈斯沃克中国是MathWorks在中国大陆的业务与人才节点，相关工作覆盖MATLAB、Simulink、算法与硬件工作流。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "迈斯沃克是MathWorks在中国大陆的业务与人才节点，相关工作覆盖MATLAB、Simulink、算法与硬件工作流。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "MathWorks China's mainland-China organization and talent footprint spans MATLAB, Simulink, algorithms, and hardware workflows. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，迈斯沃克中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，迈斯沃克可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at MathWorks China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-altair",
     "name": "Altair China",
     "nameEn": "Altair China",
-    "nameZh": "澳汰尔工程软件中国",
     "aliases": [
-      "澳汰尔工程软件中国",
       "Altair"
     ],
     "country": "United States",
@@ -11598,18 +11841,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "澳汰尔工程软件中国是Altair在中国大陆的业务与人才节点，相关工作覆盖仿真、高性能计算、数据分析与电子系统设计。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "Altair China是Altair在中国大陆的业务与人才节点，相关工作覆盖仿真、高性能计算、数据分析与电子系统设计。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Altair China's mainland-China organization and talent footprint spans simulation, HPC, data analytics, and electronic-system design. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，澳汰尔工程软件中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Altair China可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Altair China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-dassault-systemes",
     "name": "Dassault Systèmes China",
     "nameEn": "Dassault Systèmes China",
-    "nameZh": "达索系统中国",
+    "nameZh": "达索系统",
     "aliases": [
-      "达索系统中国",
+      "达索系统",
       "Dassault Systèmes"
     ],
     "country": "France",
@@ -11665,18 +11908,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "达索系统中国是Dassault Systèmes在中国大陆的业务与人才节点，相关工作覆盖3DEXPERIENCE、仿真与制造数字化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "达索系统是Dassault Systèmes在中国大陆的业务与人才节点，相关工作覆盖3DEXPERIENCE、仿真与制造数字化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Dassault Systèmes China's mainland-China organization and talent footprint spans 3DEXPERIENCE, simulation, and manufacturing digitalization. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，达索系统中国可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，达索系统可重点追踪EDA研发、CAD工程、应用工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize EDA研发, CAD工程, 应用工程, 软件工程 roles at Dassault Systèmes China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-imagination",
     "name": "Imagination Technologies China",
     "nameEn": "Imagination Technologies China",
-    "nameZh": "Imagination中国",
     "aliases": [
-      "Imagination中国",
       "Imagination Technologies"
     ],
     "country": "United Kingdom",
@@ -11732,18 +11973,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "Imagination中国是Imagination Technologies在中国大陆的业务与人才节点，相关工作覆盖GPU、AI加速与半导体IP。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "Imagination Technologies China是Imagination Technologies在中国大陆的业务与人才节点，相关工作覆盖GPU、AI加速与半导体IP。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Imagination Technologies China's mainland-China organization and talent footprint spans GPU, AI acceleration, and semiconductor IP. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Imagination中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Imagination Technologies China可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Imagination Technologies China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-nxp",
     "name": "NXP Semiconductors China",
     "nameEn": "NXP Semiconductors China",
-    "nameZh": "恩智浦半导体中国",
+    "nameZh": "恩智浦半导体",
     "aliases": [
-      "恩智浦半导体中国",
+      "恩智浦半导体",
       "NXP Semiconductors"
     ],
     "country": "Netherlands",
@@ -11803,18 +12044,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "恩智浦半导体中国是NXP Semiconductors在中国大陆的业务与人才节点，相关工作覆盖汽车、工业、边缘处理与安全连接芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "恩智浦半导体是NXP Semiconductors在中国大陆的业务与人才节点，相关工作覆盖汽车、工业、边缘处理与安全连接芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "NXP Semiconductors China's mainland-China organization and talent footprint spans automotive, industrial, edge-processing, and secure-connectivity chips. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，恩智浦半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，恩智浦半导体可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at NXP Semiconductors China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-stmicroelectronics",
     "name": "STMicroelectronics China",
     "nameEn": "STMicroelectronics China",
-    "nameZh": "意法半导体中国",
+    "nameZh": "意法半导体",
     "aliases": [
-      "意法半导体中国",
+      "意法半导体",
       "STMicroelectronics"
     ],
     "country": "Switzerland",
@@ -11873,18 +12114,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "意法半导体中国是STMicroelectronics在中国大陆的业务与人才节点，相关工作覆盖MCU、模拟、功率、MEMS与汽车半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "意法半导体是STMicroelectronics在中国大陆的业务与人才节点，相关工作覆盖MCU、模拟、功率、MEMS与汽车半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "STMicroelectronics China's mainland-China organization and talent footprint spans MCUs, analog, power, MEMS, and automotive semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，意法半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，意法半导体可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at STMicroelectronics China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-infineon",
     "name": "Infineon Technologies China",
     "nameEn": "Infineon Technologies China",
-    "nameZh": "英飞凌科技中国",
+    "nameZh": "英飞凌科技",
     "aliases": [
-      "英飞凌科技中国",
+      "英飞凌科技",
       "Infineon Technologies"
     ],
     "country": "Germany",
@@ -11943,18 +12184,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "英飞凌科技中国是Infineon Technologies在中国大陆的业务与人才节点，相关工作覆盖功率、汽车、安全与物联网半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "英飞凌科技是Infineon Technologies在中国大陆的业务与人才节点，相关工作覆盖功率、汽车、安全与物联网半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Infineon Technologies China's mainland-China organization and talent footprint spans power, automotive, security, and IoT semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英飞凌科技中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英飞凌科技可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Infineon Technologies China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-texas-instruments",
     "name": "Texas Instruments China",
     "nameEn": "Texas Instruments China",
-    "nameZh": "德州仪器中国",
+    "nameZh": "德州仪器",
     "aliases": [
-      "德州仪器中国",
+      "德州仪器",
       "Texas Instruments"
     ],
     "country": "United States",
@@ -12011,18 +12252,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "德州仪器中国是Texas Instruments在中国大陆的业务与人才节点，相关工作覆盖模拟与嵌入式处理芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "德州仪器是Texas Instruments在中国大陆的业务与人才节点，相关工作覆盖模拟与嵌入式处理芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Texas Instruments China's mainland-China organization and talent footprint spans analog and embedded-processing semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，德州仪器中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，德州仪器可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Texas Instruments China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-analog-devices",
     "name": "Analog Devices China",
     "nameEn": "Analog Devices China",
-    "nameZh": "亚德诺半导体中国",
+    "nameZh": "亚德诺半导体",
     "aliases": [
-      "亚德诺半导体中国",
+      "亚德诺半导体",
       "Analog Devices"
     ],
     "country": "United States",
@@ -12080,18 +12321,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "亚德诺半导体中国是Analog Devices在中国大陆的业务与人才节点，相关工作覆盖模拟、混合信号、数据转换与电源管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "亚德诺半导体是Analog Devices在中国大陆的业务与人才节点，相关工作覆盖模拟、混合信号、数据转换与电源管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Analog Devices China's mainland-China organization and talent footprint spans analog, mixed-signal, data conversion, and power management. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，亚德诺半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，亚德诺半导体可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Analog Devices China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-microchip",
     "name": "Microchip Technology China",
     "nameEn": "Microchip Technology China",
-    "nameZh": "微芯科技中国",
+    "nameZh": "微芯科技",
     "aliases": [
-      "微芯科技中国",
+      "微芯科技",
       "Microchip Technology"
     ],
     "country": "United States",
@@ -12149,18 +12390,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "微芯科技中国是Microchip Technology在中国大陆的业务与人才节点，相关工作覆盖MCU、FPGA、模拟与嵌入式控制。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "微芯科技是Microchip Technology在中国大陆的业务与人才节点，相关工作覆盖MCU、FPGA、模拟与嵌入式控制。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Microchip Technology China's mainland-China organization and talent footprint spans MCUs, FPGAs, analog, and embedded control. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，微芯科技中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，微芯科技可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Microchip Technology China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-onsemi",
     "name": "onsemi China",
     "nameEn": "onsemi China",
-    "nameZh": "安森美中国",
+    "nameZh": "安森美",
     "aliases": [
-      "安森美中国",
+      "安森美",
       "onsemi"
     ],
     "country": "United States",
@@ -12216,18 +12457,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "安森美中国是onsemi在中国大陆的业务与人才节点，相关工作覆盖智能电源与感知半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "安森美是onsemi在中国大陆的业务与人才节点，相关工作覆盖智能电源与感知半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "onsemi China's mainland-China organization and talent footprint spans intelligent power and sensing semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，安森美中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，安森美可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at onsemi China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-renesas",
     "name": "Renesas Electronics China",
     "nameEn": "Renesas Electronics China",
-    "nameZh": "瑞萨电子中国",
+    "nameZh": "瑞萨电子",
     "aliases": [
-      "瑞萨电子中国",
+      "瑞萨电子",
       "Renesas Electronics"
     ],
     "country": "Japan",
@@ -12286,18 +12527,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "瑞萨电子中国是Renesas Electronics在中国大陆的业务与人才节点，相关工作覆盖MCU、SoC、模拟与汽车半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "瑞萨电子是Renesas Electronics在中国大陆的业务与人才节点，相关工作覆盖MCU、SoC、模拟与汽车半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Renesas Electronics China's mainland-China organization and talent footprint spans MCUs, SoCs, analog, and automotive semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，瑞萨电子中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，瑞萨电子可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Renesas Electronics China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-rohm",
     "name": "ROHM Semiconductor China",
     "nameEn": "ROHM Semiconductor China",
-    "nameZh": "罗姆半导体中国",
+    "nameZh": "罗姆半导体",
     "aliases": [
-      "罗姆半导体中国",
+      "罗姆半导体",
       "ROHM Semiconductor"
     ],
     "country": "Japan",
@@ -12355,18 +12596,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "罗姆半导体中国是ROHM Semiconductor在中国大陆的业务与人才节点，相关工作覆盖功率器件、模拟IC与电子元件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "罗姆半导体是ROHM Semiconductor在中国大陆的业务与人才节点，相关工作覆盖功率器件、模拟IC与电子元件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "ROHM Semiconductor China's mainland-China organization and talent footprint spans power devices, analog ICs, and electronic components. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，罗姆半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，罗姆半导体可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at ROHM Semiconductor China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-toshiba-electronic",
     "name": "Toshiba Electronic Devices & Storage China",
     "nameEn": "Toshiba Electronic Devices & Storage China",
-    "nameZh": "东芝电子元件及存储中国",
+    "nameZh": "东芝电子元件及存储",
     "aliases": [
-      "东芝电子元件及存储中国",
+      "东芝电子元件及存储",
       "Toshiba Electronic Devices & Storage"
     ],
     "country": "Japan",
@@ -12424,18 +12665,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "东芝电子元件及存储中国是Toshiba Electronic Devices & Storage在中国大陆的业务与人才节点，相关工作覆盖功率器件、MCU、存储与电子元件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "东芝电子元件及存储是Toshiba Electronic Devices & Storage在中国大陆的业务与人才节点，相关工作覆盖功率器件、MCU、存储与电子元件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Toshiba Electronic Devices & Storage China's mainland-China organization and talent footprint spans power devices, MCUs, storage, and electronic components. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东芝电子元件及存储中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东芝电子元件及存储可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Toshiba Electronic Devices & Storage China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-samsung-semiconductor",
     "name": "Samsung Semiconductor China",
     "nameEn": "Samsung Semiconductor China",
-    "nameZh": "三星半导体中国",
+    "nameZh": "三星半导体",
     "aliases": [
-      "三星半导体中国",
+      "三星半导体",
       "Samsung Semiconductor"
     ],
     "country": "South Korea",
@@ -12494,18 +12735,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "三星半导体中国是Samsung Semiconductor在中国大陆的业务与人才节点，相关工作覆盖存储芯片、晶圆制造、显示与系统半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "三星半导体是Samsung Semiconductor在中国大陆的业务与人才节点，相关工作覆盖存储芯片、晶圆制造、显示与系统半导体。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Samsung Semiconductor China's mainland-China organization and talent footprint spans memory, wafer manufacturing, displays, and system semiconductors. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，三星半导体中国可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，三星半导体可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 制造自动化, 设备工程, 测试工程, 数据分析 roles at Samsung Semiconductor China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-sk-hynix",
     "name": "SK hynix China",
     "nameEn": "SK hynix China",
-    "nameZh": "SK海力士中国",
+    "nameZh": "SK海力士",
     "aliases": [
-      "SK海力士中国",
+      "SK海力士",
       "SK hynix"
     ],
     "country": "South Korea",
@@ -12564,18 +12805,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "SK海力士中国是SK hynix在中国大陆的业务与人才节点，相关工作覆盖DRAM、NAND、封装测试与晶圆制造。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "SK海力士是SK hynix在中国大陆的业务与人才节点，相关工作覆盖DRAM、NAND、封装测试与晶圆制造。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "SK hynix China's mainland-China organization and talent footprint spans DRAM, NAND, packaging, test, and wafer manufacturing. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，SK海力士中国可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，SK海力士可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 制造自动化, 设备工程, 测试工程, 数据分析 roles at SK hynix China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-micron",
     "name": "Micron Technology China",
     "nameEn": "Micron Technology China",
-    "nameZh": "美光科技中国",
+    "nameZh": "美光科技",
     "aliases": [
-      "美光科技中国",
+      "美光科技",
       "Micron Technology"
     ],
     "country": "United States",
@@ -12633,18 +12874,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "美光科技中国是Micron Technology在中国大陆的业务与人才节点，相关工作覆盖DRAM、NAND、封装测试与存储系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "美光科技是Micron Technology在中国大陆的业务与人才节点，相关工作覆盖DRAM、NAND、封装测试与存储系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Micron Technology China's mainland-China organization and talent footprint spans DRAM, NAND, packaging, test, and memory systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，美光科技中国可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，美光科技可重点追踪工艺工程、制造自动化、设备工程、测试工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 制造自动化, 设备工程, 测试工程, 数据分析 roles at Micron Technology China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-mediatek",
     "name": "MediaTek China",
     "nameEn": "MediaTek China",
-    "nameZh": "联发科技中国",
+    "nameZh": "联发科技",
     "aliases": [
-      "联发科技中国",
+      "联发科技",
       "MediaTek"
     ],
     "country": "Taiwan",
@@ -12705,18 +12946,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "联发科技中国是MediaTek在中国大陆的业务与人才节点，相关工作覆盖移动SoC、连接、电视与边缘AI芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "联发科技是MediaTek在中国大陆的业务与人才节点，相关工作覆盖移动SoC、连接、电视与边缘AI芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "MediaTek China's mainland-China organization and talent footprint spans mobile SoCs, connectivity, TV, and edge-AI chips. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，联发科技中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，联发科技可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at MediaTek China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-realtek",
     "name": "Realtek Semiconductor China",
     "nameEn": "Realtek Semiconductor China",
-    "nameZh": "瑞昱半导体中国",
+    "nameZh": "瑞昱半导体",
     "aliases": [
-      "瑞昱半导体中国",
+      "瑞昱半导体",
       "Realtek Semiconductor"
     ],
     "country": "Taiwan",
@@ -12773,18 +13014,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "瑞昱半导体中国是Realtek Semiconductor在中国大陆的业务与人才节点，相关工作覆盖网络、音频、显示与连接芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "瑞昱半导体是Realtek Semiconductor在中国大陆的业务与人才节点，相关工作覆盖网络、音频、显示与连接芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Realtek Semiconductor China's mainland-China organization and talent footprint spans networking, audio, display, and connectivity chips. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，瑞昱半导体中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，瑞昱半导体可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Realtek Semiconductor China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-marvell",
     "name": "Marvell Technology China",
     "nameEn": "Marvell Technology China",
-    "nameZh": "迈威尔科技中国",
+    "nameZh": "迈威尔科技",
     "aliases": [
-      "迈威尔科技中国",
+      "迈威尔科技",
       "Marvell Technology"
     ],
     "country": "United States",
@@ -12842,18 +13083,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "迈威尔科技中国是Marvell Technology在中国大陆的业务与人才节点，相关工作覆盖数据基础设施、网络、存储与定制芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "迈威尔科技是Marvell Technology在中国大陆的业务与人才节点，相关工作覆盖数据基础设施、网络、存储与定制芯片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Marvell Technology China's mainland-China organization and talent footprint spans data infrastructure, networking, storage, and custom silicon. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，迈威尔科技中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，迈威尔科技可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Marvell Technology China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-broadcom",
     "name": "Broadcom China",
     "nameEn": "Broadcom China",
-    "nameZh": "博通中国",
+    "nameZh": "博通",
     "aliases": [
-      "博通中国",
+      "博通",
       "Broadcom"
     ],
     "country": "United States",
@@ -12911,9 +13152,9 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "博通中国是Broadcom在中国大陆的业务与人才节点，相关工作覆盖网络、连接、存储与基础设施软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "博通是Broadcom在中国大陆的业务与人才节点，相关工作覆盖网络、连接、存储与基础设施软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Broadcom China's mainland-China organization and talent footprint spans networking, connectivity, storage, and infrastructure software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，博通中国可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，博通可重点追踪数字IC设计、设计验证、芯片架构、嵌入式软件、应用工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 数字IC设计, 设计验证, 芯片架构, 嵌入式软件, 应用工程 roles at Broadcom China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
@@ -13053,9 +13294,9 @@
     "id": "cn-foreign-asml",
     "name": "ASML China",
     "nameEn": "ASML China",
-    "nameZh": "阿斯麦中国",
+    "nameZh": "阿斯麦",
     "aliases": [
-      "阿斯麦中国",
+      "阿斯麦",
       "ASML"
     ],
     "country": "Netherlands",
@@ -13117,18 +13358,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "阿斯麦中国是ASML在中国大陆的业务与人才节点，相关工作覆盖光刻、计算光刻、电子束量测与客户支持。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "阿斯麦是ASML在中国大陆的业务与人才节点，相关工作覆盖光刻、计算光刻、电子束量测与客户支持。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "ASML China's mainland-China organization and talent footprint spans lithography, computational lithography, e-beam metrology, and customer support. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，阿斯麦中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，阿斯麦可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at ASML China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-applied-materials",
     "name": "Applied Materials China",
     "nameEn": "Applied Materials China",
-    "nameZh": "应用材料中国",
+    "nameZh": "应用材料",
     "aliases": [
-      "应用材料中国",
+      "应用材料",
       "Applied Materials"
     ],
     "country": "United States",
@@ -13187,18 +13428,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "应用材料中国是Applied Materials在中国大陆的业务与人才节点，相关工作覆盖沉积、刻蚀、材料工程与显示制造设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "应用材料是Applied Materials在中国大陆的业务与人才节点，相关工作覆盖沉积、刻蚀、材料工程与显示制造设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Applied Materials China's mainland-China organization and talent footprint spans deposition, etch, materials engineering, and display-manufacturing equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，应用材料中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，应用材料可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Applied Materials China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-lam-research",
     "name": "Lam Research China",
     "nameEn": "Lam Research China",
-    "nameZh": "泛林集团中国",
+    "nameZh": "泛林集团",
     "aliases": [
-      "泛林集团中国",
+      "泛林集团",
       "Lam Research"
     ],
     "country": "United States",
@@ -13257,18 +13498,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "泛林集团中国是Lam Research在中国大陆的业务与人才节点，相关工作覆盖刻蚀、沉积、清洗与晶圆设备服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "泛林集团是Lam Research在中国大陆的业务与人才节点，相关工作覆盖刻蚀、沉积、清洗与晶圆设备服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Lam Research China's mainland-China organization and talent footprint spans etch, deposition, clean, and wafer-equipment services. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泛林集团中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泛林集团可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Lam Research China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-kla",
     "name": "KLA China",
     "nameEn": "KLA China",
-    "nameZh": "科磊中国",
+    "nameZh": "科磊",
     "aliases": [
-      "科磊中国",
+      "科磊",
       "KLA"
     ],
     "country": "United States",
@@ -13327,18 +13568,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "科磊中国是KLA在中国大陆的业务与人才节点，相关工作覆盖过程控制、缺陷检测、量测与良率分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "科磊是KLA在中国大陆的业务与人才节点，相关工作覆盖过程控制、缺陷检测、量测与良率分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "KLA China's mainland-China organization and talent footprint spans process control, defect inspection, metrology, and yield analytics. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，科磊中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，科磊可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at KLA China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-tokyo-electron",
     "name": "Tokyo Electron China",
     "nameEn": "Tokyo Electron China",
-    "nameZh": "东京电子中国",
+    "nameZh": "东京电子",
     "aliases": [
-      "东京电子中国",
+      "东京电子",
       "Tokyo Electron"
     ],
     "country": "Japan",
@@ -13399,18 +13640,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "东京电子中国是Tokyo Electron在中国大陆的业务与人才节点，相关工作覆盖涂胶显影、刻蚀、沉积、清洗与测试设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "东京电子是Tokyo Electron在中国大陆的业务与人才节点，相关工作覆盖涂胶显影、刻蚀、沉积、清洗与测试设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Tokyo Electron China's mainland-China organization and talent footprint spans coat/develop, etch, deposition, clean, and test equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东京电子中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东京电子可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Tokyo Electron China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-screen",
     "name": "SCREEN Semiconductor Solutions China",
     "nameEn": "SCREEN Semiconductor Solutions China",
-    "nameZh": "斯库林半导体中国",
     "aliases": [
-      "斯库林半导体中国",
       "SCREEN Semiconductor Solutions"
     ],
     "country": "Japan",
@@ -13468,18 +13707,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "斯库林半导体中国是SCREEN Semiconductor Solutions在中国大陆的业务与人才节点，相关工作覆盖晶圆清洗、涂胶显影与量测设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "SCREEN Semiconductor Solutions China是SCREEN Semiconductor Solutions在中国大陆的业务与人才节点，相关工作覆盖晶圆清洗、涂胶显影与量测设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "SCREEN Semiconductor Solutions China's mainland-China organization and talent footprint spans wafer cleaning, coat/develop, and metrology equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，斯库林半导体中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，SCREEN Semiconductor Solutions China可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at SCREEN Semiconductor Solutions China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-asm-international",
     "name": "ASM International China",
     "nameEn": "ASM International China",
-    "nameZh": "ASM中国",
     "aliases": [
-      "ASM中国",
       "ASM International"
     ],
     "country": "Netherlands",
@@ -13536,18 +13773,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "ASM中国是ASM International在中国大陆的业务与人才节点，相关工作覆盖原子层沉积、外延与晶圆处理设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "ASM International China是ASM International在中国大陆的业务与人才节点，相关工作覆盖原子层沉积、外延与晶圆处理设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "ASM International China's mainland-China organization and talent footprint spans atomic-layer deposition, epitaxy, and wafer-processing equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，ASM中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，ASM International China可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at ASM International China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-advantest",
     "name": "Advantest China",
     "nameEn": "Advantest China",
-    "nameZh": "爱德万测试中国",
+    "nameZh": "爱德万测试",
     "aliases": [
-      "爱德万测试中国",
+      "爱德万测试",
       "Advantest"
     ],
     "country": "Japan",
@@ -13604,18 +13841,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "爱德万测试中国是Advantest在中国大陆的业务与人才节点，相关工作覆盖半导体ATE、测试接口与数据分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "爱德万测试是Advantest在中国大陆的业务与人才节点，相关工作覆盖半导体ATE、测试接口与数据分析。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Advantest China's mainland-China organization and talent footprint spans semiconductor ATE, test interfaces, and data analytics. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱德万测试中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱德万测试可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Advantest China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-teradyne",
     "name": "Teradyne China",
     "nameEn": "Teradyne China",
-    "nameZh": "泰瑞达中国",
+    "nameZh": "泰瑞达",
     "aliases": [
-      "泰瑞达中国",
+      "泰瑞达",
       "Teradyne"
     ],
     "country": "United States",
@@ -13672,18 +13909,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "泰瑞达中国是Teradyne在中国大陆的业务与人才节点，相关工作覆盖半导体自动测试、系统测试与工业自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "泰瑞达是Teradyne在中国大陆的业务与人才节点，相关工作覆盖半导体自动测试、系统测试与工业自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Teradyne China's mainland-China organization and talent footprint spans semiconductor automated test, system test, and industrial automation. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰瑞达中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰瑞达可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Teradyne China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-cohu",
     "name": "Cohu China",
     "nameEn": "Cohu China",
-    "nameZh": "科休中国",
+    "nameZh": "科休",
     "aliases": [
-      "科休中国",
+      "科休",
       "Cohu"
     ],
     "country": "United States",
@@ -13740,18 +13977,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "科休中国是Cohu在中国大陆的业务与人才节点，相关工作覆盖测试分选、接口、检测与设备软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "科休是Cohu在中国大陆的业务与人才节点，相关工作覆盖测试分选、接口、检测与设备软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Cohu China's mainland-China organization and talent footprint spans test handling, interfaces, inspection, and equipment software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，科休中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，科休可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Cohu China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-onto-innovation",
     "name": "Onto Innovation China",
     "nameEn": "Onto Innovation China",
-    "nameZh": "昂图创新中国",
+    "nameZh": "昂图创新",
     "aliases": [
-      "昂图创新中国",
+      "昂图创新",
       "Onto Innovation"
     ],
     "country": "United States",
@@ -13809,18 +14046,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "昂图创新中国是Onto Innovation在中国大陆的业务与人才节点，相关工作覆盖光学量测、检测、封装与良率软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "昂图创新是Onto Innovation在中国大陆的业务与人才节点，相关工作覆盖光学量测、检测、封装与良率软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Onto Innovation China's mainland-China organization and talent footprint spans optical metrology, inspection, packaging, and yield software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，昂图创新中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，昂图创新可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Onto Innovation China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-axcelis",
     "name": "Axcelis Technologies China",
     "nameEn": "Axcelis Technologies China",
-    "nameZh": "Axcelis中国",
     "aliases": [
-      "Axcelis中国",
       "Axcelis Technologies"
     ],
     "country": "United States",
@@ -13875,18 +14110,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "Axcelis中国是Axcelis Technologies在中国大陆的业务与人才节点，相关工作覆盖离子注入设备与工艺支持。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "Axcelis Technologies China是Axcelis Technologies在中国大陆的业务与人才节点，相关工作覆盖离子注入设备与工艺支持。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Axcelis Technologies China's mainland-China organization and talent footprint spans ion-implantation equipment and process support. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Axcelis中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，Axcelis Technologies China可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Axcelis Technologies China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-veeco",
     "name": "Veeco China",
     "nameEn": "Veeco China",
-    "nameZh": "维易科中国",
+    "nameZh": "维易科",
     "aliases": [
-      "维易科中国",
+      "维易科",
       "Veeco"
     ],
     "country": "United States",
@@ -13943,18 +14178,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "维易科中国是Veeco在中国大陆的业务与人才节点，相关工作覆盖薄膜、激光退火、离子束与化合物半导体设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "维易科是Veeco在中国大陆的业务与人才节点，相关工作覆盖薄膜、激光退火、离子束与化合物半导体设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Veeco China's mainland-China organization and talent footprint spans thin film, laser anneal, ion beam, and compound-semiconductor equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，维易科中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，维易科可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Veeco China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-mks",
     "name": "MKS Instruments China",
     "nameEn": "MKS Instruments China",
-    "nameZh": "万机仪器中国",
+    "nameZh": "万机仪器",
     "aliases": [
-      "万机仪器中国",
+      "万机仪器",
       "MKS Instruments"
     ],
     "country": "United States",
@@ -14012,18 +14247,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "万机仪器中国是MKS Instruments在中国大陆的业务与人才节点，相关工作覆盖真空、光子学、过程控制与精密运动。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "万机仪器是MKS Instruments在中国大陆的业务与人才节点，相关工作覆盖真空、光子学、过程控制与精密运动。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "MKS Instruments China's mainland-China organization and talent footprint spans vacuum, photonics, process control, and precision motion. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，万机仪器中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，万机仪器可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at MKS Instruments China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-edwards",
     "name": "Edwards Vacuum China",
     "nameEn": "Edwards Vacuum China",
-    "nameZh": "爱德华真空中国",
+    "nameZh": "爱德华真空",
     "aliases": [
-      "爱德华真空中国",
+      "爱德华真空",
       "Edwards Vacuum"
     ],
     "country": "United Kingdom",
@@ -14080,18 +14315,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "爱德华真空中国是Edwards Vacuum在中国大陆的业务与人才节点，相关工作覆盖半导体真空系统、减排与现场服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "爱德华真空是Edwards Vacuum在中国大陆的业务与人才节点，相关工作覆盖半导体真空系统、减排与现场服务。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Edwards Vacuum China's mainland-China organization and talent footprint spans semiconductor vacuum systems, abatement, and field service. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱德华真空中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱德华真空可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Edwards Vacuum China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-pfeiffer-vacuum",
     "name": "Pfeiffer Vacuum China",
     "nameEn": "Pfeiffer Vacuum China",
-    "nameZh": "普发真空中国",
+    "nameZh": "普发真空",
     "aliases": [
-      "普发真空中国",
+      "普发真空",
       "Pfeiffer Vacuum"
     ],
     "country": "Germany",
@@ -14149,18 +14384,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "普发真空中国是Pfeiffer Vacuum在中国大陆的业务与人才节点，相关工作覆盖真空泵、检漏、分析与系统工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "普发真空是Pfeiffer Vacuum在中国大陆的业务与人才节点，相关工作覆盖真空泵、检漏、分析与系统工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Pfeiffer Vacuum China's mainland-China organization and talent footprint spans vacuum pumps, leak detection, analysis, and systems engineering. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，普发真空中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，普发真空可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Pfeiffer Vacuum China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-vat-group",
     "name": "VAT Group China",
     "nameEn": "VAT Group China",
-    "nameZh": "VAT阀门中国",
     "aliases": [
-      "VAT阀门中国",
       "VAT Group"
     ],
     "country": "Switzerland",
@@ -14216,18 +14449,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "VAT阀门中国是VAT Group在中国大陆的业务与人才节点，相关工作覆盖高真空阀门、控制与半导体设备部件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "VAT Group China是VAT Group在中国大陆的业务与人才节点，相关工作覆盖高真空阀门、控制与半导体设备部件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "VAT Group China's mainland-China organization and talent footprint spans high-vacuum valves, controls, and semiconductor-equipment components. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，VAT阀门中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，VAT Group China可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at VAT Group China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-brooks-automation",
     "name": "Brooks Automation China",
     "nameEn": "Brooks Automation China",
-    "nameZh": "布鲁克斯自动化中国",
+    "nameZh": "布鲁克斯自动化",
     "aliases": [
-      "布鲁克斯自动化中国",
+      "布鲁克斯自动化",
       "Brooks Automation"
     ],
     "country": "United States",
@@ -14283,18 +14516,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "布鲁克斯自动化中国是Brooks Automation在中国大陆的业务与人才节点，相关工作覆盖晶圆自动化、真空机器人与样本管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "布鲁克斯自动化是Brooks Automation在中国大陆的业务与人才节点，相关工作覆盖晶圆自动化、真空机器人与样本管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Brooks Automation China's mainland-China organization and talent footprint spans wafer automation, vacuum robotics, and sample management. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，布鲁克斯自动化中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，布鲁克斯自动化可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Brooks Automation China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-horiba",
     "name": "HORIBA China",
     "nameEn": "HORIBA China",
-    "nameZh": "堀场中国",
+    "nameZh": "堀场",
     "aliases": [
-      "堀场中国",
+      "堀场",
       "HORIBA"
     ],
     "country": "Japan",
@@ -14352,18 +14585,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "堀场中国是HORIBA在中国大陆的业务与人才节点，相关工作覆盖过程分析、气体测量、材料表征与汽车测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "堀场是HORIBA在中国大陆的业务与人才节点，相关工作覆盖过程分析、气体测量、材料表征与汽车测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "HORIBA China's mainland-China organization and talent footprint spans process analysis, gas measurement, materials characterization, and automotive test. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，堀场中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，堀场可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at HORIBA China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-hitachi-high-tech",
     "name": "Hitachi High-Tech China",
     "nameEn": "Hitachi High-Tech China",
-    "nameZh": "日立高新技术中国",
+    "nameZh": "日立高新技术",
     "aliases": [
-      "日立高新技术中国",
+      "日立高新技术",
       "Hitachi High-Tech"
     ],
     "country": "Japan",
@@ -14421,18 +14654,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "日立高新技术中国是Hitachi High-Tech在中国大陆的业务与人才节点，相关工作覆盖电子显微、量测、检测与半导体制造系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "日立高新技术是Hitachi High-Tech在中国大陆的业务与人才节点，相关工作覆盖电子显微、量测、检测与半导体制造系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Hitachi High-Tech China's mainland-China organization and talent footprint spans electron microscopy, metrology, inspection, and semiconductor systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，日立高新技术中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，日立高新技术可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Hitachi High-Tech China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-jeol",
     "name": "JEOL China",
     "nameEn": "JEOL China",
-    "nameZh": "日本电子中国",
+    "nameZh": "日本电子",
     "aliases": [
-      "日本电子中国",
+      "日本电子",
       "JEOL"
     ],
     "country": "Japan",
@@ -14489,18 +14722,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "日本电子中国是JEOL在中国大陆的业务与人才节点，相关工作覆盖电子显微镜、分析仪器与纳米加工设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "日本电子是JEOL在中国大陆的业务与人才节点，相关工作覆盖电子显微镜、分析仪器与纳米加工设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "JEOL China's mainland-China organization and talent footprint spans electron microscopes, analytical instruments, and nanofabrication tools. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，日本电子中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，日本电子可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at JEOL China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-nikon-precision",
     "name": "Nikon Precision China",
     "nameEn": "Nikon Precision China",
-    "nameZh": "尼康精机中国",
+    "nameZh": "尼康精机",
     "aliases": [
-      "尼康精机中国",
+      "尼康精机",
       "Nikon Precision"
     ],
     "country": "Japan",
@@ -14556,18 +14789,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "尼康精机中国是Nikon Precision在中国大陆的业务与人才节点，相关工作覆盖半导体光刻、量测与精密光学。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "尼康精机是Nikon Precision在中国大陆的业务与人才节点，相关工作覆盖半导体光刻、量测与精密光学。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Nikon Precision China's mainland-China organization and talent footprint spans semiconductor lithography, metrology, and precision optics. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，尼康精机中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，尼康精机可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Nikon Precision China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-canon",
     "name": "Canon China",
     "nameEn": "Canon China",
-    "nameZh": "佳能中国",
+    "nameZh": "佳能",
     "aliases": [
-      "佳能中国",
+      "佳能",
       "Canon"
     ],
     "country": "Japan",
@@ -14625,18 +14858,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "佳能中国是Canon在中国大陆的业务与人才节点，相关工作覆盖半导体光刻、显示制造、成像与精密设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "佳能是Canon在中国大陆的业务与人才节点，相关工作覆盖半导体光刻、显示制造、成像与精密设备。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Canon China's mainland-China organization and talent footprint spans semiconductor lithography, display manufacturing, imaging, and precision equipment. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，佳能中国可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，佳能可重点追踪设备工程、应用工程、制造自动化、软件工程、数据分析岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 设备工程, 应用工程, 制造自动化, 软件工程, 数据分析 roles at Canon China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-keysight",
     "name": "Keysight Technologies China",
     "nameEn": "Keysight Technologies China",
-    "nameZh": "是德科技中国",
+    "nameZh": "是德科技",
     "aliases": [
-      "是德科技中国",
+      "是德科技",
       "Keysight Technologies"
     ],
     "country": "United States",
@@ -14695,18 +14928,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "是德科技中国是Keysight Technologies在中国大陆的业务与人才节点，相关工作覆盖电子设计测试、射频、协议与半导体量测。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "是德科技是Keysight Technologies在中国大陆的业务与人才节点，相关工作覆盖电子设计测试、射频、协议与半导体量测。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Keysight Technologies China's mainland-China organization and talent footprint spans electronic design and test, RF, protocol, and semiconductor measurement. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，是德科技中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，是德科技可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Keysight Technologies China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-rohde-schwarz",
     "name": "Rohde & Schwarz China",
     "nameEn": "Rohde & Schwarz China",
-    "nameZh": "罗德与施瓦茨中国",
+    "nameZh": "罗德与施瓦茨",
     "aliases": [
-      "罗德与施瓦茨中国",
+      "罗德与施瓦茨",
       "Rohde & Schwarz"
     ],
     "country": "Germany",
@@ -14765,18 +14998,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "罗德与施瓦茨中国是Rohde & Schwarz在中国大陆的业务与人才节点，相关工作覆盖射频微波、无线通信、示波与系统测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "罗德与施瓦茨是Rohde & Schwarz在中国大陆的业务与人才节点，相关工作覆盖射频微波、无线通信、示波与系统测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Rohde & Schwarz China's mainland-China organization and talent footprint spans RF/microwave, wireless communications, oscilloscopes, and system test. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，罗德与施瓦茨中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，罗德与施瓦茨可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Rohde & Schwarz China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-tektronix",
     "name": "Tektronix China",
     "nameEn": "Tektronix China",
-    "nameZh": "泰克中国",
+    "nameZh": "泰克",
     "aliases": [
-      "泰克中国",
+      "泰克",
       "Tektronix"
     ],
     "country": "United States",
@@ -14834,18 +15067,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "泰克中国是Tektronix在中国大陆的业务与人才节点，相关工作覆盖示波器、信号分析、半导体与电源测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "泰克是Tektronix在中国大陆的业务与人才节点，相关工作覆盖示波器、信号分析、半导体与电源测试。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Tektronix China's mainland-China organization and talent footprint spans oscilloscopes, signal analysis, semiconductor, and power test. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰克中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰克可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Tektronix China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-national-instruments",
     "name": "NI China",
     "nameEn": "NI China",
-    "nameZh": "恩艾仪器中国",
+    "nameZh": "恩艾仪器",
     "aliases": [
-      "恩艾仪器中国",
+      "恩艾仪器",
       "NI"
     ],
     "country": "United States",
@@ -14902,18 +15135,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "恩艾仪器中国是NI在中国大陆的业务与人才节点，相关工作覆盖自动测试、LabVIEW、数据采集与硬件在环。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "恩艾仪器是NI在中国大陆的业务与人才节点，相关工作覆盖自动测试、LabVIEW、数据采集与硬件在环。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "NI China's mainland-China organization and talent footprint spans automated test, LabVIEW, data acquisition, and hardware-in-the-loop. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，恩艾仪器中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，恩艾仪器可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at NI China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-formfactor",
     "name": "FormFactor China",
     "nameEn": "FormFactor China",
-    "nameZh": "FormFactor中国",
     "aliases": [
-      "FormFactor中国",
       "FormFactor"
     ],
     "country": "United States",
@@ -14969,18 +15200,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "FormFactor中国是FormFactor在中国大陆的业务与人才节点，相关工作覆盖探针卡、晶圆测试与低温量测系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "FormFactor China是FormFactor在中国大陆的业务与人才节点，相关工作覆盖探针卡、晶圆测试与低温量测系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "FormFactor China's mainland-China organization and talent footprint spans probe cards, wafer test, and cryogenic measurement systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，FormFactor中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，FormFactor China可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at FormFactor China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-chroma",
     "name": "Chroma ATE China",
     "nameEn": "Chroma ATE China",
-    "nameZh": "致茂电子中国",
+    "nameZh": "致茂电子",
     "aliases": [
-      "致茂电子中国",
+      "致茂电子",
       "Chroma ATE"
     ],
     "country": "Taiwan",
@@ -15038,18 +15269,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "致茂电子中国是Chroma ATE在中国大陆的业务与人才节点，相关工作覆盖电源、半导体、光电与自动测试系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "致茂电子是Chroma ATE在中国大陆的业务与人才节点，相关工作覆盖电源、半导体、光电与自动测试系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Chroma ATE China's mainland-China organization and talent footprint spans power, semiconductor, optoelectronic, and automated test systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，致茂电子中国可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，致茂电子可重点追踪测试工程、应用工程、嵌入式软件、射频工程、软件工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 测试工程, 应用工程, 嵌入式软件, 射频工程, 软件工程 roles at Chroma ATE China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-enabling-technologies",
     "name": "Teradyne Robotics China",
     "nameEn": "Teradyne Robotics China",
-    "nameZh": "泰瑞达机器人中国",
+    "nameZh": "泰瑞达机器人",
     "aliases": [
-      "泰瑞达机器人中国",
+      "泰瑞达机器人",
       "Teradyne Robotics"
     ],
     "country": "United States",
@@ -15105,18 +15336,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "泰瑞达机器人中国是Teradyne Robotics在中国大陆的业务与人才节点，相关工作覆盖协作机器人、移动机器人与工业自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "泰瑞达机器人是Teradyne Robotics在中国大陆的业务与人才节点，相关工作覆盖协作机器人、移动机器人与工业自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Teradyne Robotics China's mainland-China organization and talent footprint spans collaborative robots, mobile robots, and industrial automation. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰瑞达机器人中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，泰瑞达机器人可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Teradyne Robotics China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-air-liquide",
     "name": "Air Liquide China",
     "nameEn": "Air Liquide China",
-    "nameZh": "液化空气中国",
+    "nameZh": "液化空气",
     "aliases": [
-      "液化空气中国",
+      "液化空气",
       "Air Liquide"
     ],
     "country": "France",
@@ -15173,18 +15404,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "液化空气中国是Air Liquide在中国大陆的业务与人才节点，相关工作覆盖电子特气、先进材料与厂务气体系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "液化空气是Air Liquide在中国大陆的业务与人才节点，相关工作覆盖电子特气、先进材料与厂务气体系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Air Liquide China's mainland-China organization and talent footprint spans electronic specialty gases, advanced materials, and fab gas systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，液化空气中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，液化空气可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Air Liquide China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-linde",
     "name": "Linde China",
     "nameEn": "Linde China",
-    "nameZh": "林德中国",
+    "nameZh": "林德",
     "aliases": [
-      "林德中国",
+      "林德",
       "Linde"
     ],
     "country": "United Kingdom",
@@ -15241,18 +15472,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "林德中国是Linde在中国大陆的业务与人才节点，相关工作覆盖电子气体、现场供气与工程系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "林德是Linde在中国大陆的业务与人才节点，相关工作覆盖电子气体、现场供气与工程系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Linde China's mainland-China organization and talent footprint spans electronic gases, onsite supply, and engineering systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，林德中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，林德可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Linde China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-merck-electronics",
     "name": "Merck Electronics China",
     "nameEn": "Merck Electronics China",
-    "nameZh": "默克电子科技中国",
+    "nameZh": "默克电子科技",
     "aliases": [
-      "默克电子科技中国",
+      "默克电子科技",
       "Merck Electronics"
     ],
     "country": "Germany",
@@ -15307,18 +15538,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "默克电子科技中国是Merck Electronics在中国大陆的业务与人才节点，相关工作覆盖半导体材料、显示材料与先进配方。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "默克电子科技是Merck Electronics在中国大陆的业务与人才节点，相关工作覆盖半导体材料、显示材料与先进配方。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Merck Electronics China's mainland-China organization and talent footprint spans semiconductor materials, display materials, and advanced formulations. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，默克电子科技中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，默克电子科技可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Merck Electronics China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-dupont-electronics",
     "name": "DuPont Electronics & Industrial China",
     "nameEn": "DuPont Electronics & Industrial China",
-    "nameZh": "杜邦电子与工业中国",
+    "nameZh": "杜邦电子与工业",
     "aliases": [
-      "杜邦电子与工业中国",
+      "杜邦电子与工业",
       "DuPont Electronics & Industrial"
     ],
     "country": "United States",
@@ -15375,18 +15606,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "杜邦电子与工业中国是DuPont Electronics & Industrial在中国大陆的业务与人才节点，相关工作覆盖光刻、互连、封装与电子材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "杜邦电子与工业是DuPont Electronics & Industrial在中国大陆的业务与人才节点，相关工作覆盖光刻、互连、封装与电子材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "DuPont Electronics & Industrial China's mainland-China organization and talent footprint spans lithography, interconnect, packaging, and electronic materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，杜邦电子与工业中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，杜邦电子与工业可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at DuPont Electronics & Industrial China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-air-products",
     "name": "Air Products China",
     "nameEn": "Air Products China",
-    "nameZh": "空气产品公司中国",
+    "nameZh": "空气产品公司",
     "aliases": [
-      "空气产品公司中国",
+      "空气产品公司",
       "Air Products"
     ],
     "country": "United States",
@@ -15443,18 +15674,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "空气产品公司中国是Air Products在中国大陆的业务与人才节点，相关工作覆盖电子气体、现场制气与超高纯供应系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "空气产品公司是Air Products在中国大陆的业务与人才节点，相关工作覆盖电子气体、现场制气与超高纯供应系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Air Products China's mainland-China organization and talent footprint spans electronic gases, onsite generation, and ultra-high-purity supply systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，空气产品公司中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，空气产品公司可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Air Products China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-basf",
     "name": "BASF China",
     "nameEn": "BASF China",
-    "nameZh": "巴斯夫中国",
+    "nameZh": "巴斯夫",
     "aliases": [
-      "巴斯夫中国",
+      "巴斯夫",
       "BASF"
     ],
     "country": "Germany",
@@ -15510,18 +15741,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "巴斯夫中国是BASF在中国大陆的业务与人才节点，相关工作覆盖电子化学品、功能材料与制造数字化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "巴斯夫是BASF在中国大陆的业务与人才节点，相关工作覆盖电子化学品、功能材料与制造数字化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "BASF China's mainland-China organization and talent footprint spans electronic chemicals, functional materials, and manufacturing digitalization. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，巴斯夫中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，巴斯夫可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at BASF China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-fujifilm-electronic-materials",
     "name": "FUJIFILM Electronic Materials China",
     "nameEn": "FUJIFILM Electronic Materials China",
-    "nameZh": "富士胶片电子材料中国",
+    "nameZh": "富士胶片电子材料",
     "aliases": [
-      "富士胶片电子材料中国",
+      "富士胶片电子材料",
       "FUJIFILM Electronic Materials"
     ],
     "country": "Japan",
@@ -15577,18 +15808,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "富士胶片电子材料中国是FUJIFILM Electronic Materials在中国大陆的业务与人才节点，相关工作覆盖光刻胶、CMP、清洗与电子材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "富士胶片电子材料是FUJIFILM Electronic Materials在中国大陆的业务与人才节点，相关工作覆盖光刻胶、CMP、清洗与电子材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "FUJIFILM Electronic Materials China's mainland-China organization and talent footprint spans photoresists, CMP, cleans, and electronic materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，富士胶片电子材料中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，富士胶片电子材料可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at FUJIFILM Electronic Materials China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-resonac",
     "name": "Resonac China",
     "nameEn": "Resonac China",
-    "nameZh": "力森诺科中国",
+    "nameZh": "力森诺科",
     "aliases": [
-      "力森诺科中国",
+      "力森诺科",
       "Resonac"
     ],
     "country": "Japan",
@@ -15644,18 +15875,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "力森诺科中国是Resonac在中国大陆的业务与人才节点，相关工作覆盖封装、功率半导体与功能材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "力森诺科是Resonac在中国大陆的业务与人才节点，相关工作覆盖封装、功率半导体与功能材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Resonac China's mainland-China organization and talent footprint spans packaging, power-semiconductor, and functional materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，力森诺科中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，力森诺科可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Resonac China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-shin-etsu",
     "name": "Shin-Etsu Chemical China",
     "nameEn": "Shin-Etsu Chemical China",
-    "nameZh": "信越化学中国",
+    "nameZh": "信越化学",
     "aliases": [
-      "信越化学中国",
+      "信越化学",
       "Shin-Etsu Chemical"
     ],
     "country": "Japan",
@@ -15711,18 +15942,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "信越化学中国是Shin-Etsu Chemical在中国大陆的业务与人才节点，相关工作覆盖硅片、光刻材料、封装与功能化学品。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "信越化学是Shin-Etsu Chemical在中国大陆的业务与人才节点，相关工作覆盖硅片、光刻材料、封装与功能化学品。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Shin-Etsu Chemical China's mainland-China organization and talent footprint spans silicon wafers, lithography materials, packaging, and functional chemicals. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，信越化学中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，信越化学可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Shin-Etsu Chemical China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-jsr",
     "name": "JSR China",
     "nameEn": "JSR China",
-    "nameZh": "JSR中国",
     "aliases": [
-      "JSR中国",
       "JSR"
     ],
     "country": "Japan",
@@ -15777,18 +16006,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "JSR中国是JSR在中国大陆的业务与人才节点，相关工作覆盖光刻胶、CMP与先进半导体材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "JSR China是JSR在中国大陆的业务与人才节点，相关工作覆盖光刻胶、CMP与先进半导体材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "JSR China's mainland-China organization and talent footprint spans photoresists, CMP, and advanced semiconductor materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，JSR中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，JSR China可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at JSR China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-tok",
     "name": "Tokyo Ohka Kogyo China",
     "nameEn": "Tokyo Ohka Kogyo China",
-    "nameZh": "东京应化中国",
+    "nameZh": "东京应化",
     "aliases": [
-      "东京应化中国",
+      "东京应化",
       "Tokyo Ohka Kogyo"
     ],
     "country": "Japan",
@@ -15843,18 +16072,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "东京应化中国是Tokyo Ohka Kogyo在中国大陆的业务与人才节点，相关工作覆盖光刻胶、高纯化学品与微细加工材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "东京应化是Tokyo Ohka Kogyo在中国大陆的业务与人才节点，相关工作覆盖光刻胶、高纯化学品与微细加工材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Tokyo Ohka Kogyo China's mainland-China organization and talent footprint spans photoresists, high-purity chemicals, and microfabrication materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东京应化中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，东京应化可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Tokyo Ohka Kogyo China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-sumco",
     "name": "SUMCO China",
     "nameEn": "SUMCO China",
-    "nameZh": "胜高中国",
+    "nameZh": "胜高",
     "aliases": [
-      "胜高中国",
+      "胜高",
       "SUMCO"
     ],
     "country": "Japan",
@@ -15907,18 +16136,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "胜高中国是SUMCO在中国大陆的业务与人才节点，相关工作覆盖半导体硅片与晶体材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "胜高是SUMCO在中国大陆的业务与人才节点，相关工作覆盖半导体硅片与晶体材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "SUMCO China's mainland-China organization and talent footprint spans semiconductor silicon wafers and crystal materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，胜高中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，胜高可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at SUMCO China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-siltronic",
     "name": "Siltronic China",
     "nameEn": "Siltronic China",
-    "nameZh": "世创电子材料中国",
+    "nameZh": "世创电子材料",
     "aliases": [
-      "世创电子材料中国",
+      "世创电子材料",
       "Siltronic"
     ],
     "country": "Germany",
@@ -15971,18 +16200,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "世创电子材料中国是Siltronic在中国大陆的业务与人才节点，相关工作覆盖超纯半导体硅片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "世创电子材料是Siltronic在中国大陆的业务与人才节点，相关工作覆盖超纯半导体硅片。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Siltronic China's mainland-China organization and talent footprint spans ultra-pure semiconductor silicon wafers. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，世创电子材料中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，世创电子材料可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Siltronic China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-globalwafers",
     "name": "GlobalWafers China",
     "nameEn": "GlobalWafers China",
-    "nameZh": "环球晶圆中国",
+    "nameZh": "环球晶圆",
     "aliases": [
-      "环球晶圆中国",
+      "环球晶圆",
       "GlobalWafers"
     ],
     "country": "Taiwan",
@@ -16036,18 +16265,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "环球晶圆中国是GlobalWafers在中国大陆的业务与人才节点，相关工作覆盖半导体硅片与外延材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "环球晶圆是GlobalWafers在中国大陆的业务与人才节点，相关工作覆盖半导体硅片与外延材料。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "GlobalWafers China's mainland-China organization and talent footprint spans semiconductor wafers and epitaxial materials. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，环球晶圆中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，环球晶圆可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at GlobalWafers China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-entegris",
     "name": "Entegris China",
     "nameEn": "Entegris China",
-    "nameZh": "英特格中国",
+    "nameZh": "英特格",
     "aliases": [
-      "英特格中国",
+      "英特格",
       "Entegris"
     ],
     "country": "United States",
@@ -16103,18 +16332,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "英特格中国是Entegris在中国大陆的业务与人才节点，相关工作覆盖污染控制、特种材料与流体管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "英特格是Entegris在中国大陆的业务与人才节点，相关工作覆盖污染控制、特种材料与流体管理。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Entegris China's mainland-China organization and talent footprint spans contamination control, specialty materials, and fluid management. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英特格中国可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，英特格可重点追踪工艺工程、材料工程、应用工程、制造自动化岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 工艺工程, 材料工程, 应用工程, 制造自动化 roles at Entegris China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-bosch",
     "name": "Bosch China",
     "nameEn": "Bosch China",
-    "nameZh": "博世中国",
+    "nameZh": "博世",
     "aliases": [
-      "博世中国",
+      "博世",
       "Bosch"
     ],
     "country": "Germany",
@@ -16173,18 +16402,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "博世中国是Bosch在中国大陆的业务与人才节点，相关工作覆盖汽车电子、传感器、功率器件与工业软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "博世是Bosch在中国大陆的业务与人才节点，相关工作覆盖汽车电子、传感器、功率器件与工业软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Bosch China's mainland-China organization and talent footprint spans automotive electronics, sensors, power devices, and industrial software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，博世中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，博世可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Bosch China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-continental",
     "name": "Continental China",
     "nameEn": "Continental China",
-    "nameZh": "大陆集团中国",
+    "nameZh": "大陆集团",
     "aliases": [
-      "大陆集团中国",
+      "大陆集团",
       "Continental"
     ],
     "country": "Germany",
@@ -16243,18 +16472,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "大陆集团中国是Continental在中国大陆的业务与人才节点，相关工作覆盖汽车计算、传感、制动与软件定义汽车。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "大陆集团是Continental在中国大陆的业务与人才节点，相关工作覆盖汽车计算、传感、制动与软件定义汽车。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Continental China's mainland-China organization and talent footprint spans vehicle computing, sensing, braking, and software-defined vehicles. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，大陆集团中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，大陆集团可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Continental China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-aptiv",
     "name": "Aptiv China",
     "nameEn": "Aptiv China",
-    "nameZh": "安波福中国",
+    "nameZh": "安波福",
     "aliases": [
-      "安波福中国",
+      "安波福",
       "Aptiv"
     ],
     "country": "Ireland",
@@ -16312,18 +16541,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "安波福中国是Aptiv在中国大陆的业务与人才节点，相关工作覆盖汽车电气架构、域控制器、连接与软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "安波福是Aptiv在中国大陆的业务与人才节点，相关工作覆盖汽车电气架构、域控制器、连接与软件。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Aptiv China's mainland-China organization and talent footprint spans vehicle electrical architecture, domain controllers, connectivity, and software. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，安波福中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，安波福可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Aptiv China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-zf",
     "name": "ZF China",
     "nameEn": "ZF China",
-    "nameZh": "采埃孚中国",
+    "nameZh": "采埃孚",
     "aliases": [
-      "采埃孚中国",
+      "采埃孚",
       "ZF"
     ],
     "country": "Germany",
@@ -16381,18 +16610,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "采埃孚中国是ZF在中国大陆的业务与人才节点，相关工作覆盖电驱、底盘、控制器与自动驾驶系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "采埃孚是ZF在中国大陆的业务与人才节点，相关工作覆盖电驱、底盘、控制器与自动驾驶系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "ZF China's mainland-China organization and talent footprint spans electric drive, chassis, controllers, and automated-driving systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，采埃孚中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，采埃孚可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at ZF China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-tesla",
     "name": "Tesla China",
     "nameEn": "Tesla China",
-    "nameZh": "特斯拉中国",
+    "nameZh": "特斯拉",
     "aliases": [
-      "特斯拉中国",
+      "特斯拉",
       "Tesla"
     ],
     "country": "United States",
@@ -16449,18 +16678,16 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "特斯拉中国是Tesla在中国大陆的业务与人才节点，相关工作覆盖电动车、储能、制造自动化与嵌入式系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "特斯拉是Tesla在中国大陆的业务与人才节点，相关工作覆盖电动车、储能、制造自动化与嵌入式系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Tesla China's mainland-China organization and talent footprint spans electric vehicles, energy storage, manufacturing automation, and embedded systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，特斯拉中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，特斯拉可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Tesla China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-abb",
     "name": "ABB China",
     "nameEn": "ABB China",
-    "nameZh": "ABB中国",
     "aliases": [
-      "ABB中国",
       "ABB"
     ],
     "country": "Switzerland",
@@ -16519,18 +16746,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "ABB中国是ABB在中国大陆的业务与人才节点，相关工作覆盖工业自动化、机器人、电气与运动控制。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "ABB China是ABB在中国大陆的业务与人才节点，相关工作覆盖工业自动化、机器人、电气与运动控制。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "ABB China's mainland-China organization and talent footprint spans industrial automation, robotics, electrification, and motion control. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，ABB中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，ABB China可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at ABB China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-schneider-electric",
     "name": "Schneider Electric China",
     "nameEn": "Schneider Electric China",
-    "nameZh": "施耐德电气中国",
+    "nameZh": "施耐德电气",
     "aliases": [
-      "施耐德电气中国",
+      "施耐德电气",
       "Schneider Electric"
     ],
     "country": "France",
@@ -16588,18 +16815,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "施耐德电气中国是Schneider Electric在中国大陆的业务与人才节点，相关工作覆盖能源管理、工业自动化与数字化平台。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "施耐德电气是Schneider Electric在中国大陆的业务与人才节点，相关工作覆盖能源管理、工业自动化与数字化平台。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Schneider Electric China's mainland-China organization and talent footprint spans energy management, industrial automation, and digital platforms. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，施耐德电气中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，施耐德电气可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Schneider Electric China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-honeywell",
     "name": "Honeywell China",
     "nameEn": "Honeywell China",
-    "nameZh": "霍尼韦尔中国",
+    "nameZh": "霍尼韦尔",
     "aliases": [
-      "霍尼韦尔中国",
+      "霍尼韦尔",
       "Honeywell"
     ],
     "country": "United States",
@@ -16658,18 +16885,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "霍尼韦尔中国是Honeywell在中国大陆的业务与人才节点，相关工作覆盖航空电子、工业控制、传感与自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "霍尼韦尔是Honeywell在中国大陆的业务与人才节点，相关工作覆盖航空电子、工业控制、传感与自动化。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Honeywell China's mainland-China organization and talent footprint spans avionics, industrial controls, sensing, and automation. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，霍尼韦尔中国可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，霍尼韦尔可重点追踪嵌入式软件、控制算法、数字IC设计、设计验证、系统工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 嵌入式软件, 控制算法, 数字IC设计, 设计验证, 系统工程 roles at Honeywell China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-apple",
     "name": "Apple China",
     "nameEn": "Apple China",
-    "nameZh": "苹果中国",
+    "nameZh": "苹果",
     "aliases": [
-      "苹果中国",
+      "苹果",
       "Apple"
     ],
     "country": "United States",
@@ -16728,9 +16955,9 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "苹果中国是Apple在中国大陆的业务与人才节点，相关工作覆盖硬件、芯片生态、制造设计与供应链工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "苹果是Apple在中国大陆的业务与人才节点，相关工作覆盖硬件、芯片生态、制造设计与供应链工程。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Apple China's mainland-China organization and talent footprint spans hardware, silicon ecosystem, manufacturing design, and supply-chain engineering. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，苹果中国可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，苹果可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 芯片架构, 软件工程, 嵌入式软件, 系统工程, 人工智能工程 roles at Apple China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
@@ -16805,9 +17032,9 @@
     "id": "cn-foreign-ericsson",
     "name": "Ericsson China",
     "nameEn": "Ericsson China",
-    "nameZh": "爱立信中国",
+    "nameZh": "爱立信",
     "aliases": [
-      "爱立信中国",
+      "爱立信",
       "Ericsson"
     ],
     "country": "Sweden",
@@ -16866,18 +17093,18 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "爱立信中国是Ericsson在中国大陆的业务与人才节点，相关工作覆盖5G/6G、网络软件、基带与云原生系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "爱立信是Ericsson在中国大陆的业务与人才节点，相关工作覆盖5G/6G、网络软件、基带与云原生系统。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Ericsson China's mainland-China organization and talent footprint spans 5G/6G, network software, baseband, and cloud-native systems. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱立信中国可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，爱立信可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 芯片架构, 软件工程, 嵌入式软件, 系统工程, 人工智能工程 roles at Ericsson China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   },
   {
     "id": "cn-foreign-nokia",
     "name": "Nokia China",
     "nameEn": "Nokia China",
-    "nameZh": "诺基亚中国",
+    "nameZh": "诺基亚",
     "aliases": [
-      "诺基亚中国",
+      "诺基亚",
       "Nokia"
     ],
     "country": "Finland",
@@ -16936,9 +17163,9 @@
     ],
     "lastVerified": "2026-07-27",
     "confidence": "medium",
-    "descriptionZh": "诺基亚中国是Nokia在中国大陆的业务与人才节点，相关工作覆盖通信网络、光网络、软件与贝尔实验室研究。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
+    "descriptionZh": "诺基亚是Nokia在中国大陆的业务与人才节点，相关工作覆盖通信网络、光网络、软件与贝尔实验室研究。名册确认的是组织及在华机会入口，不代表当前一定存在某个具体职位。",
     "descriptionEn": "Nokia China's mainland-China organization and talent footprint spans communications networks, optical networking, software, and Bell Labs research. This record confirms the organization and its China opportunity channel; it does not claim that a specific opening is currently active.",
-    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，诺基亚中国可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
+    "relevanceZh": "对你的芯片、EDA、验证、基础设施与自动化路线而言，诺基亚可重点追踪芯片架构、软件工程、嵌入式软件、系统工程、人工智能工程岗位。申请前必须逐条核验城市、团队、毕业时间、实习身份与具体技术栈。",
     "relevanceEn": "For your chip, EDA, verification, infrastructure, and automation path, prioritize 芯片架构, 软件工程, 嵌入式软件, 系统工程, 人工智能工程 roles at Nokia China. Verify the city, team, graduation window, internship eligibility, and exact stack against each requisition."
   }
 ]
