@@ -146,7 +146,7 @@ export function estimateChinaNetAnnual(
     0,
     grossAnnual - 60000 - employeeSocialInsurance - employeeHousingFund,
   );
-  let individualIncomeTax = 0;
+  let individualIncomeTax: number;
   if (taxableAnnual <= 36000) {
     individualIncomeTax = taxableAnnual * 0.03;
   } else if (taxableAnnual <= 144000) {

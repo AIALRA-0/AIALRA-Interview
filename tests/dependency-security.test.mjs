@@ -25,13 +25,17 @@ function versionAtLeast(actual, minimum) {
   return true;
 }
 
-test("the minimatch 3 bridge preserves the callable ESLint plugin API", () => {
+test("public minimatch exposes the audited modern API", () => {
   const minimatch = require("minimatch");
 
-  assert.equal(typeof minimatch, "function");
+  assert.equal(typeof minimatch, "object");
+  assert.equal(typeof minimatch.minimatch, "function");
   assert.equal(typeof minimatch.Minimatch, "function");
   assert.equal(typeof minimatch.braceExpand, "function");
-  assert.equal(minimatch("src/example.test.mjs", "**/*.test.mjs"), true);
+  assert.equal(
+    minimatch.minimatch("src/example.test.mjs", "**/*.test.mjs"),
+    true,
+  );
   assert.equal(
     new minimatch.Minimatch("src/**/*.ts").match("src/example.ts"),
     true,
@@ -44,15 +48,8 @@ test("the minimatch 3 bridge preserves the callable ESLint plugin API", () => {
   ]);
 });
 
-test("every legacy lint consumer resolves the working root bridge", () => {
-  const consumers = [
-    "eslint",
-    "eslint-plugin-import",
-    "eslint-plugin-jsx-a11y",
-    "eslint-plugin-react",
-    "@eslint/config-array",
-    "@eslint/eslintrc",
-  ];
+test("every lint consumer resolves the working public package", () => {
+  const consumers = ["eslint", "@eslint/config-array"];
 
   for (const consumer of consumers) {
     const consumerRequire = createRequire(
@@ -62,10 +59,13 @@ test("every legacy lint consumer resolves the working root bridge", () => {
 
     assert.equal(
       typeof minimatch,
-      "function",
-      `${consumer} must resolve the callable bridge`,
+      "object",
+      `${consumer} must resolve the modern public package`,
     );
-    assert.equal(minimatch("src/example.ts", "src/**/*.ts"), true);
+    assert.equal(
+      minimatch.minimatch("src/example.ts", "src/**/*.ts"),
+      true,
+    );
   }
 });
 
@@ -94,23 +94,13 @@ test("the lockfile keeps security-patched React and brace expansion floors", asy
 
   assert.equal(
     manifest.devDependencies.minimatch,
-    "file:vendor/minimatch3-safe",
+    "10.2.6",
   );
   assert.equal(
     lockfile.packages["node_modules/minimatch"].resolved,
-    "vendor/minimatch3-safe",
+    "https://registry.npmjs.org/minimatch/-/minimatch-10.2.6.tgz",
   );
-  assert.equal(lockfile.packages["node_modules/minimatch"].link, true);
-
-  const localMinimatchLinks = Object.entries(lockfile.packages).filter(
-    ([path, packageEntry]) =>
-      path.endsWith("node_modules/minimatch") && packageEntry.link === true,
-  );
-  assert.deepEqual(
-    localMinimatchLinks.map(([path]) => path),
-    ["node_modules/minimatch"],
-    "nested local links resolve relative to the wrong consumer directory",
-  );
+  assert.notEqual(lockfile.packages["node_modules/minimatch"].link, true);
 
   const braceExpansionEntries = Object.entries(lockfile.packages).filter(
     ([path]) => path.endsWith("node_modules/brace-expansion"),

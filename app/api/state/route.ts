@@ -1032,7 +1032,7 @@ export async function POST(request: Request) {
     if (!companyId) {
       return privateJson({ error: "Company id required" }, { status: 400 });
     }
-    if (Boolean(body.active)) {
+    if (body.active) {
       await db
         .prepare(
           "INSERT INTO bookmarks (user_id, company_id) VALUES (?, ?) ON CONFLICT(user_id, company_id) DO NOTHING",
