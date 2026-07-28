@@ -1,6 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import categoryLabelsEnRaw from "../data/organization-category-labels.en.json";
 import categoryLabelsZhRaw from "../data/organization-category-labels.zh.json";
 import expansionCnCategoryLabelsRaw from "../data/expansion-cn-category-labels.json";
@@ -46,7 +58,8 @@ type ViewId =
   "mission" | "atlas" | "roles" | "dojo" | "applications" | "evidence";
 
 type AtlasLayout = "tree" | "cards";
-type QuestionLanguageMode = "bilingual" | "zh" | "en";
+type SiteLanguageMode = "bilingual" | "zh" | "en";
+type QuestionLanguageMode = SiteLanguageMode;
 type QuestionIndexState = "loading" | "ready" | "error";
 type QuestionDetailState = "idle" | "loading" | "ready" | "error";
 type OrganizationIndexState = "loading" | "ready" | "error";
@@ -530,10 +543,11 @@ function canonicalCategoryId(category: string) {
 }
 
 function BilingualNodeLabel({ label }: { label: { zh: string; en: string } }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className="bilingual-node-label">
-      <span lang="zh-CN">{label.zh}</span>
-      <span lang="en">{label.en}</span>
+    <span className={`bilingual-node-label mode-${mode}`}>
+      {mode !== "en" ? <span lang="zh-CN">{label.zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{label.en}</span> : null}
     </span>
   );
 }
@@ -545,19 +559,21 @@ function BilingualTermLabel({
   term: Pick<BilingualTerm, "zh" | "en">;
   className?: string;
 }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className={`bilingual-term ${className}`.trim()}>
-      <span lang="zh-CN">{term.zh}</span>
-      <span lang="en">{term.en}</span>
+    <span className={`bilingual-term mode-${mode} ${className}`.trim()}>
+      {mode !== "en" ? <span lang="zh-CN">{term.zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{term.en}</span> : null}
     </span>
   );
 }
 
 function BilingualHeading({ zh, en }: { zh: string; en: string }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className="bilingual-heading">
-      <span lang="zh-CN">{zh}</span>
-      <span lang="en">{en}</span>
+    <span className={`bilingual-heading mode-${mode}`}>
+      {mode !== "en" ? <span lang="zh-CN">{zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{en}</span> : null}
     </span>
   );
 }
@@ -571,10 +587,11 @@ function BilingualParagraph({
   en: string;
   className?: string;
 }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className={`bilingual-paragraph ${className}`.trim()}>
-      <span lang="zh-CN">{zh}</span>
-      <span lang="en">{en}</span>
+    <span className={`bilingual-paragraph mode-${mode} ${className}`.trim()}>
+      {mode !== "en" ? <span lang="zh-CN">{zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{en}</span> : null}
     </span>
   );
 }
@@ -586,18 +603,26 @@ function ProfileDisplayText({
   value: ProfileDisplayValue;
   variant?: "inline" | "heading" | "paragraph";
 }) {
-  const lines = value.lines.length
+  const mode = useSiteLanguageMode();
+  const sourceLines = value.lines.length
     ? value.lines
     : [
         { lang: "zh-CN" as const, text: "未配置" },
         { lang: "en" as const, text: "Not configured" },
       ];
+  const lines = sourceLines.filter((line) => {
+    if (line.lang === "und") return true;
+    if (mode === "zh") return line.lang === "zh-CN";
+    if (mode === "en") return line.lang === "en";
+    return true;
+  });
+  const visibleLines = lines.length ? lines : sourceLines;
   if (variant === "inline") {
     return (
-      <span className="profile-display-inline">
-        {lines.map((line, index) => (
+      <span className={`profile-display-inline mode-${mode}`}>
+        {visibleLines.map((line, index) => (
           <span lang={line.lang} key={`${line.lang}-${line.text}`}>
-            {index > 0 ? " / " : null}
+            {mode === "bilingual" && index > 0 ? " / " : null}
             {line.text}
           </span>
         ))}
@@ -607,10 +632,10 @@ function ProfileDisplayText({
   return (
     <span
       className={
-        variant === "heading" ? "bilingual-heading" : "bilingual-paragraph"
+        `${variant === "heading" ? "bilingual-heading" : "bilingual-paragraph"} mode-${mode}`
       }
     >
-      {lines.map((line) => (
+      {visibleLines.map((line) => (
         <span lang={line.lang} key={`${line.lang}-${line.text}`}>
           {line.text}
         </span>
@@ -626,16 +651,23 @@ function companyName(company: Company) {
 }
 
 function CompanyName({ company }: { company: Company }) {
+  const mode = useSiteLanguageMode();
+  const showZh = Boolean(company.nameZh) && mode !== "en";
+  const showEn = !company.nameZh || mode !== "zh";
   return (
-    <span className="bilingual-organization-name">
-      <span
-        lang={company.nameZh ? "zh-CN" : "en"}
-        className="organization-name-primary"
-      >
-        {company.nameZh || company.nameEn}
-      </span>
-      {company.nameZh ? (
-        <span lang="en" className="organization-name-secondary">
+    <span className={`bilingual-organization-name mode-${mode}`}>
+      {showZh ? (
+        <span lang="zh-CN" className="organization-name-primary">
+          {company.nameZh}
+        </span>
+      ) : null}
+      {showEn ? (
+        <span
+          lang="en"
+          className={
+            showZh ? "organization-name-secondary" : "organization-name-primary"
+          }
+        >
           {company.nameEn}
         </span>
       ) : null}
@@ -909,12 +941,6 @@ function skillTerms(skill: SkillNode): BilingualTerm[] {
   );
 }
 
-function skillLabel(skill: SkillNode) {
-  return skillTerms(skill)
-    .map((term) => `${term.zh} / ${term.en}`)
-    .join(" · ");
-}
-
 function sourceUrl(source: string | { url?: string }) {
   return typeof source === "string" ? source : source.url || "";
 }
@@ -938,35 +964,197 @@ function sourceTitle(
 }
 
 const languageModeOptions: Array<{
-  id: QuestionLanguageMode;
-  label: string;
-  description: string;
+  id: SiteLanguageMode;
+  labelZh: string;
+  labelEn: string;
+  descriptionZh: string;
+  descriptionEn: string;
 }> = [
   {
     id: "bilingual",
-    label: "中英对照 / Bilingual",
-    description: "中英并列 / Chinese and English side by side",
+    labelZh: "中英对照",
+    labelEn: "Bilingual",
+    descriptionZh: "整个网站中英并列",
+    descriptionEn: "Show the entire site bilingually",
   },
   {
     id: "zh",
-    label: "纯中文 / Chinese only",
-    description: "只显示中文题目内容 / Show Chinese task content only",
+    labelZh: "纯中文",
+    labelEn: "Chinese only",
+    descriptionZh: "整个网站只显示中文",
+    descriptionEn: "Show the entire site in Chinese",
   },
   {
     id: "en",
-    label: "English only / 纯英文",
-    description: "Show English task content only / 只显示英文题目内容",
+    labelZh: "纯英文",
+    labelEn: "English only",
+    descriptionZh: "整个网站只显示英文",
+    descriptionEn: "Show the entire site in English",
   },
 ];
 
 function questionModeText(
-  mode: QuestionLanguageMode,
+  mode: SiteLanguageMode,
   zh: string,
   en: string,
 ) {
   if (mode === "zh") return zh;
   if (mode === "en") return en;
   return `${zh} / ${en}`;
+}
+
+const SiteLanguageContext = createContext<SiteLanguageMode>("bilingual");
+
+function useSiteLanguageMode() {
+  return useContext(SiteLanguageContext);
+}
+
+function legacyBilingualText(
+  mode: SiteLanguageMode,
+  value: string,
+): string {
+  if (mode === "bilingual") return value;
+  const separator = value.indexOf(" / ");
+  if (separator < 0) return value;
+  const left = value.slice(0, separator).trim();
+  const right = value.slice(separator + 3).trim();
+  return mode === "zh" ? left : right;
+}
+
+function LocalizedText({
+  zh,
+  en,
+}: {
+  zh: string;
+  en: string;
+}) {
+  const mode = useSiteLanguageMode();
+  return <>{questionModeText(mode, zh, en)}</>;
+}
+
+function LocalizedLegacyText({ value }: { value: string }) {
+  const mode = useSiteLanguageMode();
+  return <>{legacyBilingualText(mode, value)}</>;
+}
+
+const hanCharacterPattern = /[\u3400-\u9fff]/;
+const latinCharacterPattern = /[A-Za-z]/;
+const localizedStringProps = new Set([
+  "aria-label",
+  "title",
+  "placeholder",
+  "alt",
+]);
+
+function projectImplicitBilingualText(
+  mode: SiteLanguageMode,
+  value: string,
+) {
+  if (mode === "bilingual") return value;
+  const separator = value.indexOf(" / ");
+  if (separator < 0) return value;
+
+  const zh = value.slice(0, separator).trim();
+  const en = value.slice(separator + 3).trim();
+  if (!hanCharacterPattern.test(zh) || !latinCharacterPattern.test(en)) {
+    return value;
+  }
+  return mode === "zh" ? zh : en;
+}
+
+function projectEditableBilingualValue(
+  mode: SiteLanguageMode,
+  value: string,
+) {
+  if (mode === "bilingual" || !value) return value;
+  const lines = value.split("\n");
+  const projected = lines.map((line) =>
+    projectImplicitBilingualText(mode, line),
+  );
+  if (
+    lines.length === 2 &&
+    hanCharacterPattern.test(lines[0]) &&
+    latinCharacterPattern.test(lines[1]) &&
+    !lines.some((line) => line.includes(" / "))
+  ) {
+    return mode === "zh" ? lines[0] : lines[1];
+  }
+  return projected.join("\n");
+}
+
+function reactNodeContainsHan(node: ReactNode): boolean {
+  if (typeof node === "string") {
+    return hanCharacterPattern.test(node);
+  }
+  if (!isValidElement(node)) {
+    return false;
+  }
+  return Children.toArray(
+    (node as ReactElement<Record<string, unknown>>).props.children as ReactNode,
+  ).some(reactNodeContainsHan);
+}
+
+function LocalizedSurface({ children }: { children: ReactNode }) {
+  const mode = useSiteLanguageMode();
+
+  function project(node: ReactNode): ReactNode {
+    if (typeof node === "string") {
+      return projectImplicitBilingualText(mode, node);
+    }
+    if (!isValidElement(node)) {
+      return node;
+    }
+
+    const element = node as ReactElement<Record<string, unknown>>;
+    const props = element.props;
+    const elementLanguage =
+      typeof props.lang === "string" ? props.lang.toLowerCase() : "";
+    if (mode === "zh" && elementLanguage.startsWith("en")) {
+      return null;
+    }
+    if (mode === "en" && elementLanguage.startsWith("zh")) {
+      return null;
+    }
+
+    const rawChildren = Children.toArray(props.children as ReactNode);
+    const hasDirectEnglishCopy = rawChildren.some(
+      (child) =>
+        isValidElement(child) &&
+        typeof (child.props as { lang?: unknown }).lang === "string" &&
+        String((child.props as { lang: string }).lang)
+          .toLowerCase()
+          .startsWith("en"),
+    );
+    const nextProps: Record<string, unknown> = {};
+    for (const propName of localizedStringProps) {
+      const value = props[propName];
+      if (typeof value === "string") {
+        nextProps[propName] = projectImplicitBilingualText(mode, value);
+      }
+    }
+
+    const nextChildren = rawChildren.map((child) => {
+      if (
+        mode === "en" &&
+        hasDirectEnglishCopy &&
+        reactNodeContainsHan(child)
+      ) {
+        return null;
+      }
+      if (
+        mode === "zh" &&
+        hasDirectEnglishCopy &&
+        typeof child === "string"
+      ) {
+        return child.replace(/\s*\/\s*$/, "");
+      }
+      return project(child);
+    });
+
+    return cloneElement(element, nextProps, ...nextChildren);
+  }
+
+  return <>{project(children)}</>;
 }
 
 function questionLanguageCopies(
@@ -1721,8 +1909,14 @@ function Metric({
   return (
     <div className="metric-card">
       <strong>{value}</strong>
-      <span>{label}</span>
-      {note ? <small>{note}</small> : null}
+      <span>
+        <LocalizedLegacyText value={label} />
+      </span>
+      {note ? (
+        <small>
+          <LocalizedLegacyText value={note} />
+        </small>
+      ) : null}
     </div>
   );
 }
@@ -1736,6 +1930,7 @@ function SpecificPositionPanel({
   position: SpecificPositionCompensation;
   calculation: PositionComparisonCalculation;
 }) {
+  const mode = useSiteLanguageMode();
   const isUs = market === "US";
   const currency = position.currency;
   const gross = isUs ? calculation.us.gross : calculation.china.gross;
@@ -1750,29 +1945,31 @@ function SpecificPositionPanel({
     : calculation.china.net.midpoint.effectiveCashDeductionRate;
 
   return (
-    <article className="specific-position-panel">
+    <LocalizedSurface>
+      <article className="specific-position-panel">
       <div className="specific-position-market">
-        <span>{isUs ? "美国职位 / U.S. POSITION" : "中国职位 / CHINA POSITION"}</span>
+        <span>
+          {isUs
+            ? questionModeText(mode, "美国职位", "U.S. POSITION")
+            : questionModeText(mode, "中国职位", "CHINA POSITION")}
+        </span>
         <small>
           {position.currency} · {sourceStatusLabel(position.sourceStatus)}
         </small>
       </div>
       <h4>
-        {position.companyZh && position.companyZh !== position.companyEn
-          ? `${position.companyZh} / `
-          : ""}
-        {position.companyEn}
+        {questionModeText(
+          mode,
+          position.companyZh || position.companyEn,
+          position.companyEn,
+        )}
       </h4>
       <strong className="specific-position-title">
-        {position.titleZh} / <span lang="en">{position.titleEn}</span>
+        {questionModeText(mode, position.titleZh, position.titleEn)}
       </strong>
       <div className="specific-position-meta">
-        <span>
-          {position.locationZh} / <span lang="en">{position.locationEn}</span>
-        </span>
-        <span>
-          {position.levelZh} / <span lang="en">{position.levelEn}</span>
-        </span>
+        <span>{questionModeText(mode, position.locationZh, position.locationEn)}</span>
+        <span>{questionModeText(mode, position.levelZh, position.levelEn)}</span>
       </div>
 
       <dl className="specific-position-numbers">
@@ -1821,29 +2018,32 @@ function SpecificPositionPanel({
                 calculation.us.ficaExemptNet.midpoint.netAnnual,
                 "USD",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.us.ficaExemptNet.midpoint.netMonthly,
                 "USD",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </strong>
           </span>
         ) : (
           <span>
-            中点个人公积金（另列受限储蓄）/ Midpoint employee housing fund
-            (separate restricted savings){" "}
+            {questionModeText(
+              mode,
+              "中点个人公积金（另列受限储蓄）",
+              "Midpoint employee housing fund (separate restricted savings)",
+            )}{" "}
             <strong>
               {positionMoney(
                 calculation.china.net.midpoint.employeeHousingFund,
                 "CNY",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.china.net.midpoint.employeeHousingFund / 12,
                 "CNY",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </strong>
           </span>
         )}
@@ -1851,21 +2051,28 @@ function SpecificPositionPanel({
 
       <div className="specific-position-source">
         <span>
-          {position.compensationTypeZh} /{" "}
-          <span lang="en">{position.compensationTypeEn}</span>
+          {questionModeText(
+            mode,
+            position.compensationTypeZh,
+            position.compensationTypeEn,
+          )}
         </span>
         <span>
           {positionBasisLabel(position.basis)} · {position.payMonthsPerYear}{" "}
-          个计薪月 / salary months
+          {questionModeText(mode, "个计薪月", "salary months")}
         </span>
         <a href={position.sourceUrl} target="_blank" rel="noreferrer">
-          {position.sourceTitle} · 原始证据 / Source evidence ↗
+          {mode === "en" && hanCharacterPattern.test(position.sourceTitle)
+            ? new URL(position.sourceUrl).hostname.replace(/^www\./, "")
+            : position.sourceTitle}{" "}
+          · {questionModeText(mode, "原始证据", "Source evidence")} ↗
         </a>
         <small>
           {position.notesZh} <span lang="en">{position.notesEn}</span>
         </small>
       </div>
-    </article>
+      </article>
+    </LocalizedSurface>
   );
 }
 
@@ -1876,12 +2083,14 @@ function PositionCompensationCard({
   comparison: PositionCompensationComparison;
   asset: PositionCompensationComparisonAsset;
 }) {
+  const mode = useSiteLanguageMode();
   const calculation = calculatePositionComparison(comparison, asset);
   const ppp = asset.methodology.privateConsumptionPpp;
   const fx = asset.methodology.nominalFx;
 
   return (
-    <section className="position-compensation-card">
+    <LocalizedSurface>
+      <section className="position-compensation-card">
       <div className="position-compensation-heading">
         <div>
           <strong>具体职位薪资对照 / Specific-position pay</strong>
@@ -1922,7 +2131,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.usStandardNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1931,7 +2140,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.usFicaExemptNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1940,7 +2149,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.chinaCashNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1950,12 +2159,12 @@ function PositionCompensationCard({
                 calculation.equivalence.chinaCashNetNominalUsd,
                 "USD",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.equivalence.chinaCashNetNominalUsd / 12,
                 "USD",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </dd>
           </div>
         </dl>
@@ -2029,25 +2238,26 @@ function PositionCompensationCard({
           </p>
           <div className="method-source-links">
             <a href={ppp.sourceUrl} target="_blank" rel="noreferrer">
-              {ppp.sourceTitleZh} / {ppp.sourceTitleEn} ↗
+              {questionModeText(mode, ppp.sourceTitleZh, ppp.sourceTitleEn)} ↗
             </a>
             <a href={fx.sourceUrl} target="_blank" rel="noreferrer">
-              {fx.sourceTitleZh} / {fx.sourceTitleEn} ↗
+              {questionModeText(mode, fx.sourceTitleZh, fx.sourceTitleEn)} ↗
             </a>
             {asset.methodology.usTaxScenario.sources.map((source) => (
               <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
-                {source.titleZh} / {source.titleEn} ↗
+                {questionModeText(mode, source.titleZh, source.titleEn)} ↗
               </a>
             ))}
             {asset.methodology.chinaTaxScenario.sources.map((source) => (
               <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
-                {source.titleZh} / {source.titleEn} ↗
+                {questionModeText(mode, source.titleZh, source.titleEn)} ↗
               </a>
             ))}
           </div>
         </div>
       </details>
-    </section>
+      </section>
+    </LocalizedSurface>
   );
 }
 
@@ -2056,17 +2266,18 @@ function StatusDot({ signal }: { signal: string }) {
   return (
     <span className={`signal signal-${key}`}>
       <i aria-hidden="true" />
-      {signalLabel(signal)}
+      <LocalizedLegacyText value={signalLabel(signal)} />
     </span>
   );
 }
 
 function ProgressBar({ value }: { value: number }) {
+  const mode = useSiteLanguageMode();
   return (
     <div
       className="progress-track"
       role="progressbar"
-      aria-label="岗位准备度 / Role readiness"
+      aria-label={questionModeText(mode, "岗位准备度", "Role readiness")}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={value}
@@ -2110,6 +2321,8 @@ export function CareerDojoApp({
   const [questionType, setQuestionType] = useState("ALL");
   const [questionLevel, setQuestionLevel] = useState("ALL");
   const [questionDifficulty, setQuestionDifficulty] = useState("ALL");
+  // This state is intentionally shared by every product surface, including
+  // the atlas, roles, compensation, applications, evidence, and Dojo.
   const [questionLanguageMode, setQuestionLanguageMode] =
     useState<QuestionLanguageMode>("bilingual");
   const [questions, setQuestions] = useState<InterviewQuestionSummary[]>([]);
@@ -2152,6 +2365,30 @@ export function CareerDojoApp({
       window.history.replaceState(null, "", nextHash);
     }
   }, [view]);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("aialra-site-language");
+    if (stored === "bilingual" || stored === "zh" || stored === "en") {
+      let cancelled = false;
+      window.queueMicrotask(() => {
+        if (!cancelled) setQuestionLanguageMode(stored);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+    return undefined;
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "aialra-site-language",
+      questionLanguageMode,
+    );
+    document.documentElement.lang =
+      questionLanguageMode === "en" ? "en" : "zh-CN";
+    document.documentElement.dataset.languageMode = questionLanguageMode;
+  }, [questionLanguageMode]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedQuestion, setSelectedQuestion] =
     useState<InterviewQuestionSummary | null>(null);
@@ -2936,7 +3173,7 @@ export function CareerDojoApp({
       resumeVersion: "",
       jdKeywords: company.requirementAtoms
         .map((term) => `${term.zh} / ${term.en}`)
-        .join(" · "),
+        .join("\n"),
       responsibilities: "",
       minimumQualifications: "",
       preferredQualifications: "",
@@ -3400,7 +3637,12 @@ export function CareerDojoApp({
   }
 
   return (
-    <div className="app-shell">
+    <SiteLanguageContext.Provider value={questionLanguageMode}>
+      <LocalizedSurface>
+      <div
+        className="app-shell"
+        data-language-mode={questionLanguageMode}
+      >
       <aside className="side-rail">
         <button
           className="brand"
@@ -3474,6 +3716,38 @@ export function CareerDojoApp({
             <h1>{views.find((item) => item.id === view)?.label}</h1>
           </div>
           <div className="topbar-actions">
+            <label className="site-language-control">
+              <span>
+                {questionModeText(
+                  questionLanguageMode,
+                  "网站语言",
+                  "Site language",
+                )}
+              </span>
+              <select
+                value={questionLanguageMode}
+                aria-label={questionModeText(
+                  questionLanguageMode,
+                  "网站语言",
+                  "Site language",
+                )}
+                onChange={(event) =>
+                  setQuestionLanguageMode(
+                    event.target.value as SiteLanguageMode,
+                  )
+                }
+              >
+                {languageModeOptions.map((option) => (
+                  <option value={option.id} key={option.id}>
+                    {questionModeText(
+                      questionLanguageMode,
+                      option.labelZh,
+                      option.labelEn,
+                    )}
+                  </option>
+                ))}
+              </select>
+            </label>
             <span className="evidence-pill">
               <i />
               组织证据 / Org evidence {organizationBank.evidenceDate} · 薪资 /
@@ -3565,14 +3839,14 @@ export function CareerDojoApp({
                   <li>
                     <span>01</span>
                     立即投递已开放岗位，不等待全量研究结束
-                    <small>
+                    <small lang="en">
                       Apply to open roles now; do not wait for research to end.
                     </small>
                   </li>
                   <li>
                     <span>02</span>
                     8–11 月覆盖大厂、EDA、芯片和设备公司主峰
-                    <small>
+                    <small lang="en">
                       Cover the main big-tech, EDA, silicon, and equipment cycle
                       from August through November.
                     </small>
@@ -3580,7 +3854,7 @@ export function CareerDojoApp({
                   <li>
                     <span>03</span>
                     同步争取校内实验室、开源上游和教授背书
-                    <small>
+                    <small lang="en">
                       Pursue campus labs, upstream open source, and faculty
                       evidence in parallel.
                     </small>
@@ -3838,7 +4112,11 @@ export function CareerDojoApp({
                       </option>
                       {categoryOptions.map((option) => (
                         <option key={option.id} value={option.id}>
-                          {option.zh} / {option.en}
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.zh,
+                            option.en,
+                          )}
                         </option>
                       ))}
                     </select>
@@ -3859,7 +4137,12 @@ export function CareerDojoApp({
                       </option>
                       {ownershipOptions.map((option) => (
                         <option key={option.id} value={option.id}>
-                          {option.label.zh} / {option.label.en} ({option.count})
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.label.zh,
+                            option.label.en,
+                          )}{" "}
+                          ({option.count})
                         </option>
                       ))}
                     </select>
@@ -4264,7 +4547,18 @@ export function CareerDojoApp({
                   <h3>原子能力地图 / Atomic capability map</h3>
                 </div>
                 <span>
-                  {skills.length} 个节点 / nodes · 带先修依赖 / prerequisites
+                  {skills.length}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "个节点",
+                    "nodes",
+                  )}{" "}
+                  ·{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "带先修依赖",
+                    "prerequisite-aware",
+                  )}
                 </span>
               </div>
               <div className="skill-ladder">
@@ -4335,17 +4629,42 @@ export function CareerDojoApp({
                                         </div>
                                         <small>
                                           {(skill.prerequisites || []).length
-                                            ? `先修 / Prerequisites：${(
-                                                skill.prerequisites || []
-                                              )
-                                                .map((id) =>
-                                                  skillById.has(id)
-                                                    ? skillLabel(
-                                                        skillById.get(id)!,
-                                                      )
-                                                    : id,
-                                                )
-                                                .join(" · ")}`
+                                            ? (
+                                              <>
+                                                {questionModeText(
+                                                  questionLanguageMode,
+                                                  "先修",
+                                                  "Prerequisites",
+                                                )}
+                                                ：
+                                                {(skill.prerequisites || []).map(
+                                                  (id, index) => (
+                                                    <span key={id}>
+                                                      {index > 0 ? " · " : ""}
+                                                      {skillById.has(id) ? (
+                                                        skillTerms(
+                                                          skillById.get(id)!,
+                                                        ).map(
+                                                          (term, termIndex) => (
+                                                            <span key={term.id}>
+                                                              {termIndex > 0
+                                                                ? " · "
+                                                                : ""}
+                                                              <LocalizedText
+                                                                zh={term.zh}
+                                                                en={term.en}
+                                                              />
+                                                            </span>
+                                                          ),
+                                                        )
+                                                      ) : (
+                                                        id
+                                                      )}
+                                                    </span>
+                                                  ),
+                                                )}
+                                              </>
+                                            )
                                             : "课程起点 / Entry point"}
                                           {trained ? ` · ${mastery}%` : ""}
                                         </small>
@@ -4377,9 +4696,9 @@ export function CareerDojoApp({
                   not memorization.
                 </h2>
                 <p>
-                  每道任务同时提供中文与 English
+                  每道任务同时提供中文与英文
                   题干、交付物、评分规则、常见失败、追问和参考框架，并对应岗位信号与先修能力。
-                  当前题库是研究沙箱；未完成专家与 learner pilot
+                  当前题库是研究沙箱；未完成专家与学习者试测
                   的自评分不会改变岗位准备度。
                   <span className="inline-translation" lang="en">
                     Every task pairs Chinese and English prompts, deliverables,
@@ -4578,7 +4897,13 @@ export function CareerDojoApp({
                     </select>
                   </label>
                   <fieldset className="language-switcher">
-                    <legend>显示语言 / Display language</legend>
+                    <legend>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "网站语言",
+                        "Site language",
+                      )}
+                    </legend>
                     <div className="segmented">
                       {languageModeOptions.map((option) => (
                         <button
@@ -4588,10 +4913,18 @@ export function CareerDojoApp({
                             questionLanguageMode === option.id ? "active" : ""
                           }
                           aria-pressed={questionLanguageMode === option.id}
-                          title={option.description}
+                          title={questionModeText(
+                            questionLanguageMode,
+                            option.descriptionZh,
+                            option.descriptionEn,
+                          )}
                           onClick={() => setQuestionLanguageMode(option.id)}
                         >
-                          {option.label}
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.labelZh,
+                            option.labelEn,
+                          )}
                         </button>
                       ))}
                     </div>
@@ -4625,7 +4958,11 @@ export function CareerDojoApp({
                           rolePresentationFor(role).typicalTitleAtoms[0];
                         return (
                           <option key={role.id} value={role.id}>
-                            {primaryTitle.zh} / {primaryTitle.en}
+                            {questionModeText(
+                              questionLanguageMode,
+                              primaryTitle.zh,
+                              primaryTitle.en,
+                            )}
                           </option>
                         );
                       })}
@@ -4724,7 +5061,14 @@ export function CareerDojoApp({
                                 questionLanguageMode,
                               )}
                             </span>
-                            <span>{question.estimatedMinutes} MIN</span>
+                            <span>
+                              {question.estimatedMinutes}{" "}
+                              {questionModeText(
+                                questionLanguageMode,
+                                "分钟",
+                                "MIN",
+                              )}
+                            </span>
                           </div>
                           <h3>
                             <BilingualCopy
@@ -4927,9 +5271,18 @@ export function CareerDojoApp({
                   </h3>
                 </div>
                 <span>
-                  {currentJobs.length} 条岗位记录 / requisitions ·
-                  观察日存在不代表 今日仍开放 / observed, not guaranteed open
-                  today
+                  {currentJobs.length}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "条岗位记录",
+                    "requisitions",
+                  )}{" "}
+                  ·{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "观察日存在不代表今日仍开放",
+                    "observed, not guaranteed open today",
+                  )}
                 </span>
               </div>
               <div className="current-job-grid">
@@ -5829,7 +6182,10 @@ export function CareerDojoApp({
                   <label>
                     <span>岗位名称 / Role title *</span>
                     <input
-                      value={applicationDraft.roleTitle}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.roleTitle,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5864,7 +6220,11 @@ export function CareerDojoApp({
                       <option value="">待核验 / Unverified</option>
                       {roles.map((role) => (
                         <option key={role.id} value={role.id}>
-                          {role.nameZh} / {role.name}
+                          {questionModeText(
+                            questionLanguageMode,
+                            role.nameZh,
+                            role.name,
+                          )}
                         </option>
                       ))}
                     </select>
@@ -6104,7 +6464,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>岗位关键词 / JD keywords</span>
                     <textarea
-                      value={applicationDraft.jdKeywords}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.jdKeywords,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6116,7 +6479,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>岗位职责 / Responsibilities</span>
                     <textarea
-                      value={applicationDraft.responsibilities}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.responsibilities,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6128,7 +6494,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>最低要求 / Minimum qualifications</span>
                     <textarea
-                      value={applicationDraft.minimumQualifications}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.minimumQualifications,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6140,7 +6509,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>优先条件 / Preferred qualifications</span>
                     <textarea
-                      value={applicationDraft.preferredQualifications}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.preferredQualifications,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6152,7 +6524,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>资格说明 / Eligibility notes</span>
                     <textarea
-                      value={applicationDraft.eligibilityNotes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.eligibilityNotes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6331,7 +6706,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>薪资口径说明 / Compensation notes</span>
                     <textarea
-                      value={applicationDraft.salaryNotes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.salaryNotes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6346,7 +6724,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>匹配备注 / Match notes</span>
                     <textarea
-                      value={applicationDraft.notes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.notes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6532,10 +6913,14 @@ export function CareerDojoApp({
                     }
                   >
                     <option value="">待核验 / Unverified</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.nameZh} / {role.name}
-                      </option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {questionModeText(
+                            questionLanguageMode,
+                            role.nameZh,
+                            role.name,
+                          )}
+                        </option>
                     ))}
                   </select>
                 </label>
@@ -7035,7 +7420,11 @@ export function CareerDojoApp({
             <div
               className="modal-language-switcher segmented"
               role="group"
-              aria-label="显示语言 / Display language"
+              aria-label={questionModeText(
+                questionLanguageMode,
+                "网站语言",
+                "Site language",
+              )}
             >
               {languageModeOptions.map((option) => (
                 <button
@@ -7045,7 +7434,11 @@ export function CareerDojoApp({
                   aria-pressed={questionLanguageMode === option.id}
                   onClick={() => setQuestionLanguageMode(option.id)}
                 >
-                  {option.label}
+                  {questionModeText(
+                    questionLanguageMode,
+                    option.labelZh,
+                    option.labelEn,
+                  )}
                 </button>
               ))}
             </div>
@@ -7335,6 +7728,8 @@ export function CareerDojoApp({
           </section>
         </div>
       ) : null}
-    </div>
+      </div>
+      </LocalizedSurface>
+    </SiteLanguageContext.Provider>
   );
 }

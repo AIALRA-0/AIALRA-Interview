@@ -456,8 +456,14 @@ test("Dojo keeps every assessment field bilingual and renders a bounded page", a
   assert.match(component, /useState<QuestionLanguageMode>\("bilingual"\)/);
   assert.match(component, /id: "zh"/);
   assert.match(component, /id: "en"/);
-  assert.match(component, /纯中文 \/ Chinese only/);
-  assert.match(component, /English only \/ 纯英文/);
+  assert.match(
+    component,
+    /labelZh: "纯中文"[\s\S]{0,120}labelEn: "Chinese only"/,
+  );
+  assert.match(
+    component,
+    /labelZh: "纯英文"[\s\S]{0,120}labelEn: "English only"/,
+  );
   assert.match(component, /if \(mode === "zh"\) return copies\.filter/);
   assert.match(component, /if \(mode === "en"\) return copies\.filter/);
   assert.match(component, /\[24, 48, 96\]\.map/);
@@ -618,6 +624,28 @@ test("navigation, filters, sources, and focus rings expose accessible state", as
     /\.filter-bar:not\(\.dojo-filters\)\s*\{[^}]*grid-template-columns:\s*1fr;/,
     "mobile organization filters must use one readable column",
   );
+});
+
+test("site language mode is global, persistent, and available from every view", async () => {
+  const [component, stylesheet] = await Promise.all([
+    readFile(new URL("app/CareerDojoApp.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+
+  assert.match(component, /type SiteLanguageMode = "bilingual" \| "zh" \| "en"/);
+  assert.match(component, /SiteLanguageContext\.Provider/);
+  assert.match(component, /<LocalizedSurface>/);
+  assert.match(component, /className="site-language-control"/);
+  assert.match(component, /localStorage\.getItem\("aialra-site-language"\)/);
+  assert.match(component, /localStorage\.setItem\(\s*"aialra-site-language"/);
+  assert.match(component, /document\.documentElement\.dataset\.languageMode/);
+  assert.match(component, /data-language-mode=\{questionLanguageMode\}/);
+  assert.match(
+    component,
+    /setQuestionLanguageMode\(\s*event\.target\.value as SiteLanguageMode/,
+  );
+  assert.match(stylesheet, /\.site-language-control\s*\{/);
+  assert.match(stylesheet, /@media \(max-width: 520px\)/);
 });
 
 test("question index and deterministic detail shards stay synchronized", async () => {

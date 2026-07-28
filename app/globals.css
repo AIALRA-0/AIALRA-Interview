@@ -257,6 +257,38 @@ main {
   align-items: center;
 }
 
+.site-language-control {
+  display: grid;
+  min-width: 132px;
+  gap: 4px;
+}
+
+.site-language-control > span {
+  color: var(--ink-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  font-weight: 760;
+  letter-spacing: 0.05em;
+}
+
+.site-language-control select {
+  min-height: 38px;
+  padding: 0 30px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 720;
+}
+
+.site-language-control select:focus-visible {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+}
+
 .evidence-pill {
   display: flex;
   gap: 8px;
@@ -4191,6 +4223,10 @@ main {
     display: none;
   }
 
+  .site-language-control {
+    min-width: 116px;
+  }
+
   .topbar-actions .primary-button {
     width: 64px;
     min-height: 36px;
@@ -4594,6 +4630,37 @@ main {
     width: 100%;
     margin: 4px 0 0;
     text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .topbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .site-language-control {
+    min-width: 0;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: 0;
+  }
+
+  .site-language-control > span {
+    display: none;
+  }
+
+  .site-language-control select {
+    width: 100%;
+  }
+
+  .hero-card h2 {
+    font-size: 38px;
   }
 }
 
