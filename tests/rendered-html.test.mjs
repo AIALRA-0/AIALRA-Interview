@@ -675,8 +675,10 @@ test("organization search follows the selected site language and exact jobs stay
   );
   assert.match(
     component,
-    /selectedCompanyCurrentJobs\.length \+\s*selectedCompanyPositionEvidence\.length/,
+    /const selectedCompanyRequisitionCount = new Set\(/,
   );
+  assert.match(component, /\.\.\.selectedCompanyCurrentJobs\.map/);
+  assert.match(component, /\.\.\.selectedCompanyPositionEvidence\.map/);
   assert.match(
     component,
     /尚无通过校验的企业具体岗位记录/,

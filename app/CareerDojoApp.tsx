@@ -2928,6 +2928,10 @@ export function CareerDojoApp({
         (job) => job.organizationId === selectedCompany.id,
       )
     : [];
+  const selectedCompanyRequisitionCount = new Set([
+    ...selectedCompanyCurrentJobs.map((job) => job.sourceUrl),
+    ...selectedCompanyPositionEvidence.map(({ position }) => position.sourceUrl),
+  ]).size;
   const editingApplication = editingApplicationId
     ? persisted.applications.find(
         (application) => application.id === editingApplicationId,
@@ -6181,8 +6185,7 @@ export function CareerDojoApp({
                   </h3>
                 </div>
                 <span>
-                  {selectedCompanyCurrentJobs.length +
-                    selectedCompanyPositionEvidence.length}{" "}
+                  {selectedCompanyRequisitionCount}{" "}
                   {questionModeText(
                     questionLanguageMode,
                     "条独立岗位记录",
