@@ -4024,6 +4024,18 @@ main {
 }
 
 @media (max-width: 1280px) {
+  .dojo-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dojo-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .language-switcher {
+    grid-column: 1 / -1;
+  }
+
   .filter-bar:not(.dojo-filters) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
