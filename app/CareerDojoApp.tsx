@@ -3476,7 +3476,7 @@ export function CareerDojoApp({
           <div className="topbar-actions">
             <span className="evidence-pill">
               <i />
-              组织证据 / Org evidence {effectiveProfile.evidenceDate} · 薪资 /
+              组织证据 / Org evidence {organizationBank.evidenceDate} · 薪资 /
               Pay {positionCompensationComparisons.evidenceDate}
             </span>
             <button
