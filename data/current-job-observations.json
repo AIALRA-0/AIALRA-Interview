@@ -1,7 +1,139 @@
 {
-  "schemaVersion": "1.0.0",
-  "evidenceDate": "2026-07-26",
+  "schemaVersion": "1.1.0",
+  "evidenceDate": "2026-07-28",
   "jobs": [
+    {
+      "id": "job-synopsys-senior-rd-starrc-17637",
+      "organizationId": "synopsys",
+      "titleZh": "高级研发工程师——StarRC 寄生参数提取",
+      "titleEn": "Senior R&D Engineer — StarRC Parasitic Extraction",
+      "originalTitle": "Senior R&D Engineer-17637",
+      "requisitionId": "17637",
+      "employmentType": "full-time",
+      "location": "Sunnyvale, California, United States",
+      "workplaceMode": "on-site",
+      "postingStatus": "current-at-observation",
+      "postedAt": "2026-06-01",
+      "observedAt": "2026-07-28",
+      "roleFamilyIds": [
+        "rf-eda-rd",
+        "rf-cad-flow",
+        "rf-physical-design"
+      ],
+      "responsibilitiesZh": [
+        "为 StarRC 研究、设计并实现面向 FinFET、GAA 及 3nm、2nm 以下节点的晶体管级寄生参数提取能力",
+        "使用模式匹配与场求解方法开发互连电容、电感和电阻模型",
+        "以 C++ 设计能够处理超大版图数据的算法与数据结构，并平衡提取精度、容量和运行时间",
+        "与版图、仿真、时序、物理验证、晶圆厂及客户团队协作解决先进工艺、3D IC 与先进封装提取问题"
+      ],
+      "responsibilitiesEn": [
+        "Researches, designs, and implements transistor-level StarRC extraction capabilities for FinFET, GAA, and process nodes at 3 nm, 2 nm, and beyond",
+        "Develops interconnect capacitance, inductance, and resistance models using pattern matching and field-solver methods",
+        "Designs C++ algorithms and data structures for massive layout datasets while balancing extraction accuracy, capacity, and runtime",
+        "Works with layout, simulation, timing, physical-verification, foundry, and customer teams on advanced-node, 3D IC, and advanced-packaging extraction"
+      ],
+      "minimumQualificationsZh": [
+        "电气工程、计算机科学或计算机工程硕士或博士，并具有至少一年相关 EDA 软件开发经验",
+        "熟练掌握 C++、算法设计及面向大规模软件系统的数据结构",
+        "具备计算电磁学背景，包括全波或准静态电磁建模、Maxwell 方程，以及 FEM、BEM 或 MoM 等数值方法",
+        "理解寄生效应对电路性能和签核的影响；LVS、提取、场求解器或电路仿真流程经验为加分项"
+      ],
+      "minimumQualificationsEn": [
+        "MS or PhD in electrical engineering, computer science, or computer engineering with at least one year of relevant EDA software-development experience",
+        "Proficiency in C++, algorithm design, and data structures for large-scale software systems",
+        "Background in computational electromagnetics, including full-wave or quasi-static modeling, Maxwell’s equations, and numerical methods such as FEM, BEM, or MoM",
+        "Understanding of parasitic impact on circuit performance and signoff; LVS, extraction, field-solver, or circuit-simulation experience is a plus"
+      ],
+      "eligibilityZh": [
+        "官方岗位页未披露签证赞助、CPT 接受条件或出口管制限制，须由招聘方按该岗位确认",
+        "该岗位要求研究生学历和至少一年相关 EDA 经验，不是入门级实习岗位"
+      ],
+      "eligibilityEn": [
+        "The official posting does not disclose sponsorship, CPT acceptance, or export-control restrictions; recruiting must confirm them for this requisition",
+        "The role requires a graduate degree and at least one year of relevant EDA experience and is not an entry-level internship"
+      ],
+      "compensation": {
+        "status": "disclosed",
+        "minimum": "116000",
+        "maximum": "174000",
+        "currency": "USD",
+        "period": "year",
+        "location": "Sunnyvale, California, United States",
+        "sourceUrl": "https://careers.synopsys.com/job/sunnyvale/senior-r-and-d-engineer-17637/44408/95924563664",
+        "sourceTitle": "Senior R&D Engineer-17637",
+        "basis": "employer-posting",
+        "observedAt": "2026-07-28",
+        "notesZh": "雇主披露美国基本工资区间为 116,000–174,000 美元；奖金、股权及其他酌情奖励另计，最终报价取决于地点、技能、经验和教育背景",
+        "notesEn": "The employer discloses a U.S. base-salary range of $116,000–$174,000; annual bonus, equity, and other discretionary awards may be additional, and the final offer depends on location, skills, experience, and education"
+      },
+      "sourceUrl": "https://careers.synopsys.com/job/sunnyvale/senior-r-and-d-engineer-17637/44408/95924563664"
+    },
+    {
+      "id": "job-synopsys-applications-engineering-scientist-17642",
+      "organizationId": "synopsys",
+      "titleZh": "应用工程科学家——Agentic AI EDA",
+      "titleEn": "Applications Engineering Scientist — Agentic AI EDA",
+      "originalTitle": "Applications Engineering, Scientist",
+      "requisitionId": "17642",
+      "employmentType": "full-time",
+      "location": "Austin, Texas, United States",
+      "workplaceMode": "on-site",
+      "postingStatus": "current-at-observation",
+      "postedAt": "2026-05-27",
+      "observedAt": "2026-07-28",
+      "roleFamilyIds": [
+        "rf-ai-eda",
+        "rf-eda-rd",
+        "rf-physical-design"
+      ],
+      "responsibilitiesZh": [
+        "定义 Fusion Compiler 中 Agentic AI 的体系结构愿景及自主代理与核心实现引擎之间的接口",
+        "构建能够在十亿门级设计空间中规划策略、分配资源并从失败路径恢复的多智能体系统",
+        "设计代理推理与规划层，把时序收敛、拥塞缓解和功耗优化等复杂目标分解为可自适应的子目标",
+        "把代理系统与综合、布局、CTS、布线及优化引擎集成，并推动可解释、可控制的人机协同"
+      ],
+      "responsibilitiesEn": [
+        "Defines the architectural vision for agentic AI in Fusion Compiler and the interfaces between autonomous agents and core implementation engines",
+        "Architects multi-agent systems that navigate billion-gate design spaces, set strategies, allocate resources, and recover from dead ends",
+        "Designs reasoning and planning layers that decompose timing closure, congestion mitigation, and power optimization into adaptive sub-goals",
+        "Integrates agents with synthesis, placement, CTS, routing, and optimization engines while advancing transparent and controllable human-agent collaboration"
+      ],
+      "minimumQualificationsZh": [
+        "在 EDA、VLSI CAD、芯片设计或相邻领域具有十五年以上经验，并在逻辑综合、物理设计、STA 或优化算法至少一项具备深厚专长",
+        "有定义并交付生产级体系结构解决方案的领导经验，能够区分研究原型和规模化生产系统",
+        "掌握 LLM Agent、强化学习、搜索与规划及 RAG 等 AI/ML 方法",
+        "深入理解时序图、布局合法化、布线拥塞、时钟树权衡和电源完整性等数字实现问题"
+      ],
+      "minimumQualificationsEn": [
+        "Fifteen or more years in EDA, VLSI CAD, chip design, or an adjacent field, with deep expertise in logic synthesis, physical design, static timing analysis, or optimization algorithms",
+        "Leadership experience defining and shipping production-scale architectural solutions and distinguishing prototypes from production systems",
+        "Strong AI/ML foundation spanning LLM agents, reinforcement learning, search and planning, and retrieval-augmented generation",
+        "Deep understanding of timing graphs, placement legality, routing congestion, clock-tree trade-offs, and power-grid integrity"
+      ],
+      "eligibilityZh": [
+        "官方岗位页未披露签证赞助、CPT 接受条件或出口管制限制，须由招聘方按该岗位确认",
+        "十五年以上经验门槛意味着该职位属于资深科学家/架构师岗位，不适合作为当前学生直接申请目标，但可作为长期能力标尺"
+      ],
+      "eligibilityEn": [
+        "The official posting does not disclose sponsorship, CPT acceptance, or export-control restrictions; recruiting must confirm them for this requisition",
+        "The fifteen-plus-year requirement makes this a senior scientist or architect role rather than a direct student target, but it remains a useful long-term capability benchmark"
+      ],
+      "compensation": {
+        "status": "disclosed",
+        "minimum": "196000",
+        "maximum": "294000",
+        "currency": "USD",
+        "period": "year",
+        "location": "Austin, Texas, United States",
+        "sourceUrl": "https://careers.synopsys.com/en/job/austin/applications-engineering-scientist/44408/95653634896",
+        "sourceTitle": "Applications Engineering, Scientist",
+        "basis": "employer-posting",
+        "observedAt": "2026-07-28",
+        "notesZh": "雇主披露美国基本工资区间为 196,000–294,000 美元；奖金、股权及其他酌情奖励另计，最终报价取决于地点、技能、经验和教育背景",
+        "notesEn": "The employer discloses a U.S. base-salary range of $196,000–$294,000; annual bonus, equity, and other discretionary awards may be additional, and the final offer depends on location, skills, experience, and education"
+      },
+      "sourceUrl": "https://careers.synopsys.com/en/job/austin/applications-engineering-scientist/44408/95653634896"
+    },
     {
       "id": "job-tsmc-arizona-summer-2027-engineering",
       "organizationId": "tsmc-arizona",
@@ -14,7 +146,7 @@
       "workplaceMode": "on-site",
       "postingStatus": "current-at-observation",
       "postedAt": "2026-07-03",
-      "observedAt": "2026-07-26",
+      "observedAt": "2026-07-28",
       "roleFamilyIds": [
         "rf-manufacturing-automation",
         "rf-embedded",
@@ -60,7 +192,7 @@
         "sourceUrl": "https://ro.careers.tsmc.com/job/Phoenix-Summer-2027-TSMC-AZ-Internship-Opportunities-Engineering-Roles-AZ-85001/1361003166/",
         "sourceTitle": "[Summer 2027] TSMC AZ Internship Opportunities - Engineering Roles",
         "basis": "employer-posting",
-        "observedAt": "2026-07-26",
+        "observedAt": "2026-07-28",
         "notesZh": "官方岗位页在观察日未披露现金薪资区间；页面说明可提供搬迁协助",
         "notesEn": "The official posting did not disclose a cash-pay range on the observation date; it stated that relocation assistance is available"
       },
@@ -78,7 +210,7 @@
       "workplaceMode": "on-site",
       "postingStatus": "current-at-observation",
       "postedAt": null,
-      "observedAt": "2026-07-26",
+      "observedAt": "2026-07-28",
       "roleFamilyIds": ["rf-analog-custom", "rf-manufacturing-automation"],
       "responsibilitiesZh": [
         "设计、制造并表征超导量子比特及相关器件",
@@ -118,7 +250,7 @@
         "sourceUrl": "https://qolab.ai/careers/quantum-hardware-engineer",
         "sourceTitle": "Quantum hardware engineer",
         "basis": "employer-posting",
-        "observedAt": "2026-07-26",
+        "observedAt": "2026-07-28",
         "notesZh": "官方岗位页在观察日未披露基本工资、奖金或股权区间",
         "notesEn": "The official posting did not disclose base salary, bonus, or equity ranges on the observation date"
       },

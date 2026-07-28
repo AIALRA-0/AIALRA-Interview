@@ -1,6 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import categoryLabelsEnRaw from "../data/organization-category-labels.en.json";
 import categoryLabelsZhRaw from "../data/organization-category-labels.zh.json";
 import expansionCnCategoryLabelsRaw from "../data/expansion-cn-category-labels.json";
@@ -29,6 +41,7 @@ import type {
   PositionCompensationComparisonAsset,
   Profile,
   QuestionBankBootstrap,
+  QuestionBankFallbackPack,
   QuestionBankIndex,
   QuestionBankShard,
   QuestionOracle,
@@ -45,7 +58,8 @@ type ViewId =
   "mission" | "atlas" | "roles" | "dojo" | "applications" | "evidence";
 
 type AtlasLayout = "tree" | "cards";
-type QuestionLanguageMode = "bilingual" | "zh-first" | "en-first";
+type SiteLanguageMode = "bilingual" | "zh" | "en";
+type QuestionLanguageMode = SiteLanguageMode;
 type QuestionIndexState = "loading" | "ready" | "error";
 type QuestionDetailState = "idle" | "loading" | "ready" | "error";
 type OrganizationIndexState = "loading" | "ready" | "error";
@@ -407,7 +421,7 @@ const questionTypeLabels: Record<string, { zh: string; en: string }> = {
   "log-analysis": { zh: "日志分析", en: "Log Analysis" },
   "waveform-analysis": { zh: "波形分析", en: "Waveform Analysis" },
   "system-task": { zh: "系统任务", en: "System Task" },
-  "boss-fight": { zh: "综合挑战", en: "Boss Challenge" },
+  "boss-fight": { zh: "综合任务", en: "Integrated Task" },
   behavioral: { zh: "行为面试", en: "Behavioral Interview" },
   "project-deep-dive": { zh: "项目深挖", en: "Project Deep Dive" },
   "english-communication": {
@@ -430,11 +444,6 @@ const difficultyLabels: Record<string, { zh: string; en: string }> = {
   hard: { zh: "困难", en: "Hard" },
 };
 
-const questionStatusLabels: Record<string, { zh: string; en: string }> = {
-  active: { zh: "已发布", en: "Active" },
-  "review-ready": { zh: "可供审阅", en: "Review Ready" },
-};
-
 const relationTypeLabels: Record<string, { zh: string; en: string }> = {
   "corporate-family": { zh: "企业家族", en: "Corporate Family" },
   acquisition: { zh: "收购", en: "Acquisition" },
@@ -455,6 +464,15 @@ function bilingualLabel(
 ) {
   const label = catalog[value];
   return label ? `${label.zh} / ${label.en}` : value;
+}
+
+function questionCatalogLabel(
+  value: string,
+  catalog: Record<string, { zh: string; en: string }>,
+  mode: QuestionLanguageMode,
+) {
+  const label = catalog[value];
+  return label ? questionModeText(mode, label.zh, label.en) : value;
 }
 
 function regionOf(company: Company): "US" | "CN" | "Global" {
@@ -501,12 +519,6 @@ function organizationClassTerm(company: Company) {
       };
 }
 
-function categoryLabel(category: string) {
-  const label = categoryLabels[category];
-  if (!label) return "未分类 / Unclassified";
-  return `${label.zh} / ${label.en}`;
-}
-
 function categoryAtoms(category: string): BilingualTerm[] {
   const override = categoryAtomOverrides[category];
   if (override) return override;
@@ -525,10 +537,11 @@ function canonicalCategoryId(category: string) {
 }
 
 function BilingualNodeLabel({ label }: { label: { zh: string; en: string } }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className="bilingual-node-label">
-      <span lang="zh-CN">{label.zh}</span>
-      <span lang="en">{label.en}</span>
+    <span className={`bilingual-node-label mode-${mode}`}>
+      {mode !== "en" ? <span lang="zh-CN">{label.zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{label.en}</span> : null}
     </span>
   );
 }
@@ -540,19 +553,21 @@ function BilingualTermLabel({
   term: Pick<BilingualTerm, "zh" | "en">;
   className?: string;
 }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className={`bilingual-term ${className}`.trim()}>
-      <span lang="zh-CN">{term.zh}</span>
-      <span lang="en">{term.en}</span>
+    <span className={`bilingual-term mode-${mode} ${className}`.trim()}>
+      {mode !== "en" ? <span lang="zh-CN">{term.zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{term.en}</span> : null}
     </span>
   );
 }
 
 function BilingualHeading({ zh, en }: { zh: string; en: string }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className="bilingual-heading">
-      <span lang="zh-CN">{zh}</span>
-      <span lang="en">{en}</span>
+    <span className={`bilingual-heading mode-${mode}`}>
+      {mode !== "en" ? <span lang="zh-CN">{zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{en}</span> : null}
     </span>
   );
 }
@@ -566,11 +581,40 @@ function BilingualParagraph({
   en: string;
   className?: string;
 }) {
+  const mode = useSiteLanguageMode();
   return (
-    <span className={`bilingual-paragraph ${className}`.trim()}>
-      <span lang="zh-CN">{zh}</span>
-      <span lang="en">{en}</span>
+    <span className={`bilingual-paragraph mode-${mode} ${className}`.trim()}>
+      {mode !== "en" ? <span lang="zh-CN">{zh}</span> : null}
+      {mode !== "zh" ? <span lang="en">{en}</span> : null}
     </span>
+  );
+}
+
+function BilingualBulletList({
+  zh,
+  en,
+}: {
+  zh: string[];
+  en: string[];
+}) {
+  const mode = useSiteLanguageMode();
+  return (
+    <div className={`bilingual-bullet-lists mode-${mode}`}>
+      {mode !== "en" ? (
+        <ul lang="zh-CN">
+          {zh.map((item) => (
+            <li key={`zh-${item}`}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
+      {mode !== "zh" ? (
+        <ul lang="en">
+          {en.map((item) => (
+            <li key={`en-${item}`}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 
@@ -581,18 +625,26 @@ function ProfileDisplayText({
   value: ProfileDisplayValue;
   variant?: "inline" | "heading" | "paragraph";
 }) {
-  const lines = value.lines.length
+  const mode = useSiteLanguageMode();
+  const sourceLines = value.lines.length
     ? value.lines
     : [
         { lang: "zh-CN" as const, text: "未配置" },
         { lang: "en" as const, text: "Not configured" },
       ];
+  const lines = sourceLines.filter((line) => {
+    if (line.lang === "und") return true;
+    if (mode === "zh") return line.lang === "zh-CN";
+    if (mode === "en") return line.lang === "en";
+    return true;
+  });
+  const visibleLines = lines.length ? lines : sourceLines;
   if (variant === "inline") {
     return (
-      <span className="profile-display-inline">
-        {lines.map((line, index) => (
+      <span className={`profile-display-inline mode-${mode}`}>
+        {visibleLines.map((line, index) => (
           <span lang={line.lang} key={`${line.lang}-${line.text}`}>
-            {index > 0 ? " / " : null}
+            {mode === "bilingual" && index > 0 ? " / " : null}
             {line.text}
           </span>
         ))}
@@ -602,10 +654,10 @@ function ProfileDisplayText({
   return (
     <span
       className={
-        variant === "heading" ? "bilingual-heading" : "bilingual-paragraph"
+        `${variant === "heading" ? "bilingual-heading" : "bilingual-paragraph"} mode-${mode}`
       }
     >
-      {lines.map((line) => (
+      {visibleLines.map((line) => (
         <span lang={line.lang} key={`${line.lang}-${line.text}`}>
           {line.text}
         </span>
@@ -620,17 +672,114 @@ function companyName(company: Company) {
     : company.nameEn;
 }
 
-function CompanyName({ company }: { company: Company }) {
+function positionMatchesCompany(
+  company: Company,
+  position: SpecificPositionCompensation,
+  market: "US" | "CN",
+) {
   return (
-    <span className="bilingual-organization-name">
-      <span
-        lang={company.nameZh ? "zh-CN" : "en"}
-        className="organization-name-primary"
-      >
-        {company.nameZh || company.nameEn}
-      </span>
-      {company.nameZh ? (
-        <span lang="en" className="organization-name-secondary">
+    Boolean(position.organizationId) &&
+    position.organizationId === company.id &&
+    regionOf(company) === market
+  );
+}
+
+function companySearchCorpus(
+  company: Company,
+  mode: SiteLanguageMode,
+) {
+  const neutral = [
+    company.id,
+    company.fitTier,
+    company.visaSignal,
+    ...company.locations,
+  ];
+  const chinese = [
+    company.nameZh || company.nameEn,
+    ...(company.nameZh
+      ? company.aliases.filter((alias) => hanCharacterPattern.test(alias))
+      : [company.nameEn]),
+    ...company.categories.flatMap((category) =>
+      categoryAtoms(category).map((atom) => atom.zh),
+    ),
+    company.ownership?.labelZh || "",
+    company.ownership?.summaryZh || "",
+    company.ownership?.definitionZh || "",
+    regionLabel(regionOf(company)).split(" / ")[0],
+    ...company.focusAtoms.map((item) => item.zh),
+    ...company.roleAtoms.map((item) => item.zh),
+    ...company.opportunityAtoms.map((item) => item.zh),
+    ...company.requirementAtoms.map((item) => item.zh),
+    ...company.preparationAtoms.map((item) => item.zh),
+    company.descriptionZh,
+    company.relevanceZh,
+  ];
+  const english = [
+    company.name,
+    company.nameEn,
+    ...company.aliases.filter((alias) => latinCharacterPattern.test(alias)),
+    ...company.categories.flatMap((category) =>
+      categoryAtoms(category).map((atom) => atom.en),
+    ),
+    company.ownership?.labelEn || "",
+    company.ownership?.summaryEn || "",
+    company.ownership?.definitionEn || "",
+    regionLabel(regionOf(company)).split(" / ")[1] || "",
+    company.country,
+    company.region,
+    ...company.focusAtoms.map((item) => item.en),
+    ...company.roleAtoms.map((item) => item.en),
+    ...company.opportunityAtoms.map((item) => item.en),
+    ...company.requirementAtoms.map((item) => item.en),
+    ...company.preparationAtoms.map((item) => item.en),
+    company.whyRelevant,
+    company.descriptionEn,
+    company.relevanceEn,
+  ];
+  if (mode === "zh") return [...neutral, ...chinese];
+  if (mode === "en") return [...neutral, ...english];
+  return [...neutral, ...chinese, ...english];
+}
+
+function organizationSearchMatches(corpus: string[], rawTerm: string) {
+  const term = rawTerm.normalize("NFKC").trim().toLowerCase();
+  if (!term) return true;
+  const haystack = corpus
+    .join(" ")
+    .normalize("NFKC")
+    .toLowerCase();
+  const tokens =
+    haystack.match(/[\p{Script=Han}]+|[\p{L}\p{N}]+/gu) || [];
+  const queryTokens =
+    term.match(/[\p{Script=Han}]+|[\p{L}\p{N}]+/gu) || [term];
+
+  return queryTokens.every((queryToken) => {
+    if (hanCharacterPattern.test(queryToken)) {
+      return haystack.includes(queryToken);
+    }
+    return tokens.some((token) => token === queryToken);
+  });
+}
+
+function CompanyName({ company }: { company: Company }) {
+  const mode = useSiteLanguageMode();
+  const chineseName = company.nameZh || "";
+  const showZh = Boolean(chineseName) && mode !== "en";
+  const showEn = !company.nameZh || mode !== "zh";
+  return (
+    <span className={`bilingual-organization-name mode-${mode}`}>
+      {showZh ? (
+        <span lang="zh-CN" className="organization-name-primary">
+          {chineseName}
+        </span>
+      ) : null}
+      {showEn ? (
+        <span
+          lang="en"
+          className={
+            showZh ? "organization-name-secondary" : "organization-name-primary"
+          }
+        >
           {company.nameEn}
         </span>
       ) : null}
@@ -904,12 +1053,6 @@ function skillTerms(skill: SkillNode): BilingualTerm[] {
   );
 }
 
-function skillLabel(skill: SkillNode) {
-  return skillTerms(skill)
-    .map((term) => `${term.zh} / ${term.en}`)
-    .join(" · ");
-}
-
 function sourceUrl(source: string | { url?: string }) {
   return typeof source === "string" ? source : source.url || "";
 }
@@ -933,26 +1076,226 @@ function sourceTitle(
 }
 
 const languageModeOptions: Array<{
-  id: QuestionLanguageMode;
-  label: string;
-  description: string;
+  id: SiteLanguageMode;
+  labelZh: string;
+  labelEn: string;
+  descriptionZh: string;
+  descriptionEn: string;
 }> = [
   {
     id: "bilingual",
-    label: "中英对照 / Bilingual",
-    description: "中英并列 / Chinese and English side by side",
+    labelZh: "中英对照",
+    labelEn: "Bilingual",
+    descriptionZh: "整个网站中英并列",
+    descriptionEn: "Show the entire site bilingually",
   },
   {
-    id: "zh-first",
-    label: "中文优先 / Chinese first",
-    description: "中文在前，保留英文 / Chinese first, English retained",
+    id: "zh",
+    labelZh: "纯中文",
+    labelEn: "Chinese only",
+    descriptionZh: "整个网站只显示中文",
+    descriptionEn: "Show the entire site in Chinese",
   },
   {
-    id: "en-first",
-    label: "英文优先 / English first",
-    description: "英文在前，保留中文 / English first, Chinese retained",
+    id: "en",
+    labelZh: "纯英文",
+    labelEn: "English only",
+    descriptionZh: "整个网站只显示英文",
+    descriptionEn: "Show the entire site in English",
   },
 ];
+
+function questionModeText(
+  mode: SiteLanguageMode,
+  zh: string,
+  en: string,
+) {
+  if (mode === "zh") return zh;
+  if (mode === "en") return en;
+  return `${zh} / ${en}`;
+}
+
+const SiteLanguageContext = createContext<SiteLanguageMode>("bilingual");
+
+function useSiteLanguageMode() {
+  return useContext(SiteLanguageContext);
+}
+
+function legacyBilingualText(
+  mode: SiteLanguageMode,
+  value: string,
+): string {
+  if (mode === "bilingual") return value;
+  const separator = value.indexOf(" / ");
+  if (separator < 0) return value;
+  const left = value.slice(0, separator).trim();
+  const right = value.slice(separator + 3).trim();
+  return mode === "zh" ? left : right;
+}
+
+function LocalizedText({
+  zh,
+  en,
+}: {
+  zh: string;
+  en: string;
+}) {
+  const mode = useSiteLanguageMode();
+  return <>{questionModeText(mode, zh, en)}</>;
+}
+
+function LocalizedLegacyText({ value }: { value: string }) {
+  const mode = useSiteLanguageMode();
+  return <>{legacyBilingualText(mode, value)}</>;
+}
+
+const hanCharacterPattern = /[\u3400-\u9fff]/;
+const latinCharacterPattern = /[A-Za-z]/;
+const localizedStringProps = new Set([
+  "aria-label",
+  "title",
+  "placeholder",
+  "alt",
+]);
+
+function projectImplicitBilingualText(
+  mode: SiteLanguageMode,
+  value: string,
+) {
+  if (mode === "bilingual") return value;
+  const separator = value.indexOf(" / ");
+  if (separator < 0) return value;
+
+  const zh = value.slice(0, separator).trim();
+  const en = value.slice(separator + 3).trim();
+  if (!hanCharacterPattern.test(zh) || !latinCharacterPattern.test(en)) {
+    return value;
+  }
+  return mode === "zh" ? zh : en;
+}
+
+function projectEditableBilingualValue(
+  mode: SiteLanguageMode,
+  value: string,
+) {
+  if (mode === "bilingual" || !value) return value;
+  const lines = value.split("\n");
+  const projected = lines.map((line) =>
+    projectImplicitBilingualText(mode, line),
+  );
+  if (
+    lines.length === 2 &&
+    hanCharacterPattern.test(lines[0]) &&
+    latinCharacterPattern.test(lines[1]) &&
+    !lines.some((line) => line.includes(" / "))
+  ) {
+    return mode === "zh" ? lines[0] : lines[1];
+  }
+  return projected.join("\n");
+}
+
+function reactNodeContainsHan(node: ReactNode): boolean {
+  if (typeof node === "string") {
+    return hanCharacterPattern.test(node);
+  }
+  if (!isValidElement(node)) {
+    return false;
+  }
+  return Children.toArray(
+    (node as ReactElement<Record<string, unknown>>).props.children as ReactNode,
+  ).some(reactNodeContainsHan);
+}
+
+function LocalizedSurface({ children }: { children: ReactNode }) {
+  const mode = useSiteLanguageMode();
+
+  function project(node: ReactNode): ReactNode {
+    if (typeof node === "string") {
+      return projectImplicitBilingualText(mode, node);
+    }
+    if (!isValidElement(node)) {
+      return node;
+    }
+
+    const element = node as ReactElement<Record<string, unknown>>;
+    const props = element.props;
+    const elementLanguage =
+      typeof props.lang === "string" ? props.lang.toLowerCase() : "";
+    if (mode === "zh" && elementLanguage.startsWith("en")) {
+      return null;
+    }
+    if (mode === "en" && elementLanguage.startsWith("zh")) {
+      return null;
+    }
+
+    const rawChildren = Children.toArray(props.children as ReactNode);
+    const hasDirectEnglishCopy = rawChildren.some(
+      (child) =>
+        isValidElement(child) &&
+        typeof (child.props as { lang?: unknown }).lang === "string" &&
+        String((child.props as { lang: string }).lang)
+          .toLowerCase()
+          .startsWith("en"),
+    );
+    const nextProps: Record<string, unknown> = {};
+    for (const propName of localizedStringProps) {
+      const value = props[propName];
+      if (typeof value === "string") {
+        nextProps[propName] = projectImplicitBilingualText(mode, value);
+      }
+    }
+
+    const nextChildren = rawChildren.map((child) => {
+      if (
+        mode === "en" &&
+        hasDirectEnglishCopy &&
+        reactNodeContainsHan(child)
+      ) {
+        return null;
+      }
+      if (
+        mode === "zh" &&
+        hasDirectEnglishCopy &&
+        typeof child === "string"
+      ) {
+        return child.replace(/\s*\/\s*$/, "");
+      }
+      return project(child);
+    });
+
+    return cloneElement(element, nextProps, ...nextChildren);
+  }
+
+  return <>{project(children)}</>;
+}
+
+function questionLanguageCopies(
+  mode: QuestionLanguageMode,
+  zh: string | null | undefined,
+  en: string | null | undefined,
+) {
+  const copies = [
+    {
+      id: "zh",
+      label: "中",
+      panelLabel: "中文",
+      language: "zh-CN",
+      text: zh?.trim() || "中文版本待校订",
+      missing: !zh?.trim(),
+    },
+    {
+      id: "en",
+      label: "EN",
+      panelLabel: "EN",
+      language: "en",
+      text: en?.trim() || "English version pending editorial review.",
+      missing: !en?.trim(),
+    },
+  ];
+  if (mode === "zh") return copies.filter((copy) => copy.id === "zh");
+  if (mode === "en") return copies.filter((copy) => copy.id === "en");
+  return copies;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -987,6 +1330,13 @@ const questionShardKeys = new Set([
   "schemaVersion",
   "assetVersion",
   "shardId",
+  "questionCount",
+  "questions",
+]);
+const questionFallbackPackKeys = new Set([
+  "schemaVersion",
+  "assetVersion",
+  "packId",
   "questionCount",
   "questions",
 ]);
@@ -1407,6 +1757,84 @@ async function validateQuestionBankShard(
   return value as unknown as QuestionBankShard;
 }
 
+async function validateQuestionBankFallbackPack(
+  value: unknown,
+  expected: QuestionBankBootstrap,
+  expectedPackId: string,
+  index: QuestionBankIndex,
+): Promise<QuestionBankFallbackPack> {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, questionFallbackPackKeys) ||
+    value.schemaVersion !== expected.schemaVersion ||
+    value.assetVersion !== expected.assetVersion ||
+    value.packId !== expectedPackId ||
+    !Array.isArray(value.questions) ||
+    value.questionCount !== value.questions.length
+  ) {
+    throw new Error(
+      "备用题包版本或结构不匹配 / Recovery pack version or structure mismatch.",
+    );
+  }
+
+  const summaries = new Map(
+    index.questions.map((summary) => [summary.id, summary]),
+  );
+  const expectedIds = new Set(
+    index.questions
+      .filter((summary) => summary.shardId.startsWith(expectedPackId))
+      .map((summary) => summary.id),
+  );
+  if (
+    value.questions.length !== expectedIds.size ||
+    value.questions.length === 0
+  ) {
+    throw new Error(
+      "备用题包数量与索引不匹配 / Recovery pack count does not match the index.",
+    );
+  }
+
+  const seen = new Set<string>();
+  for (const candidate of value.questions) {
+    assertPublishedQuestion(candidate);
+    const summary = summaries.get(candidate.id);
+    const derivedPackId = (await sha256Hex(candidate.id)).slice(0, 1);
+    if (
+      !summary ||
+      !summary.shardId.startsWith(expectedPackId) ||
+      derivedPackId !== expectedPackId ||
+      seen.has(candidate.id) ||
+      !expectedIds.has(candidate.id) ||
+      candidate.title !== summary.title ||
+      candidate.titleZh !== summary.titleZh ||
+      !arraysEqual(candidate.roleFamilies, summary.roleFamilies) ||
+      !arraysEqual(candidate.skills, summary.skills) ||
+      candidate.level !== summary.level ||
+      candidate.difficulty !== summary.difficulty ||
+      candidate.type !== summary.type ||
+      candidate.estimatedMinutes !== summary.estimatedMinutes ||
+      candidate.status !== summary.status ||
+      candidate.contentVersion !== summary.contentVersion ||
+      candidate.blueprintId !== summary.blueprintId ||
+      previewText(candidate.prompt, index.previewLength) !==
+        summary.promptPreview ||
+      previewText(candidate.promptZh, index.previewLength) !==
+        summary.promptPreviewZh
+    ) {
+      throw new Error(
+        "备用题包与已验证摘要不一致 / Recovery pack does not match the verified index.",
+      );
+    }
+    seen.add(candidate.id);
+  }
+  if (seen.size !== expectedIds.size) {
+    throw new Error(
+      "备用题包缺少索引题目 / Recovery pack is missing indexed tasks.",
+    );
+  }
+  return value as unknown as QuestionBankFallbackPack;
+}
+
 function BilingualCopy({
   zh,
   en,
@@ -1418,23 +1846,7 @@ function BilingualCopy({
   mode: QuestionLanguageMode;
   className?: string;
 }) {
-  const copies = [
-    {
-      id: "zh",
-      label: "中",
-      language: "zh-CN",
-      text: zh?.trim() || "中文版本待校订 / Chinese version pending review",
-      missing: !zh?.trim(),
-    },
-    {
-      id: "en",
-      label: "EN",
-      language: "en",
-      text: en?.trim() || "English version pending editorial review.",
-      missing: !en?.trim(),
-    },
-  ];
-  if (mode === "en-first") copies.reverse();
+  const copies = questionLanguageCopies(mode, zh, en);
 
   return (
     <span className={`bilingual-copy mode-${mode} ${className}`.trim()}>
@@ -1453,6 +1865,67 @@ function BilingualCopy({
         </span>
       ))}
     </span>
+  );
+}
+
+function InlineTechnicalText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(`[^`]+`)/g).map((part, index) =>
+        /^`[^`]+`$/.test(part) ? (
+          <code className="inline-technical-token" key={`${part}-${index}`}>
+            {part.slice(1, -1)}
+          </code>
+        ) : (
+          <span key={`${part}-${index}`}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function StructuredQuestionPrompt({
+  zh,
+  en,
+  mode,
+}: {
+  zh: string;
+  en: string;
+  mode: QuestionLanguageMode;
+}) {
+  const copies = questionLanguageCopies(mode, zh, en);
+
+  return (
+    <div className={`structured-question-prompt mode-${mode}`}>
+      {copies.map((copy) => (
+        <article className="prompt-language-panel" lang={copy.language} key={copy.id}>
+          <span className="prompt-language-label">{copy.panelLabel}</span>
+          <div className="prompt-section-list">
+            {copy.text
+              .split(/\n{2,}/)
+              .filter(Boolean)
+              .map((paragraph, index) => {
+                const match = paragraph.match(
+                  /^([^:：]{1,20}[:：])\s*([\s\S]*)$/,
+                );
+                return (
+                  <div
+                    className={`prompt-section${match ? "" : " prompt-section-plain"}`}
+                    key={`${copy.id}-${index}`}
+                  >
+                    {match ? <strong>{match[1]}</strong> : null}
+                    <p>
+                      <InlineTechnicalText
+                        text={(match ? match[2] : paragraph).trim()}
+                      />
+                    </p>
+                  </div>
+                );
+              })}
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
 
@@ -1514,15 +1987,15 @@ function BilingualOracle({
   }
 
   const fields = [
-    ["kind", "类型 / Kind"],
-    ["procedure", "验证步骤 / Procedure"],
-    ["acceptance", "通过标准 / Acceptance"],
+    ["kind", "类型", "Kind"],
+    ["procedure", "验证步骤", "Procedure"],
+    ["acceptance", "通过标准", "Acceptance"],
   ] as const;
   return (
     <dl className="oracle-copy oracle-details bilingual-oracle">
-      {fields.map(([field, label]) => (
+      {fields.map(([field, labelZh, labelEn]) => (
         <div key={field}>
-          <dt>{label}</dt>
+          <dt>{questionModeText(mode, labelZh, labelEn)}</dt>
           <dd>
             <BilingualCopy
               zh={oracleField(oracleZh, field)}
@@ -1548,8 +2021,14 @@ function Metric({
   return (
     <div className="metric-card">
       <strong>{value}</strong>
-      <span>{label}</span>
-      {note ? <small>{note}</small> : null}
+      <span>
+        <LocalizedLegacyText value={label} />
+      </span>
+      {note ? (
+        <small>
+          <LocalizedLegacyText value={note} />
+        </small>
+      ) : null}
     </div>
   );
 }
@@ -1563,6 +2042,7 @@ function SpecificPositionPanel({
   position: SpecificPositionCompensation;
   calculation: PositionComparisonCalculation;
 }) {
+  const mode = useSiteLanguageMode();
   const isUs = market === "US";
   const currency = position.currency;
   const gross = isUs ? calculation.us.gross : calculation.china.gross;
@@ -1577,29 +2057,31 @@ function SpecificPositionPanel({
     : calculation.china.net.midpoint.effectiveCashDeductionRate;
 
   return (
-    <article className="specific-position-panel">
+    <LocalizedSurface>
+      <article className="specific-position-panel">
       <div className="specific-position-market">
-        <span>{isUs ? "美国职位 / U.S. POSITION" : "中国职位 / CHINA POSITION"}</span>
+        <span>
+          {isUs
+            ? questionModeText(mode, "美国职位", "U.S. POSITION")
+            : questionModeText(mode, "中国职位", "CHINA POSITION")}
+        </span>
         <small>
           {position.currency} · {sourceStatusLabel(position.sourceStatus)}
         </small>
       </div>
       <h4>
-        {position.companyZh && position.companyZh !== position.companyEn
-          ? `${position.companyZh} / `
-          : ""}
-        {position.companyEn}
+        {questionModeText(
+          mode,
+          position.companyZh || position.companyEn,
+          position.companyEn,
+        )}
       </h4>
       <strong className="specific-position-title">
-        {position.titleZh} / <span lang="en">{position.titleEn}</span>
+        {questionModeText(mode, position.titleZh, position.titleEn)}
       </strong>
       <div className="specific-position-meta">
-        <span>
-          {position.locationZh} / <span lang="en">{position.locationEn}</span>
-        </span>
-        <span>
-          {position.levelZh} / <span lang="en">{position.levelEn}</span>
-        </span>
+        <span>{questionModeText(mode, position.locationZh, position.locationEn)}</span>
+        <span>{questionModeText(mode, position.levelZh, position.levelEn)}</span>
       </div>
 
       <dl className="specific-position-numbers">
@@ -1648,29 +2130,32 @@ function SpecificPositionPanel({
                 calculation.us.ficaExemptNet.midpoint.netAnnual,
                 "USD",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.us.ficaExemptNet.midpoint.netMonthly,
                 "USD",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </strong>
           </span>
         ) : (
           <span>
-            中点个人公积金（另列受限储蓄）/ Midpoint employee housing fund
-            (separate restricted savings){" "}
+            {questionModeText(
+              mode,
+              "中点个人公积金（另列受限储蓄）",
+              "Midpoint employee housing fund (separate restricted savings)",
+            )}{" "}
             <strong>
               {positionMoney(
                 calculation.china.net.midpoint.employeeHousingFund,
                 "CNY",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.china.net.midpoint.employeeHousingFund / 12,
                 "CNY",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </strong>
           </span>
         )}
@@ -1678,21 +2163,28 @@ function SpecificPositionPanel({
 
       <div className="specific-position-source">
         <span>
-          {position.compensationTypeZh} /{" "}
-          <span lang="en">{position.compensationTypeEn}</span>
+          {questionModeText(
+            mode,
+            position.compensationTypeZh,
+            position.compensationTypeEn,
+          )}
         </span>
         <span>
           {positionBasisLabel(position.basis)} · {position.payMonthsPerYear}{" "}
-          个计薪月 / salary months
+          {questionModeText(mode, "个计薪月", "salary months")}
         </span>
         <a href={position.sourceUrl} target="_blank" rel="noreferrer">
-          {position.sourceTitle} · 原始证据 / Source evidence ↗
+          {mode === "en" && hanCharacterPattern.test(position.sourceTitle)
+            ? new URL(position.sourceUrl).hostname.replace(/^www\./, "")
+            : position.sourceTitle}{" "}
+          · {questionModeText(mode, "原始证据", "Source evidence")} ↗
         </a>
         <small>
           {position.notesZh} <span lang="en">{position.notesEn}</span>
         </small>
       </div>
-    </article>
+      </article>
+    </LocalizedSurface>
   );
 }
 
@@ -1703,12 +2195,14 @@ function PositionCompensationCard({
   comparison: PositionCompensationComparison;
   asset: PositionCompensationComparisonAsset;
 }) {
+  const mode = useSiteLanguageMode();
   const calculation = calculatePositionComparison(comparison, asset);
   const ppp = asset.methodology.privateConsumptionPpp;
   const fx = asset.methodology.nominalFx;
 
   return (
-    <section className="position-compensation-card">
+    <LocalizedSurface>
+      <section className="position-compensation-card">
       <div className="position-compensation-heading">
         <div>
           <strong>具体职位薪资对照 / Specific-position pay</strong>
@@ -1749,7 +2243,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.usStandardNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1758,7 +2252,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.usFicaExemptNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1767,7 +2261,7 @@ function PositionCompensationCard({
               {internationalDollar(
                 calculation.equivalence.chinaCashNetPurchasingPower,
               )}
-              /年
+              /{questionModeText(mode, "年", "year")}
             </dd>
           </div>
           <div>
@@ -1777,12 +2271,12 @@ function PositionCompensationCard({
                 calculation.equivalence.chinaCashNetNominalUsd,
                 "USD",
               )}
-              /年 ·{" "}
+              /{questionModeText(mode, "年", "year")} ·{" "}
               {positionMoney(
                 calculation.equivalence.chinaCashNetNominalUsd / 12,
                 "USD",
               )}
-              /月
+              /{questionModeText(mode, "月", "month")}
             </dd>
           </div>
         </dl>
@@ -1856,25 +2350,26 @@ function PositionCompensationCard({
           </p>
           <div className="method-source-links">
             <a href={ppp.sourceUrl} target="_blank" rel="noreferrer">
-              {ppp.sourceTitleZh} / {ppp.sourceTitleEn} ↗
+              {questionModeText(mode, ppp.sourceTitleZh, ppp.sourceTitleEn)} ↗
             </a>
             <a href={fx.sourceUrl} target="_blank" rel="noreferrer">
-              {fx.sourceTitleZh} / {fx.sourceTitleEn} ↗
+              {questionModeText(mode, fx.sourceTitleZh, fx.sourceTitleEn)} ↗
             </a>
             {asset.methodology.usTaxScenario.sources.map((source) => (
               <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
-                {source.titleZh} / {source.titleEn} ↗
+                {questionModeText(mode, source.titleZh, source.titleEn)} ↗
               </a>
             ))}
             {asset.methodology.chinaTaxScenario.sources.map((source) => (
               <a href={source.url} target="_blank" rel="noreferrer" key={source.url}>
-                {source.titleZh} / {source.titleEn} ↗
+                {questionModeText(mode, source.titleZh, source.titleEn)} ↗
               </a>
             ))}
           </div>
         </div>
       </details>
-    </section>
+      </section>
+    </LocalizedSurface>
   );
 }
 
@@ -1883,17 +2378,18 @@ function StatusDot({ signal }: { signal: string }) {
   return (
     <span className={`signal signal-${key}`}>
       <i aria-hidden="true" />
-      {signalLabel(signal)}
+      <LocalizedLegacyText value={signalLabel(signal)} />
     </span>
   );
 }
 
 function ProgressBar({ value }: { value: number }) {
+  const mode = useSiteLanguageMode();
   return (
     <div
       className="progress-track"
       role="progressbar"
-      aria-label="岗位准备度 / Role readiness"
+      aria-label={questionModeText(mode, "岗位准备度", "Role readiness")}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={value}
@@ -1937,6 +2433,8 @@ export function CareerDojoApp({
   const [questionType, setQuestionType] = useState("ALL");
   const [questionLevel, setQuestionLevel] = useState("ALL");
   const [questionDifficulty, setQuestionDifficulty] = useState("ALL");
+  // This state is intentionally shared by every product surface, including
+  // the atlas, roles, compensation, applications, evidence, and Dojo.
   const [questionLanguageMode, setQuestionLanguageMode] =
     useState<QuestionLanguageMode>("bilingual");
   const [questions, setQuestions] = useState<InterviewQuestionSummary[]>([]);
@@ -1946,6 +2444,63 @@ export function CareerDojoApp({
   const [questionIndexRetryKey, setQuestionIndexRetryKey] = useState(0);
   const [questionPage, setQuestionPage] = useState(1);
   const [questionPageSize, setQuestionPageSize] = useState(24);
+  const skipInitialHashWrite = useRef(true);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const candidate = window.location.hash.slice(1);
+      if (
+        [
+          "mission",
+          "atlas",
+          "roles",
+          "dojo",
+          "applications",
+          "evidence",
+        ].includes(candidate)
+      ) {
+        setView(candidate as ViewId);
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
+  useEffect(() => {
+    if (skipInitialHashWrite.current) {
+      skipInitialHashWrite.current = false;
+      return;
+    }
+    const nextHash = `#${view}`;
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(null, "", nextHash);
+    }
+  }, [view]);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("aialra-site-language");
+    if (stored === "bilingual" || stored === "zh" || stored === "en") {
+      let cancelled = false;
+      window.queueMicrotask(() => {
+        if (!cancelled) setQuestionLanguageMode(stored);
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+    return undefined;
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "aialra-site-language",
+      questionLanguageMode,
+    );
+    document.documentElement.lang =
+      questionLanguageMode === "en" ? "en" : "zh-CN";
+    document.documentElement.dataset.languageMode = questionLanguageMode;
+  }, [questionLanguageMode]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedQuestion, setSelectedQuestion] =
     useState<InterviewQuestionSummary | null>(null);
@@ -1976,6 +2531,9 @@ export function CareerDojoApp({
   const questionDetailCacheRef = useRef(new Map<string, InterviewQuestion>());
   const questionShardCacheRef = useRef(
     new Map<string, Promise<QuestionBankShard>>(),
+  );
+  const questionFallbackPackCacheRef = useRef(
+    new Map<string, Promise<QuestionBankFallbackPack>>(),
   );
   const questionLoadRequestRef = useRef(0);
   const mutationQueueRef = useRef<Promise<void>>(Promise.resolve());
@@ -2069,6 +2627,7 @@ export function CareerDojoApp({
     questionIndexRef.current = null;
     questionDetailCacheRef.current.clear();
     questionShardCacheRef.current.clear();
+    questionFallbackPackCacheRef.current.clear();
 
     fetch(indexUrl, {
       cache: "no-store",
@@ -2338,6 +2897,41 @@ export function CareerDojoApp({
       ),
     [positionCompensationComparisons],
   );
+  const selectedCompanyPositionEvidence = selectedCompany
+    ? positionCompensationComparisons.comparisons.flatMap((comparison) => {
+        const matches: Array<{
+          comparison: PositionCompensationComparison;
+          market: "US" | "CN";
+          position: SpecificPositionCompensation;
+        }> = [];
+        if (positionMatchesCompany(selectedCompany, comparison.us, "US")) {
+          matches.push({
+            comparison,
+            market: "US",
+            position: comparison.us,
+          });
+        }
+        if (
+          positionMatchesCompany(selectedCompany, comparison.china, "CN")
+        ) {
+          matches.push({
+            comparison,
+            market: "CN",
+            position: comparison.china,
+          });
+        }
+        return matches;
+      })
+    : [];
+  const selectedCompanyCurrentJobs = selectedCompany
+    ? currentJobs.filter(
+        (job) => job.organizationId === selectedCompany.id,
+      )
+    : [];
+  const selectedCompanyRequisitionCount = new Set([
+    ...selectedCompanyCurrentJobs.map((job) => job.sourceUrl),
+    ...selectedCompanyPositionEvidence.map(({ position }) => position.sourceUrl),
+  ]).size;
   const editingApplication = editingApplicationId
     ? persisted.applications.find(
         (application) => application.id === editingApplicationId,
@@ -2379,41 +2973,10 @@ export function CareerDojoApp({
       )
       .filter((company) => {
         if (!term) return true;
-        return [
-          company.name,
-          company.nameEn,
-          company.nameZh || "",
-          ...company.aliases,
-          ...company.categories,
-          ...company.categories.map(categoryLabel),
-          organizationClassLabel(company),
-          company.ownership?.summaryZh || "",
-          company.ownership?.summaryEn || "",
-          company.ownership?.definitionZh || "",
-          company.ownership?.definitionEn || "",
-          regionLabel(regionOf(company)),
-          company.country,
-          company.region,
-          ...company.locations,
-          ...company.focusAreas,
-          ...company.roleFamilies,
-          ...company.opportunityTypes,
-          ...company.requirements,
-          ...company.gaps,
-          company.whyRelevant,
-          company.descriptionZh,
-          company.descriptionEn,
-          company.relevanceZh,
-          company.relevanceEn,
-          ...company.focusAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.roleAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.opportunityAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.requirementAtoms.flatMap((item) => [item.zh, item.en]),
-          ...company.preparationAtoms.flatMap((item) => [item.zh, item.en]),
-        ]
-          .join(" ")
-          .toLowerCase()
-          .includes(term);
+        return organizationSearchMatches(
+          companySearchCorpus(company, questionLanguageMode),
+          term,
+        );
       })
       .sort(
         (a, b) =>
@@ -2427,6 +2990,7 @@ export function CareerDojoApp({
     ownership,
     region,
     search,
+    questionLanguageMode,
     visa,
   ]);
 
@@ -2726,7 +3290,7 @@ export function CareerDojoApp({
       resumeVersion: "",
       jdKeywords: company.requirementAtoms
         .map((term) => `${term.zh} / ${term.en}`)
-        .join(" · "),
+        .join("\n"),
       responsibilities: "",
       minimumQualifications: "",
       preferredQualifications: "",
@@ -2988,36 +3552,119 @@ export function CareerDojoApp({
       }
       let shardPromise = questionShardCacheRef.current.get(question.shardId);
       if (!shardPromise) {
-        shardPromise = fetch(
-          `/question-bank/shards/${question.shardId}.json?v=${encodeURIComponent(
-            questionBank.assetVersion,
-          )}`,
-          {
-            cache: "no-store",
-            headers: { accept: "application/json" },
-          },
-        ).then(async (response) => {
-          if (!response.ok) {
-            throw new Error(
-              `详情分片返回 ${response.status} / Detail shard returned ${response.status}.`,
-            );
+        shardPromise = (async () => {
+          let primaryError: unknown = null;
+          for (let attempt = 1; attempt <= 3; attempt += 1) {
+            try {
+              const response = await fetch(
+                `/question-bank/shards/${question.shardId}.json?v=${encodeURIComponent(
+                  questionBank.assetVersion,
+                )}&attempt=${attempt}`,
+                {
+                  cache: "no-store",
+                  headers: { accept: "application/json" },
+                },
+              );
+              if (!response.ok) {
+                throw new Error(
+                  `详情分片返回 ${response.status} / Detail shard returned ${response.status}.`,
+                );
+              }
+              const value = await parseVerifiedJson(
+                response,
+                expectedShardSha256,
+                `题目分片 ${question.shardId} / Question shard ${question.shardId}`,
+              );
+              const payload = await validateQuestionBankShard(
+                value,
+                questionBank,
+                question.shardId,
+                verifiedIndex,
+              );
+              for (const detail of payload.questions) {
+                questionDetailCacheRef.current.set(detail.id, detail);
+              }
+              return payload;
+            } catch (error) {
+              primaryError = error;
+              if (attempt < 3) {
+                await new Promise((resolve) =>
+                  window.setTimeout(resolve, attempt * 180),
+                );
+              }
+            }
           }
-          const value = await parseVerifiedJson(
-            response,
-            expectedShardSha256,
-            `题目分片 ${question.shardId} / Question shard ${question.shardId}`,
-          );
-          const payload = await validateQuestionBankShard(
-            value,
-            questionBank,
-            question.shardId,
-            verifiedIndex,
-          );
-          for (const detail of payload.questions) {
-            questionDetailCacheRef.current.set(detail.id, detail);
+
+          const packId = question.shardId.slice(0, 1);
+          const expectedPackSha256 =
+            questionBank.fallbackPackSha256ById[packId];
+          if (!/^[0-9a-f]{64}$/.test(expectedPackSha256 || "")) {
+            throw primaryError instanceof Error
+              ? primaryError
+              : new Error(
+                  "题目详情主分片失败且备用摘要无效 / The detail shard failed and its recovery digest is invalid.",
+                );
           }
-          return payload;
-        });
+          let packPromise =
+            questionFallbackPackCacheRef.current.get(packId);
+          if (!packPromise) {
+            packPromise = fetch(
+              `/question-bank/fallback-packs/${packId}.json?v=${encodeURIComponent(
+                questionBank.assetVersion,
+              )}`,
+              {
+                cache: "no-store",
+                headers: { accept: "application/json" },
+              },
+            ).then(async (response) => {
+              if (!response.ok) {
+                throw new Error(
+                  `备用题包返回 ${response.status} / Recovery pack returned ${response.status}.`,
+                );
+              }
+              const value = await parseVerifiedJson(
+                response,
+                expectedPackSha256,
+                `备用题包 ${packId} / Recovery pack ${packId}`,
+              );
+              const payload = await validateQuestionBankFallbackPack(
+                value,
+                questionBank,
+                packId,
+                verifiedIndex,
+              );
+              for (const detail of payload.questions) {
+                questionDetailCacheRef.current.set(detail.id, detail);
+              }
+              return payload;
+            });
+            questionFallbackPackCacheRef.current.set(packId, packPromise);
+            packPromise.catch(() => {
+              if (
+                questionFallbackPackCacheRef.current.get(packId) ===
+                packPromise
+              ) {
+                questionFallbackPackCacheRef.current.delete(packId);
+              }
+            });
+          }
+          await packPromise;
+          const recovered = questionDetailCacheRef.current.get(question.id);
+          if (!recovered) {
+            throw primaryError instanceof Error
+              ? primaryError
+              : new Error(
+                  "主分片与备用题包均未找到题目 / Neither the detail shard nor recovery pack contains the task.",
+                );
+          }
+          return {
+            schemaVersion: questionBank.schemaVersion,
+            assetVersion: questionBank.assetVersion,
+            shardId: question.shardId,
+            questionCount: 1,
+            questions: [recovered],
+          };
+        })();
         questionShardCacheRef.current.set(question.shardId, shardPromise);
         shardPromise.catch(() => {
           if (
@@ -3107,7 +3754,12 @@ export function CareerDojoApp({
   }
 
   return (
-    <div className="app-shell">
+    <SiteLanguageContext.Provider value={questionLanguageMode}>
+      <LocalizedSurface>
+      <div
+        className="app-shell"
+        data-language-mode={questionLanguageMode}
+      >
       <aside className="side-rail">
         <button
           className="brand"
@@ -3181,9 +3833,41 @@ export function CareerDojoApp({
             <h1>{views.find((item) => item.id === view)?.label}</h1>
           </div>
           <div className="topbar-actions">
+            <label className="site-language-control">
+              <span>
+                {questionModeText(
+                  questionLanguageMode,
+                  "网站语言",
+                  "Site language",
+                )}
+              </span>
+              <select
+                value={questionLanguageMode}
+                aria-label={questionModeText(
+                  questionLanguageMode,
+                  "网站语言",
+                  "Site language",
+                )}
+                onChange={(event) =>
+                  setQuestionLanguageMode(
+                    event.target.value as SiteLanguageMode,
+                  )
+                }
+              >
+                {languageModeOptions.map((option) => (
+                  <option value={option.id} key={option.id}>
+                    {questionModeText(
+                      questionLanguageMode,
+                      option.labelZh,
+                      option.labelEn,
+                    )}
+                  </option>
+                ))}
+              </select>
+            </label>
             <span className="evidence-pill">
               <i />
-              组织证据 / Org evidence {effectiveProfile.evidenceDate} · 薪资 /
+              组织证据 / Org evidence {organizationBank.evidenceDate} · 薪资 /
               Pay {positionCompensationComparisons.evidenceDate}
             </span>
             <button
@@ -3272,14 +3956,14 @@ export function CareerDojoApp({
                   <li>
                     <span>01</span>
                     立即投递已开放岗位，不等待全量研究结束
-                    <small>
+                    <small lang="en">
                       Apply to open roles now; do not wait for research to end.
                     </small>
                   </li>
                   <li>
                     <span>02</span>
                     8–11 月覆盖大厂、EDA、芯片和设备公司主峰
-                    <small>
+                    <small lang="en">
                       Cover the main big-tech, EDA, silicon, and equipment cycle
                       from August through November.
                     </small>
@@ -3287,7 +3971,7 @@ export function CareerDojoApp({
                   <li>
                     <span>03</span>
                     同步争取校内实验室、开源上游和教授背书
-                    <small>
+                    <small lang="en">
                       Pursue campus labs, upstream open source, and faculty
                       evidence in parallel.
                     </small>
@@ -3545,7 +4229,11 @@ export function CareerDojoApp({
                       </option>
                       {categoryOptions.map((option) => (
                         <option key={option.id} value={option.id}>
-                          {option.zh} / {option.en}
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.zh,
+                            option.en,
+                          )}
                         </option>
                       ))}
                     </select>
@@ -3566,7 +4254,12 @@ export function CareerDojoApp({
                       </option>
                       {ownershipOptions.map((option) => (
                         <option key={option.id} value={option.id}>
-                          {option.label.zh} / {option.label.en} ({option.count})
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.label.zh,
+                            option.label.en,
+                          )}{" "}
+                          ({option.count})
                         </option>
                       ))}
                     </select>
@@ -3770,8 +4463,11 @@ export function CareerDojoApp({
                           className="secondary-button"
                           onClick={() => setCompanyLimit((value) => value + 60)}
                         >
-                          再加载 60 个节点 / Load 60 more（已显示 / shown{" "}
-                          {companyLimit}/{filteredCompanies.length}）
+                          {questionModeText(
+                            questionLanguageMode,
+                            `再加载 60 个节点（已显示 ${companyLimit}/${filteredCompanies.length}）`,
+                            `Load 60 more (showing ${companyLimit}/${filteredCompanies.length})`,
+                          )}
                         </button>
                       </div>
                     ) : null}
@@ -3971,7 +4667,18 @@ export function CareerDojoApp({
                   <h3>原子能力地图 / Atomic capability map</h3>
                 </div>
                 <span>
-                  {skills.length} 个节点 / nodes · 带先修依赖 / prerequisites
+                  {skills.length}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "个节点",
+                    "nodes",
+                  )}{" "}
+                  ·{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "带先修依赖",
+                    "prerequisite-aware",
+                  )}
                 </span>
               </div>
               <div className="skill-ladder">
@@ -4042,17 +4749,42 @@ export function CareerDojoApp({
                                         </div>
                                         <small>
                                           {(skill.prerequisites || []).length
-                                            ? `先修 / Prerequisites：${(
-                                                skill.prerequisites || []
-                                              )
-                                                .map((id) =>
-                                                  skillById.has(id)
-                                                    ? skillLabel(
-                                                        skillById.get(id)!,
-                                                      )
-                                                    : id,
-                                                )
-                                                .join(" · ")}`
+                                            ? (
+                                              <>
+                                                {questionModeText(
+                                                  questionLanguageMode,
+                                                  "先修",
+                                                  "Prerequisites",
+                                                )}
+                                                ：
+                                                {(skill.prerequisites || []).map(
+                                                  (id, index) => (
+                                                    <span key={id}>
+                                                      {index > 0 ? " · " : ""}
+                                                      {skillById.has(id) ? (
+                                                        skillTerms(
+                                                          skillById.get(id)!,
+                                                        ).map(
+                                                          (term, termIndex) => (
+                                                            <span key={term.id}>
+                                                              {termIndex > 0
+                                                                ? " · "
+                                                                : ""}
+                                                              <LocalizedText
+                                                                zh={term.zh}
+                                                                en={term.en}
+                                                              />
+                                                            </span>
+                                                          ),
+                                                        )
+                                                      ) : (
+                                                        id
+                                                      )}
+                                                    </span>
+                                                  ),
+                                                )}
+                                              </>
+                                            )
                                             : "课程起点 / Entry point"}
                                           {trained ? ` · ${mastery}%` : ""}
                                         </small>
@@ -4084,9 +4816,9 @@ export function CareerDojoApp({
                   not memorization.
                 </h2>
                 <p>
-                  每道任务同时提供中文与 English
+                  每道任务同时提供中文与英文
                   题干、交付物、评分规则、常见失败、追问和参考框架，并对应岗位信号与先修能力。
-                  当前题库是研究沙箱；未完成专家与 learner pilot
+                  当前题库是研究沙箱；未完成专家与学习者试测
                   的自评分不会改变岗位准备度。
                   <span className="inline-translation" lang="en">
                     Every task pairs Chinese and English prompts, deliverables,
@@ -4254,13 +4986,18 @@ export function CareerDojoApp({
                   >
                     <strong>{filteredQuestions.length.toLocaleString()}</strong>
                     <span>
-                      道匹配任务 / matched tasks · 共 / total{" "}
-                      {questionBank.questionCount.toLocaleString()}
+                      {questionModeText(
+                        questionLanguageMode,
+                        `道匹配任务 · 共 ${questionBank.questionCount.toLocaleString()} 道`,
+                        `matched tasks · ${questionBank.questionCount.toLocaleString()} total`,
+                      )}
                     </span>
                     <small>
-                      当前显示 / showing {questionResultStart.toLocaleString()}–
-                      {questionResultEnd.toLocaleString()} · 第 / page{" "}
-                      {safeQuestionPage} / {questionPageCount}
+                      {questionModeText(
+                        questionLanguageMode,
+                        `当前显示 ${questionResultStart.toLocaleString()}–${questionResultEnd.toLocaleString()} · 第 ${safeQuestionPage}/${questionPageCount} 页`,
+                        `showing ${questionResultStart.toLocaleString()}–${questionResultEnd.toLocaleString()} · page ${safeQuestionPage}/${questionPageCount}`,
+                      )}
                     </small>
                   </div>
                   <label className="question-page-size">
@@ -4280,7 +5017,13 @@ export function CareerDojoApp({
                     </select>
                   </label>
                   <fieldset className="language-switcher">
-                    <legend>阅读顺序 / Reading mode</legend>
+                    <legend>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "网站语言",
+                        "Site language",
+                      )}
+                    </legend>
                     <div className="segmented">
                       {languageModeOptions.map((option) => (
                         <button
@@ -4290,10 +5033,18 @@ export function CareerDojoApp({
                             questionLanguageMode === option.id ? "active" : ""
                           }
                           aria-pressed={questionLanguageMode === option.id}
-                          title={option.description}
+                          title={questionModeText(
+                            questionLanguageMode,
+                            option.descriptionZh,
+                            option.descriptionEn,
+                          )}
                           onClick={() => setQuestionLanguageMode(option.id)}
                         >
-                          {option.label}
+                          {questionModeText(
+                            questionLanguageMode,
+                            option.labelZh,
+                            option.labelEn,
+                          )}
                         </button>
                       ))}
                     </div>
@@ -4327,7 +5078,11 @@ export function CareerDojoApp({
                           rolePresentationFor(role).typicalTitleAtoms[0];
                         return (
                           <option key={role.id} value={role.id}>
-                            {primaryTitle.zh} / {primaryTitle.en}
+                            {questionModeText(
+                              questionLanguageMode,
+                              primaryTitle.zh,
+                              primaryTitle.en,
+                            )}
                           </option>
                         );
                       })}
@@ -4420,16 +5175,18 @@ export function CareerDojoApp({
                         >
                           <div className="question-card-top">
                             <span>
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.type,
                                 questionTypeLabels,
+                                questionLanguageMode,
                               )}
                             </span>
                             <span>
-                              {question.estimatedMinutes} MIN ·{" "}
-                              {bilingualLabel(
-                                question.status,
-                                questionStatusLabels,
+                              {question.estimatedMinutes}{" "}
+                              {questionModeText(
+                                questionLanguageMode,
+                                "分钟",
+                                "MIN",
                               )}
                             </span>
                           </div>
@@ -4451,43 +5208,62 @@ export function CareerDojoApp({
                           </div>
                           <div className="question-skills">
                             {question.skills
-                              .slice(0, 4)
-                              .flatMap((skill) =>
-                                skillTerms(
+                              .slice(0, 3)
+                              .flatMap((skill) => {
+                                const term = skillTerms(
                                   skillById.get(skill) || { id: skill },
-                                ).map((term) => ({ skill, term })),
-                              )
+                                )[0];
+                                return term ? [{ skill, term }] : [];
+                              })
                               .map(({ skill, term }) => (
                                 <span key={`${skill}:${term.id}`}>
-                                  <BilingualTermLabel term={term} />
+                                  {questionModeText(
+                                    questionLanguageMode,
+                                    term.zh,
+                                    term.en,
+                                  )}
                                 </span>
                               ))}
                           </div>
                           <div className="question-card-bottom">
                             <span>
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.difficulty,
                                 difficultyLabels,
+                                questionLanguageMode,
                               )}{" "}
                               ·{" "}
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.level,
                                 learningLevelLabels,
+                                questionLanguageMode,
                               )}
                             </span>
                             <button
                               onClick={() => openQuestion(question)}
-                              aria-label={`${
+                              aria-label={`${questionModeText(
+                                questionLanguageMode,
                                 completedQuestions.has(question.id)
-                                  ? "再次训练 / Retry"
-                                  : "开始任务 / Start"
-                              }：${question.titleZh || question.title} / ${
-                                question.title
-                              }`}
+                                  ? "再次训练"
+                                  : "开始任务",
+                                completedQuestions.has(question.id)
+                                  ? "Retry"
+                                  : "Start",
+                              )}：${questionModeText(
+                                questionLanguageMode,
+                                question.titleZh,
+                                question.title,
+                              )}`}
                             >
-                              {completedQuestions.has(question.id)
-                                ? "再次训练 / Retry"
-                                : "开始任务 / Start"}{" "}
+                              {questionModeText(
+                                questionLanguageMode,
+                                completedQuestions.has(question.id)
+                                  ? "再次训练"
+                                  : "开始任务",
+                                completedQuestions.has(question.id)
+                                  ? "Retry"
+                                  : "Start",
+                              )}{" "}
                               →
                             </button>
                           </div>
@@ -4615,9 +5391,18 @@ export function CareerDojoApp({
                   </h3>
                 </div>
                 <span>
-                  {currentJobs.length} 条岗位记录 / requisitions ·
-                  观察日存在不代表 今日仍开放 / observed, not guaranteed open
-                  today
+                  {currentJobs.length}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "条岗位记录",
+                    "requisitions",
+                  )}{" "}
+                  ·{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "观察日存在不代表今日仍开放",
+                    "observed, not guaranteed open today",
+                  )}
                 </span>
               </div>
               <div className="current-job-grid">
@@ -4831,7 +5616,7 @@ export function CareerDojoApp({
                               target="_blank"
                               rel="noreferrer"
                             >
-                              官方招聘入口 / Official careers ↗
+                              岗位链接 / Requisition link ↗
                             </a>
                           ) : null}
                         </article>
@@ -5386,6 +6171,191 @@ export function CareerDojoApp({
               </section>
             ) : null}
 
+            <section className="organization-position-evidence">
+              <div className="organization-relations-heading">
+                <div>
+                  <span className="section-kicker">
+                    具体企业岗位 / COMPANY-SPECIFIC REQUISITIONS
+                  </span>
+                  <h3>
+                    <BilingualHeading
+                      zh="经来源绑定的岗位与薪资"
+                      en="Source-bound jobs and compensation"
+                    />
+                  </h3>
+                </div>
+                <span>
+                  {selectedCompanyRequisitionCount}{" "}
+                  {questionModeText(
+                    questionLanguageMode,
+                    "条独立岗位记录",
+                    "independent position records",
+                  )}
+                </span>
+              </div>
+              <BilingualParagraph
+                className="organization-position-policy"
+                zh="这里只显示绑定到该企业、具体岗位、地点、级别、观察日期和原始来源的记录。方向薪资不会填入企业岗位；雇主未披露时明确标为“未披露”。"
+                en="Only records bound to this employer, exact title, location, level, observation date, and original source appear here. Role-family benchmarks are never inserted as company pay; employer omissions remain explicitly undisclosed."
+              />
+
+              {selectedCompanyCurrentJobs.length ? (
+                <div className="organization-current-job-list">
+                  {selectedCompanyCurrentJobs.map((job) => (
+                    <article
+                      className="organization-current-job"
+                      key={job.id}
+                    >
+                      <div>
+                        <span>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "当前岗位观察",
+                            "Current requisition observation",
+                          )}
+                        </span>
+                        <time dateTime={job.observedAt}>
+                          {job.observedAt}
+                        </time>
+                      </div>
+                      <h4>
+                        {questionModeText(
+                          questionLanguageMode,
+                          job.titleZh,
+                          job.titleEn,
+                        )}
+                      </h4>
+                      <p>
+                        {job.location} · {employmentTypeLabel(job.employmentType)}
+                      </p>
+                      <dl>
+                        <div>
+                          <dt>
+                            {questionModeText(
+                              questionLanguageMode,
+                              "企业披露薪资",
+                              "Employer-disclosed pay",
+                            )}
+                          </dt>
+                          <dd>{compensationText(job.compensation)}</dd>
+                        </div>
+                        <div>
+                          <dt>
+                            {questionModeText(
+                              questionLanguageMode,
+                              "岗位编号",
+                              "Requisition ID",
+                            )}
+                          </dt>
+                          <dd>{job.requisitionId}</dd>
+                        </div>
+                      </dl>
+                      <details>
+                        <summary>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "职责、最低要求与资格条件",
+                            "Responsibilities, minimum qualifications, and eligibility",
+                          )}
+                        </summary>
+                        <div className="organization-current-job-details">
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "岗位职责",
+                                "Responsibilities",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.responsibilitiesZh}
+                              en={job.responsibilitiesEn}
+                            />
+                          </section>
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "最低要求",
+                                "Minimum qualifications",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.minimumQualificationsZh}
+                              en={job.minimumQualificationsEn}
+                            />
+                          </section>
+                          <section>
+                            <strong>
+                              {questionModeText(
+                                questionLanguageMode,
+                                "资格条件",
+                                "Eligibility",
+                              )}
+                            </strong>
+                            <BilingualBulletList
+                              zh={job.eligibilityZh}
+                              en={job.eligibilityEn}
+                            />
+                          </section>
+                        </div>
+                      </details>
+                      <a
+                        href={job.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {questionModeText(
+                          questionLanguageMode,
+                          "打开原始岗位",
+                          "Open original requisition",
+                        )}{" "}
+                        ↗
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
+
+              {selectedCompanyPositionEvidence.length ? (
+                <div className="organization-position-pay-grid">
+                  {selectedCompanyPositionEvidence.map(
+                    ({ comparison, market, position }) => (
+                      <SpecificPositionPanel
+                        key={position.id}
+                        market={market}
+                        position={position}
+                        calculation={calculatePositionComparison(
+                          comparison,
+                          positionCompensationComparisons,
+                        )}
+                      />
+                    ),
+                  )}
+                </div>
+              ) : null}
+
+              {!selectedCompanyCurrentJobs.length &&
+              !selectedCompanyPositionEvidence.length ? (
+                <div className="organization-position-empty">
+                  <strong>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "尚无通过校验的企业具体岗位记录",
+                      "No validated company-specific requisition yet",
+                    )}
+                  </strong>
+                  <p>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "当前档案只证明组织和招聘入口存在；不会把同方向其他企业的职位或平均薪资复制到这里。",
+                      "The current profile proves only the organization and its careers entry point; positions or average pay from other employers are not copied here.",
+                    )}
+                  </p>
+                </div>
+              ) : null}
+            </section>
+
             <section className="organization-role-profile">
               <h3>
                 <BilingualHeading zh="目标岗位" en="Target roles" />
@@ -5517,7 +6487,10 @@ export function CareerDojoApp({
                   <label>
                     <span>岗位名称 / Role title *</span>
                     <input
-                      value={applicationDraft.roleTitle}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.roleTitle,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5552,7 +6525,11 @@ export function CareerDojoApp({
                       <option value="">待核验 / Unverified</option>
                       {roles.map((role) => (
                         <option key={role.id} value={role.id}>
-                          {role.nameZh} / {role.name}
+                          {questionModeText(
+                            questionLanguageMode,
+                            role.nameZh,
+                            role.name,
+                          )}
                         </option>
                       ))}
                     </select>
@@ -5792,7 +6769,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>岗位关键词 / JD keywords</span>
                     <textarea
-                      value={applicationDraft.jdKeywords}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.jdKeywords,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5804,7 +6784,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>岗位职责 / Responsibilities</span>
                     <textarea
-                      value={applicationDraft.responsibilities}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.responsibilities,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5816,7 +6799,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>最低要求 / Minimum qualifications</span>
                     <textarea
-                      value={applicationDraft.minimumQualifications}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.minimumQualifications,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5828,7 +6814,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>优先条件 / Preferred qualifications</span>
                     <textarea
-                      value={applicationDraft.preferredQualifications}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.preferredQualifications,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -5840,7 +6829,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>资格说明 / Eligibility notes</span>
                     <textarea
-                      value={applicationDraft.eligibilityNotes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.eligibilityNotes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6019,7 +7011,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>薪资口径说明 / Compensation notes</span>
                     <textarea
-                      value={applicationDraft.salaryNotes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.salaryNotes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6034,7 +7029,10 @@ export function CareerDojoApp({
                   <label className="wide-field">
                     <span>匹配备注 / Match notes</span>
                     <textarea
-                      value={applicationDraft.notes}
+                      value={projectEditableBilingualValue(
+                        questionLanguageMode,
+                        applicationDraft.notes,
+                      )}
                       onChange={(event) =>
                         setApplicationDraft((draft) => ({
                           ...draft,
@@ -6086,7 +7084,19 @@ export function CareerDojoApp({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  官方招聘页 / Official careers ↗
+                  {selectedCompany.evidence.some(
+                    (evidence) =>
+                      evidence.url === selectedCompany.careerUrl &&
+                      evidence.type?.startsWith("third-party-"),
+                  )
+                    ? "岗位来源 / Job source ↗"
+                    : selectedCompany.evidence.some(
+                          (evidence) =>
+                            evidence.url === selectedCompany.careerUrl &&
+                            evidence.type?.startsWith("official-"),
+                        )
+                      ? "官方招聘页 / Official careers ↗"
+                      : "招聘入口 / Careers source ↗"}
                 </a>
               ) : null}
             </div>
@@ -6220,10 +7230,14 @@ export function CareerDojoApp({
                     }
                   >
                     <option value="">待核验 / Unverified</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.nameZh} / {role.name}
-                      </option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {questionModeText(
+                            questionLanguageMode,
+                            role.nameZh,
+                            role.name,
+                          )}
+                        </option>
                     ))}
                   </select>
                 </label>
@@ -6694,13 +7708,13 @@ export function CareerDojoApp({
             <div className="question-modal-heading">
               <div>
                 <span className="section-kicker">
-                  {bilingualLabel(selectedQuestion.type, questionTypeLabels)} ·{" "}
-                  {selectedQuestion.estimatedMinutes} 分钟 / MIN ·{" "}
-                  {bilingualLabel(
-                    selectedQuestion.status,
-                    questionStatusLabels,
+                  {questionCatalogLabel(
+                    selectedQuestion.type,
+                    questionTypeLabels,
+                    questionLanguageMode,
                   )}{" "}
-                  · V{selectedQuestion.contentVersion}
+                  · {selectedQuestion.estimatedMinutes}{" "}
+                  {questionModeText(questionLanguageMode, "分钟", "MIN")}
                 </span>
                 <h2 id="question-dialog-title">
                   <BilingualCopy
@@ -6710,22 +7724,24 @@ export function CareerDojoApp({
                     className="question-dialog-title"
                   />
                 </h2>
-                {selectedQuestion.blueprintId ? (
-                  <small className="question-lineage">
-                    课程谱系 / Curriculum lineage ·{" "}
-                    <code>{selectedQuestion.blueprintId}</code>
-                  </small>
-                ) : null}
               </div>
               <span className="difficulty-badge">
-                {bilingualLabel(selectedQuestion.difficulty, difficultyLabels)}
+                {questionCatalogLabel(
+                  selectedQuestion.difficulty,
+                  difficultyLabels,
+                  questionLanguageMode,
+                )}
               </span>
             </div>
 
             <div
               className="modal-language-switcher segmented"
               role="group"
-              aria-label="阅读顺序 / Reading mode"
+              aria-label={questionModeText(
+                questionLanguageMode,
+                "网站语言",
+                "Site language",
+              )}
             >
               {languageModeOptions.map((option) => (
                 <button
@@ -6735,7 +7751,11 @@ export function CareerDojoApp({
                   aria-pressed={questionLanguageMode === option.id}
                   onClick={() => setQuestionLanguageMode(option.id)}
                 >
-                  {option.label}
+                  {questionModeText(
+                    questionLanguageMode,
+                    option.labelZh,
+                    option.labelEn,
+                  )}
                 </button>
               ))}
             </div>
@@ -6748,11 +7768,19 @@ export function CareerDojoApp({
               >
                 <span className="question-detail-loader" aria-hidden="true" />
                 <div>
-                  <strong>正在加载完整双语任务 / Loading full task</strong>
+                  <strong>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "正在加载完整任务",
+                      "Loading full task",
+                    )}
+                  </strong>
                   <p>
-                    首屏只携带轻量索引；当前仅请求这道题所在的小型静态分片。
-                    Only this task&apos;s deterministic detail shard is being
-                    requested.
+                    {questionModeText(
+                      questionLanguageMode,
+                      "系统会自动重试主分片；必要时切换到独立备用题包。",
+                      "The system retries the primary shard automatically and switches to an independent recovery pack when needed.",
+                    )}
                   </p>
                 </div>
                 <BilingualCopy
@@ -6782,27 +7810,25 @@ export function CareerDojoApp({
               </div>
             ) : selectedQuestionDetail ? (
               <>
+                <h3 className="question-primary-label">
+                  {questionModeText(questionLanguageMode, "题目", "Question")}
+                </h3>
                 <div className="prompt-box">
-                  <BilingualCopy
+                  <StructuredQuestionPrompt
                     zh={selectedQuestionDetail.promptZh}
                     en={selectedQuestionDetail.prompt}
                     mode={questionLanguageMode}
                   />
                 </div>
-                {selectedQuestion.status === "review-ready" ? (
-                  <div className="scope-notice">
-                    <strong>待校准 / Calibration pending</strong>
-                    <span>
-                      已通过结构与来源检查；尚未完成领域专家与真实练习者 pilot，
-                      分数只用于自我比较，不写入岗位准备度。 Structure and
-                      source checks are complete; expert and learner pilots are
-                      still pending.
-                    </span>
-                  </div>
-                ) : null}
                 <div className="question-modal-grid">
                   <div>
-                    <h3>你需要交付 / Deliverables</h3>
+                    <h3>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "你需要交付",
+                        "Deliverables",
+                      )}
+                    </h3>
                     <BilingualList
                       zh={selectedQuestionDetail.deliverablesZh}
                       en={selectedQuestionDetail.deliverables}
@@ -6811,7 +7837,13 @@ export function CareerDojoApp({
                     />
                   </div>
                   <div>
-                    <h3>面试官可能追问 / Follow-ups</h3>
+                    <h3>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "面试官可能追问",
+                        "Follow-ups",
+                      )}
+                    </h3>
                     <BilingualList
                       zh={selectedQuestionDetail.followUpsZh}
                       en={selectedQuestionDetail.followUps}
@@ -6822,11 +7854,21 @@ export function CareerDojoApp({
                 </div>
 
                 <label className="attempt-notes">
-                  <span>作答记录与复盘 / Answer notes &amp; reflection</span>
+                  <span>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "作答记录与复盘",
+                      "Answer notes & reflection",
+                    )}
+                  </span>
                   <textarea
                     value={attemptNotes}
                     onChange={(event) => setAttemptNotes(event.target.value)}
-                    placeholder="先独立写出思路、假设、关键取舍和验证方法 / Capture your reasoning, assumptions, trade-offs, and validation plan…"
+                    placeholder={questionModeText(
+                      questionLanguageMode,
+                      "先独立写出思路、假设、关键取舍和验证方法……",
+                      "Capture your reasoning, assumptions, trade-offs, and validation plan…",
+                    )}
                   />
                 </label>
 
@@ -6836,14 +7878,28 @@ export function CareerDojoApp({
                   aria-expanded={rubricVisible}
                 >
                   {rubricVisible
-                    ? "收起评分与参考 / Hide rubric & reference"
-                    : "完成后查看评分与参考 / Reveal after attempting"}
+                    ? questionModeText(
+                        questionLanguageMode,
+                        "收起评分与参考",
+                        "Hide rubric & reference",
+                      )
+                    : questionModeText(
+                        questionLanguageMode,
+                        "完成后查看评分与参考",
+                        "Reveal after attempting",
+                      )}
                 </button>
 
                 {rubricVisible ? (
                   <div className="rubric-grid">
                     <div>
-                      <h3>评分规则 / Rubric</h3>
+                      <h3>
+                        {questionModeText(
+                          questionLanguageMode,
+                          "评分规则",
+                          "Rubric",
+                        )}
+                      </h3>
                       <BilingualList
                         zh={selectedQuestionDetail.rubricZh}
                         en={selectedQuestionDetail.rubric}
@@ -6851,7 +7907,13 @@ export function CareerDojoApp({
                       />
                     </div>
                     <div>
-                      <h3>常见失败 / Common failures</h3>
+                      <h3>
+                        {questionModeText(
+                          questionLanguageMode,
+                          "常见失败",
+                          "Common failures",
+                        )}
+                      </h3>
                       <BilingualList
                         zh={selectedQuestionDetail.commonFailuresZh}
                         en={selectedQuestionDetail.commonFailures}
@@ -6861,7 +7923,13 @@ export function CareerDojoApp({
                     {selectedQuestionDetail.referenceOutline?.length ||
                     selectedQuestionDetail.referenceOutlineZh?.length ? (
                       <div>
-                        <h3>参考解题骨架 / Reference outline</h3>
+                        <h3>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "参考解题骨架",
+                            "Reference outline",
+                          )}
+                        </h3>
                         <BilingualList
                           zh={selectedQuestionDetail.referenceOutlineZh}
                           en={selectedQuestionDetail.referenceOutline}
@@ -6873,7 +7941,13 @@ export function CareerDojoApp({
                     {selectedQuestionDetail.oracle ||
                     selectedQuestionDetail.oracleZh ? (
                       <div>
-                        <h3>可验证完成标准 / Verifiable oracle</h3>
+                        <h3>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "可验证完成标准",
+                            "Verifiable oracle",
+                          )}
+                        </h3>
                         <BilingualOracle
                           oracle={selectedQuestionDetail.oracle}
                           oracleZh={selectedQuestionDetail.oracleZh}
@@ -6971,6 +8045,8 @@ export function CareerDojoApp({
           </section>
         </div>
       ) : null}
-    </div>
+      </div>
+      </LocalizedSurface>
+    </SiteLanguageContext.Provider>
   );
 }

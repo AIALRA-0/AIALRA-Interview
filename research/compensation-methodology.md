@@ -1,8 +1,8 @@
 # 薪资基准方法论 / Compensation Benchmark Methodology
 
-**证据冻结日 / Evidence date:** 2026-07-26
+**证据冻结日 / Evidence dates:** 具体职位薪资对照 2026-07-26；当前岗位观察 2026-07-28 / specific-position comparisons 2026-07-26; current-job observations 2026-07-28
 
-**数据资产 / Data assets:** `data/position-compensation-comparisons.json`（主展示 / primary display）与 `data/role-compensation-benchmarks.json`（背景 / background）
+**数据资产 / Data assets:** `data/position-compensation-comparisons.json`（具体职位到手测算 / specific-position net-pay modeling）、`data/current-job-observations.json`（当前岗位 / current jobs）与 `data/role-compensation-benchmarks.json`（背景 / background）
 
 ## 1. 目的与边界 / Purpose and boundaries
 
@@ -140,19 +140,23 @@ Behavioral Interview, Technical Project Deep Dive, and Technical English Communi
 
 ## 7. 具体当前岗位的披露状态 / Current-job disclosure status
 
-冻结日只有两个组织记录具有精确 `official-current-job` 证据：
+2026-07-28 的当前岗位资产含四条精确雇主岗位记录，其中两条披露基本工资，两条未披露现金薪资：
 
+- [Synopsys Senior R&D Engineer — StarRC](https://careers.synopsys.com/job/sunnyvale/senior-r-and-d-engineer-17637/44408/95924563664)：雇主披露美国基本工资 116,000–174,000 美元/年；奖金与股权另计。
+- [Synopsys Applications Engineering, Scientist](https://careers.synopsys.com/en/job/austin/applications-engineering-scientist/44408/95653634896)：雇主披露美国基本工资 196,000–294,000 美元/年；奖金与股权另计。
 - [TSMC Arizona Summer 2027 Engineering Internship](https://ro.careers.tsmc.com/job/Phoenix-Summer-2027-TSMC-AZ-Internship-Opportunities-Engineering-Roles-AZ-85001/1361003166/)：官方页面未披露现金薪资区间；页面仅说明可提供搬迁协助。
 - [Qolab Quantum Hardware Engineer](https://qolab.ai/careers/quantum-hardware-engineer)：官方页面未披露基本工资、奖金或股权区间。
 
-二者在 `data/current-job-observations.json` 中均为 `status: "not-disclosed"`，且 `minimum`、`maximum`、`currency` 与 `period` 必须为 `null`。页面可以在其下方显示独立的市场代理，但标题必须明确说明“市场基准，非雇主披露”。申请当天还需重新打开官方页面复核。
+Synopsys 两条记录使用 `status: "disclosed"`，只保存岗位页明确给出的基本工资，不把奖金或股权混入区间。TSMC 与 Qolab 使用 `status: "not-disclosed"`，且 `minimum`、`maximum`、`currency` 与 `period` 必须为 `null`。页面可以在其下方显示独立的市场代理，但标题必须明确说明“市场基准，非雇主披露”。申请当天还需重新打开官方页面复核。
 
-Only two organization records had exact `official-current-job` evidence on the evidence date:
+The current-job asset contains four exact employer postings observed on 2026-07-28: two disclose base salary and two do not disclose cash compensation:
 
+- [Synopsys Senior R&D Engineer — StarRC](https://careers.synopsys.com/job/sunnyvale/senior-r-and-d-engineer-17637/44408/95924563664): the employer discloses a U.S. base-salary range of $116,000–$174,000 per year; bonus and equity are separate.
+- [Synopsys Applications Engineering, Scientist](https://careers.synopsys.com/en/job/austin/applications-engineering-scientist/44408/95653634896): the employer discloses a U.S. base-salary range of $196,000–$294,000 per year; bonus and equity are separate.
 - [TSMC Arizona Summer 2027 Engineering Internship](https://ro.careers.tsmc.com/job/Phoenix-Summer-2027-TSMC-AZ-Internship-Opportunities-Engineering-Roles-AZ-85001/1361003166/): the official page disclosed no cash-pay range; it only stated that relocation assistance is available.
 - [Qolab Quantum Hardware Engineer](https://qolab.ai/careers/quantum-hardware-engineer): the official page disclosed no base salary, bonus, or equity range.
 
-Both records use `status: "not-disclosed"` in `data/current-job-observations.json`, and `minimum`, `maximum`, `currency`, and `period` must remain `null`. A separate market proxy may appear beneath the job, but its heading must say market benchmark, not employer disclosure. Reopen the official posting on the application date.
+The two Synopsys records use `status: "disclosed"` and store only the base range explicitly stated on each posting; bonus and equity are not folded into the range. TSMC and Qolab use `status: "not-disclosed"`, and `minimum`, `maximum`, `currency`, and `period` remain `null`. A separate market proxy may appear beneath a job, but its heading must say market benchmark, not employer disclosure. Reopen every official posting on the application date.
 
 ## 8. 显示护栏 / Display guardrails
 

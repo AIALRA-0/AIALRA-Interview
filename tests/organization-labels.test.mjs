@@ -62,6 +62,9 @@ test("organization tree has complete reviewed bilingual label coverage", async (
     ...cnCompanies,
     ...cnExpansion,
   ];
+  const chinaCompanyIds = new Set(
+    [...cnCompanies, ...cnExpansion].map((company) => company.id),
+  );
   const ids = new Set(companies.map((company) => company.id));
   const typeIds = [
     ...new Set(companies.map((company) => company.companyType)),
@@ -167,7 +170,11 @@ test("organization tree has complete reviewed bilingual label coverage", async (
     resolvedNamesEn.push(resolved.en.trim().toLowerCase());
     if (resolved.zh && resolved.zh !== resolved.en) {
       assert.match(resolved.zh, hanPattern);
-      resolvedNamesZh.push(resolved.zh.trim().toLowerCase());
+      resolvedNamesZh.push(
+        `${chinaCompanyIds.has(company.id) ? "CN" : "US"}:${resolved.zh
+          .trim()
+          .toLowerCase()}`,
+      );
       bilingual += 1;
     } else {
       englishOnly += 1;
@@ -231,11 +238,14 @@ test("every organization-name surface uses the canonical bilingual renderer", as
   );
   assert.match(component, /company\.nameEn/);
   assert.match(component, /company\.nameZh \|\| ""/);
-  assert.match(component, /company\.categories\.map\(categoryLabel\)/);
+  assert.match(
+    component,
+    /company\.categories\.flatMap\(\(category\) =>\s*categoryAtoms/,
+  );
   assert.match(component, /function canonicalCategoryId\(/);
   assert.match(component, /selectedCategoryValues\?\.has\(item\)/);
-  assert.match(component, /\.\.\.company\.requirements/);
-  assert.match(component, /\.\.\.company\.gaps/);
+  assert.match(component, /\.\.\.company\.requirementAtoms\.map/);
+  assert.match(component, /\.\.\.company\.preparationAtoms\.map/);
   assert.doesNotMatch(
     component,
     />\s*\{(?:selectedCompany|company)\.name\}\s*</,

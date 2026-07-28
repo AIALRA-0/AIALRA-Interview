@@ -357,33 +357,74 @@ test("compensation benchmarks preserve exact sources, periods, currencies, and s
   }
 });
 
-test("not-disclosed current jobs keep every monetary field null", async () => {
-  const jobsAsset = await json("data/current-job-observations.json");
+test("current jobs preserve exact employer disclosure and explicit omissions", async () => {
+  const [jobsAsset, organizationUniverse] = await Promise.all([
+    json("data/current-job-observations.json"),
+    json("public/organization-universe.json"),
+  ]);
+  const organizationIds = new Set(
+    organizationUniverse.organizations.map((organization) => organization.id),
+  );
 
-  assert.equal(jobsAsset.evidenceDate, "2026-07-26");
-  assert.equal(jobsAsset.jobs.length, 2);
+  assert.equal(jobsAsset.evidenceDate, "2026-07-28");
+  assert.equal(jobsAsset.jobs.length, 4);
+  assert.equal(
+    new Set(jobsAsset.jobs.map((job) => job.sourceUrl)).size,
+    jobsAsset.jobs.length,
+  );
   assert.deepEqual(jobsAsset.jobs.map((job) => job.id).sort(), [
     "job-qolab-quantum-hardware-engineer",
+    "job-synopsys-applications-engineering-scientist-17642",
+    "job-synopsys-senior-rd-starrc-17637",
     "job-tsmc-arizona-summer-2027-engineering",
   ]);
 
   for (const job of jobsAsset.jobs) {
+    assert.ok(
+      organizationIds.has(job.organizationId),
+      `${job.id} must bind to a published organization`,
+    );
+    assert.ok(job.roleFamilyIds.length > 0);
+    assert.ok(
+      job.roleFamilyIds.every((roleFamilyId) =>
+        technicalRoleIds.includes(roleFamilyId),
+      ),
+    );
     assert.match(job.observedAt, isoDatePattern);
     assert.equal(job.observedAt, jobsAsset.evidenceDate);
     assert.match(job.sourceUrl, httpsPattern);
-    assert.equal(job.compensation.status, "not-disclosed");
-    assert.equal(job.compensation.minimum, null);
-    assert.equal(job.compensation.maximum, null);
-    assert.equal(job.compensation.currency, null);
-    assert.equal(job.compensation.period, null);
     assert.equal(job.compensation.basis, "employer-posting");
     assert.equal(job.compensation.observedAt, job.observedAt);
     assert.equal(job.compensation.sourceUrl, job.sourceUrl);
     assert.match(job.compensation.sourceUrl, httpsPattern);
     assert.ok(job.compensation.sourceTitle.trim());
     assert.ok(job.compensation.location.trim());
-    assert.ok(job.compensation.notesZh.includes("未披露"));
-    assert.match(job.compensation.notesEn, /did not disclose/i);
+    assert.ok(job.responsibilitiesZh.length >= 3);
+    assert.equal(job.responsibilitiesZh.length, job.responsibilitiesEn.length);
+    assert.ok(job.minimumQualificationsZh.length >= 3);
+    assert.equal(
+      job.minimumQualificationsZh.length,
+      job.minimumQualificationsEn.length,
+    );
+    assert.equal(job.eligibilityZh.length, job.eligibilityEn.length);
+    if (job.compensation.status === "not-disclosed") {
+      assert.equal(job.compensation.minimum, null);
+      assert.equal(job.compensation.maximum, null);
+      assert.equal(job.compensation.currency, null);
+      assert.equal(job.compensation.period, null);
+      assert.ok(job.compensation.notesZh.includes("未披露"));
+      assert.match(job.compensation.notesEn, /did not disclose/i);
+    } else {
+      assert.equal(job.compensation.status, "disclosed");
+      assert.ok(Number(job.compensation.minimum) > 0);
+      assert.ok(
+        Number(job.compensation.maximum) >= Number(job.compensation.minimum),
+      );
+      assert.equal(job.compensation.currency, "USD");
+      assert.equal(job.compensation.period, "year");
+      assert.match(job.compensation.notesZh, /基本工资区间/);
+      assert.match(job.compensation.notesEn, /base-salary range/i);
+    }
   }
 });
 

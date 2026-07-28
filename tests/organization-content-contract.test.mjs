@@ -473,10 +473,19 @@ test("evidence types always resolve to a bilingual label or the explicit fallbac
   );
   assert.ok(observedTypes.size > 0);
   for (const type of observedTypes) {
-    const label =
-      intelligence.evidenceTypes[type] || intelligence.fallbackEvidenceType;
+    assert.ok(
+      intelligence.evidenceTypes[type],
+      `observed evidence type ${type} must have an explicit label`,
+    );
+    const label = intelligence.evidenceTypes[type];
     assertBilingualTerm({ id: type, ...label }, `evidence type ${type}`);
+    if (type.startsWith("third-party-")) {
+      assert.doesNotMatch(label.zh, /官方/);
+      assert.doesNotMatch(label.en, /official/i);
+    }
   }
+  assert.doesNotMatch(intelligence.fallbackEvidenceType.zh, /官方/);
+  assert.doesNotMatch(intelligence.fallbackEvidenceType.en, /official/i);
 });
 
 test("organization UI renders enriched bilingual atoms instead of raw compound fields", async () => {

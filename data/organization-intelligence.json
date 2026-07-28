@@ -625,6 +625,10 @@
       "zh": "官方岗位搜索",
       "en": "Official Job Search"
     },
+    "official-career-or-presence": {
+      "zh": "官方招聘或在华业务资料",
+      "en": "Official Careers or China-presence Source"
+    },
     "official-clearance-guidance": {
       "zh": "官方许可要求",
       "en": "Official Clearance Guidance"
@@ -756,11 +760,19 @@
       "zh": "官方产业目录",
       "en": "Official Industry Directory"
     },
-    "official-us-site": { "zh": "美国官方网站", "en": "Official U.S. Website" }
+    "official-us-site": { "zh": "美国官方网站", "en": "Official U.S. Website" },
+    "third-party-campus-posting": {
+      "zh": "第三方校招岗位",
+      "en": "Third-party Campus Posting"
+    },
+    "third-party-current-job": {
+      "zh": "第三方当前岗位",
+      "en": "Third-party Current Job"
+    }
   },
   "fallbackEvidenceType": {
-    "zh": "官方一手资料",
-    "en": "Official Primary Source"
+    "zh": "其他公开资料",
+    "en": "Other Public Source"
   },
   "fallbackOpportunity": {
     "id": "posting-review",

@@ -60,3 +60,24 @@ test("the precise job, compensation, training, and editor layouts stay present",
   assert.match(app, /JD 证据编译器/);
   assert.match(app, /完整岗位档案 \/ Full requisition profile/);
 });
+
+test("plain bilingual prompts use the full language-panel width", async () => {
+  const [css, app] = await Promise.all([
+    readFile(cssUrl, "utf8"),
+    readFile(appUrl, "utf8"),
+  ]);
+
+  assert.match(
+    app,
+    /className={`prompt-section\${match \? "" : " prompt-section-plain"}`}/,
+    "prompts without a Background/Task label need a distinct full-width layout",
+  );
+  assert.match(
+    css,
+    /\.prompt-section-plain\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/s,
+  );
+  assert.match(
+    css,
+    /\.prompt-section-plain p\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/s,
+  );
+});

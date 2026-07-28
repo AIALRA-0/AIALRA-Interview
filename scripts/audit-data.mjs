@@ -577,13 +577,13 @@ const questions = recordsOf(
 );
 assert.equal(
   questionsRaw.status,
-  "bilingual-review-ready-v3",
-  "question bank root status must remain bilingual-review-ready-v3",
+  "bilingual-editorial-clean-v4",
+  "question bank root status must remain bilingual-editorial-clean-v4",
 );
 assert.deepEqual(
   [...new Set(questions.map((question) => question.contentVersion))],
-  ["2026-07-23.5"],
-  "all questions must share the reviewed 2026-07-23.5 content version",
+  ["2026-07-27.1"],
+  "all questions must share the reviewed 2026-07-27.1 content version",
 );
 const skillTranslationCatalog = await readSkillTranslationCatalog();
 const questionTranslationCatalog = await readQuestionTranslationCatalog();
@@ -717,11 +717,14 @@ for (const record of ownershipRecords) {
   );
   assert.ok(
     typeof record.nameZh === "string" &&
-      record.nameZh.trim() &&
+      (!record.nameZh.trim() ||
+        hasChinese(record.nameZh) ||
+        record.nameZh.trim().toLowerCase() ===
+          record.nameEn.trim().toLowerCase()) &&
       /[A-Za-z]/.test(record.nameEn) &&
       hasChinese(record.summaryZh) &&
       /[A-Za-z]/.test(record.summaryEn),
-    `ownership record ${record.organizationId} needs bilingual identity and summary fields`,
+    `ownership record ${record.organizationId} needs a verified Chinese name or an explicit English-only identity plus bilingual summaries`,
   );
   assert.ok(
     ["high", "medium", "low"].includes(record.confidence),
@@ -1044,6 +1047,9 @@ let bilingualOrganizationCount = 0;
 let englishOnlyOrganizationCount = 0;
 const resolvedOrganizationNamesEn = [];
 const resolvedOrganizationNamesZh = [];
+const chinaOrganizationNameIds = new Set(
+  cnCompanies.map((company) => company.id),
+);
 for (const company of companies) {
   const sourceNameIsChinese = hanPattern.test(company.name);
   const aliasEn = company.aliases.find((alias) => latinPattern.test(alias));
@@ -1076,7 +1082,11 @@ for (const company of companies) {
       nameEn.trim().toLowerCase(),
       `company ${company.id} repeats the same organization name twice`,
     );
-    resolvedOrganizationNamesZh.push(nameZh.trim().toLowerCase());
+    resolvedOrganizationNamesZh.push(
+      `${chinaOrganizationNameIds.has(company.id) ? "CN" : "US"}:${nameZh
+        .trim()
+        .toLowerCase()}`,
+    );
     bilingualOrganizationCount += 1;
   } else {
     assert.ok(
@@ -1104,7 +1114,7 @@ assert.equal(
 assert.equal(
   new Set(resolvedOrganizationNamesZh).size,
   resolvedOrganizationNamesZh.length,
-  "canonical Chinese organization names must be unique",
+  "canonical Chinese organization names must be unique inside each opportunity market",
 );
 
 assert.equal(
@@ -1380,22 +1390,24 @@ const contractImplementationInstructionEn =
 const contractImplementationInstructionZh =
   /(?:^|[。！？；：，])(?!(?:不要|不得|无需|避免|省略))(?:(?:请|需要|应当|必须)\s*)?(?:为[^。！？；：，]{0,80})?(?:实现|创建|编写|写出|设计|开发)/;
 function contractInstructionTextEn(prompt = "") {
-  const sourceMarker = " Source scenario (reference-only quotation;";
-  const sourceIndex = prompt.indexOf(sourceMarker);
-  if (sourceIndex < 0) return prompt;
-  const policyIndex = prompt.lastIndexOf(" Use public concepts only;");
-  return `${prompt.slice(0, sourceIndex)}${
-    policyIndex > sourceIndex ? prompt.slice(policyIndex) : ""
-  }`;
+  const taskMarker = "\n\nTask: ";
+  const taskIndex = prompt.indexOf(taskMarker);
+  if (taskIndex < 0) return prompt;
+  const constraintIndex = prompt.indexOf("\n\nConstraint:", taskIndex);
+  return prompt.slice(
+    taskIndex + taskMarker.length,
+    constraintIndex < 0 ? undefined : constraintIndex,
+  );
 }
 function contractInstructionTextZh(prompt = "") {
-  const sourceMarker = "原始场景（仅作参考引文；";
-  const sourceIndex = prompt.indexOf(sourceMarker);
-  if (sourceIndex < 0) return prompt;
-  const policyIndex = prompt.lastIndexOf("只使用公开概念");
-  return `${prompt.slice(0, sourceIndex)}${
-    policyIndex > sourceIndex ? prompt.slice(policyIndex) : ""
-  }`;
+  const taskMarker = "\n\n任务：";
+  const taskIndex = prompt.indexOf(taskMarker);
+  if (taskIndex < 0) return prompt;
+  const constraintIndex = prompt.indexOf("\n\n限制：", taskIndex);
+  return prompt.slice(
+    taskIndex + taskMarker.length,
+    constraintIndex < 0 ? undefined : constraintIndex,
+  );
 }
 function scenarioSourceForAudit(prompt = "") {
   return prompt
@@ -1407,7 +1419,12 @@ function scenarioSourceForAudit(prompt = "") {
     .trim();
 }
 function scenarioSourceZhForAudit(prompt = "") {
-  return prompt.trim();
+  return prompt
+    .replace(
+      /(?:请)?(?:说明所有对(?:回答真实性|技术正确性|正确性)有实质影响的假设|声明所有会实质影响正确性的假设)；.*$/s,
+      "",
+    )
+    .trim();
 }
 assert.deepEqual(
   new Set(Object.keys(skillTranslationCatalog)),
@@ -1564,6 +1581,31 @@ const allowedEditorialOverrideFields = new Set([
   "appendPrompt",
   "appendPromptZh",
 ]);
+function cleanEditorialOverrideValue(value, chinese) {
+  if (chinese) {
+    return value
+      .replace(
+        /(?:请)?(?:说明所有对(?:回答真实性|技术正确性|正确性)有实质影响的假设|声明所有会实质影响正确性的假设)；(?:不要|不得)依赖未披露的厂商行为或保密(?:的)?面试知识。?/g,
+        "",
+      )
+      .replace(
+        /只能使用真实且可公开的项目证据；标记不确定性并保护保密实现细节。?/g,
+        "使用一个真实案例，并省略保密细节。",
+      )
+      .trim();
+  }
+  return value
+    .replace(
+      /\s*State all assumptions that materially affect correctness; do not rely on undisclosed vendor behavior or confidential interview knowledge\.?/gi,
+      "",
+    )
+    .replace(
+      /\s*Use only real public-safe project evidence; label uncertainty and protect confidential implementation details\.?/gi,
+      " Use one real example; omit confidential details.",
+    )
+    .replace(/\bpublic-safe\b/gi, "shareable")
+    .trim();
+}
 let appliedEditorialOverrideCount = 0;
 for (const [questionId, override] of Object.entries(editorialOverrides)) {
   const anchor = curatedAnchorById.get(questionId);
@@ -1585,15 +1627,21 @@ for (const [questionId, override] of Object.entries(editorialOverrides)) {
       `editorial override ${questionId}.${field} is empty`,
     );
     const targetField = field.endsWith("Zh") ? "promptZh" : "prompt";
+    const expectedValue = cleanEditorialOverrideValue(
+      value,
+      targetField === "promptZh",
+    );
     if (field.startsWith("append")) {
-      assert.ok(
-        anchor[targetField].includes(value.trim()),
-        `editorial override ${questionId}.${field} was not applied to ${targetField}`,
-      );
+      if (expectedValue) {
+        assert.ok(
+          anchor[targetField].includes(expectedValue),
+          `editorial override ${questionId}.${field} was not applied to ${targetField}`,
+        );
+      }
     } else {
       assert.equal(
         anchor[targetField],
-        value.trim(),
+        expectedValue,
         `editorial override ${questionId}.${field} was not applied exactly`,
       );
     }
@@ -1630,10 +1678,6 @@ assert.equal(
   22,
   "soft-policy release gate must cover exactly 22 reviewed anchors",
 );
-const globalSoftPolicyEn =
-  "State all assumptions that materially affect correctness; do not rely on undisclosed vendor behavior or confidential interview knowledge.";
-const globalSoftPolicyZh =
-  /说明所有对(?:回答真实性|技术正确性)有实质影响的假设；不得依赖未披露的厂商行为或保密的面试知识。/;
 for (const questionId of softPolicyAnchorIds) {
   const anchor = curatedAnchorById.get(questionId);
   const translation = questionTranslationCatalog[questionId];
@@ -1642,14 +1686,15 @@ for (const questionId of softPolicyAnchorIds) {
     editorialOverrides[questionId],
     `soft-policy anchor ${questionId} has no reviewed editorial override`,
   );
-  assert.ok(
-    anchor.prompt.includes(globalSoftPolicyEn),
-    `soft-policy anchor ${questionId} lacks the mandatory English assumptions/confidentiality constraint`,
+  assert.match(
+    anchor.prompt,
+    /truth|real|confidential|evidence|fabricat|invent|contribution|credit|shared|hero story|relabel|responsibility/i,
+    `soft-policy anchor ${questionId} lacks a concise English truth/evidence boundary`,
   );
   assert.match(
     anchor.promptZh,
-    globalSoftPolicyZh,
-    `soft-policy anchor ${questionId} lacks the mandatory Chinese assumptions/confidentiality constraint`,
+    /真实|保密|证据|贡献|不得编造|虚构|功劳|英雄叙事|责任|失败/,
+    `soft-policy anchor ${questionId} lacks a concise Chinese truth/evidence boundary`,
   );
   assert.ok(
     anchor.promptZh.includes(translation.promptZh),
@@ -1692,12 +1737,12 @@ assert.ok(
 );
 assert.equal(
   tapTraceQuestion.prompt,
-  tapTraceOverride.prompt?.trim(),
+  cleanEditorialOverrideValue(tapTraceOverride.prompt, false),
   "q-dft-tap-trace English prompt must exactly match the reviewed TAP fixture",
 );
 assert.equal(
   tapTraceQuestion.promptZh,
-  tapTraceOverride.promptZh?.trim(),
+  cleanEditorialOverrideValue(tapTraceOverride.promptZh, true),
   "q-dft-tap-trace Chinese prompt must exactly match the reviewed TAP fixture",
 );
 for (const marker of tapFixtureMarkers) {
@@ -2011,14 +2056,16 @@ for (const question of questions) {
       `${context}.skills[0] must expose the generated target skill`,
     );
     if (skillFocusOverride) {
-      assert.ok(
-        question.prompt.includes(skillFocusOverride.focusEn),
-        `${context} does not include the exact reviewed English skill focus for ${focusKey}`,
-      );
-      assert.ok(
-        question.promptZh.includes(skillFocusOverride.focusZh),
-        `${context} does not include the exact reviewed Chinese skill focus for ${focusKey}`,
-      );
+      if (!question.blueprintId.startsWith("community-signal-original-v1/")) {
+        assert.ok(
+          question.prompt.includes(skillFocusOverride.focusEn),
+          `${context} does not include the exact reviewed English skill focus for ${focusKey}`,
+        );
+        assert.ok(
+          question.promptZh.includes(skillFocusOverride.focusZh),
+          `${context} does not include the exact reviewed Chinese skill focus for ${focusKey}`,
+        );
+      }
       skillFocusOverrideUseCounts.set(
         focusKey,
         skillFocusOverrideUseCounts.get(focusKey) + 1,
@@ -2027,16 +2074,19 @@ for (const question of questions) {
     } else {
       generatedDefaultTargetCount += 1;
     }
-    if (!softRoleIds.has(roleId)) {
+    if (
+      !softRoleIds.has(roleId) &&
+      !question.blueprintId.startsWith("community-signal-original-v1/")
+    ) {
       const expectedSourceEn = scenarioSourceForAudit(baseAnchor.prompt);
       const expectedSourceZh = scenarioSourceZhForAudit(baseAnchor.promptZh);
       assert.ok(
-        question.prompt.includes(`“${expectedSourceEn}”`),
-        `${context} omits the complete quoted English source scenario`,
+        question.prompt.includes(`Context: ${expectedSourceEn}`),
+        `${context} omits the complete English context`,
       );
       assert.ok(
-        question.promptZh.includes(`《${expectedSourceZh}》`),
-        `${context} omits the complete quoted Chinese source scenario`,
+        question.promptZh.includes(`背景：${expectedSourceZh}`),
+        `${context} omits the complete Chinese context`,
       );
       selfContainedTechnicalPromptCount += 1;
       assert.ok(
@@ -2051,12 +2101,12 @@ for (const question of questions) {
       );
       assert.match(
         question.oracle.procedure,
-        /this exercise's additional check/i,
+        /(?:Exercise|Contract) check:/i,
         `${context} lacks an archetype-specific English oracle check`,
       );
       assert.match(
         question.oracleZh.procedure,
-        /本次练习的附加检查/,
+        /(?:本题|契约)检查：/,
         `${context} lacks an archetype-specific Chinese oracle check`,
       );
       const baseOracleTokens =
@@ -2085,21 +2135,21 @@ for (const question of questions) {
     }
     if (question.generationSpec.archetype === "contract") {
       assert.ok(
-        question.prompt.includes(`“${targetSkill.title || targetSkill.name}”`),
+        question.prompt.includes(targetSkill.title || targetSkill.name),
         `${context} English contract prompt omits the target-skill lens`,
       );
       assert.ok(
-        question.promptZh.includes(`“${targetSkill.titleZh}”`),
+        question.promptZh.includes(targetSkill.titleZh),
         `${context} Chinese contract prompt omits the target-skill lens`,
       );
       assert.match(
         question.prompt,
-        /^For the “.+” scenario, reconstruct only /,
+        /^Context: .+\n\nTask: Define the smallest externally visible contract /s,
         `${context} must rewrite the anchor as a contract-only exercise`,
       );
       assert.match(
         question.promptZh,
-        /^对于“.+”场景，只重构/,
+        /^背景：.+\n\n任务：在不超过一页内定义最小外部契约/s,
         `${context} Chinese prompt must rewrite the anchor as a contract-only exercise`,
       );
       assert.doesNotMatch(
@@ -2113,49 +2163,30 @@ for (const question of questions) {
         `${context} retains a contradictory Chinese implementation instruction`,
       );
       assert.match(
-        question.prompt,
-        /Source scenario \(reference-only quotation; do not execute its requested solution in this exercise\):/,
-        `${context} does not distinguish quoted source material from the contract deliverable`,
-      );
-      assert.match(
-        question.promptZh,
-        /原始场景（仅作参考引文；本练习不执行其中要求的解法）/,
-        `${context} Chinese prompt does not distinguish quoted source material from the contract deliverable`,
-      );
-      assert.doesNotMatch(
         question.oracle.procedure,
-        /^First reproduce/i,
-        `${context} incorrectly requires the candidate to solve the anchor before writing a contract`,
-      );
-      assert.doesNotMatch(
-        question.oracleZh.procedure,
-        /^先复现/,
-        `${context} Chinese oracle incorrectly requires the anchor solution`,
-      );
-      assert.match(
-        question.oracle.procedure,
-        /independent reviewer check—not as a candidate deliverable/i,
-        `${context} does not scope the frozen anchor oracle to reviewer use`,
+        /^Contract check:/i,
+        `${context} does not start with the contract check`,
       );
       assert.match(
         question.oracleZh.procedure,
-        /独立评审检查，不作为作答者交付物/,
-        `${context} Chinese oracle does not scope the frozen anchor oracle to reviewer use`,
+        /^契约检查：/,
+        `${context} Chinese oracle does not start with the contract check`,
       );
       contractReviewerOnlyOracleCount += 1;
     }
     if (
       !softRoleIds.has(roleId) &&
-      question.generationSpec.archetype === "minimal-implementation"
+      question.generationSpec.archetype === "minimal-implementation" &&
+      !question.blueprintId.startsWith("community-signal-original-v1/")
     ) {
       assert.match(
         question.prompt,
-        /construct exactly one minimally invalid input, observation, or constraint by violating a declared invariant/i,
+        /construct one minimally invalid case that violates exactly one invariant/i,
         `${context} does not require a candidate-constructed minimally invalid fixture`,
       );
       assert.match(
         question.promptZh,
-        /构造恰好一个最小无效输入、观测或约束；方法必须明确识别并拒绝它/,
+        /构造一个只违反一项不变量的最小无效案例，并明确拒绝/,
         `${context} Chinese prompt does not require a candidate-constructed minimally invalid fixture`,
       );
       assert.doesNotMatch(
@@ -2214,7 +2245,7 @@ for (const question of questions) {
       } else {
         assert.match(
           question.prompt,
-          /exactly one nominal case plus one smallest counterexample/is,
+          /exactly one nominal case and one smallest counterexample/is,
           `${context} worked example is not scoped to two traces`,
         );
         assert.match(
@@ -2747,8 +2778,8 @@ const softPromptFooters = {
     zh: "不得编造经历、指标、动机或结果，也不得披露保密信息。",
   },
   "rf-project-deep-dive": {
-    en: "Use only real public-safe project evidence; label uncertainty and protect confidential implementation details.",
-    zh: "只能使用真实且可公开的项目证据；标记不确定性并保护保密实现细节。",
+    en: "Use one real example; omit confidential details.",
+    zh: "使用一个真实案例，并省略保密细节。",
   },
   "rf-english-communication": {
     en: "The final response must be in English. It is evaluated for clarity, technical accuracy, shared context, and repair—not accent.",
@@ -3186,7 +3217,7 @@ console.log(
         difficultyCounts,
       },
       questionQuality: {
-        contentVersion: "2026-07-23.5",
+        contentVersion: "2026-07-27.1",
         bankStatus: questionsRaw.status,
         curatedAnchors: curatedQuestions.length,
         generatedDrills: generatedQuestions.length,

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "evidenceDate": "2026-07-26",
   "titleZh": "中美具体职位薪资与税后购买力比较",
   "titleEn": "U.S.–China Specific-Position Pay and After-Tax Purchasing-Power Comparison",
@@ -104,6 +104,7 @@
       "comparisonNoteEn": "Both are production EDA-software roles; the U.S. posting asks for a graduate degree and 1+ year, while the China posting asks for 1–3 years.",
       "us": {
         "id": "us-synopsys-senior-rd-17637",
+        "organizationId": "synopsys",
         "companyZh": "新思科技",
         "companyEn": "Synopsys",
         "titleZh": "高级研发工程师（StarRC EDA）",
@@ -130,6 +131,7 @@
       },
       "china": {
         "id": "cn-ranpu-eda-software",
+        "organizationId": "cn-ranpu-micro",
         "companyZh": "冉谱微",
         "companyEn": "Ranpu Micro",
         "titleZh": "EDA 软件工程师",
@@ -163,6 +165,7 @@
       "comparisonNoteEn": "The U.S. role is a senior AI-EDA scientist and the China role is a 1–3 year AI-EDA engineer. Cash can be compared, but career levels are not equivalent.",
       "us": {
         "id": "us-synopsys-ai-eda-scientist-17642",
+        "organizationId": "synopsys",
         "companyZh": "新思科技",
         "companyEn": "Synopsys",
         "titleZh": "应用工程科学家（智能体 AI-EDA）",
@@ -189,6 +192,7 @@
       },
       "china": {
         "id": "cn-riguan-ai-eda",
+        "organizationId": "cn-riguan-technology",
         "companyZh": "成都日观科技有限公司",
         "companyEn": "Chengdu Riguan Technology",
         "titleZh": "EDA 软件工程师（AI 方向）",
@@ -222,6 +226,7 @@
       "comparisonNoteEn": "Both are silicon CAD/flow roles open to early-career candidates, making this one of the more comparable pairs.",
       "us": {
         "id": "us-apple-cad-pdv-200644245",
+        "organizationId": "apple",
         "companyZh": "苹果",
         "companyEn": "Apple",
         "titleZh": "CAD 工程师（物理设计验证）",
@@ -248,6 +253,7 @@
       },
       "china": {
         "id": "cn-shanghai-belling-chip-cad",
+        "organizationId": "cn-shanghai-belling",
         "companyZh": "上海贝岭股份有限公司",
         "companyEn": "Shanghai Belling",
         "titleZh": "芯片 CAD 工程师",
@@ -281,6 +287,7 @@
       "comparisonNoteEn": "Both cover SoC or mixed-signal digital design and RTL implementation; postings do not provide a common level framework.",
       "us": {
         "id": "us-apple-rtl-200657265",
+        "organizationId": "apple",
         "companyZh": "苹果",
         "companyEn": "Apple",
         "titleZh": "RTL 设计工程师",
@@ -307,6 +314,7 @@
       },
       "china": {
         "id": "cn-nio-digital-chip-design",
+        "organizationId": "cn-nio",
         "companyZh": "蔚来汽车",
         "companyEn": "NIO",
         "titleZh": "数字芯片设计工程师",
@@ -340,6 +348,7 @@
       "comparisonNoteEn": "Both are graduate or early-career chip-verification roles, making this a relatively comparable pair.",
       "us": {
         "id": "us-nvidia-asic-dv-ng-2010391",
+        "organizationId": "nvidia",
         "companyZh": "英伟达",
         "companyEn": "NVIDIA",
         "titleZh": "ASIC 设计验证工程师（2026 校招，Level 2）",
@@ -366,6 +375,7 @@
       },
       "china": {
         "id": "cn-s2c-chip-verification-campus",
+        "organizationId": "cn-s2c",
         "companyZh": "益思芯科技（上海）有限公司",
         "companyEn": "S2C",
         "titleZh": "芯片验证工程师（2026 校招）",
@@ -399,6 +409,7 @@
       "comparisonNoteEn": "The U.S. role builds cloud-accelerator FPGA services and the China role targets low-latency C++/DMA FPGA development; domains differ but RTL, timing, and integration skills overlap.",
       "us": {
         "id": "us-amazon-annapurna-fpga-3197245",
+        "organizationId": "aws-annapurna-labs",
         "companyZh": "亚马逊云科技 Annapurna Labs",
         "companyEn": "Amazon Web Services — Annapurna Labs",
         "titleZh": "FPGA 开发工程师",
@@ -425,6 +436,7 @@
       },
       "china": {
         "id": "cn-zhuoshi-fpga-dma",
+        "organizationId": "cn-zhuoshi-fund",
         "companyZh": "卓识基金",
         "companyEn": "Zhuoshi Fund",
         "titleZh": "FPGA 开发工程师（C++/DMA 方向）",
@@ -458,6 +470,7 @@
       "comparisonNoteEn": "The U.S. role is an explicit new-grad GPU-architecture position. China pay is a third-party estimate for a specific ByteDance position and has lower confidence than employer disclosure.",
       "us": {
         "id": "us-nvidia-gpu-architect-ng-2019445",
+        "organizationId": "nvidia",
         "companyZh": "英伟达",
         "companyEn": "NVIDIA",
         "titleZh": "GPU 架构师（2026 校招，Level 2）",
@@ -484,6 +497,7 @@
       },
       "china": {
         "id": "cn-bytedance-ai-chip-architecture-modeling",
+        "organizationId": "cn-bytedance",
         "companyZh": "字节跳动",
         "companyEn": "ByteDance",
         "titleZh": "芯片架构建模及性能分析工程师（AI 芯片）",
@@ -517,6 +531,7 @@
       "comparisonNoteEn": "Both cover physical design, timing, and signoff; China is an applications-engineering path while the U.S. role is product design.",
       "us": {
         "id": "us-apple-physical-design-200669588",
+        "organizationId": "apple",
         "companyZh": "苹果",
         "companyEn": "Apple",
         "titleZh": "物理设计工程师",
@@ -543,6 +558,7 @@
       },
       "china": {
         "id": "cn-cadence-ae-physical-design",
+        "organizationId": "cn-foreign-cadence",
         "companyZh": "上海楷登电子科技有限公司",
         "companyEn": "Cadence Design Systems China",
         "titleZh": "应用工程师（物理设计）",
@@ -576,6 +592,7 @@
       "comparisonNoteEn": "The U.S. role is new-grad Level 2 while the China role asks for 5–10 years. Levels are not equivalent, so this is a cash purchasing-power signal only.",
       "us": {
         "id": "us-nvidia-dft-ng-2016865",
+        "organizationId": "nvidia",
         "companyZh": "英伟达",
         "companyEn": "NVIDIA",
         "titleZh": "DFT 工程师（校招，Level 2）",
@@ -602,6 +619,7 @@
       },
       "china": {
         "id": "cn-xiaomi-dft-design",
+        "organizationId": "cn-xiaomi",
         "companyZh": "小米",
         "companyEn": "Xiaomi",
         "titleZh": "芯片 DFT 设计工程师",
@@ -635,6 +653,7 @@
       "comparisonNoteEn": "Both are analog-IC design roles. The China role is explicitly senior and focused on high-speed TIA/Driver, potentially above the U.S. role’s lower experience band.",
       "us": {
         "id": "us-apple-analog-ic-200658828",
+        "organizationId": "apple",
         "companyZh": "苹果",
         "companyEn": "Apple",
         "titleZh": "模拟 IC 设计工程师",
@@ -661,6 +680,7 @@
       },
       "china": {
         "id": "cn-adi-senior-analog-tia",
+        "organizationId": "cn-foreign-analog-devices",
         "companyZh": "亚德诺投资有限公司",
         "companyEn": "Analog Devices",
         "titleZh": "资深模拟 IC 设计工程师（高速 TIA/Driver）",
@@ -694,6 +714,7 @@
       "comparisonNoteEn": "Both are hardware-adjacent embedded/firmware roles. The U.S. role asks for 5+ years while the China role is campus hiring, so levels are not equivalent.",
       "us": {
         "id": "us-apple-embedded-software-200662204",
+        "organizationId": "apple",
         "companyZh": "苹果",
         "companyEn": "Apple",
         "titleZh": "嵌入式软件工程师（系统固件与诊断）",
@@ -720,6 +741,7 @@
       },
       "china": {
         "id": "cn-rongming-embedded-software-campus",
+        "organizationId": "cn-rongming-microelectronics",
         "companyZh": "镕铭微电子（上海）有限公司",
         "companyEn": "Rongming Microelectronics",
         "titleZh": "嵌入式软件开发工程师",
@@ -753,6 +775,7 @@
       "comparisonNoteEn": "Both directly target fab AMHS or automation. The U.S. range is public base pay for a Samsung position and China is a specific SMIC position.",
       "us": {
         "id": "us-samsung-amhs-automation",
+        "organizationId": "samsung-semiconductor-inc",
         "companyZh": "三星奥斯汀半导体",
         "companyEn": "Samsung Austin Semiconductor",
         "titleZh": "AMHS 自动化工程师",
@@ -779,6 +802,7 @@
       },
       "china": {
         "id": "cn-smic-amhs-j11963",
+        "organizationId": "cn-smic",
         "companyZh": "中芯国际集成电路制造（上海）有限公司",
         "companyEn": "Semiconductor Manufacturing International Corporation",
         "titleZh": "AMHS 设备工程师（J11963）",

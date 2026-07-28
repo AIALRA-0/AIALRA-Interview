@@ -1,6 +1,6 @@
 # Coverage contract
 
-Evidence freeze: 2026-07-23
+Evidence freeze: 2026-07-27
 
 ## Employer universe
 
@@ -19,8 +19,8 @@ local integrated-circuit platforms, open-source communities, foundries,
 equipment/material suppliers, design services, system companies, automotive,
 and robotics.
 
-The v4 evidence freeze retains 799 organization-market nodes: 360 in the
-U.S.-first universe and 439 in the China-first universe. This is an
+The current evidence freeze retains 887 organization-market nodes: 360 in the
+U.S.-first universe and 527 in the China-first universe. This is an
 auditable coverage snapshot, not a mathematical claim that every legal entity,
 lab, team, or future startup in both markets has been enumerated. A new node is
 retained only when it has an independent identity, a plausible path to one of
@@ -34,7 +34,10 @@ covers central and local state-owned groups, private companies, research
 institutes, Chinese Academy of Sciences units, university laboratories,
 innovation platforms, semiconductor supply-chain organizations, aerospace,
 defense-adjacent engineering, energy, automotive, robotics, industrial
-software, and quantum technology. Regional operating entities may remain
+software, quantum technology, and 88 separately reviewed foreign-controlled
+China-market organizations across EDA/IP, chip design and manufacturing,
+equipment and metrology, test, electronic materials, automotive/industrial
+systems, and corporate research. Regional operating entities may remain
 separate only when the opportunity market or legal employer is meaningfully
 different.
 
@@ -46,7 +49,7 @@ the target and acquirer retain independent organization IDs, evidence, roles,
 bookmarks, and application records. Technology licenses must not be mislabeled
 as acquisitions.
 
-All 799 nodes require a distinct bilingual overview and a distinct bilingual
+All 887 nodes require a distinct bilingual overview and a distinct bilingual
 candidate-relevance statement. All visible organization types, categories,
 role signals, requirements, preparation actions, and opportunity forms pass
 through bilingual atomic presentation catalogs. An English-only organization

@@ -261,6 +261,7 @@ export type PositionCompensationBasis =
 
 export type SpecificPositionCompensation = {
   id: string;
+  organizationId: string;
   companyZh: string;
   companyEn: string;
   titleZh: string;
@@ -476,12 +477,21 @@ export type QuestionBankBootstrap = {
   indexUrl: string;
   indexSha256: string;
   shardSha256ById: Record<string, string>;
+  fallbackPackSha256ById: Record<string, string>;
 };
 
 export type QuestionBankShard = {
   schemaVersion: string;
   assetVersion: string;
   shardId: string;
+  questionCount: number;
+  questions: InterviewQuestion[];
+};
+
+export type QuestionBankFallbackPack = {
+  schemaVersion: string;
+  assetVersion: string;
+  packId: string;
   questionCount: number;
   questions: InterviewQuestion[];
 };

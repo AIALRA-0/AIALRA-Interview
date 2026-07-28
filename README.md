@@ -14,27 +14,28 @@ infer rejection causes or automatically reweight skills from sparse outcomes.
 
 ## Current snapshot
 
-Organization and question evidence snapshot: **2026-07-23**
+Organization and question evidence snapshot: **2026-07-27**
 
 Current-job and compensation evidence snapshot: **2026-07-26**
 
-- **799** organization-market nodes: **360** in the U.S.-first universe and
-  **439** in the China-first universe, spanning companies, state-owned groups,
+- **887** organization-market nodes: **360** in the U.S.-first universe and
+  **527** in the China-first universe, spanning companies, state-owned groups,
   research institutes, university laboratories, national laboratories,
   foundries, equipment and materials suppliers, startups, public agencies,
   standards bodies, and open-source ecosystems
 - Audited bilingual organization taxonomy: 3 opportunity-market roots, 20
   organization types, and 595 live category keys normalized into 528
   cross-market groups, then decomposed into 531 bilingual atomic filters. Of
-  the 799 organization names, 643 have reviewed
+  the 887 organization names, 731 have reviewed
   Chinese/English display pairs and 156 are explicitly English-only when no
   reviewed Chinese name is available
-- **302 / 302** China `company` nodes have a separate bilingual ownership
-  record and evidence entry. **88** are provisionally classified from an
+- **390 / 390** China `company` nodes have a separate bilingual ownership
+  record and evidence entry. **176** are provisionally classified from an
   explicit source tag; **214** remain honestly marked mixed or unknown until a
-  direct control source is added. The UI distinguishes **27** direct
+  direct control source is added. This includes **88** separately reviewed
+  foreign-controlled China-market nodes. The UI distinguishes **115** direct
   ownership-registry entries from **313** organization-context review sources
-- **15** normalized role families with **2,217** audited company-to-role edges
+- **15** normalized role families with **2,541** audited company-to-role edges
 - **12** technical role families with auditable U.S. BLS OEWS May 2025
   P25/P50/P75 wage benchmarks and separate China government recruitment-pay
   proxies; 3 cross-cutting capability families are explicitly not occupations
@@ -48,8 +49,8 @@ Current-job and compensation evidence snapshot: **2026-07-26**
   field-aligned anchor scenarios plus 1,890 progressively harder drills
   (nine per anchor), yielding 140 tasks per role family without pretending
   that every drill is an unrelated interview prompt
-- Question-bank content version **2026-07-23.5**; deterministic SHA-256
-  `0ab07ee28bb1c4221939f017ee8df755bcbf6ac1a3dd1df7473912def1b1eedf`
+- Question-bank content version **2026-07-27.1**; deterministic SHA-256
+  `b859f7b6abd50e95af3fe75b1c91d2fb84f97d9d0457dd7f357e8ab2427c9a18`
 - Persistent applications, bookmarks, skill progress, attempts, aggregate
   mastery statistics, and private candidate preferences
 
@@ -64,11 +65,12 @@ specific official job posting before applying.
 - Searchable bilingual US/China company and research-institute atlas
 - Canonical company → role → skill → prerequisite graph
 - Foundation-to-advanced Interview Dojo with provenance and review status
-- Complete side-by-side Chinese/English prompts, rubrics, failure patterns,
-  follow-ups, reference outlines, and observable completion oracles
-- Compact question index with on-demand static shards so the full bank does not
-  inflate the first page
-- Digest-verified, on-demand organization universe so all 799 profiles remain
+- Chinese-only, English-only, and side-by-side bilingual prompts, rubrics,
+  failure patterns, follow-ups, reference outlines, and observable completion
+  oracles
+- Compact question index with digest-verified on-demand shards, three automatic
+  retries, and 16 independently verified recovery packs
+- Digest-verified, on-demand organization universe so all 887 profiles remain
   available without serializing the full atlas into the initial HTML
 - Role-specific readiness estimates based on evidence, not fabricated
   acceptance probabilities

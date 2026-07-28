@@ -64,7 +64,30 @@ test("China ownership audit exactly covers every company node", async () => {
     Object.values(evidenceScopeCounts).reduce((sum, count) => sum + count, 0),
     ownership.statistics.evidenceEntries,
   );
-  assert.equal(ownership.statistics.evidenceEntries, 340);
+  assert.equal(
+    ownership.statistics.evidenceEntries,
+    ownership.records.reduce(
+      (count, record) => count + record.evidence.length,
+      0,
+    ),
+  );
+  const foreignRecords = ownership.records.filter((record) =>
+    record.organizationId.startsWith("cn-foreign-"),
+  );
+  assert.equal(foreignRecords.length, 88);
+  assert.ok(
+    foreignRecords.every(
+      (record) =>
+        record.ownershipClass === "foreign-controlled" &&
+        record.reviewStatus === "provisionally-audited" &&
+        record.sourceOwnershipTag,
+    ),
+  );
+  assert.equal(
+    new Set(foreignRecords.map((record) => record.evidence[0].url)).size,
+    foreignRecords.length,
+    "Every foreign-China organization must have its own official entry.",
+  );
   for (const record of ownership.records) {
     assert.ok(record.summaryZh.trim());
     assert.ok(record.summaryEn.trim());
@@ -76,6 +99,53 @@ test("China ownership audit exactly covers every company node", async () => {
       assert.equal(record.reviewStatus, "needs-direct-control-source");
     }
   }
+});
+
+test("foreign-company Chinese labels never use generated China suffixes or invented translations", async () => {
+  const expansion = await json("data/expansion-cn-candidates.json");
+  const foreignCompanies = expansion.filter((company) =>
+    company.id.startsWith("cn-foreign-"),
+  );
+  const englishOnlyIds = new Set([
+    "cn-foreign-abb",
+    "cn-foreign-altair",
+    "cn-foreign-amd",
+    "cn-foreign-ansys",
+    "cn-foreign-asm-international",
+    "cn-foreign-axcelis",
+    "cn-foreign-formfactor",
+    "cn-foreign-imagination",
+    "cn-foreign-jsr",
+    "cn-foreign-screen",
+    "cn-foreign-vat-group",
+  ]);
+
+  assert.equal(foreignCompanies.length, 88);
+  for (const company of foreignCompanies) {
+    assert.doesNotMatch(
+      company.nameZh || "",
+      /中国$/,
+      `${company.id} must not concatenate 中国 onto a brand name`,
+    );
+    if (englishOnlyIds.has(company.id)) {
+      assert.equal(
+        company.nameZh,
+        undefined,
+        `${company.id} must retain its official English brand in Chinese-only mode`,
+      );
+    }
+  }
+  assert.equal(
+    foreignCompanies.find((company) => company.id === "cn-foreign-ansys")
+      ?.nameEn,
+    "Ansys China",
+  );
+  assert.equal(
+    foreignCompanies.find(
+      (company) => company.id === "cn-foreign-analog-devices",
+    )?.nameZh,
+    "亚德诺半导体",
+  );
 });
 
 test("published organization asset and UI expose audited ownership safely", async () => {

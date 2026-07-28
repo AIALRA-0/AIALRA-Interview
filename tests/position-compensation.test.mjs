@@ -12,6 +12,12 @@ const asset = JSON.parse(
 const roleFamilies = JSON.parse(
   await readFile(new URL("data/role-families.json", root), "utf8"),
 );
+const organizationUniverse = JSON.parse(
+  await readFile(
+    new URL("public/organization-universe.json", root),
+    "utf8",
+  ),
+);
 
 const technicalRoleIds = [
   "rf-eda-rd",
@@ -101,7 +107,7 @@ function assertSpecificPosition(position, market, evidenceDate) {
 }
 
 test("specific-position compensation covers every technical role with independent evidence", () => {
-  assert.equal(asset.schemaVersion, "1.0.0");
+  assert.equal(asset.schemaVersion, "1.1.0");
   assert.equal(asset.evidenceDate, "2026-07-26");
   assert.match(asset.evidenceDate, /^\d{4}-\d{2}-\d{2}$/);
   assertNonEmpty(asset.titleZh, "titleZh");
@@ -110,6 +116,9 @@ test("specific-position compensation covers every technical role with independen
 
   const canonicalRoleIds = new Set(
     roleFamilies.roleFamilies.map((role) => role.id),
+  );
+  const canonicalOrganizationIds = new Set(
+    organizationUniverse.organizations.map((organization) => organization.id),
   );
   const roleIds = asset.comparisons.map((comparison) => comparison.roleFamilyId);
   assert.equal(new Set(roleIds).size, roleIds.length);
@@ -136,6 +145,14 @@ test("specific-position compensation covers every technical role with independen
       ["CN", comparison.china],
     ]) {
       assertSpecificPosition(position, market, asset.evidenceDate);
+      assertNonEmpty(
+        position.organizationId,
+        `${position.id}.organizationId`,
+      );
+      assert.ok(
+        canonicalOrganizationIds.has(position.organizationId),
+        `${position.id} references an unknown organization`,
+      );
       assert.ok(!positionIds.has(position.id), `reused position id ${position.id}`);
       assert.ok(
         !sourceUrls.has(position.sourceUrl),
