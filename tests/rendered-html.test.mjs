@@ -454,8 +454,12 @@ test("Dojo keeps every assessment field bilingual and renders a bounded page", a
   }
 
   assert.match(component, /useState<QuestionLanguageMode>\("bilingual"\)/);
-  assert.match(component, /id: "zh-first"/);
-  assert.match(component, /id: "en-first"/);
+  assert.match(component, /id: "zh"/);
+  assert.match(component, /id: "en"/);
+  assert.match(component, /纯中文 \/ Chinese only/);
+  assert.match(component, /English only \/ 纯英文/);
+  assert.match(component, /if \(mode === "zh"\) return copies\.filter/);
+  assert.match(component, /if \(mode === "en"\) return copies\.filter/);
   assert.match(component, /\[24, 48, 96\]\.map/);
   assert.match(component, /visibleQuestions\.map/);
   assert.match(component, /filteredQuestions\.slice\([\s\S]*questionPageSize/);
@@ -468,6 +472,8 @@ test("Dojo keeps every assessment field bilingual and renders a bounded page", a
   assert.match(component, /questionDetailState === "loading"/);
   assert.match(component, /questionDetailState === "error"/);
   assert.match(component, /重试 \/ Retry/);
+  assert.match(component, /for \(let attempt = 1; attempt <= 3/);
+  assert.match(component, /question-bank\/fallback-packs/);
   assert.match(component, /useState<InterviewQuestionSummary\[\]>\(\[\]\)/);
   assert.match(component, /validateQuestionBankIndex\(value, questionBank\)/);
   assert.match(component, /fetch\(indexUrl,[\s\S]*cache: "no-store"/);
@@ -718,6 +724,36 @@ test("question index and deterministic detail shards stay synchronized", async (
     }
   }
   assert.deepEqual(detailedIds, new Set(sourceById.keys()));
+
+  const actualFallbackPackNames = (
+    await readdir(new URL("public/question-bank/fallback-packs/", root))
+  )
+    .filter((name) => name.endsWith(".json"))
+    .sort();
+  assert.deepEqual(
+    actualFallbackPackNames,
+    manifest.fallbackPacks.map((pack) => `${pack.id}.json`).sort(),
+  );
+  const recoveredIds = new Set();
+  for (const pack of manifest.fallbackPacks) {
+    const packText = await readFile(
+      new URL(`public/question-bank/${pack.path}`, root),
+      "utf8",
+    );
+    const payload = JSON.parse(packText);
+    assert.equal(pack.sha256, sha256(packText));
+    assert.equal(pack.bytes, Buffer.byteLength(packText));
+    assert.equal(payload.assetVersion, manifest.assetVersion);
+    assert.equal(payload.packId, pack.id);
+    assert.equal(payload.questionCount, pack.questionCount);
+    for (const question of payload.questions) {
+      assert.equal(sha256(question.id).slice(0, 1), pack.id);
+      assert.deepEqual(question, publishedQuestionFor(sourceById.get(question.id)));
+      assert.ok(!recoveredIds.has(question.id));
+      recoveredIds.add(question.id);
+    }
+  }
+  assert.deepEqual(recoveredIds, new Set(sourceById.keys()));
   assert.ok(
     Math.max(...manifest.shards.map((shard) => shard.bytes)) <
       Buffer.byteLength(sourceText) * 0.1,

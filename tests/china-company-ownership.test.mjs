@@ -64,7 +64,30 @@ test("China ownership audit exactly covers every company node", async () => {
     Object.values(evidenceScopeCounts).reduce((sum, count) => sum + count, 0),
     ownership.statistics.evidenceEntries,
   );
-  assert.equal(ownership.statistics.evidenceEntries, 340);
+  assert.equal(
+    ownership.statistics.evidenceEntries,
+    ownership.records.reduce(
+      (count, record) => count + record.evidence.length,
+      0,
+    ),
+  );
+  const foreignRecords = ownership.records.filter((record) =>
+    record.organizationId.startsWith("cn-foreign-"),
+  );
+  assert.equal(foreignRecords.length, 88);
+  assert.ok(
+    foreignRecords.every(
+      (record) =>
+        record.ownershipClass === "foreign-controlled" &&
+        record.reviewStatus === "provisionally-audited" &&
+        record.sourceOwnershipTag,
+    ),
+  );
+  assert.equal(
+    new Set(foreignRecords.map((record) => record.evidence[0].url)).size,
+    foreignRecords.length,
+    "Every foreign-China organization must have its own official entry.",
+  );
   for (const record of ownership.records) {
     assert.ok(record.summaryZh.trim());
     assert.ok(record.summaryEn.trim());

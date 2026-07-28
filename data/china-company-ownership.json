@@ -1,10 +1,10 @@
 {
   "schemaVersion": "1.0.0",
-  "reviewedAt": "2026-07-24",
+  "reviewedAt": "2026-07-27",
   "scope": {
     "country": "China",
     "sourceCompanyType": "company",
-    "expectedOrganizationCount": 302,
+    "expectedOrganizationCount": 390,
     "sourceFiles": [
       "data/companies.cn.json",
       "data/expansion-cn-candidates.json"
@@ -46,7 +46,10 @@
         "minLength": 1
       },
       "sourceFile": {
-        "enum": ["data/companies.cn.json", "data/expansion-cn-candidates.json"]
+        "enum": [
+          "data/companies.cn.json",
+          "data/expansion-cn-candidates.json"
+        ]
       },
       "sourceCompanyType": {
         "const": "company"
@@ -66,7 +69,10 @@
         ]
       },
       "sourceOwnershipTag": {
-        "type": ["string", "null"]
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "summaryZh": {
         "type": "string",
@@ -77,7 +83,11 @@
         "minLength": 1
       },
       "confidence": {
-        "enum": ["high", "medium", "low"]
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ]
       },
       "classificationBasis": {
         "enum": [
@@ -86,7 +96,10 @@
         ]
       },
       "reviewStatus": {
-        "enum": ["provisionally-audited", "needs-direct-control-source"]
+        "enum": [
+          "provisionally-audited",
+          "needs-direct-control-source"
+        ]
       },
       "evidence": {
         "type": "array",
@@ -170,10 +183,10 @@
     }
   },
   "statistics": {
-    "total": 302,
+    "total": 390,
     "sourceCounts": {
       "data/companies.cn.json": 214,
-      "data/expansion-cn-candidates.json": 88
+      "data/expansion-cn-candidates.json": 176
     },
     "ownershipClassCounts": {
       "central-state-owned": 27,
@@ -184,22 +197,22 @@
       "state-invested": 3,
       "state-joint-venture": 1,
       "private": 18,
-      "foreign-controlled": 0,
+      "foreign-controlled": 88,
       "mixed-or-unknown": 214
     },
     "confidenceCounts": {
       "high": 27,
-      "medium": 61,
+      "medium": 149,
       "low": 214
     },
     "reviewStatusCounts": {
-      "provisionally-audited": 88,
+      "provisionally-audited": 176,
       "needs-direct-control-source": 214
     },
-    "recordsWithEvidence": 302,
-    "evidenceEntries": 340,
+    "recordsWithEvidence": 390,
+    "evidenceEntries": 428,
     "evidenceScopeCounts": {
-      "direct-ownership-registry": 27,
+      "direct-ownership-registry": 115,
       "organization-record-context": 313
     }
   },
@@ -3327,6 +3340,2294 @@
           "evidenceScope": "organization-record-context",
           "noteZh": "该来源确认组织身份或业务背景，但不单独证明最终控制权。",
           "noteEn": "This source confirms the organization or its business context but does not independently establish ultimate control."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-abb",
+      "nameZh": "ABB中国",
+      "nameEn": "ABB China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "ABB中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "ABB China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "ABB中国官方在华机构或招聘入口",
+          "titleEn": "ABB China — official China presence or careers",
+          "url": "https://careers.abb/global/en",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-advantest",
+      "nameZh": "爱德万测试中国",
+      "nameEn": "Advantest China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "爱德万测试中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Advantest China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "爱德万测试中国官方在华机构或招聘入口",
+          "titleEn": "Advantest China — official China presence or careers",
+          "url": "https://www.advantest.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-air-liquide",
+      "nameZh": "液化空气中国",
+      "nameEn": "Air Liquide China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "液化空气中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Air Liquide China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "液化空气中国官方在华机构或招聘入口",
+          "titleEn": "Air Liquide China — official China presence or careers",
+          "url": "https://www.airliquide.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-air-products",
+      "nameZh": "空气产品公司中国",
+      "nameEn": "Air Products China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "空气产品公司中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Air Products China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "空气产品公司中国官方在华机构或招聘入口",
+          "titleEn": "Air Products China — official China presence or careers",
+          "url": "https://www.airproducts.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-altair",
+      "nameZh": "澳汰尔工程软件中国",
+      "nameEn": "Altair China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "澳汰尔工程软件中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Altair China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "澳汰尔工程软件中国官方在华机构或招聘入口",
+          "titleEn": "Altair China — official China presence or careers",
+          "url": "https://altair.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-amd",
+      "nameZh": "超威半导体中国",
+      "nameEn": "AMD China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "超威半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "AMD China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "超威半导体中国官方在华机构或招聘入口",
+          "titleEn": "AMD China — official China presence or careers",
+          "url": "https://careers.amd.com/careers-home/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-analog-devices",
+      "nameZh": "亚德诺半导体中国",
+      "nameEn": "Analog Devices China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "亚德诺半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Analog Devices China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "亚德诺半导体中国官方在华机构或招聘入口",
+          "titleEn": "Analog Devices China — official China presence or careers",
+          "url": "https://www.analog.com/en/about-adi/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-ansys",
+      "nameZh": "安世亚太中国",
+      "nameEn": "Ansys China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "安世亚太中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Ansys China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "安世亚太中国官方在华机构或招聘入口",
+          "titleEn": "Ansys China — official China presence or careers",
+          "url": "https://careers.ansys.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-apple",
+      "nameZh": "苹果中国",
+      "nameEn": "Apple China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "苹果中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Apple China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "苹果中国官方在华机构或招聘入口",
+          "titleEn": "Apple China — official China presence or careers",
+          "url": "https://jobs.apple.com/en-us/search?location=china-CHNC",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-applied-materials",
+      "nameZh": "应用材料中国",
+      "nameEn": "Applied Materials China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "应用材料中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Applied Materials China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "应用材料中国官方在华机构或招聘入口",
+          "titleEn": "Applied Materials China — official China presence or careers",
+          "url": "https://careers.appliedmaterials.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-aptiv",
+      "nameZh": "安波福中国",
+      "nameEn": "Aptiv China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "安波福中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Aptiv China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "安波福中国官方在华机构或招聘入口",
+          "titleEn": "Aptiv China — official China presence or careers",
+          "url": "https://www.aptiv.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-asm-international",
+      "nameZh": "ASM中国",
+      "nameEn": "ASM International China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "ASM中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "ASM International China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "ASM中国官方在华机构或招聘入口",
+          "titleEn": "ASM International China — official China presence or careers",
+          "url": "https://www.asm.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-asml",
+      "nameZh": "阿斯麦中国",
+      "nameEn": "ASML China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "阿斯麦中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "ASML China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "阿斯麦中国官方在华机构或招聘入口",
+          "titleEn": "ASML China — official China presence or careers",
+          "url": "https://www.asml.com/en/careers/working-at-asml/china",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-axcelis",
+      "nameZh": "Axcelis中国",
+      "nameEn": "Axcelis Technologies China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "Axcelis中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Axcelis Technologies China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "Axcelis中国官方在华机构或招聘入口",
+          "titleEn": "Axcelis Technologies China — official China presence or careers",
+          "url": "https://www.axcelis.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-basf",
+      "nameZh": "巴斯夫中国",
+      "nameEn": "BASF China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "巴斯夫中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "BASF China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "巴斯夫中国官方在华机构或招聘入口",
+          "titleEn": "BASF China — official China presence or careers",
+          "url": "https://www.basf.com/global/en/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-bosch",
+      "nameZh": "博世中国",
+      "nameEn": "Bosch China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "博世中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Bosch China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "博世中国官方在华机构或招聘入口",
+          "titleEn": "Bosch China — official China presence or careers",
+          "url": "https://www.bosch.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-broadcom",
+      "nameZh": "博通中国",
+      "nameEn": "Broadcom China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "博通中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Broadcom China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "博通中国官方在华机构或招聘入口",
+          "titleEn": "Broadcom China — official China presence or careers",
+          "url": "https://www.broadcom.com/company/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-brooks-automation",
+      "nameZh": "布鲁克斯自动化中国",
+      "nameEn": "Brooks Automation China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "布鲁克斯自动化中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Brooks Automation China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "布鲁克斯自动化中国官方在华机构或招聘入口",
+          "titleEn": "Brooks Automation China — official China presence or careers",
+          "url": "https://www.brooks.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-cadence",
+      "nameZh": "楷登电子中国",
+      "nameEn": "Cadence China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "楷登电子中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Cadence China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "楷登电子中国官方在华机构或招聘入口",
+          "titleEn": "Cadence China — official China presence or careers",
+          "url": "https://www.cadence.com/zh_CN/home/company/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-canon",
+      "nameZh": "佳能中国",
+      "nameEn": "Canon China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "佳能中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Canon China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "佳能中国官方在华机构或招聘入口",
+          "titleEn": "Canon China — official China presence or careers",
+          "url": "https://global.canon/en/employ/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-chroma",
+      "nameZh": "致茂电子中国",
+      "nameEn": "Chroma ATE China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "致茂电子中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Chroma ATE China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "致茂电子中国官方在华机构或招聘入口",
+          "titleEn": "Chroma ATE China — official China presence or careers",
+          "url": "https://www.chromaate.com/en/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-cohu",
+      "nameZh": "科休中国",
+      "nameEn": "Cohu China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "科休中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Cohu China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "科休中国官方在华机构或招聘入口",
+          "titleEn": "Cohu China — official China presence or careers",
+          "url": "https://www.cohu.com/company/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-continental",
+      "nameZh": "大陆集团中国",
+      "nameEn": "Continental China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "大陆集团中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Continental China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "大陆集团中国官方在华机构或招聘入口",
+          "titleEn": "Continental China — official China presence or careers",
+          "url": "https://www.continental.com/en/career/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-dassault-systemes",
+      "nameZh": "达索系统中国",
+      "nameEn": "Dassault Systèmes China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "达索系统中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Dassault Systèmes China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "达索系统中国官方在华机构或招聘入口",
+          "titleEn": "Dassault Systèmes China — official China presence or careers",
+          "url": "https://careers.3ds.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-dupont-electronics",
+      "nameZh": "杜邦电子与工业中国",
+      "nameEn": "DuPont Electronics & Industrial China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "杜邦电子与工业中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "DuPont Electronics & Industrial China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "杜邦电子与工业中国官方在华机构或招聘入口",
+          "titleEn": "DuPont Electronics & Industrial China — official China presence or careers",
+          "url": "https://careers.dupont.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-edwards",
+      "nameZh": "爱德华真空中国",
+      "nameEn": "Edwards Vacuum China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "爱德华真空中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Edwards Vacuum China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "爱德华真空中国官方在华机构或招聘入口",
+          "titleEn": "Edwards Vacuum China — official China presence or careers",
+          "url": "https://www.edwardsvacuum.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-enabling-technologies",
+      "nameZh": "泰瑞达机器人中国",
+      "nameEn": "Teradyne Robotics China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "泰瑞达机器人中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Teradyne Robotics China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "泰瑞达机器人中国官方在华机构或招聘入口",
+          "titleEn": "Teradyne Robotics China — official China presence or careers",
+          "url": "https://www.teradyne.com/robotics/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-entegris",
+      "nameZh": "英特格中国",
+      "nameEn": "Entegris China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "英特格中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Entegris China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "英特格中国官方在华机构或招聘入口",
+          "titleEn": "Entegris China — official China presence or careers",
+          "url": "https://www.entegris.com/en/home/about-us/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-ericsson",
+      "nameZh": "爱立信中国",
+      "nameEn": "Ericsson China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "爱立信中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Ericsson China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "爱立信中国官方在华机构或招聘入口",
+          "titleEn": "Ericsson China — official China presence or careers",
+          "url": "https://www.ericsson.com/en/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-formfactor",
+      "nameZh": "FormFactor中国",
+      "nameEn": "FormFactor China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "FormFactor中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "FormFactor China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "FormFactor中国官方在华机构或招聘入口",
+          "titleEn": "FormFactor China — official China presence or careers",
+          "url": "https://www.formfactor.com/company/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-fujifilm-electronic-materials",
+      "nameZh": "富士胶片电子材料中国",
+      "nameEn": "FUJIFILM Electronic Materials China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "富士胶片电子材料中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "FUJIFILM Electronic Materials China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "富士胶片电子材料中国官方在华机构或招聘入口",
+          "titleEn": "FUJIFILM Electronic Materials China — official China presence or careers",
+          "url": "https://careers.fujifilm.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-globalwafers",
+      "nameZh": "环球晶圆中国",
+      "nameEn": "GlobalWafers China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "环球晶圆中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "GlobalWafers China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "环球晶圆中国官方在华机构或招聘入口",
+          "titleEn": "GlobalWafers China — official China presence or careers",
+          "url": "https://www.sas-globalwafers.com/en/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-he-jian",
+      "nameZh": "和舰芯片制造",
+      "nameEn": "HeJian Technology China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "和舰芯片制造通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "HeJian Technology China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "和舰芯片制造官方在华机构或招聘入口",
+          "titleEn": "HeJian Technology China — official China presence or careers",
+          "url": "https://www.hjtc.com.cn/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-hitachi-high-tech",
+      "nameZh": "日立高新技术中国",
+      "nameEn": "Hitachi High-Tech China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "日立高新技术中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Hitachi High-Tech China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "日立高新技术中国官方在华机构或招聘入口",
+          "titleEn": "Hitachi High-Tech China — official China presence or careers",
+          "url": "https://www.hitachi-hightech.com/global/en/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-honeywell",
+      "nameZh": "霍尼韦尔中国",
+      "nameEn": "Honeywell China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "霍尼韦尔中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Honeywell China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "霍尼韦尔中国官方在华机构或招聘入口",
+          "titleEn": "Honeywell China — official China presence or careers",
+          "url": "https://careers.honeywell.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-horiba",
+      "nameZh": "堀场中国",
+      "nameEn": "HORIBA China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "堀场中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "HORIBA China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "堀场中国官方在华机构或招聘入口",
+          "titleEn": "HORIBA China — official China presence or careers",
+          "url": "https://www.horiba.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-imagination",
+      "nameZh": "Imagination中国",
+      "nameEn": "Imagination Technologies China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "Imagination中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Imagination Technologies China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "Imagination中国官方在华机构或招聘入口",
+          "titleEn": "Imagination Technologies China — official China presence or careers",
+          "url": "https://careers.imaginationtech.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-infineon",
+      "nameZh": "英飞凌科技中国",
+      "nameEn": "Infineon Technologies China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "英飞凌科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Infineon Technologies China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "英飞凌科技中国官方在华机构或招聘入口",
+          "titleEn": "Infineon Technologies China — official China presence or careers",
+          "url": "https://www.infineon.com/cms/en/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-intel",
+      "nameZh": "英特尔中国",
+      "nameEn": "Intel China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "英特尔中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Intel China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "英特尔中国官方在华机构或招聘入口",
+          "titleEn": "Intel China — official China presence or careers",
+          "url": "https://jobs.intel.com/en/location/china-jobs/599/1814991/2",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-jeol",
+      "nameZh": "日本电子中国",
+      "nameEn": "JEOL China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "日本电子中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "JEOL China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "日本电子中国官方在华机构或招聘入口",
+          "titleEn": "JEOL China — official China presence or careers",
+          "url": "https://www.jeol.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-jsr",
+      "nameZh": "JSR中国",
+      "nameEn": "JSR China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "JSR中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "JSR China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "JSR中国官方在华机构或招聘入口",
+          "titleEn": "JSR China — official China presence or careers",
+          "url": "https://www.jsr.co.jp/jsr_e/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-keysight",
+      "nameZh": "是德科技中国",
+      "nameEn": "Keysight Technologies China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "是德科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Keysight Technologies China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "是德科技中国官方在华机构或招聘入口",
+          "titleEn": "Keysight Technologies China — official China presence or careers",
+          "url": "https://jobs.keysight.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-kla",
+      "nameZh": "科磊中国",
+      "nameEn": "KLA China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "科磊中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "KLA China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "科磊中国官方在华机构或招聘入口",
+          "titleEn": "KLA China — official China presence or careers",
+          "url": "https://www.kla.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-lam-research",
+      "nameZh": "泛林集团中国",
+      "nameEn": "Lam Research China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "泛林集团中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Lam Research China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "泛林集团中国官方在华机构或招聘入口",
+          "titleEn": "Lam Research China — official China presence or careers",
+          "url": "https://www.lamresearch.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-linde",
+      "nameZh": "林德中国",
+      "nameEn": "Linde China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "林德中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Linde China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "林德中国官方在华机构或招聘入口",
+          "titleEn": "Linde China — official China presence or careers",
+          "url": "https://www.linde.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-marvell",
+      "nameZh": "迈威尔科技中国",
+      "nameEn": "Marvell Technology China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "迈威尔科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Marvell Technology China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "迈威尔科技中国官方在华机构或招聘入口",
+          "titleEn": "Marvell Technology China — official China presence or careers",
+          "url": "https://www.marvell.com/company/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-mathworks",
+      "nameZh": "迈斯沃克中国",
+      "nameEn": "MathWorks China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "迈斯沃克中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "MathWorks China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "迈斯沃克中国官方在华机构或招聘入口",
+          "titleEn": "MathWorks China — official China presence or careers",
+          "url": "https://www.mathworks.com/company/jobs/opportunities/locations/china.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-mediatek",
+      "nameZh": "联发科技中国",
+      "nameEn": "MediaTek China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "联发科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "MediaTek China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "联发科技中国官方在华机构或招聘入口",
+          "titleEn": "MediaTek China — official China presence or careers",
+          "url": "https://www.mediatek.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-merck-electronics",
+      "nameZh": "默克电子科技中国",
+      "nameEn": "Merck Electronics China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "默克电子科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Merck Electronics China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "默克电子科技中国官方在华机构或招聘入口",
+          "titleEn": "Merck Electronics China — official China presence or careers",
+          "url": "https://www.merckgroup.com/en/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-microchip",
+      "nameZh": "微芯科技中国",
+      "nameEn": "Microchip Technology China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "微芯科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Microchip Technology China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "微芯科技中国官方在华机构或招聘入口",
+          "titleEn": "Microchip Technology China — official China presence or careers",
+          "url": "https://careers.microchip.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-micron",
+      "nameZh": "美光科技中国",
+      "nameEn": "Micron Technology China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "美光科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Micron Technology China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "美光科技中国官方在华机构或招聘入口",
+          "titleEn": "Micron Technology China — official China presence or careers",
+          "url": "https://careers.micron.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-microsoft-research-asia",
+      "nameZh": "微软亚洲研究院",
+      "nameEn": "Microsoft Research Asia",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "微软亚洲研究院通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Microsoft Research Asia is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "微软亚洲研究院官方在华机构或招聘入口",
+          "titleEn": "Microsoft Research Asia — official China presence or careers",
+          "url": "https://www.microsoft.com/en-us/research/lab/microsoft-research-asia/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-mks",
+      "nameZh": "万机仪器中国",
+      "nameEn": "MKS Instruments China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "万机仪器中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "MKS Instruments China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "万机仪器中国官方在华机构或招聘入口",
+          "titleEn": "MKS Instruments China — official China presence or careers",
+          "url": "https://www.mks.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-national-instruments",
+      "nameZh": "恩艾仪器中国",
+      "nameEn": "NI China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "恩艾仪器中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "NI China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "恩艾仪器中国官方在华机构或招聘入口",
+          "titleEn": "NI China — official China presence or careers",
+          "url": "https://www.ni.com/en/about-ni/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-nikon-precision",
+      "nameZh": "尼康精机中国",
+      "nameEn": "Nikon Precision China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "尼康精机中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Nikon Precision China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "尼康精机中国官方在华机构或招聘入口",
+          "titleEn": "Nikon Precision China — official China presence or careers",
+          "url": "https://www.nikon.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-nokia",
+      "nameZh": "诺基亚中国",
+      "nameEn": "Nokia China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "诺基亚中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Nokia China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "诺基亚中国官方在华机构或招聘入口",
+          "titleEn": "Nokia China — official China presence or careers",
+          "url": "https://www.nokia.com/about-us/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-nvidia",
+      "nameZh": "英伟达中国",
+      "nameEn": "NVIDIA China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "英伟达中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "NVIDIA China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "英伟达中国官方在华机构或招聘入口",
+          "titleEn": "NVIDIA China — official China presence or careers",
+          "url": "https://www.nvidia.com/en-gb/contact/?section=locations",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-nxp",
+      "nameZh": "恩智浦半导体中国",
+      "nameEn": "NXP Semiconductors China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "恩智浦半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "NXP Semiconductors China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "恩智浦半导体中国官方在华机构或招聘入口",
+          "titleEn": "NXP Semiconductors China — official China presence or careers",
+          "url": "https://www.nxp.com/company/about-nxp/careers:CAREERS",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-onsemi",
+      "nameZh": "安森美中国",
+      "nameEn": "onsemi China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "安森美中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "onsemi China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "安森美中国官方在华机构或招聘入口",
+          "titleEn": "onsemi China — official China presence or careers",
+          "url": "https://www.onsemi.com/company/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-onto-innovation",
+      "nameZh": "昂图创新中国",
+      "nameEn": "Onto Innovation China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "昂图创新中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Onto Innovation China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "昂图创新中国官方在华机构或招聘入口",
+          "titleEn": "Onto Innovation China — official China presence or careers",
+          "url": "https://ontoinnovation.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-pfeiffer-vacuum",
+      "nameZh": "普发真空中国",
+      "nameEn": "Pfeiffer Vacuum China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "普发真空中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Pfeiffer Vacuum China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "普发真空中国官方在华机构或招聘入口",
+          "titleEn": "Pfeiffer Vacuum China — official China presence or careers",
+          "url": "https://www.pfeiffer-vacuum.com/global/en/career/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-qualcomm",
+      "nameZh": "高通中国",
+      "nameEn": "Qualcomm China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "高通中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Qualcomm China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "高通中国官方在华机构或招聘入口",
+          "titleEn": "Qualcomm China — official China presence or careers",
+          "url": "https://www.qualcomm.com/company/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-realtek",
+      "nameZh": "瑞昱半导体中国",
+      "nameEn": "Realtek Semiconductor China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "瑞昱半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Realtek Semiconductor China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "瑞昱半导体中国官方在华机构或招聘入口",
+          "titleEn": "Realtek Semiconductor China — official China presence or careers",
+          "url": "https://www.realtek.com/Employment",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-renesas",
+      "nameZh": "瑞萨电子中国",
+      "nameEn": "Renesas Electronics China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "瑞萨电子中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Renesas Electronics China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "瑞萨电子中国官方在华机构或招聘入口",
+          "titleEn": "Renesas Electronics China — official China presence or careers",
+          "url": "https://jobs.renesas.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-resonac",
+      "nameZh": "力森诺科中国",
+      "nameEn": "Resonac China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "力森诺科中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Resonac China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "力森诺科中国官方在华机构或招聘入口",
+          "titleEn": "Resonac China — official China presence or careers",
+          "url": "https://www.resonac.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-rohde-schwarz",
+      "nameZh": "罗德与施瓦茨中国",
+      "nameEn": "Rohde & Schwarz China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "罗德与施瓦茨中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Rohde & Schwarz China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "罗德与施瓦茨中国官方在华机构或招聘入口",
+          "titleEn": "Rohde & Schwarz China — official China presence or careers",
+          "url": "https://www.rohde-schwarz.com/career/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-rohm",
+      "nameZh": "罗姆半导体中国",
+      "nameEn": "ROHM Semiconductor China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "罗姆半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "ROHM Semiconductor China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "罗姆半导体中国官方在华机构或招聘入口",
+          "titleEn": "ROHM Semiconductor China — official China presence or careers",
+          "url": "https://www.rohm.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-samsung-semiconductor",
+      "nameZh": "三星半导体中国",
+      "nameEn": "Samsung Semiconductor China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "三星半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Samsung Semiconductor China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "三星半导体中国官方在华机构或招聘入口",
+          "titleEn": "Samsung Semiconductor China — official China presence or careers",
+          "url": "https://www.samsungcareers.com.cn/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-schneider-electric",
+      "nameZh": "施耐德电气中国",
+      "nameEn": "Schneider Electric China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "施耐德电气中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Schneider Electric China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "施耐德电气中国官方在华机构或招聘入口",
+          "titleEn": "Schneider Electric China — official China presence or careers",
+          "url": "https://www.se.com/ww/en/about-us/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-screen",
+      "nameZh": "斯库林半导体中国",
+      "nameEn": "SCREEN Semiconductor Solutions China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "斯库林半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "SCREEN Semiconductor Solutions China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "斯库林半导体中国官方在华机构或招聘入口",
+          "titleEn": "SCREEN Semiconductor Solutions China — official China presence or careers",
+          "url": "https://www.screen.co.jp/spe/en/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-shin-etsu",
+      "nameZh": "信越化学中国",
+      "nameEn": "Shin-Etsu Chemical China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "信越化学中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Shin-Etsu Chemical China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "信越化学中国官方在华机构或招聘入口",
+          "titleEn": "Shin-Etsu Chemical China — official China presence or careers",
+          "url": "https://www.shinetsu.co.jp/en/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-siemens-eda",
+      "nameZh": "西门子EDA中国",
+      "nameEn": "Siemens EDA China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "西门子EDA中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Siemens EDA China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "西门子EDA中国官方在华机构或招聘入口",
+          "titleEn": "Siemens EDA China — official China presence or careers",
+          "url": "https://jobs.siemens.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-siltronic",
+      "nameZh": "世创电子材料中国",
+      "nameEn": "Siltronic China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "世创电子材料中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Siltronic China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "世创电子材料中国官方在华机构或招聘入口",
+          "titleEn": "Siltronic China — official China presence or careers",
+          "url": "https://www.siltronic.com/en/career.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-sk-hynix",
+      "nameZh": "SK海力士中国",
+      "nameEn": "SK hynix China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "SK海力士中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "SK hynix China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "SK海力士中国官方在华机构或招聘入口",
+          "titleEn": "SK hynix China — official China presence or careers",
+          "url": "https://www.skhynix.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-stmicroelectronics",
+      "nameZh": "意法半导体中国",
+      "nameEn": "STMicroelectronics China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "意法半导体中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "STMicroelectronics China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "意法半导体中国官方在华机构或招聘入口",
+          "titleEn": "STMicroelectronics China — official China presence or careers",
+          "url": "https://www.st.com/content/st_com/en/about/careers.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-sumco",
+      "nameZh": "胜高中国",
+      "nameEn": "SUMCO China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "胜高中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "SUMCO China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "胜高中国官方在华机构或招聘入口",
+          "titleEn": "SUMCO China — official China presence or careers",
+          "url": "https://www.sumcosi.com/english/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-synopsys",
+      "nameZh": "新思科技中国",
+      "nameEn": "Synopsys China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "新思科技中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Synopsys China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "新思科技中国官方在华机构或招聘入口",
+          "titleEn": "Synopsys China — official China presence or careers",
+          "url": "https://careers.synopsys.com/china",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-tektronix",
+      "nameZh": "泰克中国",
+      "nameEn": "Tektronix China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "泰克中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Tektronix China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "泰克中国官方在华机构或招聘入口",
+          "titleEn": "Tektronix China — official China presence or careers",
+          "url": "https://careers.fortive.com/tektronix",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-teradyne",
+      "nameZh": "泰瑞达中国",
+      "nameEn": "Teradyne China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "泰瑞达中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Teradyne China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "泰瑞达中国官方在华机构或招聘入口",
+          "titleEn": "Teradyne China — official China presence or careers",
+          "url": "https://www.teradyne.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-tesla",
+      "nameZh": "特斯拉中国",
+      "nameEn": "Tesla China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "特斯拉中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Tesla China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "特斯拉中国官方在华机构或招聘入口",
+          "titleEn": "Tesla China — official China presence or careers",
+          "url": "https://www.tesla.com/careers/search/?country=CN",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-texas-instruments",
+      "nameZh": "德州仪器中国",
+      "nameEn": "Texas Instruments China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "德州仪器中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Texas Instruments China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "德州仪器中国官方在华机构或招聘入口",
+          "titleEn": "Texas Instruments China — official China presence or careers",
+          "url": "https://careers.ti.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-tok",
+      "nameZh": "东京应化中国",
+      "nameEn": "Tokyo Ohka Kogyo China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "东京应化中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Tokyo Ohka Kogyo China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "东京应化中国官方在华机构或招聘入口",
+          "titleEn": "Tokyo Ohka Kogyo China — official China presence or careers",
+          "url": "https://www.tok.co.jp/eng/recruit/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-tokyo-electron",
+      "nameZh": "东京电子中国",
+      "nameEn": "Tokyo Electron China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "东京电子中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Tokyo Electron China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "东京电子中国官方在华机构或招聘入口",
+          "titleEn": "Tokyo Electron China — official China presence or careers",
+          "url": "https://www.tel.com/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-toshiba-electronic",
+      "nameZh": "东芝电子元件及存储中国",
+      "nameEn": "Toshiba Electronic Devices & Storage China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "东芝电子元件及存储中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Toshiba Electronic Devices & Storage China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "东芝电子元件及存储中国官方在华机构或招聘入口",
+          "titleEn": "Toshiba Electronic Devices & Storage China — official China presence or careers",
+          "url": "https://toshiba.semicon-storage.com/ap-en/top.html",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-tsmc-nanjing",
+      "nameZh": "台积电南京",
+      "nameEn": "TSMC Nanjing",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "台积电南京通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "TSMC Nanjing is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "台积电南京官方在华机构或招聘入口",
+          "titleEn": "TSMC Nanjing — official China presence or careers",
+          "url": "https://careers.tsmc.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-vat-group",
+      "nameZh": "VAT阀门中国",
+      "nameEn": "VAT Group China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "VAT阀门中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "VAT Group China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "VAT阀门中国官方在华机构或招聘入口",
+          "titleEn": "VAT Group China — official China presence or careers",
+          "url": "https://www.vatgroup.com/careers",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-veeco",
+      "nameZh": "维易科中国",
+      "nameEn": "Veeco China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "维易科中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "Veeco China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "维易科中国官方在华机构或招聘入口",
+          "titleEn": "Veeco China — official China presence or careers",
+          "url": "https://www.veeco.com/company/careers/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
+        }
+      ]
+    },
+    {
+      "organizationId": "cn-foreign-zf",
+      "nameZh": "采埃孚中国",
+      "nameEn": "ZF China",
+      "sourceFile": "data/expansion-cn-candidates.json",
+      "sourceCompanyType": "company",
+      "ownershipClass": "foreign-controlled",
+      "sourceOwnershipTag": "official-parent-domain-China-presence",
+      "summaryZh": "采埃孚中国通过境外母公司官方域名中的在华机构、地点或招聘入口纳入本批次；本记录将其归入外资控制节点，并把具体法人层级留待岗位申请时按雇佣实体复核。",
+      "summaryEn": "ZF China is included through an official parent-domain China presence, location, or careers channel. This audit classifies the node as foreign-controlled while leaving the exact employing legal entity for requisition-level verification.",
+      "confidence": "medium",
+      "classificationBasis": "existing-explicit-ownership-category",
+      "reviewStatus": "provisionally-audited",
+      "evidence": [
+        {
+          "titleZh": "采埃孚中国官方在华机构或招聘入口",
+          "titleEn": "ZF China — official China presence or careers",
+          "url": "https://jobs.zf.com/",
+          "sourceType": "official-career-or-presence",
+          "observedAt": "2026-07-27",
+          "evidenceScope": "direct-ownership-registry",
+          "noteZh": "该境外母公司官方域名确认在华组织、地点或招聘入口；具体雇佣法人仍须按职位公告复核。",
+          "noteEn": "The foreign parent's official domain confirms a China organization, location, or careers channel; verify the exact employing entity in the requisition."
         }
       ]
     },

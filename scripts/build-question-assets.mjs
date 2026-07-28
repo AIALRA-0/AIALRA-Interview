@@ -7,7 +7,7 @@ const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const sourcePath = join(projectRoot, "data/questions.seed.json");
 const outputDir = join(projectRoot, "public/question-bank");
 const checkOnly = process.argv.includes("--check");
-const assetSchemaVersion = "2.0.0";
+const assetSchemaVersion = "2.1.0";
 const previewLength = 160;
 
 function sha256(value) {
@@ -97,6 +97,7 @@ async function buildExpectedFiles() {
 
   const ids = new Set();
   const shards = new Map();
+  const fallbackPacks = new Map();
   for (const question of source.questions) {
     if (!question?.id || typeof question.id !== "string") {
       throw new Error("Every question must have a string id");
@@ -106,9 +107,14 @@ async function buildExpectedFiles() {
     }
     ids.add(question.id);
     const shardId = shardIdFor(question.id);
+    const published = publishedQuestionFor(question);
     const entries = shards.get(shardId) || [];
-    entries.push(publishedQuestionFor(question));
+    entries.push(published);
     shards.set(shardId, entries);
+    const packId = shardId.slice(0, 1);
+    const packEntries = fallbackPacks.get(packId) || [];
+    packEntries.push(published);
+    fallbackPacks.set(packId, packEntries);
   }
 
   const sourceSha256 = sha256(sourceText);
@@ -152,6 +158,30 @@ async function buildExpectedFiles() {
     });
   }
 
+  const fallbackPackManifest = [];
+  for (const packId of [...fallbackPacks.keys()].sort()) {
+    const questions = fallbackPacks
+      .get(packId)
+      .slice()
+      .sort((a, b) => a.id.localeCompare(b.id));
+    const packContent = compactJson({
+      schemaVersion: assetSchemaVersion,
+      assetVersion,
+      packId,
+      questionCount: questions.length,
+      questions,
+    });
+    const path = `fallback-packs/${packId}.json`;
+    files.set(path, packContent);
+    fallbackPackManifest.push({
+      id: packId,
+      path,
+      questionCount: questions.length,
+      sha256: sha256(packContent),
+      bytes: Buffer.byteLength(packContent),
+    });
+  }
+
   const manifest = {
     schemaVersion: assetSchemaVersion,
     assetVersion,
@@ -170,6 +200,9 @@ async function buildExpectedFiles() {
     shardStrategy: "sha256(question.id)[0:2]",
     detailPathTemplate: "shards/{shardId}.json",
     shards: shardManifest,
+    fallbackPackStrategy: "sha256(question.id)[0:1]",
+    fallbackPackPathTemplate: "fallback-packs/{packId}.json",
+    fallbackPacks: fallbackPackManifest,
   };
   files.set("manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
 
@@ -180,8 +213,16 @@ async function buildExpectedFiles() {
       indexBytes: Buffer.byteLength(indexContent),
       shardBytes: shardManifest.reduce((total, shard) => total + shard.bytes, 0),
       maxShardBytes: Math.max(...shardManifest.map((shard) => shard.bytes)),
+      fallbackPackBytes: fallbackPackManifest.reduce(
+        (total, pack) => total + pack.bytes,
+        0,
+      ),
+      maxFallbackPackBytes: Math.max(
+        ...fallbackPackManifest.map((pack) => pack.bytes),
+      ),
       questionCount: source.questions.length,
       shardCount: shardManifest.length,
+      fallbackPackCount: fallbackPackManifest.length,
     },
   };
 }
@@ -250,5 +291,5 @@ console.log(
   `${checkOnly ? "Verified" : "Built"} ${metrics.questionCount} question summaries and ${metrics.shardCount} deterministic shards.`,
 );
 console.log(
-  `Source ${metrics.sourceBytes} B → initial index ${metrics.indexBytes} B (${ratio}%); detail shards ${metrics.shardBytes} B total, ${metrics.maxShardBytes} B max.`,
+  `Source ${metrics.sourceBytes} B → initial index ${metrics.indexBytes} B (${ratio}%); detail shards ${metrics.shardBytes} B total, ${metrics.maxShardBytes} B max; ${metrics.fallbackPackCount} recovery packs ${metrics.fallbackPackBytes} B total, ${metrics.maxFallbackPackBytes} B max.`,
 );

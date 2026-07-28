@@ -6,6 +6,7 @@
     "node": ">=22.15.0"
   },
   "scripts": {
+    "foreign-cn:sync": "node scripts/expand-foreign-cn-companies.mjs",
     "questions:generate": "node scripts/generate-question-bank.mjs",
     "questions:editorial-audit": "node scripts/audit-question-editorial.mjs",
     "questions:build": "node scripts/build-question-assets.mjs",

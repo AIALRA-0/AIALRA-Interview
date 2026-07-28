@@ -5,9 +5,9 @@ import { mappedRoleFamilyIds } from "../shared/role-matching.js";
 
 const root = new URL("../", import.meta.url);
 const checkOnly = process.argv.includes("--check");
-const assetVersion = "2026-07-24.1";
+const assetVersion = "2026-07-27.1";
 const schemaVersion = "1.0.0";
-const evidenceDate = "2026-07-23";
+const evidenceDate = "2026-07-27";
 const sourcePaths = [
   "data/companies.us.json",
   "data/expansion-us-candidates.json",

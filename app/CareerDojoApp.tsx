@@ -29,6 +29,7 @@ import type {
   PositionCompensationComparisonAsset,
   Profile,
   QuestionBankBootstrap,
+  QuestionBankFallbackPack,
   QuestionBankIndex,
   QuestionBankShard,
   QuestionOracle,
@@ -45,7 +46,7 @@ type ViewId =
   "mission" | "atlas" | "roles" | "dojo" | "applications" | "evidence";
 
 type AtlasLayout = "tree" | "cards";
-type QuestionLanguageMode = "bilingual" | "zh-first" | "en-first";
+type QuestionLanguageMode = "bilingual" | "zh" | "en";
 type QuestionIndexState = "loading" | "ready" | "error";
 type QuestionDetailState = "idle" | "loading" | "ready" | "error";
 type OrganizationIndexState = "loading" | "ready" | "error";
@@ -450,6 +451,15 @@ function bilingualLabel(
 ) {
   const label = catalog[value];
   return label ? `${label.zh} / ${label.en}` : value;
+}
+
+function questionCatalogLabel(
+  value: string,
+  catalog: Record<string, { zh: string; en: string }>,
+  mode: QuestionLanguageMode,
+) {
+  const label = catalog[value];
+  return label ? questionModeText(mode, label.zh, label.en) : value;
 }
 
 function regionOf(company: Company): "US" | "CN" | "Global" {
@@ -938,16 +948,54 @@ const languageModeOptions: Array<{
     description: "中英并列 / Chinese and English side by side",
   },
   {
-    id: "zh-first",
-    label: "中文优先 / Chinese first",
-    description: "中文在前，保留英文 / Chinese first, English retained",
+    id: "zh",
+    label: "纯中文 / Chinese only",
+    description: "只显示中文题目内容 / Show Chinese task content only",
   },
   {
-    id: "en-first",
-    label: "英文优先 / English first",
-    description: "英文在前，保留中文 / English first, Chinese retained",
+    id: "en",
+    label: "English only / 纯英文",
+    description: "Show English task content only / 只显示英文题目内容",
   },
 ];
+
+function questionModeText(
+  mode: QuestionLanguageMode,
+  zh: string,
+  en: string,
+) {
+  if (mode === "zh") return zh;
+  if (mode === "en") return en;
+  return `${zh} / ${en}`;
+}
+
+function questionLanguageCopies(
+  mode: QuestionLanguageMode,
+  zh: string | null | undefined,
+  en: string | null | undefined,
+) {
+  const copies = [
+    {
+      id: "zh",
+      label: "中",
+      panelLabel: "中文",
+      language: "zh-CN",
+      text: zh?.trim() || "中文版本待校订",
+      missing: !zh?.trim(),
+    },
+    {
+      id: "en",
+      label: "EN",
+      panelLabel: "EN",
+      language: "en",
+      text: en?.trim() || "English version pending editorial review.",
+      missing: !en?.trim(),
+    },
+  ];
+  if (mode === "zh") return copies.filter((copy) => copy.id === "zh");
+  if (mode === "en") return copies.filter((copy) => copy.id === "en");
+  return copies;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -982,6 +1030,13 @@ const questionShardKeys = new Set([
   "schemaVersion",
   "assetVersion",
   "shardId",
+  "questionCount",
+  "questions",
+]);
+const questionFallbackPackKeys = new Set([
+  "schemaVersion",
+  "assetVersion",
+  "packId",
   "questionCount",
   "questions",
 ]);
@@ -1402,6 +1457,84 @@ async function validateQuestionBankShard(
   return value as unknown as QuestionBankShard;
 }
 
+async function validateQuestionBankFallbackPack(
+  value: unknown,
+  expected: QuestionBankBootstrap,
+  expectedPackId: string,
+  index: QuestionBankIndex,
+): Promise<QuestionBankFallbackPack> {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, questionFallbackPackKeys) ||
+    value.schemaVersion !== expected.schemaVersion ||
+    value.assetVersion !== expected.assetVersion ||
+    value.packId !== expectedPackId ||
+    !Array.isArray(value.questions) ||
+    value.questionCount !== value.questions.length
+  ) {
+    throw new Error(
+      "备用题包版本或结构不匹配 / Recovery pack version or structure mismatch.",
+    );
+  }
+
+  const summaries = new Map(
+    index.questions.map((summary) => [summary.id, summary]),
+  );
+  const expectedIds = new Set(
+    index.questions
+      .filter((summary) => summary.shardId.startsWith(expectedPackId))
+      .map((summary) => summary.id),
+  );
+  if (
+    value.questions.length !== expectedIds.size ||
+    value.questions.length === 0
+  ) {
+    throw new Error(
+      "备用题包数量与索引不匹配 / Recovery pack count does not match the index.",
+    );
+  }
+
+  const seen = new Set<string>();
+  for (const candidate of value.questions) {
+    assertPublishedQuestion(candidate);
+    const summary = summaries.get(candidate.id);
+    const derivedPackId = (await sha256Hex(candidate.id)).slice(0, 1);
+    if (
+      !summary ||
+      !summary.shardId.startsWith(expectedPackId) ||
+      derivedPackId !== expectedPackId ||
+      seen.has(candidate.id) ||
+      !expectedIds.has(candidate.id) ||
+      candidate.title !== summary.title ||
+      candidate.titleZh !== summary.titleZh ||
+      !arraysEqual(candidate.roleFamilies, summary.roleFamilies) ||
+      !arraysEqual(candidate.skills, summary.skills) ||
+      candidate.level !== summary.level ||
+      candidate.difficulty !== summary.difficulty ||
+      candidate.type !== summary.type ||
+      candidate.estimatedMinutes !== summary.estimatedMinutes ||
+      candidate.status !== summary.status ||
+      candidate.contentVersion !== summary.contentVersion ||
+      candidate.blueprintId !== summary.blueprintId ||
+      previewText(candidate.prompt, index.previewLength) !==
+        summary.promptPreview ||
+      previewText(candidate.promptZh, index.previewLength) !==
+        summary.promptPreviewZh
+    ) {
+      throw new Error(
+        "备用题包与已验证摘要不一致 / Recovery pack does not match the verified index.",
+      );
+    }
+    seen.add(candidate.id);
+  }
+  if (seen.size !== expectedIds.size) {
+    throw new Error(
+      "备用题包缺少索引题目 / Recovery pack is missing indexed tasks.",
+    );
+  }
+  return value as unknown as QuestionBankFallbackPack;
+}
+
 function BilingualCopy({
   zh,
   en,
@@ -1413,23 +1546,7 @@ function BilingualCopy({
   mode: QuestionLanguageMode;
   className?: string;
 }) {
-  const copies = [
-    {
-      id: "zh",
-      label: "中",
-      language: "zh-CN",
-      text: zh?.trim() || "中文版本待校订 / Chinese version pending review",
-      missing: !zh?.trim(),
-    },
-    {
-      id: "en",
-      label: "EN",
-      language: "en",
-      text: en?.trim() || "English version pending editorial review.",
-      missing: !en?.trim(),
-    },
-  ];
-  if (mode === "en-first") copies.reverse();
+  const copies = questionLanguageCopies(mode, zh, en);
 
   return (
     <span className={`bilingual-copy mode-${mode} ${className}`.trim()}>
@@ -1476,17 +1593,13 @@ function StructuredQuestionPrompt({
   en: string;
   mode: QuestionLanguageMode;
 }) {
-  const copies = [
-    { id: "zh", label: "中文", language: "zh-CN", text: zh },
-    { id: "en", label: "EN", language: "en", text: en },
-  ];
-  if (mode === "en-first") copies.reverse();
+  const copies = questionLanguageCopies(mode, zh, en);
 
   return (
     <div className={`structured-question-prompt mode-${mode}`}>
       {copies.map((copy) => (
         <article className="prompt-language-panel" lang={copy.language} key={copy.id}>
-          <span className="prompt-language-label">{copy.label}</span>
+          <span className="prompt-language-label">{copy.panelLabel}</span>
           <div className="prompt-section-list">
             {copy.text
               .split(/\n{2,}/)
@@ -1574,15 +1687,15 @@ function BilingualOracle({
   }
 
   const fields = [
-    ["kind", "类型 / Kind"],
-    ["procedure", "验证步骤 / Procedure"],
-    ["acceptance", "通过标准 / Acceptance"],
+    ["kind", "类型", "Kind"],
+    ["procedure", "验证步骤", "Procedure"],
+    ["acceptance", "通过标准", "Acceptance"],
   ] as const;
   return (
     <dl className="oracle-copy oracle-details bilingual-oracle">
-      {fields.map(([field, label]) => (
+      {fields.map(([field, labelZh, labelEn]) => (
         <div key={field}>
-          <dt>{label}</dt>
+          <dt>{questionModeText(mode, labelZh, labelEn)}</dt>
           <dd>
             <BilingualCopy
               zh={oracleField(oracleZh, field)}
@@ -2070,6 +2183,9 @@ export function CareerDojoApp({
   const questionShardCacheRef = useRef(
     new Map<string, Promise<QuestionBankShard>>(),
   );
+  const questionFallbackPackCacheRef = useRef(
+    new Map<string, Promise<QuestionBankFallbackPack>>(),
+  );
   const questionLoadRequestRef = useRef(0);
   const mutationQueueRef = useRef<Promise<void>>(Promise.resolve());
   const effectiveProfile = useMemo(() => {
@@ -2162,6 +2278,7 @@ export function CareerDojoApp({
     questionIndexRef.current = null;
     questionDetailCacheRef.current.clear();
     questionShardCacheRef.current.clear();
+    questionFallbackPackCacheRef.current.clear();
 
     fetch(indexUrl, {
       cache: "no-store",
@@ -3081,36 +3198,119 @@ export function CareerDojoApp({
       }
       let shardPromise = questionShardCacheRef.current.get(question.shardId);
       if (!shardPromise) {
-        shardPromise = fetch(
-          `/question-bank/shards/${question.shardId}.json?v=${encodeURIComponent(
-            questionBank.assetVersion,
-          )}`,
-          {
-            cache: "no-store",
-            headers: { accept: "application/json" },
-          },
-        ).then(async (response) => {
-          if (!response.ok) {
-            throw new Error(
-              `详情分片返回 ${response.status} / Detail shard returned ${response.status}.`,
-            );
+        shardPromise = (async () => {
+          let primaryError: unknown = null;
+          for (let attempt = 1; attempt <= 3; attempt += 1) {
+            try {
+              const response = await fetch(
+                `/question-bank/shards/${question.shardId}.json?v=${encodeURIComponent(
+                  questionBank.assetVersion,
+                )}&attempt=${attempt}`,
+                {
+                  cache: "no-store",
+                  headers: { accept: "application/json" },
+                },
+              );
+              if (!response.ok) {
+                throw new Error(
+                  `详情分片返回 ${response.status} / Detail shard returned ${response.status}.`,
+                );
+              }
+              const value = await parseVerifiedJson(
+                response,
+                expectedShardSha256,
+                `题目分片 ${question.shardId} / Question shard ${question.shardId}`,
+              );
+              const payload = await validateQuestionBankShard(
+                value,
+                questionBank,
+                question.shardId,
+                verifiedIndex,
+              );
+              for (const detail of payload.questions) {
+                questionDetailCacheRef.current.set(detail.id, detail);
+              }
+              return payload;
+            } catch (error) {
+              primaryError = error;
+              if (attempt < 3) {
+                await new Promise((resolve) =>
+                  window.setTimeout(resolve, attempt * 180),
+                );
+              }
+            }
           }
-          const value = await parseVerifiedJson(
-            response,
-            expectedShardSha256,
-            `题目分片 ${question.shardId} / Question shard ${question.shardId}`,
-          );
-          const payload = await validateQuestionBankShard(
-            value,
-            questionBank,
-            question.shardId,
-            verifiedIndex,
-          );
-          for (const detail of payload.questions) {
-            questionDetailCacheRef.current.set(detail.id, detail);
+
+          const packId = question.shardId.slice(0, 1);
+          const expectedPackSha256 =
+            questionBank.fallbackPackSha256ById[packId];
+          if (!/^[0-9a-f]{64}$/.test(expectedPackSha256 || "")) {
+            throw primaryError instanceof Error
+              ? primaryError
+              : new Error(
+                  "题目详情主分片失败且备用摘要无效 / The detail shard failed and its recovery digest is invalid.",
+                );
           }
-          return payload;
-        });
+          let packPromise =
+            questionFallbackPackCacheRef.current.get(packId);
+          if (!packPromise) {
+            packPromise = fetch(
+              `/question-bank/fallback-packs/${packId}.json?v=${encodeURIComponent(
+                questionBank.assetVersion,
+              )}`,
+              {
+                cache: "no-store",
+                headers: { accept: "application/json" },
+              },
+            ).then(async (response) => {
+              if (!response.ok) {
+                throw new Error(
+                  `备用题包返回 ${response.status} / Recovery pack returned ${response.status}.`,
+                );
+              }
+              const value = await parseVerifiedJson(
+                response,
+                expectedPackSha256,
+                `备用题包 ${packId} / Recovery pack ${packId}`,
+              );
+              const payload = await validateQuestionBankFallbackPack(
+                value,
+                questionBank,
+                packId,
+                verifiedIndex,
+              );
+              for (const detail of payload.questions) {
+                questionDetailCacheRef.current.set(detail.id, detail);
+              }
+              return payload;
+            });
+            questionFallbackPackCacheRef.current.set(packId, packPromise);
+            packPromise.catch(() => {
+              if (
+                questionFallbackPackCacheRef.current.get(packId) ===
+                packPromise
+              ) {
+                questionFallbackPackCacheRef.current.delete(packId);
+              }
+            });
+          }
+          await packPromise;
+          const recovered = questionDetailCacheRef.current.get(question.id);
+          if (!recovered) {
+            throw primaryError instanceof Error
+              ? primaryError
+              : new Error(
+                  "主分片与备用题包均未找到题目 / Neither the detail shard nor recovery pack contains the task.",
+                );
+          }
+          return {
+            schemaVersion: questionBank.schemaVersion,
+            assetVersion: questionBank.assetVersion,
+            shardId: question.shardId,
+            questionCount: 1,
+            questions: [recovered],
+          };
+        })();
         questionShardCacheRef.current.set(question.shardId, shardPromise);
         shardPromise.catch(() => {
           if (
@@ -4347,13 +4547,18 @@ export function CareerDojoApp({
                   >
                     <strong>{filteredQuestions.length.toLocaleString()}</strong>
                     <span>
-                      道匹配任务 / matched tasks · 共 / total{" "}
-                      {questionBank.questionCount.toLocaleString()}
+                      {questionModeText(
+                        questionLanguageMode,
+                        `道匹配任务 · 共 ${questionBank.questionCount.toLocaleString()} 道`,
+                        `matched tasks · ${questionBank.questionCount.toLocaleString()} total`,
+                      )}
                     </span>
                     <small>
-                      当前显示 / showing {questionResultStart.toLocaleString()}–
-                      {questionResultEnd.toLocaleString()} · 第 / page{" "}
-                      {safeQuestionPage} / {questionPageCount}
+                      {questionModeText(
+                        questionLanguageMode,
+                        `当前显示 ${questionResultStart.toLocaleString()}–${questionResultEnd.toLocaleString()} · 第 ${safeQuestionPage}/${questionPageCount} 页`,
+                        `showing ${questionResultStart.toLocaleString()}–${questionResultEnd.toLocaleString()} · page ${safeQuestionPage}/${questionPageCount}`,
+                      )}
                     </small>
                   </div>
                   <label className="question-page-size">
@@ -4373,7 +4578,7 @@ export function CareerDojoApp({
                     </select>
                   </label>
                   <fieldset className="language-switcher">
-                    <legend>阅读顺序 / Reading mode</legend>
+                    <legend>显示语言 / Display language</legend>
                     <div className="segmented">
                       {languageModeOptions.map((option) => (
                         <button
@@ -4513,9 +4718,10 @@ export function CareerDojoApp({
                         >
                           <div className="question-card-top">
                             <span>
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.type,
                                 questionTypeLabels,
+                                questionLanguageMode,
                               )}
                             </span>
                             <span>{question.estimatedMinutes} MIN</span>
@@ -4547,35 +4753,53 @@ export function CareerDojoApp({
                               })
                               .map(({ skill, term }) => (
                                 <span key={`${skill}:${term.id}`}>
-                                  <BilingualTermLabel term={term} />
+                                  {questionModeText(
+                                    questionLanguageMode,
+                                    term.zh,
+                                    term.en,
+                                  )}
                                 </span>
                               ))}
                           </div>
                           <div className="question-card-bottom">
                             <span>
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.difficulty,
                                 difficultyLabels,
+                                questionLanguageMode,
                               )}{" "}
                               ·{" "}
-                              {bilingualLabel(
+                              {questionCatalogLabel(
                                 question.level,
                                 learningLevelLabels,
+                                questionLanguageMode,
                               )}
                             </span>
                             <button
                               onClick={() => openQuestion(question)}
-                              aria-label={`${
+                              aria-label={`${questionModeText(
+                                questionLanguageMode,
                                 completedQuestions.has(question.id)
-                                  ? "再次训练 / Retry"
-                                  : "开始任务 / Start"
-                              }：${question.titleZh || question.title} / ${
-                                question.title
-                              }`}
+                                  ? "再次训练"
+                                  : "开始任务",
+                                completedQuestions.has(question.id)
+                                  ? "Retry"
+                                  : "Start",
+                              )}：${questionModeText(
+                                questionLanguageMode,
+                                question.titleZh,
+                                question.title,
+                              )}`}
                             >
-                              {completedQuestions.has(question.id)
-                                ? "再次训练 / Retry"
-                                : "开始任务 / Start"}{" "}
+                              {questionModeText(
+                                questionLanguageMode,
+                                completedQuestions.has(question.id)
+                                  ? "再次训练"
+                                  : "开始任务",
+                                completedQuestions.has(question.id)
+                                  ? "Retry"
+                                  : "Start",
+                              )}{" "}
                               →
                             </button>
                           </div>
@@ -6782,8 +7006,13 @@ export function CareerDojoApp({
             <div className="question-modal-heading">
               <div>
                 <span className="section-kicker">
-                  {bilingualLabel(selectedQuestion.type, questionTypeLabels)} ·{" "}
-                  {selectedQuestion.estimatedMinutes} 分钟 / MIN
+                  {questionCatalogLabel(
+                    selectedQuestion.type,
+                    questionTypeLabels,
+                    questionLanguageMode,
+                  )}{" "}
+                  · {selectedQuestion.estimatedMinutes}{" "}
+                  {questionModeText(questionLanguageMode, "分钟", "MIN")}
                 </span>
                 <h2 id="question-dialog-title">
                   <BilingualCopy
@@ -6795,14 +7024,18 @@ export function CareerDojoApp({
                 </h2>
               </div>
               <span className="difficulty-badge">
-                {bilingualLabel(selectedQuestion.difficulty, difficultyLabels)}
+                {questionCatalogLabel(
+                  selectedQuestion.difficulty,
+                  difficultyLabels,
+                  questionLanguageMode,
+                )}
               </span>
             </div>
 
             <div
               className="modal-language-switcher segmented"
               role="group"
-              aria-label="阅读顺序 / Reading mode"
+              aria-label="显示语言 / Display language"
             >
               {languageModeOptions.map((option) => (
                 <button
@@ -6825,11 +7058,19 @@ export function CareerDojoApp({
               >
                 <span className="question-detail-loader" aria-hidden="true" />
                 <div>
-                  <strong>正在加载完整双语任务 / Loading full task</strong>
+                  <strong>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "正在加载完整任务",
+                      "Loading full task",
+                    )}
+                  </strong>
                   <p>
-                    首屏只携带轻量索引；当前仅请求这道题所在的小型静态分片。
-                    Only this task&apos;s deterministic detail shard is being
-                    requested.
+                    {questionModeText(
+                      questionLanguageMode,
+                      "系统会自动重试主分片；必要时切换到独立备用题包。",
+                      "The system retries the primary shard automatically and switches to an independent recovery pack when needed.",
+                    )}
                   </p>
                 </div>
                 <BilingualCopy
@@ -6859,7 +7100,9 @@ export function CareerDojoApp({
               </div>
             ) : selectedQuestionDetail ? (
               <>
-                <h3 className="question-primary-label">题目 / Question</h3>
+                <h3 className="question-primary-label">
+                  {questionModeText(questionLanguageMode, "题目", "Question")}
+                </h3>
                 <div className="prompt-box">
                   <StructuredQuestionPrompt
                     zh={selectedQuestionDetail.promptZh}
@@ -6869,7 +7112,13 @@ export function CareerDojoApp({
                 </div>
                 <div className="question-modal-grid">
                   <div>
-                    <h3>你需要交付 / Deliverables</h3>
+                    <h3>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "你需要交付",
+                        "Deliverables",
+                      )}
+                    </h3>
                     <BilingualList
                       zh={selectedQuestionDetail.deliverablesZh}
                       en={selectedQuestionDetail.deliverables}
@@ -6878,7 +7127,13 @@ export function CareerDojoApp({
                     />
                   </div>
                   <div>
-                    <h3>面试官可能追问 / Follow-ups</h3>
+                    <h3>
+                      {questionModeText(
+                        questionLanguageMode,
+                        "面试官可能追问",
+                        "Follow-ups",
+                      )}
+                    </h3>
                     <BilingualList
                       zh={selectedQuestionDetail.followUpsZh}
                       en={selectedQuestionDetail.followUps}
@@ -6889,11 +7144,21 @@ export function CareerDojoApp({
                 </div>
 
                 <label className="attempt-notes">
-                  <span>作答记录与复盘 / Answer notes &amp; reflection</span>
+                  <span>
+                    {questionModeText(
+                      questionLanguageMode,
+                      "作答记录与复盘",
+                      "Answer notes & reflection",
+                    )}
+                  </span>
                   <textarea
                     value={attemptNotes}
                     onChange={(event) => setAttemptNotes(event.target.value)}
-                    placeholder="先独立写出思路、假设、关键取舍和验证方法 / Capture your reasoning, assumptions, trade-offs, and validation plan…"
+                    placeholder={questionModeText(
+                      questionLanguageMode,
+                      "先独立写出思路、假设、关键取舍和验证方法……",
+                      "Capture your reasoning, assumptions, trade-offs, and validation plan…",
+                    )}
                   />
                 </label>
 
@@ -6903,14 +7168,28 @@ export function CareerDojoApp({
                   aria-expanded={rubricVisible}
                 >
                   {rubricVisible
-                    ? "收起评分与参考 / Hide rubric & reference"
-                    : "完成后查看评分与参考 / Reveal after attempting"}
+                    ? questionModeText(
+                        questionLanguageMode,
+                        "收起评分与参考",
+                        "Hide rubric & reference",
+                      )
+                    : questionModeText(
+                        questionLanguageMode,
+                        "完成后查看评分与参考",
+                        "Reveal after attempting",
+                      )}
                 </button>
 
                 {rubricVisible ? (
                   <div className="rubric-grid">
                     <div>
-                      <h3>评分规则 / Rubric</h3>
+                      <h3>
+                        {questionModeText(
+                          questionLanguageMode,
+                          "评分规则",
+                          "Rubric",
+                        )}
+                      </h3>
                       <BilingualList
                         zh={selectedQuestionDetail.rubricZh}
                         en={selectedQuestionDetail.rubric}
@@ -6918,7 +7197,13 @@ export function CareerDojoApp({
                       />
                     </div>
                     <div>
-                      <h3>常见失败 / Common failures</h3>
+                      <h3>
+                        {questionModeText(
+                          questionLanguageMode,
+                          "常见失败",
+                          "Common failures",
+                        )}
+                      </h3>
                       <BilingualList
                         zh={selectedQuestionDetail.commonFailuresZh}
                         en={selectedQuestionDetail.commonFailures}
@@ -6928,7 +7213,13 @@ export function CareerDojoApp({
                     {selectedQuestionDetail.referenceOutline?.length ||
                     selectedQuestionDetail.referenceOutlineZh?.length ? (
                       <div>
-                        <h3>参考解题骨架 / Reference outline</h3>
+                        <h3>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "参考解题骨架",
+                            "Reference outline",
+                          )}
+                        </h3>
                         <BilingualList
                           zh={selectedQuestionDetail.referenceOutlineZh}
                           en={selectedQuestionDetail.referenceOutline}
@@ -6940,7 +7231,13 @@ export function CareerDojoApp({
                     {selectedQuestionDetail.oracle ||
                     selectedQuestionDetail.oracleZh ? (
                       <div>
-                        <h3>可验证完成标准 / Verifiable oracle</h3>
+                        <h3>
+                          {questionModeText(
+                            questionLanguageMode,
+                            "可验证完成标准",
+                            "Verifiable oracle",
+                          )}
+                        </h3>
                         <BilingualOracle
                           oracle={selectedQuestionDetail.oracle}
                           oracleZh={selectedQuestionDetail.oracleZh}

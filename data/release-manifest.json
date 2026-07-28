@@ -1,23 +1,23 @@
 {
   "schemaVersion": "1.0.0",
   "releaseId": "v4",
-  "evidenceDate": "2026-07-23",
+  "evidenceDate": "2026-07-27",
   "organizations": {
-    "total": 799,
+    "total": 887,
     "regionCounts": {
       "US": 360,
-      "CN": 439,
+      "CN": 527,
       "Global": 0
     },
     "canonicalCategoryGroups": 528,
     "categoryAliasGroups": 64,
     "atomicCategoryFilters": 531,
     "atomicCategoryAliasGroups": 70,
-    "bilingualNames": 643,
+    "bilingualNames": 731,
     "englishOnlyNames": 156,
-    "canonicalRoleEdges": 2217,
-    "chinaCompanyOwnershipRecords": 302,
-    "provisionallyAuditedOwnershipRecords": 88,
+    "canonicalRoleEdges": 2541,
+    "chinaCompanyOwnershipRecords": 390,
+    "provisionallyAuditedOwnershipRecords": 176,
     "ownershipNeedsDirectSource": 214
   },
   "roleFamilies": 15,

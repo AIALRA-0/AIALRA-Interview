@@ -1,6 +1,6 @@
 # 中国企业所有制分类审计 / China Company Ownership Audit
 
-审计日期 / Review date: 2026-07-24  
+审计日期 / Review date: 2026-07-27
 数据文件 / Data file: `data/china-company-ownership.json`  
 范围 / Scope: `data/companies.cn.json` 与 `data/expansion-cn-candidates.json` 中 `companyType = company` 的全部节点
 
@@ -10,15 +10,15 @@
 
 This review creates an independent, conservative, and traceable ownership layer for Chinese company records. The layer does not rewrite the source company records; the release pipeline consumes it as read-only audit data in the organization asset, tree, ownership filter, and profile detail.
 
-- 源节点 / Source nodes: **302**
-- 所有制记录 / Ownership records: **302**
-- 唯一 ID / Unique IDs: **302**
-- 与源集合精确一致 / Exact source-set coverage: **302 / 302**
-- 至少一项证据 / Records with at least one evidence entry: **302 / 302**
-- 证据条目 / Evidence entries: **340**
-- 直接所有制名录 / Direct ownership-registry entries: **27**
+- 源节点 / Source nodes: **390**
+- 所有制记录 / Ownership records: **390**
+- 唯一 ID / Unique IDs: **390**
+- 与源集合精确一致 / Exact source-set coverage: **390 / 390**
+- 至少一项证据 / Records with at least one evidence entry: **390 / 390**
+- 证据条目 / Evidence entries: **428**
+- 直接所有制名录或境外母公司官方域名 / Direct ownership-registry or official foreign-parent entries: **115**
 - 组织资料复核入口 / Organization-context review sources: **313**
-- 具有明确现有所有制类别、完成暂定分类 / Provisionally classified from an existing explicit ownership tag: **88**
+- 具有明确现有所有制类别、完成暂定分类 / Provisionally classified from an existing explicit ownership tag: **176**
 - 因缺少直接控制权来源而保守标为混合或未知 / Conservatively marked mixed or unknown for lack of direct control evidence: **214**
 
 这里的“暂定分类”不是法律意见。最新年报、交易所实际控制人披露、国资监管名录或官方控制权公告优先于本数据。
@@ -39,14 +39,14 @@ This review creates an independent, conservative, and traceable ownership layer 
 
 发布集成读取该审计层，并同步到：
 
-- `public/organization-universe.json` 中的 302 个 `ownership` 档案；
+- `public/organization-universe.json` 中的 390 个 `ownership` 档案；
 - 组织树的所有制分组与独立所有制筛选器；
 - 组织详情中的双语分类定义、置信度、审核状态和证据入口；
 - 数据门禁、发布清单与自动化测试。
 
 The release integration consumes this audit layer in:
 
-- 302 `ownership` profiles in `public/organization-universe.json`;
+- 390 `ownership` profiles in `public/organization-universe.json`;
 - ownership groups in the organization tree and a dedicated ownership filter;
 - bilingual definitions, confidence, review status, and evidence links in each relevant organization profile;
 - data gates, the release manifest, and automated tests.
@@ -114,9 +114,9 @@ The remaining records are not classified from names, industries, listing status,
 | `state-invested`           |       3 | 国仪量子技术（合肥）股份有限公司、曙光信息产业股份有限公司、长飞光纤光缆股份有限公司       |
 | `state-joint-venture`      |       1 | 新华三技术有限公司                                                                         |
 | `private`                  |      18 | 宁德时代新能源科技股份有限公司、深圳市众擎机器人科技有限公司、南京埃斯顿自动化股份有限公司 |
-| `foreign-controlled`       |       0 | 本轮没有获得足够直接证据的节点 / No record met the direct-evidence threshold               |
+| `foreign-controlled`       |      88 | Intel China、Synopsys China、ASML China、Bosch China 等                                    |
 | `mixed-or-unknown`         |     214 | 思瑞浦、华峰测控、盛美上海等                                                               |
-| **合计 / Total**           | **302** |                                                                                            |
+| **合计 / Total**           | **390** |                                                                                            |
 
 置信度分布 / Confidence distribution:
 
@@ -166,8 +166,8 @@ The remaining records are not classified from names, industries, listing status,
 执行的只读验证包括：
 
 - 两个源文件中 `companyType = company` 的 ID 集合与新记录完全相同；
-- 总数为 302；
-- 302 个 `organizationId` 全部唯一；
+- 总数为 390；
+- 390 个 `organizationId` 全部唯一；
 - 每条均具有非空中英文名称、中英文摘要和置信度；
 - 每条 `ownershipClass` 均属于 schema 枚举；
 - 每条至少含一项 `http://` 或 `https://` 证据；
@@ -182,5 +182,5 @@ The remaining records are not classified from names, industries, listing status,
 - `private` 表示控制性质，不表示未上市。 / `private` describes control and does not mean unlisted.
 - `state-invested` 不表示国有控制。 / `state-invested` does not establish state control.
 - `central-state-subsidiary` 不推断未经证实的直接母子公司层级。 / `central-state-subsidiary` does not infer an unverified direct parent tier.
-- `foreign-controlled = 0` 只表示本轮没有达到证据阈值，不表示名单中不存在外资背景企业。 / `foreign-controlled = 0` means that no record met this review’s evidence threshold, not that the universe contains no foreign-backed enterprise.
+- 88 个 `foreign-controlled` 节点依据境外母公司官方域名中的在华机构、地点或招聘入口纳入；具体雇佣法人仍须逐 requisition 复核。 / The 88 `foreign-controlled` nodes are grounded in official foreign-parent domains that expose a China organization, location, or careers channel; verify the exact employing entity per requisition.
 - 所有制会因增资、上市、并购、国资划转和控制权变更而变化，必须保留 `reviewedAt` 并定期复核。 / Ownership can change through financing, listing, acquisitions, state-capital transfers, or other control events; retain `reviewedAt` and re-verify periodically.

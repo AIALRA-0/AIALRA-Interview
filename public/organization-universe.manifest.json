@@ -1,17 +1,17 @@
 {
   "schemaVersion": "1.0.0",
-  "assetVersion": "2026-07-24.1",
-  "sourceSha256": "76a38f8e6938387e870bbbb9fa215c8eb84d47e37a26a23da7c7ae76475e0961",
-  "evidenceDate": "2026-07-23",
-  "organizationCount": 799,
+  "assetVersion": "2026-07-27.1",
+  "sourceSha256": "57f956a13f04b10e8fd8bdc4397e45488750517eddb491523eb2bc122c1fa07b",
+  "evidenceDate": "2026-07-27",
+  "organizationCount": 887,
   "regionCounts": {
     "US": 360,
-    "CN": 439,
+    "CN": 527,
     "Global": 0
   },
   "asset": {
     "url": "/organization-universe.json",
-    "sha256": "c5b8a684191ebdbcee9843377db1b7352b82aa6dd8d4d416a0eb4a958e4b4c12",
-    "bytes": 3731340
+    "sha256": "d98959bfa6963a1cbe8a59bfdd568e3eb6cd9c9aa51b8cc5e60606cfca0a8881",
+    "bytes": 4279892
   }
 }

@@ -2219,17 +2219,6 @@ main {
   letter-spacing: 0;
 }
 
-.mode-zh-first .language-copy:first-child > span:last-child,
-.mode-en-first .language-copy:first-child > span:last-child {
-  color: var(--ink);
-  font-weight: 690;
-}
-
-.mode-zh-first .language-copy:not(:first-child),
-.mode-en-first .language-copy:not(:first-child) {
-  color: var(--ink-soft);
-}
-
 .translation-missing {
   color: #767676;
   font-style: italic;
@@ -3742,6 +3731,11 @@ main {
 .structured-question-prompt {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.structured-question-prompt.mode-zh,
+.structured-question-prompt.mode-en {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .prompt-language-panel {

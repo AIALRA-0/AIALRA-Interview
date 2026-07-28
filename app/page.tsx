@@ -143,6 +143,9 @@ const questionBank: QuestionBankBootstrap = {
   shardSha256ById: Object.fromEntries(
     questionManifestRaw.shards.map((shard) => [shard.id, shard.sha256]),
   ),
+  fallbackPackSha256ById: Object.fromEntries(
+    questionManifestRaw.fallbackPacks.map((pack) => [pack.id, pack.sha256]),
+  ),
 };
 const organizationBank: OrganizationBankBootstrap = {
   schemaVersion: organizationManifestRaw.schemaVersion,
